@@ -68,6 +68,15 @@ table$Enquiries <- gsub("Enquiries: ", "", table$Enquiries)
 table$Associated_Orgs <- gsub("^\\n","", table$Associated_Orgs)
 table$Associated_Orgs <- gsub("\\n","; ", table$Associated_Orgs)
 
+# Get the DTP URL
+table$URL <- page %>%
+             html_elements(xpath = "//tr/td/a[starts-with(@href,'http')] |
+                                   //tr/td/p/a[starts-with(@href,'http')]") %>%
+             html_attr("href")
+
+# Rearrange columns
+table <- table[c(1,6,2,3,4,5)]
+
 # Make sure the Saving directory
 if(!dir.exists("../Data")){
   stop("Data directory does not exist. Make sure you set the working directory ",
