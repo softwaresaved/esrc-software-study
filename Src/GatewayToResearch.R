@@ -60,10 +60,6 @@ GtR_api <- function(path, debug = FALSE){
 
               )
 
-  if(debug){
-    message("Payload ", http_type(resp))
-  }
-
   # Check for errors
   if (http_error(resp)) {
     stop(
