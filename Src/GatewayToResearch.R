@@ -13,6 +13,10 @@
 # (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
 #
 # API Info: https://gtr.ukri.org/resources/api.html
+#
+#   * v1 doc: https://gtr.ukri.org/resources/GtR-1-API-v3.3.pdf
+#   * v2 doc: https://gtr.ukri.org/resources/GtR-2-API-v1.7.5.pdf
+#
 # Data dictionary: https://gtr.ukri.org/resources/GtRDataDictionary.pdf
 #
 
