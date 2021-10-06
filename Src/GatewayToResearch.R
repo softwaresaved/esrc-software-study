@@ -14,10 +14,19 @@
 #
 # API Info: https://gtr.ukri.org/resources/api.html
 # Data dictionary: https://gtr.ukri.org/resources/GtRDataDictionary.pdf
+#
+
+
+# Load packages -----------------------------------------------------------
+
 
 library(httr)
 library(jsonlite)
 library(xml2)
+
+
+# Request function --------------------------------------------------------
+
 
 # Following: https://cran.r-project.org/web/packages/httr/vignettes/api-packages.html
 
@@ -92,12 +101,18 @@ GtR_api <- function(path, debug = FALSE){
   )
 }
 
+# Print responses ---------------------------------------------------------
+
 # Print content as a response
 print.GtR_api <- function(x, ...) {
   cat("<GtR ", x$path, ">\n", sep = "")
   str(x$content)
   invisible(x)
 }
+
+
+
+# Perform queries ---------------------------------------------------------
 
 # Retrieve the example contents
 r <- GtR_api("examples")
