@@ -24,6 +24,8 @@ library(httr)
 library(jsonlite)
 library(xml2)
 
+# Do not use scientific notation
+options(scipen=999)
 
 # Request function --------------------------------------------------------
 
@@ -58,7 +60,8 @@ GtR_api <- function(path, out = "json", debug = FALSE){
   } else if(out == "xml"){
     accept <- "application/vnd.rcuk.gtr.xml-v7"
   }else {
-    stop("Unknown accept format: \"", out, "\", value should on be json or xml.")
+    stop("Unknown accept format: \"", out, "\", value should on be ",
+         "\"json\" or \"xml\".")
   }
 
   # Send the request
@@ -81,10 +84,10 @@ GtR_api <- function(path, out = "json", debug = FALSE){
     )
   }
 
-  # Get the response type
+  # Get the response type.
   resp_type <- http_type(resp)
 
-  # Extract the content
+  # Extract the content.
   if ( resp_type == "application/json" |
        resp_type == "application/vnd.rcuk.gtr.json-v7") { # Check we have JSON
 
@@ -93,7 +96,8 @@ GtR_api <- function(path, out = "json", debug = FALSE){
       message("JSON payload: ", resp_type,".")
     }
 
-    parsed <- jsonlite::fromJSON(content(resp, as = "text"), simplifyVector = FALSE)
+    parsed <- jsonlite::fromJSON(content(resp, as = "text"),
+                                 simplifyVector = TRUE)
 
   } else if (resp_type == "text/html" |
              resp_type == "application/vnd.rcuk.gtr.xml-v7") {
@@ -117,7 +121,7 @@ GtR_api <- function(path, out = "json", debug = FALSE){
     stop("API did not return json, html or xml.", call. = FALSE)
   }
 
-  # Construct a structure output
+  # Construct a structure output.
   structure(
     list(
       content = parsed,
@@ -143,12 +147,8 @@ print.GtR_api <- function(x, ...) {
 r <- GtR_api("examples")
 
 # Retrieve information about funds
-r2 <- GtR_api("funds", out = "html", debug = TRUE)
+r2 <- GtR_api("funds", out = "json", debug = FALSE)
 
-
-
-r2$response$content
-r2$response$parsed
 funds <- r2$content$fund
 View(funds)
 
