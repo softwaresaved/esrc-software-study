@@ -52,8 +52,12 @@ GtR_api <- function(path, debug = FALSE){
   # Accept: application/vnd.rcuk.gtr.xml-v7
   # Earlier versions are apparently also available. Up to v7 on 05/10/21.
   resp <- GET(myurl,
-              accept("application/vnd.rcuk.gtr.json-v7")
-              #accept("application/vnd.rcuk.gtr.xml-v7")
+              config = list(
+                accept("application/vnd.rcuk.gtr.json-v7"),
+                #accept("application/vnd.rcuk.gtr.xml-v7"),
+                user_agent("httr GtR client 0.1")
+              )
+
               )
 
   if(debug){
@@ -127,15 +131,13 @@ print.GtR_api <- function(x, ...) {
 
 # Perform queries ---------------------------------------------------------
 
-# Error
-rr <-  GtR_api("example")
-
 # Retrieve the example contents
 r <- GtR_api("examples")
 
+# Retrieve information about funds
 r2 <- GtR_api("funds", debug = TRUE)
 
-r3 <- fromJSON("https://gtr.ukri.org/gtr/api/funds")
+
 
 r2$response$content
 r2$response$parsed
