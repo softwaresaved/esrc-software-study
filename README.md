@@ -7,7 +7,7 @@ Any software produced is made available under a BSD 2-Clause licence and any dat
 Exceptions to this are:
 
 * Data from the UKRI ESRC is mostly made available under an [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) Licence.
-* Some of the data from Gateway to Research is made available under an [Open Government Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
+* Data from Gateway to Research is made available under an [Open Government Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
 
 ---
 
