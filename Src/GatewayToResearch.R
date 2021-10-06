@@ -32,19 +32,29 @@ options(scipen=999)
 
 # Following: https://cran.r-project.org/web/packages/httr/vignettes/api-packages.html
 
-# A generic function to query the GtR API - pass in:
+# A generic function to query the GtR API v2 - pass in:
 #
 #  * path  - the path part of the query.
 #  * out   - the output format can be "json" or "xml", defaults to json.
+#  * version - version of the api. Can only be  "v1" or "v2".
 #  * debug - boolean specifying whether to print out debug statements,
 #           defaults to FALSE.
 #
 # A structure is returned with the parsed contents, the path query and
 # the response.
-GtR_api <- function(path, out = "json", debug = FALSE){
+GtR_api <- function(path, out = "json", version = "v2", debug = FALSE){
 
-  # Prepend the to the URL path
-  path <-  paste0("/gtr/api/", path)
+  # Deal with different versions of the api
+  if(version == "v2"){
+    # Prepend the to the URL path
+    path <-  paste0("/gtr/api/", path)
+  }else if ( version == "v1"){
+    # Nothing for now
+  } else {
+    stop("Version can only be \"v1\" or \"v2\". You specified ", version, ".")
+  }
+
+
 
   # Construct the URL
   myurl <- modify_url("https://gtr.ukri.org", path = path)
@@ -144,7 +154,7 @@ print.GtR_api <- function(x, ...) {
 # Perform queries ---------------------------------------------------------
 
 # Retrieve the example contents
-r <- GtR_api("examples")
+r <- GtR_api("examples", debug = TRUE)
 
 # Retrieve information about funds
 r2 <- GtR_api("funds", out = "json", debug = FALSE)
@@ -153,3 +163,9 @@ funds <- r2$content$fund
 View(funds)
 
 print(r)
+
+# Try a v1 type query
+# http://gtr.ukri.org/search/person?term=paul&amp;page=1&amp;fetchSize=25
+r3 <- GtR_api("search/person?term=paul&amp;page=1&amp;fetchSize=25",
+              version = "v1", debug = TRUE)
+View(r3)
