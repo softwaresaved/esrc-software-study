@@ -30,10 +30,16 @@ library(xml2)
 
 # Following: https://cran.r-project.org/web/packages/httr/vignettes/api-packages.html
 
-# A generic function to query the gtr interface - pass in the path.
+# A generic function to query the GtR API - pass in:
+#
+#  * path  - the path part of the query.
+#  * out   - the output format can be "json" or "xml", defaults to json.
+#  * debug - boolean specifying whether to print out debug statements,
+#           defaults to FALSE.
+#
 # A structure is returned with the parsed contents, the path query and
 # the response.
-GtR_api <- function(path, debug = FALSE){
+GtR_api <- function(path, out = "json", debug = FALSE){
 
   # Prepend the to the URL path
   path <-  paste0("/gtr/api/", path)
@@ -41,26 +47,29 @@ GtR_api <- function(path, debug = FALSE){
   # Construct the URL
   myurl <- modify_url("https://gtr.ukri.org", path = path)
 
+  # If debugging print out the query URL.
   if(debug){
     message("Query URL ", myurl,".")
   }
 
-  # Get the contents
-  # Accept request required by the API either:
-  # Accept: application/vnd.rcuk.gtr.json-v7
-  # or
-  # Accept: application/vnd.rcuk.gtr.xml-v7
-  # Earlier versions are apparently also available. Up to v7 on 05/10/21.
+  # Set the required output format
+  if ( out == "json"){
+    accept <- "application/vnd.rcuk.gtr.json-v7"
+  } else if(out == "xml"){
+    accept <- "application/vnd.rcuk.gtr.xml-v7"
+  }else {
+    stop("Unknown accept format: \"", out, "\", value should on be json or xml.")
+  }
+
+  # Send the request
   resp <- GET(myurl,
               config = list(
-                accept("application/vnd.rcuk.gtr.json-v7"),
-                #accept("application/vnd.rcuk.gtr.xml-v7"),
-                user_agent("httr GtR client 0.1.")
+                            accept(accept),
+                            user_agent("httr GtR client 0.1.")
+                           )
               )
 
-              )
-
-  # Check for errors
+  # Check for errors in the response.
   if (http_error(resp)) {
     stop(
       sprintf(
@@ -134,7 +143,7 @@ print.GtR_api <- function(x, ...) {
 r <- GtR_api("examples")
 
 # Retrieve information about funds
-r2 <- GtR_api("funds", debug = TRUE)
+r2 <- GtR_api("funds", out = "html", debug = TRUE)
 
 
 
