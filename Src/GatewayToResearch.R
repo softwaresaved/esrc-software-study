@@ -36,13 +36,13 @@ library(xml2)
 GtR_api <- function(path, debug = FALSE){
 
   # Prepend the to the URL path
-  path <-  paste0("/gtr/api/",path)
+  path <-  paste0("/gtr/api/", path)
 
   # Construct the URL
   myurl <- modify_url("https://gtr.ukri.org", path = path)
 
   if(debug){
-    message("Query URL ",myurl)
+    message("Query URL ", myurl,".")
   }
 
   # Get the contents
@@ -53,9 +53,24 @@ GtR_api <- function(path, debug = FALSE){
   # Earlier versions are apparently also available. Up to v7 on 05/10/21.
   resp <- GET(myurl,
               accept("application/vnd.rcuk.gtr.json-v7")
+              #accept("application/vnd.rcuk.gtr.xml-v7")
               )
 
-  message("Payload ", http_type(resp))
+  if(debug){
+    message("Payload ", http_type(resp))
+  }
+
+  # Check for errors
+  if (http_error(resp)) {
+    stop(
+      sprintf(
+        "GtR API request failed [%s].\nURL: %s.\n",
+        status_code(resp),
+        resp$url
+      ),
+      call. = FALSE
+    )
+  }
 
   # Extract the content
   if (http_type(resp) == "application/json" |
@@ -75,7 +90,7 @@ GtR_api <- function(path, debug = FALSE){
       message("HTML payload.")
     }
 
-    parsed <- xml2::read_html(content(resp, as = "raw"))
+    parsed <- xml2::read_html(content(resp, as = "auto"))
 
   } else if(http_type(resp) == "text/xml") {
 
@@ -83,7 +98,7 @@ GtR_api <- function(path, debug = FALSE){
       message("XML payload.")
     }
 
-    parsed <- xml2::read_xml(content(resp, as = "raw"))
+    parsed <- xml2::read_xml(content(resp, as = "auto"))
 
   } else {
     message("Got ",http_type(resp))
@@ -110,14 +125,17 @@ print.GtR_api <- function(x, ...) {
   invisible(x)
 }
 
-
-
 # Perform queries ---------------------------------------------------------
+
+# Error
+rr <-  GtR_api("example")
 
 # Retrieve the example contents
 r <- GtR_api("examples")
 
 r2 <- GtR_api("funds", debug = TRUE)
+
+r3 <- fromJSON("https://gtr.ukri.org/gtr/api/funds")
 
 r2$response$content
 r2$response$parsed
