@@ -55,7 +55,7 @@ GtR_api <- function(path, debug = FALSE){
               config = list(
                 accept("application/vnd.rcuk.gtr.json-v7"),
                 #accept("application/vnd.rcuk.gtr.xml-v7"),
-                user_agent("httr GtR client 0.1")
+                user_agent("httr GtR client 0.1.")
               )
 
               )
@@ -76,36 +76,39 @@ GtR_api <- function(path, debug = FALSE){
     )
   }
 
+  # Get the response type
+  resp_type <- http_type(resp)
+
   # Extract the content
-  if (http_type(resp) == "application/json" |
-      http_type(resp) == "application/vnd.rcuk.gtr.json-v7") { # Check we have JSON
+  if ( resp_type == "application/json" |
+       resp_type == "application/vnd.rcuk.gtr.json-v7") { # Check we have JSON
 
     # Extract the JSON payload
     if(debug){
-      message("JSON payload.")
+      message("JSON payload: ", resp_type,".")
     }
 
     parsed <- jsonlite::fromJSON(content(resp, as = "text"), simplifyVector = FALSE)
 
-  } else if (http_type(resp) == "text/html" |
-             http_type(resp) == "application/vnd.rcuk.gtr.xml-v7") {
+  } else if (resp_type == "text/html" |
+             resp_type == "application/vnd.rcuk.gtr.xml-v7") {
 
     if(debug){
-      message("HTML payload.")
+      message("HTML payload: ", resp_type,".")
     }
 
     parsed <- xml2::read_html(content(resp, as = "auto"))
 
-  } else if(http_type(resp) == "text/xml") {
+  } else if(resp_type == "text/xml") {
 
     if(debug){
-      message("XML payload.")
+      message("XML payload: ", resp_type, ".")
     }
 
     parsed <- xml2::read_xml(content(resp, as = "auto"))
 
   } else {
-    message("Got ",http_type(resp))
+    message("Got ", resp_type)
     stop("API did not return json, html or xml.", call. = FALSE)
   }
 
