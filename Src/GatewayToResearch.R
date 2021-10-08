@@ -164,6 +164,11 @@ r <- GtR_api("examples", debug = TRUE)
 r2 <- GtR_api("funds", out = "json", debug = FALSE)
 
 funds <- r2$content$fund
+
+funds$start <- as.POSIXct(funds$start/1000, origin = "1970-01-01", tz = "GMT")
+funds$end <- as.POSIXct(funds$end/1000, origin = "1970-01-01", tz = "GMT")
+funds$created <- as.POSIXct(funds$created/1000, origin = "1970-01-01", tz = "GMT")
+
 View(funds)
 
 print(r)
