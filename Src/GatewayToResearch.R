@@ -82,6 +82,7 @@ GtR_api <- function(path, out = "json", version = "v2", debug = FALSE){
   resp <- GET(myurl,
               config = list(
                             accept(accept),
+                            verbose(),
                             user_agent("httr GtR client 0.1.")
                            )
               )
@@ -161,11 +162,11 @@ print.GtR_api <- function(x, ...) {
 r <- GtR_api("examples", debug = TRUE)
 
 # Retrieve information about funds
-r2 <- GtR_api("funds", out = "json", debug = FALSE)
+r2 <- GtR_api("funds", out = "json", debug = TRUE)
 
 funds <- r2$content$fund
 View(funds)
-
+View(r2)
 print(r)
 
 # Try a v1 type query
