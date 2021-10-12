@@ -1,7 +1,7 @@
 ---
 title: "ESRC Data"
 author: "Mario Antonioletti,"
-date: "`r Sys.Date()`"
+date: "`r format(Sys.Date(), '%d/%m/%y')`"
 output: 
   github_document:
       toc: true
@@ -67,11 +67,33 @@ esrcdat <- gtrdat %>% filter(FundingOrgName == "ESRC")
 
 # Overall expenditure
 
-The data set covers the period `r format(min(gtrdat$StartDate),"%d/%m/%y")` to `r format(max(gtrdat$EndDate, na.rm = TRUE),"%d/%m/%y")` (for data downloaded from the Gateway to Research website downloaded on 11/10/21). Expenditure for the whole period under consideration is shown in the graph below.
+## All projects
+
+The data set covers the period `r format(min(gtrdat$StartDate),"%d/%m/%y")` to `r format(max(gtrdat$EndDate, na.rm = TRUE),"%d/%m/%y")` (for data downloaded from the Gateway to Research website downloaded on 11/10/21). Expenditure for the whole period under consideration is shown in the graph below. Awards that do not have a value defined are removed.
 
 ```{r funding_ByOrg, echo = FALSE}
 
-gtrdat %>% select(FundingOrgName, AwardPounds)                    %>% 
+gtrdat %>% filter(!is.na(AwardPounds))                            %>% 
+           select(FundingOrgName, AwardPounds)                    %>% 
+           group_by(FundingOrgName)                               %>% 
+           summarise(TotalExpenditure = sum(AwardPounds)/1000000) %>% 
+           filter(!is.na(TotalExpenditure))                       %>% 
+           ggplot(aes(x = FundingOrgName, y = TotalExpenditure)) + 
+           geom_col(colour="black",fill="red") +
+           xlab("Funding Organisation") + 
+           ylab("Expenditure (in million of pounds)") +
+           theme_bw() + scale_y_log10()
+          
+```
+
+## Active projects only 
+
+The graph below only contains values for currently active projects:
+
+```{r funding_ByOrg_active, echo = FALSE}
+
+gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))       %>% 
+           select(FundingOrgName, AwardPounds)                    %>% 
            group_by(FundingOrgName)                               %>% 
            summarise(TotalExpenditure = sum(AwardPounds)/1000000) %>% 
            filter(!is.na(TotalExpenditure))                       %>% 

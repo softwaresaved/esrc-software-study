@@ -1,29 +1,39 @@
 ESRC Data
 ================
 Mario Antonioletti,
-2021-10-12
+12/10/21
 
 -   [Overall expenditure](#overall-expenditure)
+    -   [All projects](#all-projects)
+    -   [Active projects only](#active-projects-only)
 -   [ESRC data](#esrc-data)
     -   [Project category awards](#project-category-awards)
-        -   [All projects](#all-projects)
+        -   [All projects](#all-projects-1)
         -   [Active projects](#active-projects)
     -   [Award length distribution](#award-length-distribution)
-        -   [All projects](#all-projects-1)
+        -   [All projects](#all-projects-2)
     -   [Geographical distribution of
         awards](#geographical-distribution-of-awards)
-        -   [All projects](#all-projects-2)
+        -   [All projects](#all-projects-3)
         -   [Active projects](#active-projects-1)
     -   [Department with active awards](#department-with-active-awards)
 
 # Overall expenditure
 
+## All projects
+
 The data set covers the period 01/01/73 to 01/01/30 (for data downloaded
 from the Gateway to Research website downloaded on 11/10/21).
 Expenditure for the whole period under consideration is shown in the
-graph below.
+graph below. Awards that do not have a value defined are removed.
 
 ![](ESRC_files/figure-gfm/funding_ByOrg-1.png)<!-- -->
+
+## Active projects only
+
+The graph below only contains values for currently active projects:
+
+![](ESRC_files/figure-gfm/funding_ByOrg_active-1.png)<!-- -->
 
 # ESRC data
 
