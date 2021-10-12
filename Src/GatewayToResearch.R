@@ -78,11 +78,10 @@ GtR_api <- function(path, out = "json", version = "v2", debug = FALSE){
          "\"json\" or \"xml\".")
   }
 
-  # Send the request
+  # Send the request to the URL specified
   resp <- GET(myurl,
               config = list(
                             accept(accept),
-                            verbose(),
                             user_agent("httr GtR client 0.1.")
                            )
               )
@@ -162,7 +161,7 @@ print.GtR_api <- function(x, ...) {
 r <- GtR_api("examples", debug = TRUE)
 
 # Retrieve information about funds
-r2 <- GtR_api("funds", out = "json", debug = TRUE)
+r2 <- GtR_api("funds", out = "xml", version="v2", debug = TRUE)
 
 funds <- r2$content$fund
 
