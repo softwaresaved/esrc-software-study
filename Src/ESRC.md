@@ -6,9 +6,14 @@ Mario Antonioletti,
 -   [Overall expenditure](#overall-expenditure)
 -   [ESRC data](#esrc-data)
     -   [Project category awards](#project-category-awards)
+        -   [All projects](#all-projects)
+        -   [Active projects](#active-projects)
     -   [Award length distribution](#award-length-distribution)
+        -   [All projects](#all-projects-1)
     -   [Geographical distribution of
         awards](#geographical-distribution-of-awards)
+        -   [All projects](#all-projects-2)
+        -   [Active projects](#active-projects-1)
 
 # Overall expenditure
 
@@ -23,6 +28,8 @@ graph below.
 
 ## Project category awards
 
+### All projects
+
 The project categories for the ESRC awards covering the period 01/01/06
 to 30/09/29.
 
@@ -33,13 +40,29 @@ to 30/09/29.
 | Fellowship       |            1,415 |       151,376,374 |         106,979.8 |
 | Studentship      |            3,028 |                 0 |               0.0 |
 
+### Active projects
+
+| Project Catgeory | Number of Awards | Total Awarded (£) | Average Award (£) |
+|:-----------------|-----------------:|------------------:|------------------:|
+| Training Grant   |               72 |       480,410,834 |       6,672,372.7 |
+| Research Grant   |            1,232 |     1,143,410,400 |         928,092.9 |
+| Fellowship       |              284 |        33,284,791 |         117,200.0 |
+| Studentship      |            2,870 |                 0 |               0.0 |
+
 ## Award length distribution
+
+### All projects
 
 The award length distribution of the award lengths binned into 4-week
 periods is shown below.
-![](ESRC_files/figure-gfm/award_lengths-1.png)<!-- -->
+![](ESRC_files/figure-gfm/award_lengths-1.png)<!-- --> ### Active
+projects only
+
+![](ESRC_files/figure-gfm/award_lengths_active-1.png)<!-- -->
 
 ## Geographical distribution of awards
+
+### All projects
 
 The expenditure of the awards over the whole time period by region:
 
@@ -60,3 +83,25 @@ The expenditure of the awards over the whole time period by region:
 | Outside UK               |               87 |        42,660,826 |         490,354.3 |
 | North East               |               44 |         5,720,679 |         130,015.4 |
 | NA                       |                2 |           527,623 |         263,811.5 |
+
+### Active projects
+
+We can generate the table for projects that are currently active:
+
+| Region                   | Number of Awards | Total Awarded (£) | Average Award (£) |
+|:-------------------------|-----------------:|------------------:|------------------:|
+| London                   |              914 |       391,942,746 |        428,821.39 |
+| Unknown                  |            1,299 |       359,876,346 |        277,041.07 |
+| East of England          |               69 |       208,363,309 |      3,019,758.10 |
+| South East               |              648 |       198,970,757 |        307,053.64 |
+| Scotland                 |              425 |       159,790,596 |        375,977.87 |
+| North West               |              305 |        95,100,417 |        311,804.65 |
+| South West               |              215 |        68,982,724 |        320,849.88 |
+| West Midlands            |              125 |        66,968,340 |        535,746.72 |
+| Wales                    |               99 |        29,842,672 |        301,441.13 |
+| East Midlands            |              150 |        27,054,527 |        180,363.51 |
+| Northern Ireland         |               60 |        19,812,880 |        330,214.67 |
+| Outside UK               |               27 |        17,942,249 |        664,527.74 |
+| Yorkshire and The Humber |              110 |        10,514,565 |         95,586.95 |
+| North East               |               11 |         1,843,525 |        167,593.18 |
+| NA                       |                1 |           100,372 |        100,372.00 |

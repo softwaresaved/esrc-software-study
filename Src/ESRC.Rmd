@@ -5,6 +5,7 @@ date: "`r Sys.Date()`"
 output: 
   github_document:
       toc: true
+      toc_depth: 4
 ---
 
 ```{r setup, include=FALSE}
@@ -86,6 +87,8 @@ gtrdat %>% select(FundingOrgName, AwardPounds)                    %>%
 
 ## Project category awards
 
+### All projects
+
 The project categories for the ESRC awards covering the period `r format(min(esrcdat$StartDate),"%d/%m/%y")` to `r format(max(esrcdat$EndDate, na.rm = TRUE),"%d/%m/%y")`.
 
 ```{r esrc_categories, echo = FALSE}
@@ -104,9 +107,29 @@ esrcdat %>% select(ProjectCategory, AwardPounds)                           %>%
 #                                 "Total Awarded (£)","Average Award (£)"))
 ```
 
+### Active projects
+
+```{r esrc_categories_active, echo = FALSE}
+
+# Look at the project categories
+esrcdat %>% filter(Status == "Active")                                     %>% 
+            select(ProjectCategory, AwardPounds)                           %>% 
+            group_by(ProjectCategory)                                      %>% 
+            summarise(Number = n(), TotalAward = sum(AwardPounds))         %>% 
+            mutate(AverageAward = TotalAward/Number)                       %>% 
+            arrange(desc(AverageAward))                                    %>% 
+            mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
+            kbl(format="pipe", align = c("l",rep("r",3)), 
+                col.names = c("Project Catgeory", "Number of Awards", 
+                                "Total Awarded (£)","Average Award (£)")) 
+# knitr::kable(format="pipe", col.names = c("Project Category", "Number of Awards", 
+#                                 "Total Awarded (£)","Average Award (£)"))
+```
+
 ## Award length distribution
 
-The award length distribution of the award lengths binned into 4-week periods is shown below.
+### All projects
+The award length distribution of the award lengths binned into 4-week periods is shown below. 
 ```{r award_lengths, echo = FALSE}
 
 # The as.numeric() is a workaround for https://github.com/tidyverse/ggplot2/issues/1377
@@ -116,10 +139,26 @@ esrcdat %>% select(StartDate, EndDate, ProjectCategory) %>%
             ggplot(aes(x = as.numeric(grant_length), fill = ProjectCategory)) + 
             geom_histogram(binwidth = 5, colour="black") + 
             ylab("Number of Awards") + xlab("Award Length (weeks)") +
-            labs(fill = "Project Category") +theme_bw()
+            labs(fill = "Project Category") + theme_bw()
+```
+### Active projects only
+
+```{r award_lengths_active, echo = FALSE}
+
+# The as.numeric() is a workaround for https://github.com/tidyverse/ggplot2/issues/1377
+esrcdat %>% filter(Status == "Active")                                          %>% 
+            select(StartDate, EndDate, ProjectCategory)                         %>% 
+            filter(!is.na(StartDate) & !is.na(EndDate))                         %>% 
+            mutate(grant_length = difftime(EndDate, StartDate,units = "weeks")) %>% 
+            ggplot(aes(x = as.numeric(grant_length), fill = ProjectCategory)) + 
+            geom_histogram(binwidth = 5, colour="black") + 
+            ylab("Number of Awards") + xlab("Award Length (weeks)") +
+            labs(fill = "Project Category") + theme_bw()
 ```
 
 ## Geographical distribution of awards
+
+### All projects
 
 The expenditure of the awards over the whole time period by region:
 
@@ -135,3 +174,19 @@ esrcdat %>% select(Region, AwardPounds)                                    %>%
                 col.names = c("Region", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
 ```
 
+### Active projects
+
+We can generate the table for projects that are currently active:
+
+```{r esrc_byRegions_active, echo = FALSE}
+
+esrcdat %>% filter(Status == "Active")                                     %>% 
+            select(Region, AwardPounds)                                    %>% 
+            group_by(Region)                                               %>% 
+            summarise(Number = n(), TotalAward = sum(AwardPounds))         %>% 
+            mutate(AverageAward = TotalAward/Number)                       %>% 
+            arrange(desc(TotalAward))                                      %>% 
+            mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
+            kbl(format="pipe", align = c("l",rep("r",3)),
+                col.names = c("Region", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
+```
