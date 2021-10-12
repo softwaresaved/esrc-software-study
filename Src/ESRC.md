@@ -6,6 +6,8 @@ Mario Antonioletti
 -   [ESRC data](#esrc-data)
     -   [Project category awards](#project-category-awards)
     -   [Award length distribution](#award-length-distribution)
+    -   [Geographical distribution of
+        Awards](#geographical-distribution-of-awards)
 
 # Overall expenditure
 
@@ -35,3 +37,25 @@ to 30/09/29.
 The award length distribution of the award lengths binned into 4-week
 periods is shown below.
 ![](ESRC_files/figure-gfm/award_lengths-1.png)<!-- -->
+
+## Geographical distribution of Awards
+
+The expenditure of the awards over the whole time period by region:
+
+| Region                   | Number of Awards | Total Awarded (£) | Average Award (£) |
+|:-------------------------|-----------------:|------------------:|------------------:|
+| London                   |            2,146 |       787,629,225 |         367,022.0 |
+| Unknown                  |            2,889 |       732,939,310 |         253,700.0 |
+| South East               |            1,606 |       440,321,751 |         274,172.9 |
+| East of England          |              211 |       337,843,043 |       1,601,151.9 |
+| Scotland                 |            1,107 |       318,742,093 |         287,933.2 |
+| North West               |              761 |       202,140,437 |         265,624.8 |
+| South West               |              531 |       135,904,528 |         255,940.7 |
+| West Midlands            |              388 |       116,408,219 |         300,021.2 |
+| East Midlands            |              401 |        75,599,871 |         188,528.4 |
+| Wales                    |              199 |        64,699,705 |         325,124.1 |
+| Northern Ireland         |              154 |        48,860,541 |         317,276.2 |
+| Yorkshire and The Humber |              308 |        46,657,789 |         151,486.3 |
+| Outside UK               |               87 |        42,660,826 |         490,354.3 |
+| North East               |               44 |         5,720,679 |         130,015.4 |
+| NA                       |                2 |           527,623 |         263,811.5 |

@@ -116,3 +116,19 @@ esrcdat %>% select(StartDate, EndDate, ProjectCategory) %>%
             labs(fill = "Project Category") +theme_bw()
 ```
 
+## Geographical distribution of Awards
+
+The expenditure of the awards over the whole time period by region:
+
+```{r esrc_byRegions, echo = FALSE}
+
+esrcdat %>% select(Region, AwardPounds)                            %>% 
+            group_by(Region)                                       %>% 
+            summarise(Number = n(), TotalAward = sum(AwardPounds)) %>% 
+            mutate(AverageAward = TotalAward/Number)               %>% 
+            arrange(desc(TotalAward))                              %>% 
+            mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
+            kbl(format="pipe", align = c("l",rep("r",3)),
+                col.names = c("Region", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
+```
+
