@@ -1,0 +1,118 @@
+---
+title: "ESRC Data"
+author: Mario Antonioletti
+output: 
+  github_document:
+      toc: true
+---
+
+```{r setup, include=FALSE}
+
+# Global knitr options
+knitr::opts_chunk$set(echo = TRUE)
+
+# Load packages to be used
+library(readr)
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+library(knitr)
+library(kableExtra)
+
+# Do not use scientific notation
+options(scipen=999)
+
+# Columns to read
+input_cols <- cols(
+                    FundingOrgName = col_character(),
+                    ProjectReference = col_character(),
+                    LeadROName = col_character(),
+                    Department = col_character(),
+                    ProjectCategory = col_character(),
+                    PISurname = col_character(),
+                    PIFirstName = col_character(),
+                    PIOtherNames = col_character(),
+                    `PI ORCID iD` = col_character(),
+                    StudentSurname = col_character(),
+                    StudentFirstName = col_character(),
+                    StudentOtherNames = col_character(),
+                    `Student ORCID iD` = col_character(),
+                    Title = col_character(),
+                    StartDate = col_date(format="%d/%m/%Y"),
+                    EndDate = col_date(format="%d/%m/%Y"),
+                    AwardPounds = col_double(),
+                    ExpenditurePounds = col_double(),
+                    Region = col_character(),
+                    Status = col_character(),
+                    GTRProjectUrl = col_character(),
+                    ProjectId = col_character(),
+                    FundingOrgId = col_character(),
+                    LeadROId = col_character(),
+                    PIId = col_character()
+)
+
+# Read the Gateway to Research data
+gtrdat <- read_csv("../Data/projectsearch-1633957153275.csv.gz", col_types = input_cols)
+
+# Remove EndDate >= 2050 or is an NAs - removes 25 values
+gtrdat <- gtrdat[!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) < 2050,]
+
+# Filter ESRC data - 10834 rows (about 8.9% of the data)
+esrcdat <- gtrdat %>% filter(FundingOrgName == "ESRC")
+
+
+```
+
+# Overall expenditure
+
+The data set covers the period `r format(min(gtrdat$StartDate),"%d/%m/%y")` to `r format(max(gtrdat$EndDate, na.rm = TRUE),"%d/%m/%y")` (for data downloaded from the Gateway to Research website downloaded on 11/10/21). Expenditure for the whole period under consideration is shown in the graph below.
+
+```{r funding_ByOrg, echo = FALSE}
+
+gtrdat %>% select(FundingOrgName, AwardPounds)                    %>% 
+           group_by(FundingOrgName)                               %>% 
+           summarise(TotalExpenditure = sum(AwardPounds)/1000000) %>% 
+           filter(!is.na(TotalExpenditure))                       %>% 
+           ggplot(aes(x = FundingOrgName, y = TotalExpenditure)) + 
+           geom_col(colour="black",fill="red") +
+           xlab("Funding Organisation") + 
+           ylab("Expenditure (in million of pounds)") +
+           theme_bw() + scale_y_log10()
+          
+```
+
+# ESRC data
+
+## Project category awards
+
+The project categories for the ESRC awards covering the period `r format(min(esrcdat$StartDate),"%d/%m/%y")` to `r format(max(esrcdat$EndDate, na.rm = TRUE),"%d/%m/%y")`.
+
+```{r esrc_categories, echo = FALSE}
+
+# Look at the project categories
+esrcdat %>% select(ProjectCategory, AwardPounds)                   %>% 
+            group_by(ProjectCategory)                              %>% 
+            summarise(Number = n(), TotalAward = sum(AwardPounds)) %>% 
+            mutate(AverageAward = TotalAward/Number)               %>% 
+            arrange(desc(AverageAward))                            %>% 
+            kbl(format="pipe", col.names = c("Project Catgeory", "Number of Awards", 
+                                "Total Awarded (£)","Average Award (£)")) 
+# knitr::kable(format="pipe", col.names = c("Project Category", "Number of Awards", 
+#                                 "Total Awarded (£)","Average Award (£)"))
+```
+
+## Award length distribution
+
+The award length distribution of the award lengths binned into 4-week periods is shown below.
+```{r award_lengths, echo = FALSE}
+
+# The as.numeric() is a workaround for https://github.com/tidyverse/ggplot2/issues/1377
+esrcdat %>% select(StartDate, EndDate, ProjectCategory) %>% 
+            filter(!is.na(StartDate) & !is.na(EndDate)) %>% 
+            mutate(grant_length = difftime(EndDate, StartDate,units = "weeks")) %>% 
+            ggplot(aes(x = as.numeric(grant_length), fill = ProjectCategory)) + 
+            geom_histogram(binwidth = 5, colour="black") + 
+            ylab("Number of Awards") + xlab("Award Length (weeks)") +
+            labs(fill = "Project Category") +theme_bw()
+```
+
