@@ -190,3 +190,21 @@ esrcdat %>% filter(Status == "Active")                                     %>%
             kbl(format="pipe", align = c("l",rep("r",3)),
                 col.names = c("Region", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
 ```
+
+## Department with active awards
+
+There are `r length(unique(esrcdat[["Department"]][esrcdat$Status == "Active"]))` unique departments for active projects (`r length(unique(esrcdat[["Department"]]))` for all projects). The table below only shows cases that have 30 or more occurrences in active projects.
+
+```{r active_departments, echo = FALSE}
+
+esrcdat %>% filter(Status == "Active") %>% 
+            select(Department)         %>% 
+            group_by(Department)       %>% 
+            tally()                    %>%
+            arrange(desc(n))           %>% 
+            filter(n >= 30)            %>% 
+            kbl(format="pipe", align = c("l","r"),
+                col.names = c("Department", "Number")) 
+
+```
+

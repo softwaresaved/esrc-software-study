@@ -14,6 +14,7 @@ Mario Antonioletti,
         awards](#geographical-distribution-of-awards)
         -   [All projects](#all-projects-2)
         -   [Active projects](#active-projects-1)
+    -   [Department with active awards](#department-with-active-awards)
 
 # Overall expenditure
 
@@ -105,3 +106,39 @@ We can generate the table for projects that are currently active:
 | Yorkshire and The Humber |              110 |        10,514,565 |         95,586.95 |
 | North East               |               11 |         1,843,525 |        167,593.18 |
 | NA                       |                1 |           100,372 |        100,372.00 |
+
+## Department with active awards
+
+There are 633 unique departments for active projects (1166 for all
+projects). The table below only shows cases that have 30 or more
+occurrences in active projects.
+
+| Department                               | Number |
+|:-----------------------------------------|-------:|
+| Psychology                               |    186 |
+| Economics                                |    158 |
+| Geography                                |    129 |
+| Sociology                                |    123 |
+| Social Sciences                          |     99 |
+| Education                                |     95 |
+| Sch of Social Sciences                   |     94 |
+| Politics                                 |     93 |
+| Sch of Psychology                        |     78 |
+| School of Psychology                     |     62 |
+| Law                                      |     56 |
+| Anthropology                             |     48 |
+| Sch of Economic, Social & Political Sci  |     47 |
+| College of Arts, Humanities & Social Sci |     44 |
+| Geography Politics and Sociology         |     44 |
+| Faculty of Education                     |     42 |
+| Epidemiology and Public Health           |     39 |
+| Applied Social Science                   |     37 |
+| Sch of Social and Political Science      |     37 |
+| School of Social & Political Sciences    |     35 |
+| Geography and Planning                   |     34 |
+| Experimental Psychology                  |     33 |
+| History                                  |     32 |
+| Sch of Geography                         |     32 |
+| Politics and International Studies       |     30 |
+| Sch of Applied Social Sciences           |     30 |
+| Sociology & Social Policy                |     30 |
