@@ -7,7 +7,7 @@ Mario Antonioletti
     -   [Project category awards](#project-category-awards)
     -   [Award length distribution](#award-length-distribution)
     -   [Geographical distribution of
-        Awards](#geographical-distribution-of-awards)
+        awards](#geographical-distribution-of-awards)
 
 # Overall expenditure
 
@@ -27,10 +27,10 @@ to 30/09/29.
 
 | Project Catgeory | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:-----------------|-----------------:|------------------:|------------------:|
-| Training Grant   |              403 |         574208131 |         1424834.1 |
-| Research Grant   |             5988 |        2631071135 |          439390.6 |
-| Fellowship       |             1415 |         151376374 |          106979.8 |
-| Studentship      |             3028 |                 0 |               0.0 |
+| Training Grant   |              403 |       574,208,131 |       1,424,834.1 |
+| Research Grant   |            5,988 |     2,631,071,135 |         439,390.6 |
+| Fellowship       |            1,415 |       151,376,374 |         106,979.8 |
+| Studentship      |            3,028 |                 0 |               0.0 |
 
 ## Award length distribution
 
@@ -38,7 +38,7 @@ The award length distribution of the award lengths binned into 4-week
 periods is shown below.
 ![](ESRC_files/figure-gfm/award_lengths-1.png)<!-- -->
 
-## Geographical distribution of Awards
+## Geographical distribution of awards
 
 The expenditure of the awards over the whole time period by region:
 

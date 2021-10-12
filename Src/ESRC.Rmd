@@ -90,12 +90,14 @@ The project categories for the ESRC awards covering the period `r format(min(esr
 ```{r esrc_categories, echo = FALSE}
 
 # Look at the project categories
-esrcdat %>% select(ProjectCategory, AwardPounds)                   %>% 
-            group_by(ProjectCategory)                              %>% 
-            summarise(Number = n(), TotalAward = sum(AwardPounds)) %>% 
-            mutate(AverageAward = TotalAward/Number)               %>% 
-            arrange(desc(AverageAward))                            %>% 
-            kbl(format="pipe", col.names = c("Project Catgeory", "Number of Awards", 
+esrcdat %>% select(ProjectCategory, AwardPounds)                           %>% 
+            group_by(ProjectCategory)                                      %>% 
+            summarise(Number = n(), TotalAward = sum(AwardPounds))         %>% 
+            mutate(AverageAward = TotalAward/Number)                       %>% 
+            arrange(desc(AverageAward))                                    %>% 
+            mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
+            kbl(format="pipe", align = c("l",rep("r",3)), 
+                col.names = c("Project Catgeory", "Number of Awards", 
                                 "Total Awarded (£)","Average Award (£)")) 
 # knitr::kable(format="pipe", col.names = c("Project Category", "Number of Awards", 
 #                                 "Total Awarded (£)","Average Award (£)"))
@@ -116,17 +118,17 @@ esrcdat %>% select(StartDate, EndDate, ProjectCategory) %>%
             labs(fill = "Project Category") +theme_bw()
 ```
 
-## Geographical distribution of Awards
+## Geographical distribution of awards
 
 The expenditure of the awards over the whole time period by region:
 
 ```{r esrc_byRegions, echo = FALSE}
 
-esrcdat %>% select(Region, AwardPounds)                            %>% 
-            group_by(Region)                                       %>% 
-            summarise(Number = n(), TotalAward = sum(AwardPounds)) %>% 
-            mutate(AverageAward = TotalAward/Number)               %>% 
-            arrange(desc(TotalAward))                              %>% 
+esrcdat %>% select(Region, AwardPounds)                                    %>% 
+            group_by(Region)                                               %>% 
+            summarise(Number = n(), TotalAward = sum(AwardPounds))         %>% 
+            mutate(AverageAward = TotalAward/Number)                       %>% 
+            arrange(desc(TotalAward))                                      %>% 
             mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
             kbl(format="pipe", align = c("l",rep("r",3)),
                 col.names = c("Region", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
