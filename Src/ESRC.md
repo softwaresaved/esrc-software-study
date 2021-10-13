@@ -12,6 +12,7 @@ Mario Antonioletti,
         -   [Active projects](#active-projects)
     -   [Award length distribution](#award-length-distribution)
         -   [All projects](#all-projects-2)
+        -   [Active projects only](#active-projects-only-1)
     -   [Geographical distribution of
         awards](#geographical-distribution-of-awards)
         -   [All projects](#all-projects-3)
@@ -20,6 +21,8 @@ Mario Antonioletti,
         -   [All projects](#all-projects-4)
         -   [Active projects](#active-projects-2)
     -   [Department with active awards](#department-with-active-awards)
+        -   [All projects](#all-projects-5)
+        -   [Active projects](#active-projects-3)
 
 # Overall expenditure
 
@@ -49,7 +52,7 @@ The graph below only contains values for currently active projects:
 ### All projects
 
 The project categories for the ESRC awards covering the period 01/01/06
-to 30/09/29.
+to 30/09/29. No explicit data seems to be provided for *Studentships*.
 
 | Project Catgeory | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:-----------------|-----------------:|------------------:|------------------:|
@@ -59,6 +62,9 @@ to 30/09/29.
 | Studentship      |            3,028 |                 0 |               0.0 |
 
 ### Active projects
+
+This information corresponds to projects that are classified as
+*Active*.
 
 | Project Catgeory | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:-----------------|-----------------:|------------------:|------------------:|
@@ -73,8 +79,12 @@ to 30/09/29.
 
 The award length distribution of the award lengths binned into 4-week
 periods is shown below.
-![](ESRC_files/figure-gfm/award_lengths-1.png)<!-- --> ### Active
-projects only
+![](ESRC_files/figure-gfm/award_lengths-1.png)<!-- -->
+
+### Active projects only
+
+The same information as provided above but only for *Active* projects.
+The maximum funding period corresponds to 626 weeks.
 
 ![](ESRC_files/figure-gfm/award_lengths_active-1.png)<!-- -->
 
@@ -83,7 +93,7 @@ projects only
 ### All projects
 
 The expenditure of the awards over the whole time period by region
-ordered by the total award given:
+ordered by the total award given is shown in the table below.
 
 | Region                   | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:-------------------------|-----------------:|------------------:|------------------:|
@@ -106,7 +116,7 @@ ordered by the total award given:
 ### Active projects
 
 We can generate the table for projects that are currently active ordered
-by the total award given:
+by the total award given is shown in the table below.
 
 | Region                   | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:-------------------------|-----------------:|------------------:|------------------:|
@@ -130,7 +140,8 @@ by the total award given:
 
 ### All projects
 
-This only shows the top 25 organisations by the average value of award.
+This only shows the top 25 organisations by the average value of the
+award.
 
 | Org                                     | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:----------------------------------------|-----------------:|------------------:|------------------:|
@@ -162,8 +173,8 @@ This only shows the top 25 organisations by the average value of award.
 
 ### Active projects
 
-This only shows the top 25 organisations with active projects by average
-value.
+This only shows the top 25 organisations with active projects by the
+average value of the award.
 
 | Org                                     | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:----------------------------------------|-----------------:|------------------:|------------------:|
@@ -194,6 +205,81 @@ value.
 | University of the Witwatersrand         |                2 |         1,223,884 |        611,942.00 |
 
 ## Department with active awards
+
+### All projects
+
+There are 1166 unique departments. The table below only shows
+departments that have 30 or more occurrences.
+
+| Department                               | Number |
+|:-----------------------------------------|-------:|
+| Psychology                               |    477 |
+| Economics                                |    384 |
+| Geography                                |    310 |
+| Sociology                                |    274 |
+| Sch of Psychology                        |    223 |
+| Social Sciences                          |    222 |
+| Politics                                 |    207 |
+| Education                                |    200 |
+| Sch of Social Sciences                   |    181 |
+| Sch of Social and Political Science      |    147 |
+| School of Psychology                     |    138 |
+| Law                                      |    130 |
+| Anthropology                             |    101 |
+| Business School                          |     94 |
+| Experimental Psychology                  |     92 |
+| Politics and International Studies       |     89 |
+| Environment, Education and Development   |     84 |
+| Geography Politics and Sociology         |     80 |
+| School of Social Sciences                |     79 |
+| School of Social & Political Sciences    |     75 |
+| IFS Research Team                        |     73 |
+| International Development                |     72 |
+| Epidemiology and Public Health           |     71 |
+| Faculty of Education                     |     66 |
+| Research Department                      |     66 |
+| Applied Social Science                   |     61 |
+| Sch of Economic, Social & Political Sci  |     61 |
+| Sch of Geography                         |     61 |
+| History                                  |     60 |
+| Politics and International Relations     |     58 |
+| Sch of Global Studies                    |     55 |
+| Geography and Planning                   |     52 |
+| Sociology & Social Policy                |     52 |
+| Management School                        |     51 |
+| Psychological Sciences                   |     51 |
+| Sch of Law                               |     51 |
+| Sch for Policy Studies                   |     50 |
+| Cardiff Business School                  |     49 |
+| Inst for Social and Economic Research    |     49 |
+| Sch of Philosophy Psychology & Language  |     46 |
+| Social Science                           |     46 |
+| School of Health Sciences                |     45 |
+| Unlisted                                 |     45 |
+| College of Arts, Humanities & Social Sci |     44 |
+| Government                               |     42 |
+| Public Health and Policy                 |     42 |
+| Criminology                              |     41 |
+| Social and Policy Sciences               |     39 |
+| Sch of Applied Social Sciences           |     38 |
+| Management                               |     37 |
+| Sch of Education                         |     37 |
+| Sch of Economics                         |     36 |
+| War Studies                              |     36 |
+| Arts Languages and Cultures              |     35 |
+| Education and Professional Studies       |     35 |
+| Geography - SoGE                         |     35 |
+| Linguistics and English Language         |     33 |
+| Sociological Studies                     |     33 |
+| Finance                                  |     32 |
+| Sch of Social Pol Sociology & Social Res |     31 |
+| Social Policy                            |     31 |
+| Cardiff School of Planning and Geography |     30 |
+| Sch of Politics & International Relation |     30 |
+| School of Law                            |     30 |
+| Warwick Business School                  |     30 |
+
+### Active projects
 
 There are 633 unique departments for active projects (1166 for all
 projects). The table below only shows cases that have 30 or more

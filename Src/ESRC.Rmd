@@ -113,7 +113,7 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))              %>%
 
 ### All projects
 
-The project categories for the ESRC awards covering the period `r format(min(esrcdat$StartDate),"%d/%m/%y")` to `r format(max(esrcdat$EndDate, na.rm = TRUE),"%d/%m/%y")`.
+The project categories for the ESRC awards covering the period `r format(min(esrcdat$StartDate),"%d/%m/%y")` to `r format(max(esrcdat$EndDate, na.rm = TRUE),"%d/%m/%y")`. No explicit data seems to be provided for *Studentships*.
 
 ```{r esrc_categories, echo = FALSE}
 
@@ -130,6 +130,8 @@ esrcdat %>% select(ProjectCategory, AwardPounds)                           %>%
 ```
 
 ### Active projects
+
+This information corresponds to projects that are classified as *Active*.
 
 ```{r esrc_categories_active, echo = FALSE}
 
@@ -162,7 +164,9 @@ esrcdat %>% select(StartDate, EndDate, ProjectCategory) %>%
             ylab("Number of Awards") + xlab("Award Length (weeks)") +
             labs(fill = "Project Category") + theme_bw()
 ```
+
 ### Active projects only
+The same information as provided above but only for *Active* projects. The maximum funding period corresponds to `r as.numeric(max(difftime(esrcdat[["EndDate"]][esrcdat$Status == "Active"], esrcdat[["StartDate"]][esrcdat$Status == "Active"], units = "weeks")))` weeks.
 
 ```{r award_lengths_active, echo = FALSE}
 
@@ -181,7 +185,7 @@ esrcdat %>% filter(Status == "Active")                                          
 
 ### All projects
 
-The expenditure of the awards over the whole time period by region ordered by the total award given:
+The expenditure of the awards over the whole time period by region ordered by the total award given is shown in the table below.
 
 ```{r esrc_byRegions, echo = FALSE}
 
@@ -197,7 +201,7 @@ esrcdat %>% select(Region, AwardPounds)                                    %>%
 
 ### Active projects
 
-We can generate the table for projects that are currently active ordered by the total award given:
+We can generate the table for projects that are currently active ordered by the total award given is shown in the table below.
 
 ```{r esrc_byRegions_active, echo = FALSE}
 
@@ -217,7 +221,7 @@ esrcdat %>% filter(Status == "Active")                                     %>%
 
 ### All projects
 
-This only shows the top 25 organisations by the average value of award.
+This only shows the top 25 organisations by the average value of the award.
  
 ```{r AwardByOrg, echo = FALSE}
 
@@ -233,7 +237,7 @@ esrcdat %>% select(LeadROName, AwardPounds)                                     
 ```
 
 ### Active projects
-This only shows the top 25 organisations with active projects by average value.
+This only shows the top 25 organisations with active projects by the average value of the award.
  
 ```{r ActiveAwardByOrg, echo = FALSE}
 
@@ -249,6 +253,25 @@ esrcdat %>% filter(Status == "Active")                                          
                 col.names = c("Org", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
 ```
 ## Department with active awards
+
+### All projects
+
+There are `r length(unique(esrcdat[["Department"]]))` unique departments. The table below only shows departments that have 30 or more occurrences.
+
+```{r departments, echo = FALSE}
+
+esrcdat %>% select(Department)         %>% 
+            group_by(Department)       %>% 
+            tally()                    %>%
+            arrange(desc(n))           %>% 
+            filter(n >= 30)            %>% 
+            kbl(format="pipe", align = c("l","r"),
+                col.names = c("Department", "Number")) 
+
+```
+
+
+### Active projects 
 
 There are `r length(unique(esrcdat[["Department"]][esrcdat$Status == "Active"]))` unique departments for active projects (`r length(unique(esrcdat[["Department"]]))` for all projects). The table below only shows cases that have 30 or more occurrences in active projects.
 
