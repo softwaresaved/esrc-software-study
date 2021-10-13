@@ -1,7 +1,7 @@
 ESRC Data
 ================
 Mario Antonioletti,
-12/10/21
+13/10/21
 
 -   [Overall expenditure](#overall-expenditure)
     -   [All projects](#all-projects)
@@ -22,10 +22,14 @@ Mario Antonioletti,
 
 ## All projects
 
-The data set covers the period 01/01/73 to 01/01/30 (for data downloaded
-from the Gateway to Research website downloaded on 11/10/21).
+The [Gateway to Research](https://gtr.ukri.org/) data set, made
+available under an [Open Government
+Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/),
+covers the period 01/01/73 to 01/01/30 (for data downloaded from the
+Gateway to Research website on 11/10/21).
+
 Expenditure for the whole period under consideration is shown in the
-graph below. Awards that do not have a value defined are removed.
+graph below. Awards that do not have a value defined have been removed.
 
 ![](ESRC_files/figure-gfm/funding_ByOrg-1.png)<!-- -->
 
