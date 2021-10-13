@@ -319,4 +319,5 @@ occurrences in active projects.
 # ToDo Items
 
 -   [ ] Department text needs some cleaning.
--   [ ] Research title looks intersting to examine.
+-   [ ] Research title looks interesting for further examination but
+    will require processing to be comprehensible.
