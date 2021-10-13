@@ -16,6 +16,9 @@ Mario Antonioletti,
         awards](#geographical-distribution-of-awards)
         -   [All projects](#all-projects-3)
         -   [Active projects](#active-projects-1)
+    -   [Funding by lead organisation](#funding-by-lead-organisation)
+        -   [All projects](#all-projects-4)
+        -   [Active projects](#active-projects-2)
     -   [Department with active awards](#department-with-active-awards)
 
 # Overall expenditure
@@ -79,7 +82,8 @@ projects only
 
 ### All projects
 
-The expenditure of the awards over the whole time period by region:
+The expenditure of the awards over the whole time period by region
+ordered by the total award given:
 
 | Region                   | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:-------------------------|-----------------:|------------------:|------------------:|
@@ -101,7 +105,8 @@ The expenditure of the awards over the whole time period by region:
 
 ### Active projects
 
-We can generate the table for projects that are currently active:
+We can generate the table for projects that are currently active ordered
+by the total award given:
 
 | Region                   | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:-------------------------|-----------------:|------------------:|------------------:|
@@ -120,6 +125,73 @@ We can generate the table for projects that are currently active:
 | Yorkshire and The Humber |              110 |        10,514,565 |         95,586.95 |
 | North East               |               11 |         1,843,525 |        167,593.18 |
 | NA                       |                1 |           100,372 |        100,372.00 |
+
+## Funding by lead organisation
+
+### All projects
+
+This only shows the top 25 organisations by the average value of award.
+
+| Org                                     | Number of Awards | Total Awarded (£) | Average Award (£) |
+|:----------------------------------------|-----------------:|------------------:|------------------:|
+| World Conservation Monitoring Ctr WCMC  |                2 |        22,456,789 |     11,228,394.50 |
+| Office for National Statistics          |                2 |        17,898,948 |      8,949,474.00 |
+| Ministry of Justice                     |                1 |         3,412,732 |      3,412,732.00 |
+| Liverpool School of Tropical Medicine   |                4 |        12,482,546 |      3,120,636.50 |
+| International Institute for Env and Dev |                4 |         9,359,410 |      2,339,852.50 |
+| Northern Ireland Stat Res Agency NISRA  |                2 |         3,979,826 |      1,989,913.00 |
+| The Scottish Government                 |                3 |         5,468,844 |      1,822,948.00 |
+| University of Essex                     |              170 |       307,055,795 |      1,806,210.56 |
+| University of Pretoria                  |                2 |         2,581,756 |      1,290,878.00 |
+| Rhodes University                       |                2 |         2,561,566 |      1,280,783.00 |
+| Coventry University                     |               21 |        23,060,299 |      1,098,109.48 |
+| Leonard Cheshire Disability             |                2 |         2,161,816 |      1,080,908.00 |
+| Addis Ababa University                  |                3 |         3,131,845 |      1,043,948.33 |
+| University of Cape Town                 |                6 |         5,670,678 |        945,113.00 |
+| Johns Hopkins University                |                1 |           865,561 |        865,561.00 |
+| University of Michigan                  |                3 |         2,240,913 |        746,971.00 |
+| Institute of Development Studies        |               34 |        25,051,833 |        736,818.62 |
+| National Institute of Public Health     |                1 |           722,163 |        722,163.00 |
+| Institute for Fiscal Studies            |               74 |        50,370,972 |        680,688.81 |
+| University of the Free State            |                1 |           670,903 |        670,903.00 |
+| University of Nairobi                   |                1 |           614,772 |        614,772.00 |
+| University of Lagos                     |                2 |         1,229,275 |        614,637.50 |
+| University of the Witwatersrand         |                2 |         1,223,884 |        611,942.00 |
+| Makerere University                     |                1 |           596,479 |        596,479.00 |
+| Monash University                       |                1 |           572,984 |        572,984.00 |
+
+### Active projects
+
+This only shows the top 25 organisations with active projects by average
+value.
+
+| Org                                     | Number of Awards | Total Awarded (£) | Average Award (£) |
+|:----------------------------------------|-----------------:|------------------:|------------------:|
+| Liverpool School of Tropical Medicine   |                1 |        12,156,514 |     12,156,514.00 |
+| World Conservation Monitoring Ctr WCMC  |                2 |        22,456,789 |     11,228,394.50 |
+| Office for National Statistics          |                2 |        17,898,948 |      8,949,474.00 |
+| International Institute for Env and Dev |                2 |         8,252,550 |      4,126,275.00 |
+| Ministry of Justice                     |                1 |         3,412,732 |      3,412,732.00 |
+| University of Essex                     |               59 |       182,174,111 |      3,087,696.80 |
+| Coventry University                     |                8 |        22,024,518 |      2,753,064.75 |
+| Northern Ireland Stat Res Agency NISRA  |                2 |         3,979,826 |      1,989,913.00 |
+| The Scottish Government                 |                3 |         5,468,844 |      1,822,948.00 |
+| University of Pretoria                  |                2 |         2,581,756 |      1,290,878.00 |
+| Rhodes University                       |                2 |         2,561,566 |      1,280,783.00 |
+| Addis Ababa University                  |                3 |         3,131,845 |      1,043,948.33 |
+| Institute of Development Studies        |               11 |        11,185,739 |      1,016,885.36 |
+| Cranfield University                    |                3 |         2,943,034 |        981,011.33 |
+| Institute for Fiscal Studies            |               17 |        15,737,680 |        925,745.88 |
+| University of Surrey                    |               25 |        22,761,941 |        910,477.64 |
+| University of Cape Town                 |                4 |         3,264,723 |        816,180.75 |
+| Washington University in St Louis       |                1 |           713,698 |        713,698.00 |
+| University of Michigan                  |                1 |           697,241 |        697,241.00 |
+| University of the Free State            |                1 |           670,903 |        670,903.00 |
+| University College London               |              298 |       192,209,248 |        644,997.48 |
+| University of Edinburgh                 |              134 |        84,313,517 |        629,205.35 |
+| University of Nairobi                   |                1 |           614,772 |        614,772.00 |
+| University of Lagos                     |                2 |         1,229,275 |        614,637.50 |
+| University of the Witwatersrand         |                2 |         1,223,884 |        611,942.00 |
 
 ## Department with active awards
 

@@ -184,7 +184,7 @@ esrcdat %>% filter(Status == "Active")                                          
 
 ### All projects
 
-The expenditure of the awards over the whole time period by region:
+The expenditure of the awards over the whole time period by region ordered by the total award given:
 
 ```{r esrc_byRegions, echo = FALSE}
 
@@ -200,7 +200,7 @@ esrcdat %>% select(Region, AwardPounds)                                    %>%
 
 ### Active projects
 
-We can generate the table for projects that are currently active:
+We can generate the table for projects that are currently active ordered by the total award given:
 
 ```{r esrc_byRegions_active, echo = FALSE}
 
@@ -215,6 +215,42 @@ esrcdat %>% filter(Status == "Active")                                     %>%
                 col.names = c("Region", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
 ```
 
+
+## Funding by lead organisation
+
+### All projects
+
+This only shows the top 25 organisations by the average value of award.
+ 
+```{r AwardByOrg, echo = FALSE}
+
+esrcdat %>% select(LeadROName, AwardPounds)                                     %>% 
+            group_by(LeadROName)                                                %>% 
+            summarise(Number = n(), TotalAward = sum(AwardPounds,na.rm = TRUE)) %>% 
+            mutate(AvgAward = TotalAward/Number)                                %>% 
+            arrange(desc(AvgAward))                                             %>% 
+            mutate(across(where(is.numeric), ~ format(., big.mark = ",")))      %>% 
+            slice_head(n = 25)                                                  %>% 
+            kbl(format="pipe", align = c("l",rep("r",3)),
+                col.names = c("Org", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
+```
+
+### Active projects
+This only shows the top 25 organisations with active projects by average value.
+ 
+```{r ActiveAwardByOrg, echo = FALSE}
+
+esrcdat %>% filter(Status == "Active")                                          %>% 
+            select(LeadROName, AwardPounds)                                     %>% 
+            group_by(LeadROName)                                                %>% 
+            summarise(Number = n(), TotalAward = sum(AwardPounds,na.rm = TRUE)) %>% 
+            mutate(AvgAward = round(TotalAward/Number,2))                       %>% 
+            arrange(desc(AvgAward))                                             %>% 
+            mutate(across(where(is.numeric), ~ format(., big.mark = ",")))      %>% 
+            slice_head(n = 25)                                                  %>% 
+            kbl(format="pipe", align = c("l",rep("r",3)),
+                col.names = c("Org", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
+```
 ## Department with active awards
 
 There are `r length(unique(esrcdat[["Department"]][esrcdat$Status == "Active"]))` unique departments for active projects (`r length(unique(esrcdat[["Department"]]))` for all projects). The table below only shows cases that have 30 or more occurrences in active projects.
