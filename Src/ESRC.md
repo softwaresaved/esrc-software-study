@@ -23,6 +23,7 @@ Mario Antonioletti,
     -   [Department with active awards](#department-with-active-awards)
         -   [All projects](#all-projects-5)
         -   [Active projects](#active-projects-3)
+-   [ToDo Items](#todo-items)
 
 # Overall expenditure
 
@@ -314,3 +315,8 @@ occurrences in active projects.
 | Politics and International Studies       |     30 |
 | Sch of Applied Social Sciences           |     30 |
 | Sociology & Social Policy                |     30 |
+
+# ToDo Items
+
+-   [ ] Department text needs some cleaning.
+-   [ ] Research title looks intersting to examine.

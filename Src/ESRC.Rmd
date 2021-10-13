@@ -288,3 +288,7 @@ esrcdat %>% filter(Status == "Active") %>%
 
 ```
 
+# ToDo Items
+
+- [ ] Department text needs some cleaning.
+- [ ] Research title looks intersting to examine.
