@@ -127,8 +127,6 @@ esrcdat %>% select(ProjectCategory, AwardPounds)                           %>%
             kbl(format="pipe", align = c("l",rep("r",3)), 
                 col.names = c("Project Catgeory", "Number of Awards", 
                                 "Total Awarded (£)","Average Award (£)")) 
-# knitr::kable(format="pipe", col.names = c("Project Category", "Number of Awards", 
-#                                 "Total Awarded (£)","Average Award (£)"))
 ```
 
 ### Active projects
@@ -146,8 +144,7 @@ esrcdat %>% filter(Status == "Active")                                     %>%
             kbl(format="pipe", align = c("l",rep("r",3)), 
                 col.names = c("Project Catgeory", "Number of Awards", 
                                 "Total Awarded (£)","Average Award (£)")) 
-# knitr::kable(format="pipe", col.names = c("Project Category", "Number of Awards", 
-#                                 "Total Awarded (£)","Average Award (£)"))
+
 ```
 
 ## Award length distribution
