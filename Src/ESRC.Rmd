@@ -75,11 +75,11 @@ Expenditure for the whole period under consideration is shown in the graph below
 
 ```{r funding_ByOrg, echo = FALSE}
 
-gtrdat %>% filter(!is.na(AwardPounds))                            %>% 
-           select(FundingOrgName, AwardPounds)                    %>% 
-           group_by(FundingOrgName)                               %>% 
-           summarise(TotalExpenditure = sum(AwardPounds)/1000000) %>% 
-           filter(!is.na(TotalExpenditure))                       %>% 
+gtrdat %>% filter(!is.na(AwardPounds))                                   %>% 
+           select(FundingOrgName, AwardPounds)                           %>% 
+           group_by(FundingOrgName)                                      %>% 
+           summarise(TotalExpenditure = round(sum(AwardPounds)/1000000)) %>% 
+           filter(!is.na(TotalExpenditure))                              %>% 
            ggplot(aes(x = FundingOrgName, y = TotalExpenditure)) + 
            geom_col(colour="black",fill="red") +
            xlab("Funding Organisation") + 
@@ -94,11 +94,11 @@ The graph below only contains values for currently active projects:
 
 ```{r funding_ByOrg_active, echo = FALSE}
 
-gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))       %>% 
-           select(FundingOrgName, AwardPounds)                    %>% 
-           group_by(FundingOrgName)                               %>% 
-           summarise(TotalExpenditure = sum(AwardPounds)/1000000) %>% 
-           filter(!is.na(TotalExpenditure))                       %>% 
+gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))              %>% 
+           select(FundingOrgName, AwardPounds)                           %>% 
+           group_by(FundingOrgName)                                      %>% 
+           summarise(TotalExpenditure = round(sum(AwardPounds)/1000000)) %>% 
+           filter(!is.na(TotalExpenditure))                              %>% 
            ggplot(aes(x = FundingOrgName, y = TotalExpenditure)) + 
            geom_col(colour="black",fill="red") +
            xlab("Funding Organisation") + 
@@ -121,7 +121,7 @@ The project categories for the ESRC awards covering the period `r format(min(esr
 esrcdat %>% select(ProjectCategory, AwardPounds)                           %>% 
             group_by(ProjectCategory)                                      %>% 
             summarise(Number = n(), TotalAward = sum(AwardPounds))         %>% 
-            mutate(AverageAward = TotalAward/Number)                       %>% 
+            mutate(AverageAward = round(TotalAward/Number,2))              %>% 
             arrange(desc(AverageAward))                                    %>% 
             mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
             kbl(format="pipe", align = c("l",rep("r",3)), 
@@ -140,7 +140,7 @@ esrcdat %>% filter(Status == "Active")                                     %>%
             select(ProjectCategory, AwardPounds)                           %>% 
             group_by(ProjectCategory)                                      %>% 
             summarise(Number = n(), TotalAward = sum(AwardPounds))         %>% 
-            mutate(AverageAward = TotalAward/Number)                       %>% 
+            mutate(AverageAward = round(TotalAward/Number,2))              %>% 
             arrange(desc(AverageAward))                                    %>% 
             mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
             kbl(format="pipe", align = c("l",rep("r",3)), 
@@ -191,7 +191,7 @@ The expenditure of the awards over the whole time period by region ordered by th
 esrcdat %>% select(Region, AwardPounds)                                    %>% 
             group_by(Region)                                               %>% 
             summarise(Number = n(), TotalAward = sum(AwardPounds))         %>% 
-            mutate(AverageAward = TotalAward/Number)                       %>% 
+            mutate(AverageAward = round(TotalAward/Number,2))              %>% 
             arrange(desc(TotalAward))                                      %>% 
             mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
             kbl(format="pipe", align = c("l",rep("r",3)),
@@ -208,7 +208,7 @@ esrcdat %>% filter(Status == "Active")                                     %>%
             select(Region, AwardPounds)                                    %>% 
             group_by(Region)                                               %>% 
             summarise(Number = n(), TotalAward = sum(AwardPounds))         %>% 
-            mutate(AverageAward = TotalAward/Number)                       %>% 
+            mutate(AverageAward = round(TotalAward/Number,2))              %>% 
             arrange(desc(TotalAward))                                      %>% 
             mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
             kbl(format="pipe", align = c("l",rep("r",3)),
@@ -227,7 +227,7 @@ This only shows the top 25 organisations by the average value of award.
 esrcdat %>% select(LeadROName, AwardPounds)                                     %>% 
             group_by(LeadROName)                                                %>% 
             summarise(Number = n(), TotalAward = sum(AwardPounds,na.rm = TRUE)) %>% 
-            mutate(AvgAward = TotalAward/Number)                                %>% 
+            mutate(AvgAward = round(TotalAward/Number,2))                       %>% 
             arrange(desc(AvgAward))                                             %>% 
             mutate(across(where(is.numeric), ~ format(., big.mark = ",")))      %>% 
             slice_head(n = 25)                                                  %>% 
