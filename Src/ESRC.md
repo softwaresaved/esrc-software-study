@@ -20,7 +20,7 @@ Mario Antonioletti,
     -   [Funding by lead organisation](#funding-by-lead-organisation)
         -   [All projects](#all-projects-4)
         -   [Active projects](#active-projects-2)
-    -   [Department with active awards](#department-with-active-awards)
+    -   [Department awards](#department-awards)
         -   [All projects](#all-projects-5)
         -   [Active projects](#active-projects-3)
 -   [ToDo Items](#todo-items)
@@ -205,80 +205,69 @@ average value of the award.
 | University of Lagos                     |                2 |         1,229,275 |        614,637.50 |
 | University of the Witwatersrand         |                2 |         1,223,884 |        611,942.00 |
 
-## Department with active awards
+## Department awards
 
 ### All projects
 
 There are 1166 unique departments. The table below only shows
-departments that have 30 or more occurrences.
+departments that have 30 or more occurrences. The Departments below have
+been ‘cleaned’ to remove minor differences, e.g. Cardiff Business School
+to Business School and so on.
 
-| Department                               | Number |
-|:-----------------------------------------|-------:|
-| Psychology                               |    477 |
-| Economics                                |    384 |
-| Geography                                |    310 |
-| Sociology                                |    274 |
-| Sch of Psychology                        |    223 |
-| Social Sciences                          |    222 |
-| Politics                                 |    207 |
-| Education                                |    200 |
-| Sch of Social Sciences                   |    181 |
-| Sch of Social and Political Science      |    147 |
-| School of Psychology                     |    138 |
-| Law                                      |    130 |
-| Anthropology                             |    101 |
-| Business School                          |     94 |
-| Experimental Psychology                  |     92 |
-| Politics and International Studies       |     89 |
-| Environment, Education and Development   |     84 |
-| Geography Politics and Sociology         |     80 |
-| School of Social Sciences                |     79 |
-| School of Social & Political Sciences    |     75 |
-| IFS Research Team                        |     73 |
-| International Development                |     72 |
-| Epidemiology and Public Health           |     71 |
-| Faculty of Education                     |     66 |
-| Research Department                      |     66 |
-| Applied Social Science                   |     61 |
-| Sch of Economic, Social & Political Sci  |     61 |
-| Sch of Geography                         |     61 |
-| History                                  |     60 |
-| Politics and International Relations     |     58 |
-| Sch of Global Studies                    |     55 |
-| Geography and Planning                   |     52 |
-| Sociology & Social Policy                |     52 |
-| Management School                        |     51 |
-| Psychological Sciences                   |     51 |
-| Sch of Law                               |     51 |
-| Sch for Policy Studies                   |     50 |
-| Cardiff Business School                  |     49 |
-| Inst for Social and Economic Research    |     49 |
-| Sch of Philosophy Psychology & Language  |     46 |
-| Social Science                           |     46 |
-| School of Health Sciences                |     45 |
-| Unlisted                                 |     45 |
-| College of Arts, Humanities & Social Sci |     44 |
-| Government                               |     42 |
-| Public Health and Policy                 |     42 |
-| Criminology                              |     41 |
-| Social and Policy Sciences               |     39 |
-| Sch of Applied Social Sciences           |     38 |
-| Management                               |     37 |
-| Sch of Education                         |     37 |
-| Sch of Economics                         |     36 |
-| War Studies                              |     36 |
-| Arts Languages and Cultures              |     35 |
-| Education and Professional Studies       |     35 |
-| Geography - SoGE                         |     35 |
-| Linguistics and English Language         |     33 |
-| Sociological Studies                     |     33 |
-| Finance                                  |     32 |
-| Sch of Social Pol Sociology & Social Res |     31 |
-| Social Policy                            |     31 |
-| Cardiff School of Planning and Geography |     30 |
-| Sch of Politics & International Relation |     30 |
-| School of Law                            |     30 |
-| Warwick Business School                  |     30 |
+| Department                             | Number |
+|:---------------------------------------|-------:|
+| Psychology                             |    839 |
+| Social Science                         |    584 |
+| Economics                              |    421 |
+| Geography                              |    400 |
+| Education                              |    335 |
+| Sociology                              |    275 |
+| Business School                        |    254 |
+| Law                                    |    217 |
+| Politics                               |    207 |
+| Social and Political Science           |    150 |
+| Management                             |    144 |
+| Applied Social Science                 |    131 |
+| Anthropology                           |    101 |
+| Experimental Psychology                |     92 |
+| Politics and International Studies     |     89 |
+| Environment, Education and Development |     84 |
+| International Development              |     84 |
+| Geography Politics and Sociology       |     80 |
+| Social & Political Science             |     75 |
+| Sociology & Social Policy              |     75 |
+| Health Science                         |     73 |
+| History                                |     73 |
+| IFS Research Team                      |     73 |
+| Epidemiology and Public Health         |     71 |
+| Research Department                    |     66 |
+| Economic, Social & Political Sci       |     61 |
+| Psychological Science                  |     60 |
+| Politics and International Relations   |     58 |
+| Global Studies                         |     55 |
+| Policy Studies                         |     53 |
+| Geography and Planning                 |     52 |
+| Social and Economic Research           |     49 |
+| Health and Life Science                |     46 |
+| Philosophy Psychology & Language       |     46 |
+| Unlisted                               |     45 |
+| Arts, Humanities & Social Sci          |     44 |
+| Government                             |     43 |
+| Public Health and Policy               |     42 |
+| Criminology                            |     41 |
+| Social and Policy Science              |     39 |
+| War Studies                            |     36 |
+| Arts Languages and Cultures            |     35 |
+| Education and Professional Studies     |     35 |
+| Geography - SoGE                       |     35 |
+| Law School                             |     35 |
+| Linguistics and English Language       |     35 |
+| Sociological Studies                   |     33 |
+| Finance                                |     32 |
+| Social Pol Sociology & Social Res      |     31 |
+| Social Policy                          |     31 |
+| Planning and Geography                 |     30 |
+| Politics & International Relation      |     30 |
 
 ### Active projects
 
@@ -286,35 +275,33 @@ There are 633 unique departments for active projects (1166 for all
 projects). The table below only shows cases that have 30 or more
 occurrences in active projects.
 
-| Department                               | Number |
-|:-----------------------------------------|-------:|
-| Psychology                               |    186 |
-| Economics                                |    158 |
-| Geography                                |    129 |
-| Sociology                                |    123 |
-| Social Sciences                          |     99 |
-| Education                                |     95 |
-| Sch of Social Sciences                   |     94 |
-| Politics                                 |     93 |
-| Sch of Psychology                        |     78 |
-| School of Psychology                     |     62 |
-| Law                                      |     56 |
-| Anthropology                             |     48 |
-| Sch of Economic, Social & Political Sci  |     47 |
-| College of Arts, Humanities & Social Sci |     44 |
-| Geography Politics and Sociology         |     44 |
-| Faculty of Education                     |     42 |
-| Epidemiology and Public Health           |     39 |
-| Applied Social Science                   |     37 |
-| Sch of Social and Political Science      |     37 |
-| School of Social & Political Sciences    |     35 |
-| Geography and Planning                   |     34 |
-| Experimental Psychology                  |     33 |
-| History                                  |     32 |
-| Sch of Geography                         |     32 |
-| Politics and International Studies       |     30 |
-| Sch of Applied Social Sciences           |     30 |
-| Sociology & Social Policy                |     30 |
+| Department                         | Number |
+|:-----------------------------------|-------:|
+| Psychology                         |    326 |
+| Social Science                     |    245 |
+| Geography                          |    172 |
+| Economics                          |    170 |
+| Education                          |    160 |
+| Sociology                          |    123 |
+| Business School                    |    106 |
+| Law                                |     97 |
+| Politics                           |     93 |
+| Applied Social Science             |     72 |
+| Management                         |     53 |
+| Anthropology                       |     48 |
+| Economic, Social & Political Sci   |     47 |
+| Arts, Humanities & Social Sci      |     44 |
+| Geography Politics and Sociology   |     44 |
+| Sociology & Social Policy          |     43 |
+| History                            |     40 |
+| Epidemiology and Public Health     |     39 |
+| Social and Political Science       |     38 |
+| Health Science                     |     37 |
+| Social & Political Science         |     35 |
+| Geography and Planning             |     34 |
+| Experimental Psychology            |     33 |
+| International Development          |     31 |
+| Politics and International Studies |     30 |
 
 # ToDo Items
 

@@ -18,6 +18,7 @@ library(readr)
 library(lubridate)
 library(dplyr)
 library(ggplot2)
+library(stringr)
 library(knitr)
 library(kableExtra)
 
@@ -252,16 +253,52 @@ esrcdat %>% filter(Status == "Active")                                          
             kbl(format="pipe", align = c("l",rep("r",3)),
                 col.names = c("Org", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
 ```
-## Department with active awards
+
+## Department awards
+
+```{r clean_Dep, echo = FALSE}
+esrcdat$CleanDep <- esrcdat$Department
+esrcdat$CleanDep <- gsub("Cardiff School of ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("School of ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Schl of ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Sch of ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Sch for ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Department of ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Dept of ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Institute of ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Inst of ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Inst for ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Institute for ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Birbeck ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("College of ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Centre for ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Ctr for ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Fac of ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Faculty of ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Essex ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Cardiff ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Oxford ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Warwick ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Sheffield ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Sciences", "Science", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Alliance Manchester ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Management School", "Management", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Southampton ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Nottingham University ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("University of Sussex ", "", esrcdat$CleanDep)
+
+# length(unique(esrcdat$CleanDep))
+# unique(esrcdat$CleanDep)
+```
 
 ### All projects
 
-There are `r length(unique(esrcdat[["Department"]]))` unique departments. The table below only shows departments that have 30 or more occurrences.
+There are `r length(unique(esrcdat[["Department"]]))` unique departments. The table below only shows departments that have 30 or more occurrences. The Departments below have been 'cleaned' to remove minor differences, e.g. Cardiff Business School to Business School and so on.
 
 ```{r departments, echo = FALSE}
 
-esrcdat %>% select(Department)         %>% 
-            group_by(Department)       %>% 
+esrcdat %>% select(CleanDep)           %>% 
+            group_by(CleanDep)         %>% 
             tally()                    %>%
             arrange(desc(n))           %>% 
             filter(n >= 30)            %>% 
@@ -278,8 +315,8 @@ There are `r length(unique(esrcdat[["Department"]][esrcdat$Status == "Active"]))
 ```{r active_departments, echo = FALSE}
 
 esrcdat %>% filter(Status == "Active") %>% 
-            select(Department)         %>% 
-            group_by(Department)       %>% 
+            select(CleanDep)           %>% 
+            group_by(CleanDep)         %>% 
             tally()                    %>%
             arrange(desc(n))           %>% 
             filter(n >= 30)            %>% 
