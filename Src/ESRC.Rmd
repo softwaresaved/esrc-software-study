@@ -153,21 +153,21 @@ esrcdat %>% filter(Status == "Active")                                     %>%
 ## Award length distribution
 
 ### All projects
-The award length distribution of the award lengths binned into 4-week periods is shown below. 
+The award length distribution of the award lengths binned into 28-day periods is shown below. 
 ```{r award_lengths, echo = FALSE}
 
 # The as.numeric() is a workaround for https://github.com/tidyverse/ggplot2/issues/1377
 esrcdat %>% select(StartDate, EndDate, ProjectCategory) %>% 
             filter(!is.na(StartDate) & !is.na(EndDate)) %>% 
-            mutate(grant_length = difftime(EndDate, StartDate,units = "weeks")) %>% 
+            mutate(grant_length = difftime(EndDate, StartDate,units = "days")) %>% 
             ggplot(aes(x = as.numeric(grant_length), fill = ProjectCategory)) + 
-            geom_histogram(binwidth = 5, colour="black") + 
-            ylab("Number of Awards") + xlab("Award Length (weeks)") +
+            geom_histogram(binwidth = 28, colour="black") + 
+            ylab("Number of Awards") + xlab("Award Length (days)") +
             labs(fill = "Project Category") + theme_bw()
 ```
 
 ### Active projects only
-The same information as provided above but only for *Active* projects. The maximum funding period corresponds to `r as.numeric(max(difftime(esrcdat[["EndDate"]][esrcdat$Status == "Active"], esrcdat[["StartDate"]][esrcdat$Status == "Active"], units = "weeks")))` weeks.
+The same information as provided above but only for *Active* projects. The maximum funding period corresponds to `r as.numeric(max(difftime(esrcdat[["EndDate"]][esrcdat$Status == "Active"], esrcdat[["StartDate"]][esrcdat$Status == "Active"], units = "days")))` days.
 
 ```{r award_lengths_active, echo = FALSE}
 
@@ -175,13 +175,43 @@ The same information as provided above but only for *Active* projects. The maxim
 esrcdat %>% filter(Status == "Active")                                          %>% 
             select(StartDate, EndDate, ProjectCategory)                         %>% 
             filter(!is.na(StartDate) & !is.na(EndDate))                         %>% 
-            mutate(grant_length = difftime(EndDate, StartDate,units = "weeks")) %>% 
+            mutate(grant_length = difftime(EndDate, StartDate,units = "days")) %>% 
             ggplot(aes(x = as.numeric(grant_length), fill = ProjectCategory)) + 
-            geom_histogram(binwidth = 5, colour="black") + 
-            ylab("Number of Awards") + xlab("Award Length (weeks)") +
+            geom_histogram(binwidth = 28, colour="black") + 
+            ylab("Number of Awards") + xlab("Award Length (days)") +
             labs(fill = "Project Category") + theme_bw()
 ```
 
+The top length of awards lie by project category in days is tabulated below.
+
+```{r award_lengths_active_table, echo = FALSE}
+
+esrcdat %>% filter(Status == "Active")                                                      %>% 
+            select(StartDate, EndDate, ProjectCategory)                                     %>% 
+            filter(!is.na(StartDate) & !is.na(EndDate))                                     %>% 
+            mutate(grant_length = as.numeric(difftime(EndDate, StartDate,units = "days")))  %>% 
+            group_by(grant_length, ProjectCategory)                                         %>% 
+            tally()                                                                         %>% 
+            arrange(desc(n))                                                                %>% 
+            head(15)                                                                        %>% 
+            kbl(format="pipe", align = c("r","l","r"), 
+                col.names = c("Number of days","Project Category","Number of projects"))
+```
+
+Percentage of award types by time length.
+
+```{r award_lengths_active_fill, echo = FALSE}
+
+# The as.numeric() is a workaround for https://github.com/tidyverse/ggplot2/issues/1377
+esrcdat %>% filter(Status == "Active")                                          %>% 
+            select(StartDate, EndDate, ProjectCategory)                         %>% 
+            filter(!is.na(StartDate) & !is.na(EndDate))                         %>% 
+            mutate(grant_length = difftime(EndDate, StartDate,units = "days")) %>% 
+            ggplot(aes(x = as.numeric(grant_length), fill = ProjectCategory)) + 
+            geom_histogram(binwidth = 28, colour="black", position="fill", na.rm = TRUE) + 
+            ylab("Number of Awards") + xlab("Award Length (days)") +
+            labs(fill = "Project Category") + theme_bw() + scale_y_continuous(labels = scales::percent)
+```
 ## Geographical distribution of awards
 
 ### All projects

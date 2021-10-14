@@ -1,7 +1,7 @@
 ESRC Data
 ================
 Mario Antonioletti,
-13/10/21
+14/10/21
 
 -   [Overall expenditure](#overall-expenditure)
     -   [All projects](#all-projects)
@@ -13,8 +13,6 @@ Mario Antonioletti,
     -   [Award length distribution](#award-length-distribution)
         -   [All projects](#all-projects-2)
         -   [Active projects only](#active-projects-only-1)
-    -   [Geographical distribution of
-        awards](#geographical-distribution-of-awards)
         -   [All projects](#all-projects-3)
         -   [Active projects](#active-projects-1)
     -   [Funding by lead organisation](#funding-by-lead-organisation)
@@ -78,18 +76,42 @@ This information corresponds to projects that are classified as
 
 ### All projects
 
-The award length distribution of the award lengths binned into 4-week
+The award length distribution of the award lengths binned into 28-day
 periods is shown below.
 ![](ESRC_files/figure-gfm/award_lengths-1.png)<!-- -->
 
 ### Active projects only
 
 The same information as provided above but only for *Active* projects.
-The maximum funding period corresponds to 626 weeks.
+The maximum funding period corresponds to 4382 days.
 
 ![](ESRC_files/figure-gfm/award_lengths_active-1.png)<!-- -->
 
-## Geographical distribution of awards
+The top length of awards lie by project category in days is tabulated
+below.
+
+| Number of days | Project Category | Number of projects |
+|---------------:|:-----------------|-------------------:|
+|           1460 | Studentship      |                624 |
+|           1095 | Research Grant   |                204 |
+|           1095 | Studentship      |                186 |
+|            364 | Fellowship       |                178 |
+|           1094 | Studentship      |                164 |
+|           1277 | Studentship      |                144 |
+|            364 | Research Grant   |                 93 |
+|           1460 | Research Grant   |                 88 |
+|           1552 | Studentship      |                 79 |
+|           1461 | Studentship      |                 73 |
+|           1187 | Studentship      |                 72 |
+|           1094 | Research Grant   |                 70 |
+|            729 | Research Grant   |                 57 |
+|           1186 | Studentship      |                 53 |
+|           1642 | Studentship      |                 52 |
+
+Percentage of award types by time length.
+
+![](ESRC_files/figure-gfm/award_lengths_active_fill-1.png)<!-- --> ##
+Geographical distribution of awards
 
 ### All projects
 
