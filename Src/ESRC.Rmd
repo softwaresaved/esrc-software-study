@@ -283,7 +283,21 @@ esrcdat %>% filter(Status == "Active")                                          
             kbl(format="pipe", align = c("l",rep("r",3)),
                 col.names = c("Org", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
 ```
+The same table ordered by the number of awards:
 
+```{r ActiveAwardByOrgByNum, echo = FALSE}
+
+esrcdat %>% filter(Status == "Active")                                          %>% 
+            select(LeadROName, AwardPounds)                                     %>% 
+            group_by(LeadROName)                                                %>% 
+            summarise(Number = n(), TotalAward = sum(AwardPounds,na.rm = TRUE)) %>% 
+            mutate(AvgAward = round(TotalAward/Number,2))                       %>% 
+            arrange(desc(Number))                                               %>% 
+            mutate(across(where(is.numeric), ~ format(., big.mark = ",")))      %>% 
+            slice_head(n = 25)                                                  %>% 
+            kbl(format="pipe", align = c("l",rep("r",3)),
+                col.names = c("Org", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
+```
 ## Department awards
 
 ```{r clean_Dep, echo = FALSE}

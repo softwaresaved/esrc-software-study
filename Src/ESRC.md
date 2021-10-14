@@ -227,6 +227,36 @@ average value of the award.
 | University of Lagos                     |                2 |         1,229,275 |        614,637.50 |
 | University of the Witwatersrand         |                2 |         1,223,884 |        611,942.00 |
 
+The same table ordered by the number of awards:
+
+| Org                                  | Number of Awards | Total Awarded (£) | Average Award (£) |
+|:-------------------------------------|-----------------:|------------------:|------------------:|
+| University College London            |              298 |       192,209,248 |        644,997.48 |
+| University of Oxford                 |              212 |        85,087,672 |        401,356.94 |
+| London School of Economics & Pol Sci |              203 |        77,153,467 |        380,066.34 |
+| Cardiff University                   |              194 |        57,753,590 |        297,698.92 |
+| King’s College London                |              187 |        55,888,025 |        298,866.44 |
+| University of Cambridge              |              180 |        43,757,825 |        243,099.03 |
+| University of Manchester             |              172 |        52,461,785 |        305,010.38 |
+| University of Sheffield              |              159 |        54,388,829 |        342,068.11 |
+| University of Edinburgh              |              134 |        84,313,517 |        629,205.35 |
+| University of Southampton            |              124 |        41,953,513 |        338,334.78 |
+| University of Leeds                  |              118 |        26,316,633 |        223,022.31 |
+| University of Bristol                |              116 |        55,911,023 |        481,991.58 |
+| University of Exeter                 |              111 |        12,119,644 |        109,185.98 |
+| University of Birmingham             |              109 |        17,784,306 |        163,158.77 |
+| University of Glasgow                |              109 |        38,637,697 |        354,474.28 |
+| University of Liverpool              |              107 |        55,411,421 |        517,863.75 |
+| Newcastle University                 |              101 |        24,657,965 |        244,138.27 |
+| Durham University                    |               92 |        29,292,951 |        318,401.64 |
+| Lancaster University                 |               92 |        24,859,790 |        270,215.11 |
+| University of Warwick                |               86 |        39,649,280 |        461,038.14 |
+| University of Nottingham             |               77 |        16,777,758 |        217,892.96 |
+| University of York                   |               77 |         8,404,399 |        109,148.04 |
+| Queen Mary, University of London     |               73 |        10,693,466 |        146,485.84 |
+| University of Bath                   |               70 |         9,274,029 |        132,486.13 |
+| University of Sussex                 |               68 |        29,292,000 |        430,764.71 |
+
 ## Department awards
 
 ### All projects
