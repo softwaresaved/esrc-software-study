@@ -236,60 +236,60 @@ departments that have 30 or more occurrences. The Departments below have
 been ‘cleaned’ to remove minor differences, e.g. Cardiff Business School
 to Business School and so on.
 
-| Department                             | Number |
-|:---------------------------------------|-------:|
-| Psychology                             |    839 |
-| Social Science                         |    584 |
-| Economics                              |    421 |
-| Geography                              |    400 |
-| Education                              |    335 |
-| Sociology                              |    275 |
-| Business School                        |    254 |
-| Law                                    |    217 |
-| Politics                               |    207 |
-| Social and Political Science           |    150 |
-| Management                             |    144 |
-| Applied Social Science                 |    131 |
-| Anthropology                           |    101 |
-| Experimental Psychology                |     92 |
-| Politics and International Studies     |     89 |
-| Environment, Education and Development |     84 |
-| International Development              |     84 |
-| Geography Politics and Sociology       |     80 |
-| Social & Political Science             |     75 |
-| Sociology & Social Policy              |     75 |
-| Health Science                         |     73 |
-| History                                |     73 |
-| IFS Research Team                      |     73 |
-| Epidemiology and Public Health         |     71 |
-| Research Department                    |     66 |
-| Economic, Social & Political Sci       |     61 |
-| Psychological Science                  |     60 |
-| Politics and International Relations   |     58 |
-| Global Studies                         |     55 |
-| Policy Studies                         |     53 |
-| Geography and Planning                 |     52 |
-| Social and Economic Research           |     49 |
-| Health and Life Science                |     46 |
-| Philosophy Psychology & Language       |     46 |
-| Unlisted                               |     45 |
-| Arts, Humanities & Social Sci          |     44 |
-| Government                             |     43 |
-| Public Health and Policy               |     42 |
-| Criminology                            |     41 |
-| Social and Policy Science              |     39 |
-| War Studies                            |     36 |
-| Arts Languages and Cultures            |     35 |
-| Education and Professional Studies     |     35 |
-| Geography - SoGE                       |     35 |
-| Law School                             |     35 |
-| Linguistics and English Language       |     35 |
-| Sociological Studies                   |     33 |
-| Finance                                |     32 |
-| Social Pol Sociology & Social Res      |     31 |
-| Social Policy                          |     31 |
-| Planning and Geography                 |     30 |
-| Politics & International Relation      |     30 |
+| Department                             | Number | Percent |
+|:---------------------------------------|-------:|--------:|
+| Psychology                             |    839 |    7.74 |
+| Social Science                         |    584 |    5.39 |
+| Economics                              |    421 |    3.89 |
+| Geography                              |    400 |    3.69 |
+| Education                              |    335 |    3.09 |
+| Sociology                              |    275 |    2.54 |
+| Business School                        |    254 |    2.34 |
+| Law                                    |    217 |    2.00 |
+| Politics                               |    207 |    1.91 |
+| Social and Political Science           |    150 |    1.38 |
+| Management                             |    144 |    1.33 |
+| Applied Social Science                 |    131 |    1.21 |
+| Anthropology                           |    101 |    0.93 |
+| Experimental Psychology                |     92 |    0.85 |
+| Politics and International Studies     |     89 |    0.82 |
+| Environment, Education and Development |     84 |    0.78 |
+| International Development              |     84 |    0.78 |
+| Geography Politics and Sociology       |     80 |    0.74 |
+| Social & Political Science             |     75 |    0.69 |
+| Sociology & Social Policy              |     75 |    0.69 |
+| Health Science                         |     73 |    0.67 |
+| History                                |     73 |    0.67 |
+| IFS Research Team                      |     73 |    0.67 |
+| Epidemiology and Public Health         |     71 |    0.66 |
+| Research Department                    |     66 |    0.61 |
+| Economic, Social & Political Sci       |     61 |    0.56 |
+| Psychological Science                  |     60 |    0.55 |
+| Politics and International Relations   |     58 |    0.54 |
+| Global Studies                         |     55 |    0.51 |
+| Policy Studies                         |     53 |    0.49 |
+| Geography and Planning                 |     52 |    0.48 |
+| Social and Economic Research           |     49 |    0.45 |
+| Health and Life Science                |     46 |    0.42 |
+| Philosophy Psychology & Language       |     46 |    0.42 |
+| Unlisted                               |     45 |    0.42 |
+| Arts, Humanities & Social Sci          |     44 |    0.41 |
+| Government                             |     43 |    0.40 |
+| Public Health and Policy               |     42 |    0.39 |
+| Criminology                            |     41 |    0.38 |
+| Social and Policy Science              |     39 |    0.36 |
+| War Studies                            |     36 |    0.33 |
+| Arts Languages and Cultures            |     35 |    0.32 |
+| Education and Professional Studies     |     35 |    0.32 |
+| Geography - SoGE                       |     35 |    0.32 |
+| Law School                             |     35 |    0.32 |
+| Linguistics and English Language       |     35 |    0.32 |
+| Sociological Studies                   |     33 |    0.30 |
+| Finance                                |     32 |    0.30 |
+| Social Pol Sociology & Social Res      |     31 |    0.29 |
+| Social Policy                          |     31 |    0.29 |
+| Planning and Geography                 |     30 |    0.28 |
+| Politics & International Relation      |     30 |    0.28 |
 
 ### Active projects
 
@@ -297,33 +297,33 @@ There are 633 unique departments for active projects (1166 for all
 projects). The table below only shows cases that have 30 or more
 occurrences in active projects.
 
-| Department                         | Number |
-|:-----------------------------------|-------:|
-| Psychology                         |    326 |
-| Social Science                     |    245 |
-| Geography                          |    172 |
-| Economics                          |    170 |
-| Education                          |    160 |
-| Sociology                          |    123 |
-| Business School                    |    106 |
-| Law                                |     97 |
-| Politics                           |     93 |
-| Applied Social Science             |     72 |
-| Management                         |     53 |
-| Anthropology                       |     48 |
-| Economic, Social & Political Sci   |     47 |
-| Arts, Humanities & Social Sci      |     44 |
-| Geography Politics and Sociology   |     44 |
-| Sociology & Social Policy          |     43 |
-| History                            |     40 |
-| Epidemiology and Public Health     |     39 |
-| Social and Political Science       |     38 |
-| Health Science                     |     37 |
-| Social & Political Science         |     35 |
-| Geography and Planning             |     34 |
-| Experimental Psychology            |     33 |
-| International Development          |     31 |
-| Politics and International Studies |     30 |
+| Department                         | Number | Percent |
+|:-----------------------------------|-------:|--------:|
+| Psychology                         |    326 |    7.31 |
+| Social Science                     |    245 |    5.50 |
+| Geography                          |    172 |    3.86 |
+| Economics                          |    170 |    3.81 |
+| Education                          |    160 |    3.59 |
+| Sociology                          |    123 |    2.76 |
+| Business School                    |    106 |    2.38 |
+| Law                                |     97 |    2.18 |
+| Politics                           |     93 |    2.09 |
+| Applied Social Science             |     72 |    1.62 |
+| Management                         |     53 |    1.19 |
+| Anthropology                       |     48 |    1.08 |
+| Economic, Social & Political Sci   |     47 |    1.05 |
+| Arts, Humanities & Social Sci      |     44 |    0.99 |
+| Geography Politics and Sociology   |     44 |    0.99 |
+| Sociology & Social Policy          |     43 |    0.96 |
+| History                            |     40 |    0.90 |
+| Epidemiology and Public Health     |     39 |    0.87 |
+| Social and Political Science       |     38 |    0.85 |
+| Health Science                     |     37 |    0.83 |
+| Social & Political Science         |     35 |    0.79 |
+| Geography and Planning             |     34 |    0.76 |
+| Experimental Psychology            |     33 |    0.74 |
+| International Development          |     31 |    0.70 |
+| Politics and International Studies |     30 |    0.67 |
 
 # ToDo Items
 
