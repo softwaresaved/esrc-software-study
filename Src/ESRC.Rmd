@@ -208,7 +208,7 @@ esrcdat %>% filter(Status == "Active")                                          
 
 Percentage of award types by time length.
 
-```{r award_lengths_active_fill, echo = FALSE, fig.alt = "A percentage distribution of the length of awards."}
+```{r award_lengths_active_fill, echo = FALSE, fig.alt = "Percentage distribution of project type by the length of awards."}
 
 # The as.numeric() is a workaround for https://github.com/tidyverse/ggplot2/issues/1377
 esrcdat %>% filter(Status == "Active")                                          %>% 
@@ -343,6 +343,8 @@ esrcdat$CleanDep <- gsub("Management School", "Management", esrcdat$CleanDep)
 esrcdat$CleanDep <- gsub("Southampton ", "", esrcdat$CleanDep)
 esrcdat$CleanDep <- gsub("Nottingham University ", "", esrcdat$CleanDep)
 esrcdat$CleanDep <- gsub("University of Sussex ", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub(" - SoGE", "", esrcdat$CleanDep)
+esrcdat$CleanDep <- gsub("Law School", "Law", esrcdat$CleanDep)
 
 # length(unique(esrcdat$CleanDep))
 # unique(esrcdat$CleanDep)

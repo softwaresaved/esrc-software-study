@@ -140,7 +140,7 @@ below.
 
 Percentage of award types by time length.
 
-<img src="ESRC_files/figure-gfm/award_lengths_active_fill-1.png" title="A percentage distribution of the length of awards." alt="A percentage distribution of the length of awards."  />
+<img src="ESRC_files/figure-gfm/award_lengths_active_fill-1.png" title="Percentage distribution of project type by the length of awards." alt="Percentage distribution of project type by the length of awards."  />
 
 ## Regional distribution of awards
 
@@ -301,12 +301,12 @@ to Business School and so on.
 |:---------------------------------------|-------:|--------:|
 | Psychology                             |    839 |    7.74 |
 | Social Science                         |    584 |    5.39 |
+| Geography                              |    435 |    4.02 |
 | Economics                              |    421 |    3.89 |
-| Geography                              |    400 |    3.69 |
 | Education                              |    335 |    3.09 |
 | Sociology                              |    275 |    2.54 |
 | Business School                        |    254 |    2.34 |
-| Law                                    |    217 |    2.00 |
+| Law                                    |    252 |    2.33 |
 | Politics                               |    207 |    1.91 |
 | Social and Political Science           |    150 |    1.38 |
 | Management                             |    144 |    1.33 |
@@ -342,8 +342,6 @@ to Business School and so on.
 | War Studies                            |     36 |    0.33 |
 | Arts Languages and Cultures            |     35 |    0.32 |
 | Education and Professional Studies     |     35 |    0.32 |
-| Geography - SoGE                       |     35 |    0.32 |
-| Law School                             |     35 |    0.32 |
 | Linguistics and English Language       |     35 |    0.32 |
 | Sociological Studies                   |     33 |    0.30 |
 | Finance                                |     32 |    0.30 |
@@ -362,12 +360,12 @@ occurrences in active projects.
 |:-----------------------------------|-------:|--------:|
 | Psychology                         |    326 |    7.31 |
 | Social Science                     |    245 |    5.50 |
-| Geography                          |    172 |    3.86 |
+| Geography                          |    188 |    4.22 |
 | Economics                          |    170 |    3.81 |
 | Education                          |    160 |    3.59 |
 | Sociology                          |    123 |    2.76 |
+| Law                                |    122 |    2.74 |
 | Business School                    |    106 |    2.38 |
-| Law                                |     97 |    2.18 |
 | Politics                           |     93 |    2.09 |
 | Applied Social Science             |     72 |    1.62 |
 | Management                         |     53 |    1.19 |
