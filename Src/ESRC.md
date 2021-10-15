@@ -3,34 +3,37 @@ Economic and Social Research Council (ESRC) Data
 **Author**: Mario Antonioletti.<br/>
 **Last updated**: 15/10/21
 
--   [1 Introduction](#introduction)
--   [2 Overall expenditure](#overall-expenditure)
-    -   [2.1 Expenditure for all UKRI
+-   [Introduction](#introduction)
+-   [Overall expenditure](#overall-expenditure)
+    -   [Expenditure for all UKRI
         projects](#expenditure-for-all-ukri-projects)
-    -   [2.2 Expenditure for active UKRI projects
+    -   [Expenditure for active UKRI projects
         only](#expenditure-for-active-ukri-projects-only)
--   [3 ESRC data](#esrc-data)
-    -   [3.1 Project category awards](#project-category-awards)
-        -   [3.1.1 All projects](#all-projects)
-        -   [3.1.2 Active projects](#active-projects)
-    -   [3.2 Award length distribution](#award-length-distribution)
-        -   [3.2.1 All projects](#all-projects-1)
-        -   [3.2.2 Active projects only](#active-projects-only)
-        -   [3.2.3 All projects](#all-projects-2)
-        -   [3.2.4 Active projects](#active-projects-1)
-    -   [3.3 Funding by lead
-        organisation](#funding-by-lead-organisation)
-        -   [3.3.1 All projects](#all-projects-3)
-        -   [3.3.2 Active projects](#active-projects-2)
-    -   [3.4 Department awards](#department-awards)
-        -   [3.4.1 All projects](#all-projects-4)
-        -   [3.4.2 Active projects](#active-projects-3)
-    -   [3.5 Doctoral Training
+-   [ESRC data](#esrc-data)
+    -   [Project category awards](#project-category-awards)
+        -   [All projects category
+            awards](#all-projects-category-awards)
+        -   [Active projects categry awards
+            only](#active-projects-categry-awards-only)
+    -   [Award length distribution](#award-length-distribution)
+        -   [Award length distribution for all
+            projects](#award-length-distribution-for-all-projects)
+        -   [Award length distribuion for active projects
+            only](#award-length-distribuion-for-active-projects-only)
+        -   [All projects](#all-projects)
+        -   [Active projects](#active-projects)
+    -   [Funding by lead organisation](#funding-by-lead-organisation)
+        -   [All projects](#all-projects-1)
+        -   [Active projects](#active-projects-1)
+    -   [Department awards](#department-awards)
+        -   [All projects](#all-projects-2)
+        -   [Active projects](#active-projects-2)
+    -   [Doctoral Training
         Partnerships](#doctoral-training-partnerships)
-        -   [3.5.1 Active Partnerships](#active-partnerships)
--   [4 ToDo Items](#todo-items)
+        -   [Active Partnerships](#active-partnerships)
+-   [ToDo Items](#todo-items)
 
-# 1 Introduction
+# Introduction
 
 The aim of this document is to give an overview of expenditure done by
 the UKRI ESRC as determined from a [Gateway to
@@ -46,26 +49,26 @@ The data set contains 120,865 rows (after some data cleaning), where a
 row can be interpreted as the record of an award. In this data set
 10,834 correspond to ESRC awards.
 
-# 2 Overall expenditure
+# Overall expenditure
 
-## 2.1 Expenditure for all UKRI projects
+## Expenditure for all UKRI projects
 
 Expenditure for the whole period under consideration is shown in the
 graph below. Awards that do not have a value defined have been removed.
 
 <img src="ESRC_files/figure-gfm/funding_ByOrg-1.png" title="Expenditure across all UKRI councils from the available data." alt="Expenditure across all UKRI councils from the available data."  />
 
-## 2.2 Expenditure for active UKRI projects only
+## Expenditure for active UKRI projects only
 
 The graph below only contains values for currently active projects:
 
 <img src="ESRC_files/figure-gfm/funding_ByOrg_active-1.png" title="Expenditure across all UKRI councils for active projects from the available data." alt="Expenditure across all UKRI councils for active projects from the available data."  />
 
-# 3 ESRC data
+# ESRC data
 
-## 3.1 Project category awards
+## Project category awards
 
-### 3.1.1 All projects
+### All projects category awards
 
 The project categories for the ESRC awards covering the period 01/01/06
 to 30/09/29. No explicit data seems to be provided for *Studentships*.
@@ -77,7 +80,7 @@ to 30/09/29. No explicit data seems to be provided for *Studentships*.
 | Fellowship       |            1,415 |       151,376,374 |         106,979.8 |
 | Studentship      |            3,028 |                 0 |               0.0 |
 
-### 3.1.2 Active projects
+### Active projects categry awards only
 
 This information corresponds to projects that are classified as
 *Active*.
@@ -89,20 +92,21 @@ This information corresponds to projects that are classified as
 | Fellowship       |              284 |        33,284,791 |         117,200.0 |
 | Studentship      |            2,870 |                 0 |               0.0 |
 
-## 3.2 Award length distribution
+## Award length distribution
 
-### 3.2.1 All projects
+### Award length distribution for all projects
 
 The award length distribution of the award lengths binned into 28-day
 periods is shown below.
-![](ESRC_files/figure-gfm/award_lengths-1.png)<!-- -->
 
-### 3.2.2 Active projects only
+<img src="ESRC_files/figure-gfm/award_lengths-1.png" title="Histogram of the length distribution for all projects." alt="Histogram of the length distribution for all projects."  />
+
+### Award length distribuion for active projects only
 
 The same information as provided above but only for *Active* projects.
 The maximum funding period corresponds to 4382 days.
 
-![](ESRC_files/figure-gfm/award_lengths_active-1.png)<!-- -->
+<img src="ESRC_files/figure-gfm/award_lengths_active-1.png" title="Histogram of the length distribution for active projects only." alt="Histogram of the length distribution for active projects only."  />
 
 The top length of awards lie by project category in days is tabulated
 below.
@@ -130,7 +134,7 @@ Percentage of award types by time length.
 ![](ESRC_files/figure-gfm/award_lengths_active_fill-1.png)<!-- --> ##
 Geographical distribution of awards
 
-### 3.2.3 All projects
+### All projects
 
 The expenditure of the awards over the whole time period by region
 ordered by the total award given is shown in the table below.
@@ -153,7 +157,7 @@ ordered by the total award given is shown in the table below.
 | North East               |               44 |         5,720,679 |         130,015.4 |
 | NA                       |                2 |           527,623 |         263,811.5 |
 
-### 3.2.4 Active projects
+### Active projects
 
 We can generate the table for projects that are currently active ordered
 by the total award given is shown in the table below.
@@ -176,9 +180,9 @@ by the total award given is shown in the table below.
 | North East               |               11 |         1,843,525 |        167,593.18 |
 | NA                       |                1 |           100,372 |        100,372.00 |
 
-## 3.3 Funding by lead organisation
+## Funding by lead organisation
 
-### 3.3.1 All projects
+### All projects
 
 This only shows the top 25 organisations by the average value of the
 award.
@@ -211,7 +215,7 @@ award.
 | Makerere University                     |                1 |           596,479 |        596,479.00 |
 | Monash University                       |                1 |           572,984 |        572,984.00 |
 
-### 3.3.2 Active projects
+### Active projects
 
 This only shows the top 25 organisations with active projects by the
 average value of the award.
@@ -274,9 +278,9 @@ The same table ordered by the number of awards:
 | University of Bath                   |               70 |         9,274,029 |        132,486.13 |
 | University of Sussex                 |               68 |        29,292,000 |        430,764.71 |
 
-## 3.4 Department awards
+## Department awards
 
-### 3.4.1 All projects
+### All projects
 
 There are 1166 unique departments. The table below only shows
 departments that have 30 or more occurrences. The Departments below have
@@ -338,7 +342,7 @@ to Business School and so on.
 | Planning and Geography                 |     30 |    0.28 |
 | Politics & International Relation      |     30 |    0.28 |
 
-### 3.4.2 Active projects
+### Active projects
 
 There are 633 unique departments for active projects (1166 for all
 projects). The table below only shows cases that have 30 or more
@@ -372,9 +376,9 @@ occurrences in active projects.
 | International Development          |     31 |    0.70 |
 | Politics and International Studies |     30 |    0.67 |
 
-## 3.5 Doctoral Training Partnerships
+## Doctoral Training Partnerships
 
-### 3.5.1 Active Partnerships
+### Active Partnerships
 
 Currently active doctoral partnerships:
 
@@ -419,10 +423,11 @@ Currently active doctoral partnerships:
 | University of the West of England    | Faculty of Health and Life Sciences     | 01/10/20 | 01/10/24 |          0 |
 | University College London            | Epidemiology and Public Health          | 01/10/20 | 30/09/26 |  1,453,720 |
 
-# 4 ToDo Items
+# ToDo Items
 
 -   [x] Department text needs some cleaning.
--   [ ] Fix ToC, links do not work.
+-   [x] Fix ToC, links do not work. Auto-numbering the sections was
+    breaking the ToC links.
 -   [ ] Add ALT tags to images.
 -   [ ] Research title looks interesting for further examination but
     will require processing to be comprehensible.

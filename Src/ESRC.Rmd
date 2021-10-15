@@ -5,7 +5,7 @@ date: "**Last updated**: `r format(Sys.Date(), '%d/%m/%y')`"
 output: 
   github_document:
       toc: true
-      number_sections: true
+      number_sections: false
       toc_depth: 4
 ---
 
@@ -117,7 +117,7 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))              %>%
 
 ## Project category awards
 
-### All projects
+### All projects category awards
 
 The project categories for the ESRC awards covering the period `r format(min(esrcdat$StartDate),"%d/%m/%y")` to `r format(max(esrcdat$EndDate, na.rm = TRUE),"%d/%m/%y")`. No explicit data seems to be provided for *Studentships*.
 
@@ -135,7 +135,7 @@ esrcdat %>% select(ProjectCategory, AwardPounds)                           %>%
                                 "Total Awarded (£)","Average Award (£)")) 
 ```
 
-### Active projects
+### Active projects categry awards only
 
 This information corresponds to projects that are classified as *Active*.
 
@@ -157,9 +157,11 @@ esrcdat %>% filter(Status == "Active")                                     %>%
 
 ## Award length distribution
 
-### All projects
+### Award length distribution for all projects
+
 The award length distribution of the award lengths binned into 28-day periods is shown below. 
-```{r award_lengths, echo = FALSE}
+
+```{r award_lengths, echo = FALSE, fig.alt = "Histogram of the length distribution for all projects."}
 
 # The as.numeric() is a workaround for https://github.com/tidyverse/ggplot2/issues/1377
 esrcdat %>% select(StartDate, EndDate, ProjectCategory) %>% 
@@ -171,10 +173,11 @@ esrcdat %>% select(StartDate, EndDate, ProjectCategory) %>%
             labs(fill = "Project Category") + theme_bw()
 ```
 
-### Active projects only
+### Award length distribuion for active projects only
+
 The same information as provided above but only for *Active* projects. The maximum funding period corresponds to `r as.numeric(max(difftime(esrcdat[["EndDate"]][esrcdat$Status == "Active"], esrcdat[["StartDate"]][esrcdat$Status == "Active"], units = "days")))` days.
 
-```{r award_lengths_active, echo = FALSE}
+```{r award_lengths_active, echo = FALSE, fig.alt = "Histogram of the length distribution for active projects only."}
 
 # The as.numeric() is a workaround for https://github.com/tidyverse/ggplot2/issues/1377
 esrcdat %>% filter(Status == "Active")                                          %>% 
@@ -400,6 +403,7 @@ esrcdat %>% filter(Status == "Active")                                   %>%
 # ToDo Items
 
 - [X] Department text needs some cleaning.
-- [ ] Fix ToC, links do not work.
+- [X] Fix ToC, links do not work.
+      Auto-numbering the sections was breaking the ToC links.
 - [ ] Add ALT tags to images.
 - [ ] Research title looks interesting for further examination but will require processing to be comprehensible.
