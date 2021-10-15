@@ -23,6 +23,9 @@ Economic and Social Research Council (ESRC) Data
     -   [3.4 Department awards](#department-awards)
         -   [3.4.1 All projects](#all-projects-5)
         -   [3.4.2 Active projects](#active-projects-3)
+    -   [3.5 Doctoral Training
+        Partnerships](#doctoral-training-partnerships)
+        -   [3.5.1 Active Partnerships](#active-partnerships)
 -   [4 ToDo Items](#todo-items)
 
 # 1 Introduction
@@ -367,8 +370,55 @@ occurrences in active projects.
 | International Development          |     31 |    0.70 |
 | Politics and International Studies |     30 |    0.67 |
 
+## 3.5 Doctoral Training Partnerships
+
+### 3.5.1 Active Partnerships
+
+Currently active doctoral partnerships:
+
+| Lead Organisation                    | Department                              | Start    | End      |  Award (£) |
+|:-------------------------------------|:----------------------------------------|:---------|:---------|-----------:|
+| University College London            | Economics                               | 01/10/11 | 02/10/21 | 14,505,856 |
+| University of Nottingham             | Research and Graduate Services          | 01/10/11 | 02/10/22 |  7,964,843 |
+| London School of Economics & Pol Sci | Research & Project Development Division | 01/10/11 | 02/10/21 | 15,316,412 |
+| University of Surrey                 | Psychology                              | 01/10/11 | 02/10/22 | 11,094,593 |
+| University of Southampton            | Sch of Economic, Social & Political Sci | 01/10/11 | 02/10/22 |  8,164,941 |
+| University of Cambridge              | Board of Graduate Studies               | 01/10/11 | 02/10/22 | 10,015,074 |
+| University of Sussex                 | Research and Enterprise Services        | 01/10/11 | 02/10/22 |  4,864,902 |
+| University of Essex                  | Sociology                               | 01/10/11 | 02/10/22 |  7,884,208 |
+| University College London            | Doctoral School                         | 01/10/11 | 02/10/22 | 12,927,461 |
+| University of Oxford                 | Social Sciences Division                | 01/10/11 | 02/10/22 | 19,130,534 |
+| University of Liverpool              | Sch of Law and Social Justice           | 01/10/11 | 01/10/22 | 24,932,784 |
+| University of Bristol                | Research and Enterprise Development     | 01/10/11 | 02/10/21 | 17,563,914 |
+| King’s College London                | SSPP School Office                      | 01/10/11 | 31/03/22 |  7,150,273 |
+| University of Edinburgh              | Sch of Social and Political Science     | 01/10/11 | 02/10/21 | 27,538,201 |
+| Durham University                    | Archaeology                             | 01/10/11 | 30/09/23 | 11,794,305 |
+| Cardiff University                   | Registry                                | 01/10/11 | 02/10/22 | 14,946,728 |
+| Queen Mary, University of London     | English                                 | 01/10/11 | 02/10/21 |  5,087,223 |
+| University of Birmingham             | The Registrar                           | 01/10/11 | 02/04/22 |  6,274,406 |
+| University of Sheffield              | Geography                               | 01/10/11 | 02/10/22 | 21,102,259 |
+| University of Warwick                | Politics and International Studies      | 03/10/11 | 02/04/22 | 12,410,843 |
+| London Business School               | Research and Faculty Office             | 01/08/17 | 02/10/21 |    346,071 |
+| University of Cambridge              | Criminology                             | 01/10/17 | 30/09/27 | 12,979,116 |
+| University of Leeds                  | Sch of Geography                        | 01/10/17 | 30/09/24 |  2,345,247 |
+| University of Bristol                | Education                               | 01/10/17 | 30/09/27 | 17,755,419 |
+| University College London            | Epidemiology and Public Health          | 01/10/17 | 30/09/24 |  2,154,131 |
+| University of Edinburgh              | Sch of Geosciences                      | 01/10/17 | 30/09/27 | 17,379,682 |
+| University College London            | Doctoral School                         | 01/10/17 | 30/09/27 | 18,280,789 |
+| University of Essex                  | Registry                                | 01/10/17 | 30/09/27 | 11,598,176 |
+| University of Oxford                 | Social Sciences Division                | 01/10/17 | 30/09/27 | 12,248,322 |
+| University of Liverpool              | Sch of Law and Social Justice           | 01/10/17 | 30/09/27 | 17,857,544 |
+| Durham University                    | Geography                               | 01/10/17 | 30/09/27 | 11,145,710 |
+| Cardiff University                   | Sch of Social Sciences                  | 01/10/17 | 30/09/27 | 13,588,255 |
+| London School of Economics & Pol Sci | Research & Project Development Division | 01/10/17 | 30/09/27 | 11,974,889 |
+| University of Warwick                | Sociology                               | 01/10/17 | 30/09/27 | 12,466,265 |
+| University of Sheffield              | Geography                               | 01/10/17 | 30/09/27 | 15,403,920 |
+| University of Southampton            | Sch of Economic, Social & Political Sci | 01/10/17 | 30/09/27 | 14,976,397 |
+| University of the West of England    | Faculty of Health and Life Sciences     | 01/10/20 | 01/10/24 |          0 |
+| University College London            | Epidemiology and Public Health          | 01/10/20 | 30/09/26 |  1,453,720 |
+
 # 4 ToDo Items
 
--   [ ] Department text needs some cleaning.
+-   [x] Department text needs some cleaning.
 -   [ ] Research title looks interesting for further examination but
     will require processing to be comprehensible.

@@ -379,7 +379,25 @@ esrcdat %>% filter(Status == "Active")       %>%
                 col.names = c("Department", "Number", "Percent")) 
 ```
 
+## Doctoral Training Partnerships
+
+### Active Partnerships
+
+Currently active doctoral partnerships:
+
+```{r active_DTPs, echo = FALSE}
+
+esrcdat %>% filter(Status == "Active")                                   %>%  
+            filter(grepl("Doctoral Training",Title, ignore.case = TRUE)) %>% 
+            select(LeadROName, Department, StartDate, EndDate, AwardPounds) %>%
+            arrange(StartDate) %>% 
+            mutate(across(where(is.Date), ~ format(., "%d/%m/%y"))) %>% 
+            mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
+            kable(format="pipe", align= c("l","l","l","l","r"), 
+                  col.names = c("Lead Organisation", "Department","Start", "End","Award (£)")) 
+```
+
 # ToDo Items
 
-- [ ] Department text needs some cleaning.
+- [X] Department text needs some cleaning.
 - [ ] Research title looks interesting for further examination but will require processing to be comprehensible.
