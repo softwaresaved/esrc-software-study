@@ -1,7 +1,7 @@
 ---
 title: "Economic and Social Research Council (ESRC) Data"
 author: "**Author**: Mario Antonioletti.<br/>"
-date: "**Last updated**: `r format(Sys.Date(), '%d/%m/%y')`"
+date: "**Last updated**: `r format(Sys.Date(), '%d/%m/%y')`."
 output: 
   github_document:
       toc: true

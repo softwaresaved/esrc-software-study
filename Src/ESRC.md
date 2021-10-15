@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 15/10/21
+**Last updated**: 15/10/21.
 
 -   [Introduction](#introduction)
 -   [Overall expenditure](#overall-expenditure)
