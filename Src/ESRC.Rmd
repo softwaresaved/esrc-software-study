@@ -69,7 +69,7 @@ esrcdat <- gtrdat %>% filter(FundingOrgName == "ESRC")
 
 # Introduction
 
-The aim of this document is to give an overview of expenditure done by the UKRI ESRC as determined from a [Gateway to Research](https://gtr.ukri.org/) (GtR) data set, made available under an [Open Government Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/), which covers the period `r format(min(gtrdat$StartDate),"%d/%m/%y")` to `r format(max(gtrdat$EndDate, na.rm = TRUE),"%d/%m/%y")`. The GtR data snapshot was downloaded from the GtR website on the 11/10/21 and was last updated by UKRI on the 30th of September 2021. The R markdown should also work on any future updates.
+The aim of this document is to give an overview of expenditure done by the [United Kingdom Research and Innovation](https://www.ukri.org/) (UKRI) ESRC as determined from a [Gateway to Research](https://gtr.ukri.org/) (GtR) data set, made available under an [Open Government Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/), which covers the period `r format(min(gtrdat$StartDate),"%d/%m/%y")` to `r format(max(gtrdat$EndDate, na.rm = TRUE),"%d/%m/%y")`. The GtR data snapshot was downloaded from the GtR website on the 11/10/21 and was last updated by UKRI on the 30th of September 2021. The R markdown should also work on any future updates.
 
 The data set contains `r format(nrow(gtrdat), big.mark = ",")` rows (after some data cleaning), where a row can be interpreted as the record of an award. In this data set `r format(nrow(gtrdat[gtrdat$FundingOrgName == "ESRC",]), big.mark = ",")` correspond to ESRC awards.
 
@@ -173,7 +173,7 @@ esrcdat %>% select(StartDate, EndDate, ProjectCategory) %>%
             labs(fill = "Project Category") + theme_bw()
 ```
 
-### Award length distribuion for active projects only
+### Award length distribution for active projects only
 
 The same information as provided above but only for *Active* projects. The maximum funding period corresponds to `r as.numeric(max(difftime(esrcdat[["EndDate"]][esrcdat$Status == "Active"], esrcdat[["StartDate"]][esrcdat$Status == "Active"], units = "days")))` days.
 
@@ -259,7 +259,7 @@ esrcdat %>% filter(Status == "Active")                                     %>%
 
 ## Funding by lead organisation
 
-### All projects
+### Funding by lead organisation for all projects
 
 This only shows the top 25 organisations by the average value of the award.
  
@@ -276,7 +276,8 @@ esrcdat %>% select(LeadROName, AwardPounds)                                     
                 col.names = c("Org", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
 ```
 
-### Active projects
+### Funding by lead organisation for active projects only
+
 This only shows the top 25 organisations with active projects by the average value of the award.
  
 ```{r ActiveAwardByOrg, echo = FALSE}
@@ -307,9 +308,12 @@ esrcdat %>% filter(Status == "Active")                                          
             kbl(format="pipe", align = c("l",rep("r",3)),
                 col.names = c("Org", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
 ```
+
 ## Department awards
 
-```{r clean_Dep, echo = FALSE}
+```{r clean_Departments, echo = FALSE}
+
+# Try and normalise some of the text and add the results into a new column.
 esrcdat$CleanDep <- esrcdat$Department
 esrcdat$CleanDep <- gsub("Cardiff School of ", "", esrcdat$CleanDep)
 esrcdat$CleanDep <- gsub("School of ", "", esrcdat$CleanDep)
@@ -344,12 +348,13 @@ esrcdat$CleanDep <- gsub("University of Sussex ", "", esrcdat$CleanDep)
 # unique(esrcdat$CleanDep)
 ```
 
-### All projects
+### Department awards for all projects
 
 There are `r length(unique(esrcdat[["Department"]]))` unique departments. The table below only shows departments that have 30 or more occurrences. The Departments below have been 'cleaned' to remove minor differences, e.g. Cardiff Business School to Business School and so on.
 
 ```{r departments, echo = FALSE}
 
+# Total number of ESRC projects to calculate percentages.
 N <- nrow(esrcdat)
 
 esrcdat %>% select(CleanDep)                 %>% 
@@ -364,12 +369,13 @@ esrcdat %>% select(CleanDep)                 %>%
 ```
 
 
-### Active projects 
+### Department awards for active projects only
 
 There are `r length(unique(esrcdat[["Department"]][esrcdat$Status == "Active"]))` unique departments for active projects (`r length(unique(esrcdat[["Department"]]))` for all projects). The table below only shows cases that have 30 or more occurrences in active projects.
 
 ```{r active_departments, echo = FALSE}
 
+# Total number of active projects only to calculate percentages.
 N <- nrow(esrcdat[esrcdat$Status =="Active",])
 
 esrcdat %>% filter(Status == "Active")       %>% 
@@ -409,4 +415,5 @@ esrcdat %>% filter(Status == "Active")                                   %>%
       Auto-numbering the sections was breaking the ToC links.
 - [X] Add ALT tags to images.<br/>
       Have added ALT tags to the distributions. 
+- [ ] Reconcile DTPs from what was scraped from the [ESRC DTP](https://esrc.ukri.org/skills-and-careers/doctoral-training/doctoral-training-partnerships/doctoral-training-partnership-dtp-contacts/) web page and what is in the GtR data file (there are more).
 - [ ] Research title looks interesting for further examination but will require processing to be comprehensible.

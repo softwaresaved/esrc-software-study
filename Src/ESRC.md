@@ -18,8 +18,8 @@ Economic and Social Research Council (ESRC) Data
     -   [Award length distribution](#award-length-distribution)
         -   [Award length distribution for all
             projects](#award-length-distribution-for-all-projects)
-        -   [Award length distribuion for active projects
-            only](#award-length-distribuion-for-active-projects-only)
+        -   [Award length distribution for active projects
+            only](#award-length-distribution-for-active-projects-only)
     -   [Regional distribution of
         awards](#regional-distribution-of-awards)
         -   [Region distributions of awards for all
@@ -27,11 +27,15 @@ Economic and Social Research Council (ESRC) Data
         -   [Regional distributions of awards for active projects
             only](#regional-distributions-of-awards-for-active-projects-only)
     -   [Funding by lead organisation](#funding-by-lead-organisation)
-        -   [All projects](#all-projects)
-        -   [Active projects](#active-projects)
+        -   [Funding by lead organisation for all
+            projects](#funding-by-lead-organisation-for-all-projects)
+        -   [Funding by lead organisation for active projects
+            only](#funding-by-lead-organisation-for-active-projects-only)
     -   [Department awards](#department-awards)
-        -   [All projects](#all-projects-1)
-        -   [Active projects](#active-projects-1)
+        -   [Department awards for all
+            projects](#department-awards-for-all-projects)
+        -   [Department awards for active projects
+            only](#department-awards-for-active-projects-only)
     -   [Doctoral Training
         Partnerships](#doctoral-training-partnerships)
         -   [Active Partnerships](#active-partnerships)
@@ -40,7 +44,8 @@ Economic and Social Research Council (ESRC) Data
 # Introduction
 
 The aim of this document is to give an overview of expenditure done by
-the UKRI ESRC as determined from a [Gateway to
+the [United Kingdom Research and Innovation](https://www.ukri.org/)
+(UKRI) ESRC as determined from a [Gateway to
 Research](https://gtr.ukri.org/) (GtR) data set, made available under an
 [Open Government
 Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/),
@@ -105,7 +110,7 @@ periods is shown below.
 
 <img src="ESRC_files/figure-gfm/award_lengths-1.png" title="Histogram of the length distribution for all projects." alt="Histogram of the length distribution for all projects."  />
 
-### Award length distribuion for active projects only
+### Award length distribution for active projects only
 
 The same information as provided above but only for *Active* projects.
 The maximum funding period corresponds to 4382 days.
@@ -187,7 +192,7 @@ by the total award given is shown in the table below.
 
 ## Funding by lead organisation
 
-### All projects
+### Funding by lead organisation for all projects
 
 This only shows the top 25 organisations by the average value of the
 award.
@@ -220,7 +225,7 @@ award.
 | Makerere University                     |                1 |           596,479 |        596,479.00 |
 | Monash University                       |                1 |           572,984 |        572,984.00 |
 
-### Active projects
+### Funding by lead organisation for active projects only
 
 This only shows the top 25 organisations with active projects by the
 average value of the award.
@@ -285,7 +290,7 @@ The same table ordered by the number of awards:
 
 ## Department awards
 
-### All projects
+### Department awards for all projects
 
 There are 1166 unique departments. The table below only shows
 departments that have 30 or more occurrences. The Departments below have
@@ -347,7 +352,7 @@ to Business School and so on.
 | Planning and Geography                 |     30 |    0.28 |
 | Politics & International Relation      |     30 |    0.28 |
 
-### Active projects
+### Department awards for active projects only
 
 There are 633 unique departments for active projects (1166 for all
 projects). The table below only shows cases that have 30 or more
@@ -436,5 +441,8 @@ Currently active doctoral partnerships:
     breaking the ToC links.
 -   [x] Add ALT tags to images.<br/> Have added ALT tags to the
     distributions.
+-   [ ] Reconcile DTPs from what was scraped from the [ESRC
+    DTP](https://esrc.ukri.org/skills-and-careers/doctoral-training/doctoral-training-partnerships/doctoral-training-partnership-dtp-contacts/)
+    web page and what is in the GtR data file (there are more).
 -   [ ] Research title looks interesting for further examination but
     will require processing to be comprehensible.
