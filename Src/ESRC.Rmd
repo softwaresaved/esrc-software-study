@@ -75,11 +75,11 @@ The data set contains `r format(nrow(gtrdat), big.mark = ",")` rows (after some 
 
 # Overall expenditure
 
-## All projects
+## Expenditure for all UKRI projects
 
 Expenditure for the whole period under consideration is shown in the graph below. Awards that do not have a value defined have been removed.
 
-```{r funding_ByOrg, echo = FALSE}
+```{r funding_ByOrg, echo = FALSE, fig.alt = "Expenditure across all UKRI councils from the available data."}
 
 gtrdat %>% filter(!is.na(AwardPounds))                                   %>% 
            select(FundingOrgName, AwardPounds)                           %>% 
@@ -94,11 +94,11 @@ gtrdat %>% filter(!is.na(AwardPounds))                                   %>%
           
 ```
 
-## Active projects only 
+## Expenditure for active UKRI projects only 
 
 The graph below only contains values for currently active projects:
 
-```{r funding_ByOrg_active, echo = FALSE}
+```{r funding_ByOrg_active, echo = FALSE, fig.alt = "Expenditure across all UKRI councils for active projects from the available data."}
 
 gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))              %>% 
            select(FundingOrgName, AwardPounds)                           %>% 
@@ -400,4 +400,6 @@ esrcdat %>% filter(Status == "Active")                                   %>%
 # ToDo Items
 
 - [X] Department text needs some cleaning.
+- [ ] Fix ToC, links do not work.
+- [ ] Add ALT tags to images.
 - [ ] Research title looks interesting for further examination but will require processing to be comprehensible.

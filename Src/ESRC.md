@@ -5,23 +5,25 @@ Economic and Social Research Council (ESRC) Data
 
 -   [1 Introduction](#introduction)
 -   [2 Overall expenditure](#overall-expenditure)
-    -   [2.1 All projects](#all-projects)
-    -   [2.2 Active projects only](#active-projects-only)
+    -   [2.1 Expenditure for all UKRI
+        projects](#expenditure-for-all-ukri-projects)
+    -   [2.2 Expenditure for active UKRI projects
+        only](#expenditure-for-active-ukri-projects-only)
 -   [3 ESRC data](#esrc-data)
     -   [3.1 Project category awards](#project-category-awards)
-        -   [3.1.1 All projects](#all-projects-1)
+        -   [3.1.1 All projects](#all-projects)
         -   [3.1.2 Active projects](#active-projects)
     -   [3.2 Award length distribution](#award-length-distribution)
-        -   [3.2.1 All projects](#all-projects-2)
-        -   [3.2.2 Active projects only](#active-projects-only-1)
-        -   [3.2.3 All projects](#all-projects-3)
+        -   [3.2.1 All projects](#all-projects-1)
+        -   [3.2.2 Active projects only](#active-projects-only)
+        -   [3.2.3 All projects](#all-projects-2)
         -   [3.2.4 Active projects](#active-projects-1)
     -   [3.3 Funding by lead
         organisation](#funding-by-lead-organisation)
-        -   [3.3.1 All projects](#all-projects-4)
+        -   [3.3.1 All projects](#all-projects-3)
         -   [3.3.2 Active projects](#active-projects-2)
     -   [3.4 Department awards](#department-awards)
-        -   [3.4.1 All projects](#all-projects-5)
+        -   [3.4.1 All projects](#all-projects-4)
         -   [3.4.2 Active projects](#active-projects-3)
     -   [3.5 Doctoral Training
         Partnerships](#doctoral-training-partnerships)
@@ -46,18 +48,18 @@ row can be interpreted as the record of an award. In this data set
 
 # 2 Overall expenditure
 
-## 2.1 All projects
+## 2.1 Expenditure for all UKRI projects
 
 Expenditure for the whole period under consideration is shown in the
 graph below. Awards that do not have a value defined have been removed.
 
-![](ESRC_files/figure-gfm/funding_ByOrg-1.png)<!-- -->
+<img src="ESRC_files/figure-gfm/funding_ByOrg-1.png" title="Expenditure across all UKRI councils from the available data." alt="Expenditure across all UKRI councils from the available data."  />
 
-## 2.2 Active projects only
+## 2.2 Expenditure for active UKRI projects only
 
 The graph below only contains values for currently active projects:
 
-![](ESRC_files/figure-gfm/funding_ByOrg_active-1.png)<!-- -->
+<img src="ESRC_files/figure-gfm/funding_ByOrg_active-1.png" title="Expenditure across all UKRI councils for active projects from the available data." alt="Expenditure across all UKRI councils for active projects from the available data."  />
 
 # 3 ESRC data
 
@@ -420,5 +422,7 @@ Currently active doctoral partnerships:
 # 4 ToDo Items
 
 -   [x] Department text needs some cleaning.
+-   [ ] Fix ToC, links do not work.
+-   [ ] Add ALT tags to images.
 -   [ ] Research title looks interesting for further examination but
     will require processing to be comprehensible.
