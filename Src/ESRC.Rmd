@@ -208,7 +208,7 @@ esrcdat %>% filter(Status == "Active")                                          
 
 Percentage of award types by time length.
 
-```{r award_lengths_active_fill, echo = FALSE}
+```{r award_lengths_active_fill, echo = FALSE, fig.alt = "A percentage distribution of the length of awards."}
 
 # The as.numeric() is a workaround for https://github.com/tidyverse/ggplot2/issues/1377
 esrcdat %>% filter(Status == "Active")                                          %>% 
@@ -220,9 +220,10 @@ esrcdat %>% filter(Status == "Active")                                          
             ylab("Number of Awards") + xlab("Award Length (days)") +
             labs(fill = "Project Category") + theme_bw() + scale_y_continuous(labels = scales::percent)
 ```
-## Geographical distribution of awards
 
-### All projects
+## Regional distribution of awards
+
+### Region distributions of awards for all projects
 
 The expenditure of the awards over the whole time period by region ordered by the total award given is shown in the table below.
 
@@ -238,7 +239,7 @@ esrcdat %>% select(Region, AwardPounds)                                    %>%
                 col.names = c("Region", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
 ```
 
-### Active projects
+### Regional distributions of awards for active projects only
 
 We can generate the table for projects that are currently active ordered by the total award given is shown in the table below.
 
@@ -402,8 +403,10 @@ esrcdat %>% filter(Status == "Active")                                   %>%
 
 # ToDo Items
 
-- [X] Department text needs some cleaning.
-- [X] Fix ToC, links do not work.
+- [X] Department text needs some cleaning.<br/>
+      Have done some data cleaning.
+- [X] Fix ToC, links do not work.<br/>
       Auto-numbering the sections was breaking the ToC links.
-- [ ] Add ALT tags to images.
+- [X] Add ALT tags to images.<br/>
+      Have added ALT tags to the distributions. 
 - [ ] Research title looks interesting for further examination but will require processing to be comprehensible.

@@ -20,14 +20,18 @@ Economic and Social Research Council (ESRC) Data
             projects](#award-length-distribution-for-all-projects)
         -   [Award length distribuion for active projects
             only](#award-length-distribuion-for-active-projects-only)
+    -   [Regional distribution of
+        awards](#regional-distribution-of-awards)
+        -   [Region distributions of awards for all
+            projects](#region-distributions-of-awards-for-all-projects)
+        -   [Regional distributions of awards for active projects
+            only](#regional-distributions-of-awards-for-active-projects-only)
+    -   [Funding by lead organisation](#funding-by-lead-organisation)
         -   [All projects](#all-projects)
         -   [Active projects](#active-projects)
-    -   [Funding by lead organisation](#funding-by-lead-organisation)
+    -   [Department awards](#department-awards)
         -   [All projects](#all-projects-1)
         -   [Active projects](#active-projects-1)
-    -   [Department awards](#department-awards)
-        -   [All projects](#all-projects-2)
-        -   [Active projects](#active-projects-2)
     -   [Doctoral Training
         Partnerships](#doctoral-training-partnerships)
         -   [Active Partnerships](#active-partnerships)
@@ -131,10 +135,11 @@ below.
 
 Percentage of award types by time length.
 
-![](ESRC_files/figure-gfm/award_lengths_active_fill-1.png)<!-- --> ##
-Geographical distribution of awards
+<img src="ESRC_files/figure-gfm/award_lengths_active_fill-1.png" title="A percentage distribution of the length of awards." alt="A percentage distribution of the length of awards."  />
 
-### All projects
+## Regional distribution of awards
+
+### Region distributions of awards for all projects
 
 The expenditure of the awards over the whole time period by region
 ordered by the total award given is shown in the table below.
@@ -157,7 +162,7 @@ ordered by the total award given is shown in the table below.
 | North East               |               44 |         5,720,679 |         130,015.4 |
 | NA                       |                2 |           527,623 |         263,811.5 |
 
-### Active projects
+### Regional distributions of awards for active projects only
 
 We can generate the table for projects that are currently active ordered
 by the total award given is shown in the table below.
@@ -425,9 +430,11 @@ Currently active doctoral partnerships:
 
 # ToDo Items
 
--   [x] Department text needs some cleaning.
--   [x] Fix ToC, links do not work. Auto-numbering the sections was
+-   [x] Department text needs some cleaning.<br/> Have done some data
+    cleaning.
+-   [x] Fix ToC, links do not work.<br/> Auto-numbering the sections was
     breaking the ToC links.
--   [ ] Add ALT tags to images.
+-   [x] Add ALT tags to images.<br/> Have added ALT tags to the
+    distributions.
 -   [ ] Research title looks interesting for further examination but
     will require processing to be comprehensible.
