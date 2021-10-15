@@ -43,22 +43,25 @@ Economic and Social Research Council (ESRC) Data
 
 # Introduction
 
-The aim of this document is to give an overview of expenditure done by
-the [United Kingdom Research and Innovation](https://www.ukri.org/)
+The aim of this document is to provide an overview of expenditure done
+of the [United Kingdom Research and Innovation](https://www.ukri.org/)
 (UKRI) ESRC as determined from a [Gateway to
-Research](https://gtr.ukri.org/) (GtR) data set, made available under an
-[Open Government
+Research](https://gtr.ukri.org/) (GtR) data snapshot. The data is made
+available under an [Open Government
 Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/),
-which covers the period 01/01/73 to 01/01/30. The GtR data snapshot was
-downloaded from the GtR website on the 11/10/21 and was last updated by
-UKRI on the 30th of September 2021. The R markdown should also work on
-any future updates.
+and covers the period 01/01/73 to 01/01/30. The GtR data snapshot was
+downloaded from the GtR website on the 11/10/21 and corresponded to data
+last updated by UKRI on the 30th of September 2021. The R markdown
+should work with any future data updates.
 
 The data set contains 120,865 rows (after some data cleaning), where a
-row can be interpreted as the record of an award. In this data set
-10,834 correspond to ESRC awards.
+row corresponds to the record of an award. In this data set 10,834
+correspond to ESRC awards.
 
 # Overall expenditure
+
+We start by doing a brief overview of all the data before we focus on
+the ESRC data.
 
 ## Expenditure for all UKRI projects
 
@@ -388,7 +391,7 @@ occurrences in active projects.
 
 ### Active Partnerships
 
-Currently active doctoral partnerships:
+Currently active doctoral partnerships ordered by the start date.
 
 | Lead Organisation                    | Department                              | Start    | End      |  Award (£) |
 |:-------------------------------------|:----------------------------------------|:---------|:---------|-----------:|
