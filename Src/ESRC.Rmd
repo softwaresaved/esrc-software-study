@@ -1,10 +1,11 @@
 ---
-title: "ESRC Data"
-author: "Mario Antonioletti,"
-date: "`r format(Sys.Date(), '%d/%m/%y')`"
+title: "Economic and Social Research Council (ESRC) Data"
+author: "**Author**: Mario Antonioletti.<br/>"
+date: "**Last updated**: `r format(Sys.Date(), '%d/%m/%y')`"
 output: 
   github_document:
       toc: true
+      number_sections: true
       toc_depth: 4
 ---
 
@@ -66,11 +67,15 @@ esrcdat <- gtrdat %>% filter(FundingOrgName == "ESRC")
 
 ```
 
+# Introduction
+
+The aim of this document is to give an overview of expenditure done by the UKRI ESRC as determined from a [Gateway to Research](https://gtr.ukri.org/) (GtR) data set, made available under an [Open Government Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/), which covers the period `r format(min(gtrdat$StartDate),"%d/%m/%y")` to `r format(max(gtrdat$EndDate, na.rm = TRUE),"%d/%m/%y")`. The GtR data snapshot was downloaded from the GtR website on the 11/10/21 and was last updated by UKRI on the 30th of September 2021. The R markdown should also work on any future updates.
+
+The data set contains `r format(nrow(gtrdat), big.mark = ",")` rows (after some data cleaning), where a row can be interpreted as the record of an award. In this data set `r format(nrow(gtrdat[gtrdat$FundingOrgName == "ESRC",]), big.mark = ",")` correspond to ESRC awards.
+
 # Overall expenditure
 
 ## All projects
-
-The [Gateway to Research](https://gtr.ukri.org/) data set, made available under an [Open Government Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/), covers the period `r format(min(gtrdat$StartDate),"%d/%m/%y")` to `r format(max(gtrdat$EndDate, na.rm = TRUE),"%d/%m/%y")` (for data downloaded from the Gateway to Research website on 11/10/21). 
 
 Expenditure for the whole period under consideration is shown in the graph below. Awards that do not have a value defined have been removed.
 
