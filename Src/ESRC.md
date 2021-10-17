@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 15/10/21.
+**Last updated**: 17/10/21.
 
 -   [Introduction](#introduction)
 -   [Overall expenditure](#overall-expenditure)
@@ -39,6 +39,8 @@ Economic and Social Research Council (ESRC) Data
     -   [Doctoral Training
         Partnerships](#doctoral-training-partnerships)
         -   [Active Partnerships](#active-partnerships)
+    -   [Award Titles](#award-titles)
+        -   [Active award titles](#active-award-titles)
 -   [ToDo Items](#todo-items)
 
 # Introduction
@@ -433,6 +435,15 @@ Currently active doctoral partnerships ordered by the start date.
 | University of Southampton            | Sch of Economic, Social & Political Sci | 01/10/17 | 30/09/27 | 14,976,397 |
 | University of the West of England    | Faculty of Health and Life Sciences     | 01/10/20 | 01/10/24 |          0 |
 | University College London            | Epidemiology and Public Health          | 01/10/20 | 30/09/26 |  1,453,720 |
+
+## Award Titles
+
+### Active award titles
+
+A word cloud made from the award titles (some of the longer words are
+not included).
+
+![](ESRC_files/figure-gfm/ActiveWordCloud-1.png)<!-- -->
 
 # ToDo Items
 

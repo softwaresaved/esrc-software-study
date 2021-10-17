@@ -22,6 +22,8 @@ library(ggplot2)
 library(stringr)
 library(knitr)
 library(kableExtra)
+library(tidytext)
+library(wordcloud)
 
 # Do not use scientific notation
 options(scipen=999)
@@ -409,6 +411,21 @@ esrcdat %>% filter(Status == "Active")                                   %>%
             mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
             kable(format="pipe", align= c("l","l","l","l","r"), 
                   col.names = c("Lead Organisation", "Department","Start", "End","Award (£)")) 
+```
+
+## Award Titles
+
+### Active award titles
+
+A word cloud made from the award titles (some of the longer words are not included).
+
+```{r ActiveWordCloud, echo = FALSE}
+esrcdat %>% filter(Status == "Active")        %>%
+            select(Title)                     %>% 
+            unnest_tokens(word, Title)        %>% 
+            anti_join(stop_words, by="word")  %>% 
+            count(word)                       %>%
+            with(suppressWarnings(wordcloud(word, n))) #, max.words = 200))
 ```
 
 # ToDo Items
