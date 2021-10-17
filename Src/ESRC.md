@@ -302,58 +302,58 @@ departments that have 30 or more occurrences. The Departments below have
 been ‘cleaned’ to remove minor differences, e.g. Cardiff Business School
 to Business School and so on.
 
-| Department                             | Number | Percent |
-|:---------------------------------------|-------:|--------:|
-| Psychology                             |    839 |    7.74 |
-| Social Science                         |    584 |    5.39 |
-| Geography                              |    435 |    4.02 |
-| Economics                              |    421 |    3.89 |
-| Education                              |    335 |    3.09 |
-| Sociology                              |    275 |    2.54 |
-| Business School                        |    254 |    2.34 |
-| Law                                    |    252 |    2.33 |
-| Politics                               |    207 |    1.91 |
-| Social and Political Science           |    150 |    1.38 |
-| Management                             |    144 |    1.33 |
-| Applied Social Science                 |    131 |    1.21 |
-| Anthropology                           |    101 |    0.93 |
-| Experimental Psychology                |     92 |    0.85 |
-| Politics and International Studies     |     89 |    0.82 |
-| Environment, Education and Development |     84 |    0.78 |
-| International Development              |     84 |    0.78 |
-| Geography Politics and Sociology       |     80 |    0.74 |
-| Social & Political Science             |     75 |    0.69 |
-| Sociology & Social Policy              |     75 |    0.69 |
-| Health Science                         |     73 |    0.67 |
-| History                                |     73 |    0.67 |
-| IFS Research Team                      |     73 |    0.67 |
-| Epidemiology and Public Health         |     71 |    0.66 |
-| Research Department                    |     66 |    0.61 |
-| Economic, Social & Political Sci       |     61 |    0.56 |
-| Psychological Science                  |     60 |    0.55 |
-| Politics and International Relations   |     58 |    0.54 |
-| Global Studies                         |     55 |    0.51 |
-| Policy Studies                         |     53 |    0.49 |
-| Geography and Planning                 |     52 |    0.48 |
-| Social and Economic Research           |     49 |    0.45 |
-| Health and Life Science                |     46 |    0.42 |
-| Philosophy Psychology & Language       |     46 |    0.42 |
-| Unlisted                               |     45 |    0.42 |
-| Arts, Humanities & Social Sci          |     44 |    0.41 |
-| Government                             |     43 |    0.40 |
-| Public Health and Policy               |     42 |    0.39 |
-| Criminology                            |     41 |    0.38 |
-| Social and Policy Science              |     39 |    0.36 |
-| War Studies                            |     36 |    0.33 |
-| Arts Languages and Cultures            |     35 |    0.32 |
-| Education and Professional Studies     |     35 |    0.32 |
-| Linguistics and English Language       |     35 |    0.32 |
-| Sociological Studies                   |     33 |    0.30 |
-| Finance                                |     32 |    0.30 |
-| Social Pol Sociology & Social Res      |     31 |    0.29 |
-| Social Policy                          |     31 |    0.29 |
-| Planning and Geography                 |     30 |    0.28 |
-| Politics & International Relation      |     30 |    0.28 |
+| Department                             | Number | Percent | Total Awarded (£) |
+|:---------------------------------------|-------:|--------:|------------------:|
+| Psychology                             |    839 |    7.74 |       154,446,970 |
+| Social Science                         |    584 |    5.39 |       208,817,195 |
+| Geography                              |    435 |    4.02 |       131,992,135 |
+| Economics                              |    421 |    3.89 |       102,887,848 |
+| Education                              |    335 |    3.09 |        77,918,564 |
+| Sociology                              |    275 |    2.54 |        70,917,605 |
+| Business School                        |    254 |    2.34 |        93,862,678 |
+| Law                                    |    252 |    2.33 |        48,175,718 |
+| Politics                               |    207 |    1.91 |        25,135,954 |
+| Social and Political Science           |    150 |    1.38 |        62,954,739 |
+| Management                             |    144 |    1.33 |        23,519,136 |
+| Applied Social Science                 |    131 |    1.21 |        17,362,110 |
+| Anthropology                           |    101 |    0.93 |        14,001,257 |
+| Experimental Psychology                |     92 |    0.85 |        21,776,720 |
+| Politics and International Studies     |     89 |    0.82 |        24,030,894 |
+| Environment, Education and Development |     84 |    0.78 |        24,138,283 |
+| International Development              |     84 |    0.78 |        14,309,525 |
+| Geography Politics and Sociology       |     80 |    0.74 |         7,949,894 |
+| Sociology & Social Policy              |     75 |    0.69 |        11,282,534 |
+| Social & Political Science             |     75 |    0.69 |        34,254,755 |
+| History                                |     73 |    0.67 |         7,457,117 |
+| IFS Research Team                      |     73 |    0.67 |        50,344,834 |
+| Health Science                         |     73 |    0.67 |        22,207,732 |
+| Epidemiology and Public Health         |     71 |    0.66 |        23,417,504 |
+| Research Department                    |     66 |    0.61 |        27,509,469 |
+| Economic, Social & Political Sci       |     61 |    0.56 |        49,834,146 |
+| Psychological Science                  |     60 |    0.55 |         9,177,714 |
+| Politics and International Relations   |     58 |    0.54 |         4,890,554 |
+| Global Studies                         |     55 |    0.51 |        11,758,682 |
+| Policy Studies                         |     53 |    0.49 |        12,665,105 |
+| Geography and Planning                 |     52 |    0.48 |         2,274,800 |
+| Social and Economic Research           |     49 |    0.45 |       194,928,356 |
+| Philosophy Psychology & Language       |     46 |    0.42 |         9,255,042 |
+| Health and Life Science                |     46 |    0.42 |         5,496,272 |
+| Unlisted                               |     45 |    0.42 |         4,878,100 |
+| Arts, Humanities & Social Sci          |     44 |    0.41 |                 0 |
+| Government                             |     43 |    0.40 |         6,983,337 |
+| Public Health and Policy               |     42 |    0.39 |        15,936,964 |
+| Criminology                            |     41 |    0.38 |        22,692,158 |
+| Social and Policy Science              |     39 |    0.36 |         3,718,498 |
+| War Studies                            |     36 |    0.33 |        22,269,956 |
+| Arts Languages and Cultures            |     35 |    0.32 |         3,272,010 |
+| Linguistics and English Language       |     35 |    0.32 |        12,826,299 |
+| Education and Professional Studies     |     35 |    0.32 |         7,147,045 |
+| Sociological Studies                   |     33 |    0.30 |         5,477,753 |
+| Finance                                |     32 |    0.30 |        11,313,590 |
+| Social Policy                          |     31 |    0.29 |         4,424,327 |
+| Social Pol Sociology & Social Res      |     31 |    0.29 |         3,551,396 |
+| Planning and Geography                 |     30 |    0.28 |         4,192,112 |
+| Politics & International Relation      |     30 |    0.28 |         8,033,864 |
 
 ### Department awards for active projects only
 
@@ -361,33 +361,33 @@ There are 633 unique departments for active projects (1166 for all
 projects). The table below only shows cases that have 30 or more
 occurrences in active projects.
 
-| Department                         | Number | Percent |
-|:-----------------------------------|-------:|--------:|
-| Psychology                         |    326 |    7.31 |
-| Social Science                     |    245 |    5.50 |
-| Geography                          |    188 |    4.22 |
-| Economics                          |    170 |    3.81 |
-| Education                          |    160 |    3.59 |
-| Sociology                          |    123 |    2.76 |
-| Law                                |    122 |    2.74 |
-| Business School                    |    106 |    2.38 |
-| Politics                           |     93 |    2.09 |
-| Applied Social Science             |     72 |    1.62 |
-| Management                         |     53 |    1.19 |
-| Anthropology                       |     48 |    1.08 |
-| Economic, Social & Political Sci   |     47 |    1.05 |
-| Arts, Humanities & Social Sci      |     44 |    0.99 |
-| Geography Politics and Sociology   |     44 |    0.99 |
-| Sociology & Social Policy          |     43 |    0.96 |
-| History                            |     40 |    0.90 |
-| Epidemiology and Public Health     |     39 |    0.87 |
-| Social and Political Science       |     38 |    0.85 |
-| Health Science                     |     37 |    0.83 |
-| Social & Political Science         |     35 |    0.79 |
-| Geography and Planning             |     34 |    0.76 |
-| Experimental Psychology            |     33 |    0.74 |
-| International Development          |     31 |    0.70 |
-| Politics and International Studies |     30 |    0.67 |
+| Department                         | Number | Percent | Total Awarded (£) |
+|:-----------------------------------|-------:|--------:|------------------:|
+| Psychology                         |    326 |    7.31 |        55,046,914 |
+| Social Science                     |    245 |    5.50 |       107,208,289 |
+| Geography                          |    188 |    4.22 |        83,754,853 |
+| Economics                          |    170 |    3.81 |        38,703,797 |
+| Education                          |    160 |    3.59 |        44,652,817 |
+| Sociology                          |    123 |    2.76 |        31,913,789 |
+| Law                                |    122 |    2.74 |        12,008,464 |
+| Business School                    |    106 |    2.38 |        59,220,361 |
+| Politics                           |     93 |    2.09 |         8,250,341 |
+| Applied Social Science             |     72 |    1.62 |         9,026,525 |
+| Management                         |     53 |    1.19 |         9,652,115 |
+| Anthropology                       |     48 |    1.08 |         2,759,406 |
+| Economic, Social & Political Sci   |     47 |    1.05 |        37,096,487 |
+| Geography Politics and Sociology   |     44 |    0.99 |         2,566,784 |
+| Arts, Humanities & Social Sci      |     44 |    0.99 |                 0 |
+| Sociology & Social Policy          |     43 |    0.96 |         2,629,138 |
+| History                            |     40 |    0.90 |         1,442,202 |
+| Epidemiology and Public Health     |     39 |    0.87 |         9,697,205 |
+| Social and Political Science       |     38 |    0.85 |        42,038,838 |
+| Health Science                     |     37 |    0.83 |         4,951,362 |
+| Social & Political Science         |     35 |    0.79 |        20,929,329 |
+| Geography and Planning             |     34 |    0.76 |           668,248 |
+| Experimental Psychology            |     33 |    0.74 |         5,761,096 |
+| International Development          |     31 |    0.70 |         4,649,261 |
+| Politics and International Studies |     30 |    0.67 |        15,728,744 |
 
 ## Doctoral Training Partnerships
 

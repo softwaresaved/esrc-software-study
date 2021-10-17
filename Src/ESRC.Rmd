@@ -364,14 +364,16 @@ There are `r length(unique(esrcdat[["Department"]]))` unique departments. The ta
 # Total number of ESRC projects to calculate percentages.
 N <- nrow(esrcdat)
 
-esrcdat %>% select(CleanDep)                 %>% 
+esrcdat %>% select(CleanDep, AwardPounds)    %>% 
             group_by(CleanDep)               %>% 
-            tally()                          %>%
-            mutate(Percent=round(n/N*100,2)) %>% 
+            mutate(n = n())                 %>% 
+            mutate(n, Percent=round(n/N*100,2), 
+                      Total = format(sum(AwardPounds),big.mark =",")) %>% 
+            distinct(CleanDep, n, Percent, Total) %>% 
             arrange(desc(n))                 %>% 
             filter(n >= 30)                  %>% 
-            kbl(format="pipe", align = c("l","r","r"),
-                col.names = c("Department", "Number", "Percent")) 
+            kbl(format="pipe", align = c("l","r","r","r"),
+                col.names = c("Department", "Number", "Percent", "Total Awarded (£)")) 
 
 ```
 
@@ -386,14 +388,16 @@ There are `r length(unique(esrcdat[["Department"]][esrcdat$Status == "Active"]))
 N <- nrow(esrcdat[esrcdat$Status =="Active",])
 
 esrcdat %>% filter(Status == "Active")       %>% 
-            select(CleanDep)                 %>% 
+            select(CleanDep, AwardPounds)    %>% 
             group_by(CleanDep)               %>% 
-            tally()                          %>%
-            mutate(Percent=round(n/N*100,2)) %>% 
+            mutate(n = n())                 %>% 
+            mutate(n, Percent=round(n/N*100,2), 
+                      Total = format(sum(AwardPounds),big.mark =",")) %>% 
+            distinct(CleanDep, n, Percent, Total) %>% 
             arrange(desc(n))                 %>% 
             filter(n >= 30)                  %>% 
-            kbl(format="pipe", align = c("l","r","r"),
-                col.names = c("Department", "Number", "Percent")) 
+            kbl(format="pipe", align = c("l","r","r","r"),
+                col.names = c("Department", "Number", "Percent", "Total Awarded (£)")) 
 ```
 
 ## Doctoral Training Partnerships
