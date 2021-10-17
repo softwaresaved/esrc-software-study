@@ -440,8 +440,8 @@ Currently active doctoral partnerships ordered by the start date.
 
 ### Active award titles
 
-A word cloud made from the award titles (some of the longer words are
-not included).
+A word cloud made from the award titles using the top 250 words thogh
+some of the longer words have been excluded.
 
 ![](ESRC_files/figure-gfm/ActiveWordCloud-1.png)<!-- -->
 

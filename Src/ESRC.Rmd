@@ -418,7 +418,7 @@ esrcdat %>% filter(Status == "Active")                                   %>%
 
 ### Active award titles
 
-A word cloud made from the award titles (some of the longer words are not included).
+A word cloud made from the award titles using the top 250 words thogh some of the longer words have been excluded.
 
 ```{r ActiveWordCloud, echo = FALSE}
 pal <- brewer.pal(9,"BuGn")
@@ -429,7 +429,7 @@ esrcdat %>% filter(Status == "Active")                            %>%
             anti_join(stop_words, by="word")                      %>% 
             suppressWarnings(filter(!str_detect(word, "^[0-9]"))) %>% 
             count(word, sort = TRUE)                              %>%
-            with(suppressWarnings(wordcloud(word, n, colours = pal, ordered.colors = TRUE))) 
+            with(suppressWarnings(wordcloud(word, n, colours = pal, ordered.colors = TRUE, max.words = 250))) 
 ```
 
 # ToDo Items
