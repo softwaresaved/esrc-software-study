@@ -23,6 +23,7 @@ library(stringr)
 library(knitr)
 library(kableExtra)
 library(tidytext)
+library(RColorBrewer)
 library(wordcloud)
 
 # Do not use scientific notation
@@ -420,12 +421,15 @@ esrcdat %>% filter(Status == "Active")                                   %>%
 A word cloud made from the award titles (some of the longer words are not included).
 
 ```{r ActiveWordCloud, echo = FALSE}
-esrcdat %>% filter(Status == "Active")        %>%
-            select(Title)                     %>% 
-            unnest_tokens(word, Title)        %>% 
-            anti_join(stop_words, by="word")  %>% 
-            count(word)                       %>%
-            with(suppressWarnings(wordcloud(word, n))) #, max.words = 200))
+pal <- brewer.pal(9,"BuGn")
+
+esrcdat %>% filter(Status == "Active")                            %>%
+            select(Title)                                         %>% 
+            unnest_tokens(word, Title)                            %>% 
+            anti_join(stop_words, by="word")                      %>% 
+            suppressWarnings(filter(!str_detect(word, "^[0-9]"))) %>% 
+            count(word, sort = TRUE)                              %>%
+            with(suppressWarnings(wordcloud(word, n, colours = pal, ordered.colors = TRUE))) 
 ```
 
 # ToDo Items
