@@ -11,7 +11,9 @@ library(readr)
 library(lubridate)
 library(dplyr)
 library(ggplot2)
-
+library(stringr)
+library(rvest)
+library(xml2)
 
 # Read the data -----------------------------------------------------------
 
@@ -93,8 +95,14 @@ gtrdat <- gtrdat[!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) < 2050,]
 # Look at the ESRC data ---------------------------------------------------
 
 
+## ESRC projects -----------------------------------------------------------
+
 # Filter ESRC data - 10834 rows (about 8.9% of the data)
 esrcdat <- gtrdat %>% filter(FundingOrgName == "ESRC")
+
+
+## ESRC Project categories -------------------------------------------------
+
 
 # Look at the project categories
 esrcdat %>% select(ProjectCategory, AwardPounds)                   %>%
@@ -102,3 +110,4 @@ esrcdat %>% select(ProjectCategory, AwardPounds)                   %>%
             summarise(Number = n(), TotalAward = sum(AwardPounds)) %>%
             mutate(AverageAward = TotalAward/Number)               %>%
             arrange(desc(AverageAward))
+
