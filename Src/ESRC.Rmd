@@ -177,6 +177,22 @@ esrcdat %>% select(StartDate, EndDate, ProjectCategory) %>%
             ylab("Number of Awards") + xlab("Award Length (days)") +
             labs(fill = "Project Category") + theme_bw()
 ```
+Look at the award given by the length of project by project category for all projects.
+
+```{r award_lengthsVsAwardSize, echo = FALSE, fig.alt = "Award length vs Award size projects."}
+
+# The as.numeric() is a workaround for https://github.com/tidyverse/ggplot2/issues/1377
+esrcdat %>% select(StartDate, EndDate, ProjectCategory, AwardPounds) %>% 
+            filter(!is.na(StartDate) & !is.na(EndDate)) %>% 
+            mutate(grant_length = difftime(EndDate, StartDate,units = "days")) %>% 
+            filter(AwardPounds > 0)                                            %>% 
+            #mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
+            ggplot(aes(x = as.numeric(grant_length), y = AwardPounds, colour = ProjectCategory)) + 
+            geom_point(alpha = 0.25) + 
+            ylab("Awards (£)") + xlab("Award Length (days)") + scale_y_log10() +
+            facet_wrap(vars(ProjectCategory)) +
+            labs(fill = "Project Category") + theme_bw()
+```
 
 ### Award length distribution for active projects only
 
@@ -219,11 +235,29 @@ Percentage of award types by time length.
 esrcdat %>% filter(Status == "Active")                                          %>% 
             select(StartDate, EndDate, ProjectCategory)                         %>% 
             filter(!is.na(StartDate) & !is.na(EndDate))                         %>% 
-            mutate(grant_length = difftime(EndDate, StartDate,units = "days")) %>% 
+            mutate(grant_length = difftime(EndDate, StartDate,units = "days"))  %>% 
             ggplot(aes(x = as.numeric(grant_length), fill = ProjectCategory)) + 
             geom_histogram(binwidth = 28, colour="black", position="fill", na.rm = TRUE) + 
             ylab("Number of Awards") + xlab("Award Length (days)") +
             labs(fill = "Project Category") + theme_bw() + scale_y_continuous(labels = scales::percent)
+```
+
+Look at the award given by the length of project by project category for active projects.
+
+```{r award_lengthsVsAwardSizeForActiveProjects, echo = FALSE, fig.alt = "Award length vs Award size for active projects."}
+
+# The as.numeric() is a workaround for https://github.com/tidyverse/ggplot2/issues/1377
+esrcdat %>% filter(Status == "Active")                                          %>%
+             select(StartDate, EndDate, ProjectCategory, AwardPounds)           %>% 
+            filter(!is.na(StartDate) & !is.na(EndDate))                         %>% 
+            mutate(grant_length = difftime(EndDate, StartDate,units = "days"))  %>% 
+            filter(AwardPounds > 0)                                             %>% 
+            #mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
+            ggplot(aes(x = as.numeric(grant_length), y = AwardPounds, colour = ProjectCategory)) + 
+            geom_point(alpha = 0.25) + 
+            ylab("Awards (£)") + xlab("Award Length (days)") + scale_y_log10() +
+            facet_wrap(vars(ProjectCategory)) +
+            labs(fill = "Project Category") + theme_bw()
 ```
 
 ## Regional distribution of awards

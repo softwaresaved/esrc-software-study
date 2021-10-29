@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 17/10/21.
+**Last updated**: 29/10/21.
 
 -   [Introduction](#introduction)
 -   [Overall expenditure](#overall-expenditure)
@@ -114,6 +114,10 @@ The award length distribution of the award lengths binned into 28-day
 periods is shown below.
 
 <img src="ESRC_files/figure-gfm/award_lengths-1.png" title="Histogram of the length distribution for all projects." alt="Histogram of the length distribution for all projects."  />
+Look at the award given by the length of project by project category for
+all projects.
+
+<img src="ESRC_files/figure-gfm/award_lengthsVsAwardSize-1.png" title="Award length vs Award size projects." alt="Award length vs Award size projects."  />
 
 ### Award length distribution for active projects only
 
@@ -146,6 +150,11 @@ below.
 Percentage of award types by time length.
 
 <img src="ESRC_files/figure-gfm/award_lengths_active_fill-1.png" title="Percentage distribution of project type by the length of awards." alt="Percentage distribution of project type by the length of awards."  />
+
+Look at the award given by the length of project by project category for
+active projects.
+
+<img src="ESRC_files/figure-gfm/award_lengthsVsAwardSizeForActiveProjects-1.png" title="Award length vs Award size for active projects." alt="Award length vs Award size for active projects."  />
 
 ## Regional distribution of awards
 
