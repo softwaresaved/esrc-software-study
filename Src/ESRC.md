@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 29/10/21.
+**Last updated**: 31/10/21.
 
 -   [Introduction](#introduction)
 -   [Overall expenditure](#overall-expenditure)
@@ -114,10 +114,31 @@ The award length distribution of the award lengths binned into 28-day
 periods is shown below.
 
 <img src="ESRC_files/figure-gfm/award_lengths-1.png" title="Histogram of the length distribution for all projects." alt="Histogram of the length distribution for all projects."  />
+
 Look at the award given by the length of project by project category for
 all projects.
 
 <img src="ESRC_files/figure-gfm/award_lengthsVsAwardSize-1.png" title="Award length vs Award size projects." alt="Award length vs Award size projects."  />
+
+The top 15 active projects:
+
+|                               Lead Org |       Category | Total awarded (£) |                                                           Project title |
+|---------------------------------------:|---------------:|------------------:|------------------------------------------------------------------------:|
+|                    University of Essex | Research Grant |        44,619,972 | Understanding Society: The UK Household Longitudinal Survey Waves 13-15 |
+|              University College London | Research Grant |        35,772,415 |                Centre for Longitudinal Studies, Resource Centre 2015-20 |
+|                    University of Essex | Research Grant |        31,987,749 |                                      Understanding Society Waves 6 to 8 |
+|                    University of Essex | Research Grant |        30,212,001 |  Understanding Society: The UK Household Longitudinal Study: Waves 9-11 |
+|                University of Edinburgh | Training Grant |        27,538,201 |                       Scottish ESRC Doctoral Training Centre DTC 2011 - |
+|               University of Manchester | Research Grant |        26,621,454 |                                              The Productivity Institute |
+|                University of Liverpool | Training Grant |        24,932,784 |                       North West ESRC Doctoral Training Centre DTG 2011 |
+|                    University of Essex | Research Grant |        21,847,174 |                                             UK Data Service (2017-2022) |
+|                University of Sheffield | Training Grant |        21,102,259 |                       White Rose ESRC Doctoral Training Centre DTG 2011 |
+|                   University of Oxford | Training Grant |        19,130,534 |             University of Oxford ESRC Doctoral Training Centre DTG 2011 |
+|                    Coventry University | Research Grant |        18,759,063 |              GCRF South-South Migration, Inequality and Development Hub |
+|                   University of Oxford | Research Grant |        18,531,197 |              GCRF Accelerating Achievement for Africa’s Adolescents Hub |
+|              University College London | Training Grant |        18,280,789 |           UCL, Bloomsbury and East London Doctoral Training Partnership |
+| World Conservation Monitoring Ctr WCMC | Research Grant |        18,239,311 |                         GCRF Trade, Development and the Environment Hub |
+|                University of Liverpool | Training Grant |        17,857,544 |       North West Social Science Doctoral Training Partnership (NWSSDTP) |
 
 ### Award length distribution for active projects only
 

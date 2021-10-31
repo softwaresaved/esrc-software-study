@@ -25,6 +25,7 @@ library(kableExtra)
 library(tidytext)
 library(RColorBrewer)
 library(wordcloud)
+library(leaflet)
 
 # Do not use scientific notation
 options(scipen=999)
@@ -177,6 +178,7 @@ esrcdat %>% select(StartDate, EndDate, ProjectCategory) %>%
             ylab("Number of Awards") + xlab("Award Length (days)") +
             labs(fill = "Project Category") + theme_bw()
 ```
+
 Look at the award given by the length of project by project category for all projects.
 
 ```{r award_lengthsVsAwardSize, echo = FALSE, fig.alt = "Award length vs Award size projects."}
@@ -192,6 +194,22 @@ esrcdat %>% select(StartDate, EndDate, ProjectCategory, AwardPounds) %>%
             ylab("Awards (£)") + xlab("Award Length (days)") + scale_y_log10() +
             facet_wrap(vars(ProjectCategory)) +
             labs(fill = "Project Category") + theme_bw()
+```
+
+The top 15 active projects:
+
+```{r top15_active_projects, echo = FALSE}
+
+esrcdat %>% filter(Status == "Active" & AwardPounds > 10e6)                  %>% 
+            arrange(desc(AwardPounds))                                       %>% 
+            select(LeadROName, ProjectCategory, AwardPounds, Title)          %>% 
+            mutate(across(where(is.numeric), ~ format(., big.mark = ",")))   %>% 
+            slice_head(n = 15)                                               %>% 
+            kbl(format="pipe", align = rep("r",4), 
+                col.names = c("Lead Org", "Category", 
+                                "Total awarded (£)","Project title")) 
+
+
 ```
 
 ### Award length distribution for active projects only
