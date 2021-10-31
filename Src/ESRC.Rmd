@@ -125,17 +125,17 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))              %>%
 
 ### All projects category awards
 
-The project categories for the ESRC awards covering the period `r format(min(esrcdat$StartDate),"%d/%m/%y")` to `r format(max(esrcdat$EndDate, na.rm = TRUE),"%d/%m/%y")`. No explicit data seems to be provided for *Studentships*.
+The project categories for the ESRC awards covering the period `r format(min(esrcdat$StartDate),"%d/%m/%y")` to `r format(max(esrcdat$EndDate, na.rm = TRUE),"%d/%m/%y")`. No explicit data seems to be provided for *Studentships*. Data is sorted by the average award.
 
 ```{r esrc_categories, echo = FALSE}
 
 # Look at the project categories
-esrcdat %>% select(ProjectCategory, AwardPounds)                           %>% 
-            group_by(ProjectCategory)                                      %>% 
-            summarise(Number = n(), TotalAward = sum(AwardPounds))         %>% 
-            mutate(AverageAward = round(TotalAward/Number,2))              %>% 
-            arrange(desc(AverageAward))                                    %>% 
-            mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
+esrcdat %>% select(ProjectCategory, AwardPounds)                              %>% 
+            group_by(ProjectCategory)                                         %>% 
+            summarise(Number = n(), TotalAward = sum(AwardPounds))            %>% 
+            mutate(AverageAward = sprintf("%.2f",round(TotalAward/Number,2))) %>% 
+            arrange(desc(AverageAward))                                       %>% 
+            mutate(across(where(is.numeric), ~ format(., big.mark = ",")))    %>% 
             kbl(format="pipe", align = c("l",rep("r",3)), 
                 col.names = c("Project Catgeory", "Number of Awards", 
                                 "Total Awarded (£)","Average Award (£)")) 
@@ -148,13 +148,13 @@ This information corresponds to projects that are classified as *Active*.
 ```{r esrc_categories_active, echo = FALSE}
 
 # Look at the project categories
-esrcdat %>% filter(Status == "Active")                                     %>% 
-            select(ProjectCategory, AwardPounds)                           %>% 
-            group_by(ProjectCategory)                                      %>% 
-            summarise(Number = n(), TotalAward = sum(AwardPounds))         %>% 
-            mutate(AverageAward = round(TotalAward/Number,2))              %>% 
-            arrange(desc(AverageAward))                                    %>% 
-            mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
+esrcdat %>% filter(Status == "Active")                                         %>% 
+            select(ProjectCategory, AwardPounds)                               %>% 
+            group_by(ProjectCategory)                                          %>% 
+            summarise(Number = n(), TotalAward = sum(AwardPounds))             %>% 
+            mutate(AverageAward = sprintf("%.2f",round(TotalAward/Number,2)))  %>% 
+            arrange(desc(AverageAward))                                        %>% 
+            mutate(across(where(is.numeric), ~ format(., big.mark = ",")))     %>% 
             kbl(format="pipe", align = c("l",rep("r",3)), 
                 col.names = c("Project Catgeory", "Number of Awards", 
                                 "Total Awarded (£)","Average Award (£)")) 
@@ -172,10 +172,10 @@ The award length distribution of the award lengths binned into 28-day periods is
 # The as.numeric() is a workaround for https://github.com/tidyverse/ggplot2/issues/1377
 esrcdat %>% select(StartDate, EndDate, ProjectCategory) %>% 
             filter(!is.na(StartDate) & !is.na(EndDate)) %>% 
-            mutate(grant_length = difftime(EndDate, StartDate,units = "days")) %>% 
+            mutate(grant_length = difftime(EndDate, StartDate,units = "weeks")) %>% 
             ggplot(aes(x = as.numeric(grant_length), fill = ProjectCategory)) + 
             geom_histogram(binwidth = 28, colour="black") + 
-            ylab("Number of Awards") + xlab("Award Length (days)") +
+            ylab("Number of Awards") + xlab("Award Length (weeks)") +
             labs(fill = "Project Category") + theme_bw()
 ```
 
@@ -186,12 +186,12 @@ Look at the award given by the length of project by project category for all pro
 # The as.numeric() is a workaround for https://github.com/tidyverse/ggplot2/issues/1377
 esrcdat %>% select(StartDate, EndDate, ProjectCategory, AwardPounds) %>% 
             filter(!is.na(StartDate) & !is.na(EndDate)) %>% 
-            mutate(grant_length = difftime(EndDate, StartDate,units = "days")) %>% 
+            mutate(grant_length = difftime(EndDate, StartDate,units = "weeks")) %>% 
             filter(AwardPounds > 0)                                            %>% 
             #mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
             ggplot(aes(x = as.numeric(grant_length), y = AwardPounds, colour = ProjectCategory)) + 
             geom_point(alpha = 0.25) + 
-            ylab("Awards (£)") + xlab("Award Length (days)") + scale_y_log10() +
+            ylab("Awards (£)") + xlab("Award Length (weeks)") + scale_y_log10() +
             facet_wrap(vars(ProjectCategory)) +
             labs(fill = "Project Category") + theme_bw()
 ```
@@ -286,12 +286,12 @@ The expenditure of the awards over the whole time period by region ordered by th
 
 ```{r esrc_byRegions, echo = FALSE}
 
-esrcdat %>% select(Region, AwardPounds)                                    %>% 
-            group_by(Region)                                               %>% 
-            summarise(Number = n(), TotalAward = sum(AwardPounds))         %>% 
-            mutate(AverageAward = round(TotalAward/Number,2))              %>% 
-            arrange(desc(TotalAward))                                      %>% 
-            mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
+esrcdat %>% select(Region, AwardPounds)                                       %>% 
+            group_by(Region)                                                  %>% 
+            summarise(Number = n(), TotalAward = sum(AwardPounds))            %>% 
+            mutate(AverageAward = sprintf("%.2f",round(TotalAward/Number,2))) %>% 
+            arrange(desc(TotalAward))                                         %>% 
+            mutate(across(where(is.numeric), ~ format(., big.mark = ",")))    %>% 
             kbl(format="pipe", align = c("l",rep("r",3)),
                 col.names = c("Region", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
 ```
@@ -302,13 +302,13 @@ We can generate the table for projects that are currently active ordered by the 
 
 ```{r esrc_byRegions_active, echo = FALSE}
 
-esrcdat %>% filter(Status == "Active")                                     %>% 
-            select(Region, AwardPounds)                                    %>% 
-            group_by(Region)                                               %>% 
-            summarise(Number = n(), TotalAward = sum(AwardPounds))         %>% 
-            mutate(AverageAward = round(TotalAward/Number,2))              %>% 
-            arrange(desc(TotalAward))                                      %>% 
-            mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
+esrcdat %>% filter(Status == "Active")                                        %>% 
+            select(Region, AwardPounds)                                       %>% 
+            group_by(Region)                                                  %>% 
+            summarise(Number = n(), TotalAward = sum(AwardPounds))            %>% 
+            mutate(AverageAward = sprintf("%.2f",round(TotalAward/Number,2))) %>% 
+            arrange(desc(TotalAward))                                         %>% 
+            mutate(across(where(is.numeric), ~ format(., big.mark = ",")))    %>% 
             kbl(format="pipe", align = c("l",rep("r",3)),
                 col.names = c("Region", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
 ```
@@ -325,7 +325,7 @@ This only shows the top 25 organisations by the average value of the award.
 esrcdat %>% select(LeadROName, AwardPounds)                                     %>% 
             group_by(LeadROName)                                                %>% 
             summarise(Number = n(), TotalAward = sum(AwardPounds,na.rm = TRUE)) %>% 
-            mutate(AvgAward = round(TotalAward/Number,2))                       %>% 
+            mutate(AvgAward = sprintf("%.2f",round(TotalAward/Number,2)))       %>% 
             arrange(desc(AvgAward))                                             %>% 
             mutate(across(where(is.numeric), ~ format(., big.mark = ",")))      %>% 
             slice_head(n = 25)                                                  %>% 
@@ -343,7 +343,7 @@ esrcdat %>% filter(Status == "Active")                                          
             select(LeadROName, AwardPounds)                                     %>% 
             group_by(LeadROName)                                                %>% 
             summarise(Number = n(), TotalAward = sum(AwardPounds,na.rm = TRUE)) %>% 
-            mutate(AvgAward = round(TotalAward/Number,2))                       %>% 
+            mutate(AvgAward = sprintf("%.2f",round(TotalAward/Number,2)))       %>% 
             arrange(desc(AvgAward))                                             %>% 
             mutate(across(where(is.numeric), ~ format(., big.mark = ",")))      %>% 
             slice_head(n = 25)                                                  %>% 
@@ -358,7 +358,7 @@ esrcdat %>% filter(Status == "Active")                                          
             select(LeadROName, AwardPounds)                                     %>% 
             group_by(LeadROName)                                                %>% 
             summarise(Number = n(), TotalAward = sum(AwardPounds,na.rm = TRUE)) %>% 
-            mutate(AvgAward = round(TotalAward/Number,2))                       %>% 
+            mutate(AvgAward = sprintf("%.2f",round(TotalAward/Number,2)))       %>% 
             arrange(desc(Number))                                               %>% 
             mutate(across(where(is.numeric), ~ format(., big.mark = ",")))      %>% 
             slice_head(n = 25)                                                  %>% 
@@ -416,14 +416,14 @@ There are `r length(unique(esrcdat[["Department"]]))` unique departments. The ta
 # Total number of ESRC projects to calculate percentages.
 N <- nrow(esrcdat)
 
-esrcdat %>% select(CleanDep, AwardPounds)    %>% 
-            group_by(CleanDep)               %>% 
-            mutate(n = n())                 %>% 
+esrcdat %>% select(CleanDep, AwardPounds)                             %>% 
+            group_by(CleanDep)                                        %>% 
+            mutate(n = n())                                           %>% 
             mutate(n, Percent=round(n/N*100,2), 
                       Total = format(sum(AwardPounds),big.mark =",")) %>% 
-            distinct(CleanDep, n, Percent, Total) %>% 
-            arrange(desc(n))                 %>% 
-            filter(n >= 30)                  %>% 
+            distinct(CleanDep, n, Percent, Total)                     %>% 
+            arrange(desc(n))                                          %>% 
+            filter(n >= 30)                                           %>% 
             kbl(format="pipe", align = c("l","r","r","r"),
                 col.names = c("Department", "Number", "Percent", "Total Awarded (£)")) 
 
@@ -439,15 +439,15 @@ There are `r length(unique(esrcdat[["Department"]][esrcdat$Status == "Active"]))
 # Total number of active projects only to calculate percentages.
 N <- nrow(esrcdat[esrcdat$Status =="Active",])
 
-esrcdat %>% filter(Status == "Active")       %>% 
-            select(CleanDep, AwardPounds)    %>% 
-            group_by(CleanDep)               %>% 
-            mutate(n = n())                 %>% 
+esrcdat %>% filter(Status == "Active")                                %>% 
+            select(CleanDep, AwardPounds)                             %>% 
+            group_by(CleanDep)                                        %>% 
+            mutate(n = n())                                           %>% 
             mutate(n, Percent=round(n/N*100,2), 
                       Total = format(sum(AwardPounds),big.mark =",")) %>% 
-            distinct(CleanDep, n, Percent, Total) %>% 
-            arrange(desc(n))                 %>% 
-            filter(n >= 30)                  %>% 
+            distinct(CleanDep, n, Percent, Total)                     %>% 
+            arrange(desc(n))                                          %>% 
+            filter(n >= 30)                                           %>% 
             kbl(format="pipe", align = c("l","r","r","r"),
                 col.names = c("Department", "Number", "Percent", "Total Awarded (£)")) 
 ```
@@ -460,12 +460,12 @@ Currently active doctoral partnerships ordered by the start date.
 
 ```{r active_DTPs, echo = FALSE}
 
-esrcdat %>% filter(Status == "Active")                                   %>%  
-            filter(grepl("Doctoral Training",Title, ignore.case = TRUE)) %>% 
+esrcdat %>% filter(Status == "Active")                                      %>%  
+            filter(grepl("Doctoral Training",Title, ignore.case = TRUE))    %>% 
             select(LeadROName, Department, StartDate, EndDate, AwardPounds) %>%
-            arrange(StartDate) %>% 
-            mutate(across(where(is.Date), ~ format(., "%d/%m/%y"))) %>% 
-            mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
+            arrange(StartDate)                                              %>% 
+            mutate(across(where(is.Date), ~ format(., "%d/%m/%y")))         %>% 
+            mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
             kable(format="pipe", align= c("l","l","l","l","r"), 
                   col.names = c("Lead Organisation", "Department","Start", "End","Award (£)")) 
 ```
