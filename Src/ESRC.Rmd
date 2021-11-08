@@ -89,7 +89,7 @@ We start by doing a brief overview of all the data before we focus on the ESRC d
 
 Expenditure for the whole period under consideration is shown in the graph below. Awards that do not have a value defined have been removed.
 
-```{r funding_ByOrg, echo = FALSE, fig.alt = "Expenditure across all UKRI councils from the available data."}
+```{r funding_ByOrg, echo = FALSE, fig.alt = "Expenditure across each UKRI council from the available data."}
 
 gtrdat %>% filter(!is.na(AwardPounds))                                   %>% 
            select(FundingOrgName, AwardPounds)                           %>% 
@@ -98,17 +98,52 @@ gtrdat %>% filter(!is.na(AwardPounds))                                   %>%
            filter(!is.na(TotalExpenditure))                              %>% 
            ggplot(aes(x = FundingOrgName, y = TotalExpenditure)) + 
            geom_col(colour="black",fill="red") +
-           xlab("Funding Organisation") + 
+           xlab("Funding organisation") + 
            ylab("Expenditure (in million of pounds)") +
            theme_bw() + scale_y_log10()
           
+```
+
+The number of awards given by each council:
+
+```{r NumberOfAwards_ByOrg, echo = FALSE, fig.alt = "Number of awards across each UKRI councils from the available data."}
+
+gtrdat %>% filter(!is.na(AwardPounds))                                   %>% 
+           select(FundingOrgName, AwardPounds)                           %>% 
+           group_by(FundingOrgName)                                      %>% 
+           mutate(N = n())                                               %>% 
+           ggplot(aes(x = FundingOrgName, y = N/1e6)) + 
+           geom_col(colour="red") +
+           xlab("Funding organisation") + 
+           ylab("Number of awards (millions)") +
+           theme_bw() 
+          
+```
+
+Average award per founding councilordered by the average award:
+
+```{r AvgAwardPerFundCouncil, echo = FALSE, fig.alt = "Average award size per organisation."}
+
+gtrdat %>% filter(!is.na(AwardPounds))                                              %>% 
+           select(FundingOrgName, AwardPounds)                                      %>% 
+           group_by(FundingOrgName)                                                 %>% 
+           summarise(TotalExpenditure = round(sum(AwardPounds)),
+                  TotalAwards = n())                                                %>%
+           mutate(AvgAward = 
+                    as.numeric(round(TotalExpenditure/TotalAwards)))         %>% 
+           select(FundingOrgName, TotalAwards, TotalExpenditure, AvgAward)          %>% 
+           arrange(desc(as.numeric(AvgAward)))                                      %>% 
+           mutate(across(where(is.numeric), ~ format(., big.mark = ",")))           %>%
+           kbl(format="pipe", align = c("l",rep("r",3)),
+                col.names = c("Funding org", "Number of awards",
+                                "Total awarded (£)","Average award (£)"))
 ```
 
 ## Expenditure for active UKRI projects only 
 
 The graph below only contains values for currently active projects:
 
-```{r funding_ByOrg_active, echo = FALSE, fig.alt = "Expenditure across all UKRI councils for active projects from the available data."}
+```{r Activefunding_ByOrg_active, echo = FALSE, fig.alt = "Expenditure across all UKRI councils for active projects from the available data."}
 
 gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))              %>% 
            select(FundingOrgName, AwardPounds)                           %>% 
@@ -123,6 +158,40 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))              %>%
           
 ```
 
+The number of awards given by each council for active projects:
+
+```{r ActiveNumberOfAwards_ByOrg, echo = FALSE, fig.alt = "Number of awards across each UKRI councils for active projects from the available data."}
+
+gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))              %>% 
+           select(FundingOrgName, AwardPounds)                           %>% 
+           group_by(FundingOrgName)                                      %>% 
+           mutate(N = n())                                               %>% 
+           ggplot(aes(x = FundingOrgName, y = N/1e6)) + 
+           geom_col(colour="red") +
+           xlab("Funding organisation") + 
+           ylab("Number of awards (millions)") +
+           theme_bw() 
+          
+```
+
+Average award per founding council for active projects ordered by the average award:
+
+```{r ActiveAvgAwardPerFundCouncil, echo = FALSE, fig.alt = "Average award size per organisation for active projects."}
+
+gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))                        %>% 
+           select(FundingOrgName, AwardPounds)                                      %>% 
+           group_by(FundingOrgName)                                                 %>% 
+           summarise(TotalExpenditure = round(sum(AwardPounds)),
+                  TotalAwards = n())                                                %>%
+           mutate(AvgAward = 
+                    as.numeric(round(TotalExpenditure/TotalAwards)))                %>% 
+           select(FundingOrgName, TotalAwards, TotalExpenditure, AvgAward)          %>% 
+           arrange(desc(as.numeric(AvgAward)))                                      %>% 
+           mutate(across(where(is.numeric), ~ format(., big.mark = ",")))           %>%
+           kbl(format="pipe", align = c("l",rep("r",3)),
+                col.names = c("Funding org", "Number of awards",
+                                "Total awarded (£)","Average award (£)"))
+```
 # ESRC data
 
 ## Project category awards

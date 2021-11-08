@@ -70,13 +70,52 @@ the ESRC data.
 Expenditure for the whole period under consideration is shown in the
 graph below. Awards that do not have a value defined have been removed.
 
-<img src="ESRC_files/figure-gfm/funding_ByOrg-1.png" title="Expenditure across all UKRI councils from the available data." alt="Expenditure across all UKRI councils from the available data."  />
+<img src="ESRC_files/figure-gfm/funding_ByOrg-1.png" title="Expenditure across each UKRI council from the available data." alt="Expenditure across each UKRI council from the available data."  />
+
+The number of awards given by each council:
+
+<img src="ESRC_files/figure-gfm/NumberOfAwards_ByOrg-1.png" title="Number of awards across each UKRI councils from the available data." alt="Number of awards across each UKRI councils from the available data."  />
+
+Average award per founding councilordered by the average award:
+
+| Funding org | Number of awards | Total awarded (£) | Average award (£) |
+|:------------|-----------------:|------------------:|------------------:|
+| UKRI        |              316 |       322,537,043 |         1,020,687 |
+| MRC         |            9,778 |     6,075,879,176 |           621,383 |
+| EPSRC       |           30,442 |    14,994,349,564 |           492,555 |
+| Innovate UK |           24,111 |    11,708,607,728 |           485,613 |
+| STFC        |            6,710 |     2,275,419,041 |           339,109 |
+| ESRC        |           10,834 |     3,356,655,640 |           309,826 |
+| NERC        |           10,272 |     3,072,845,685 |           299,148 |
+| BBSRC       |           15,479 |     4,629,630,223 |           299,091 |
+| NC3Rs       |              437 |        71,292,006 |           163,140 |
+| AHRC        |            8,851 |     1,223,218,940 |           138,201 |
 
 ## Expenditure for active UKRI projects only
 
 The graph below only contains values for currently active projects:
 
-<img src="ESRC_files/figure-gfm/funding_ByOrg_active-1.png" title="Expenditure across all UKRI councils for active projects from the available data." alt="Expenditure across all UKRI councils for active projects from the available data."  />
+<img src="ESRC_files/figure-gfm/Activefunding_ByOrg_active-1.png" title="Expenditure across all UKRI councils for active projects from the available data." alt="Expenditure across all UKRI councils for active projects from the available data."  />
+
+The number of awards given by each council for active projects:
+
+<img src="ESRC_files/figure-gfm/ActiveNumberOfAwards_ByOrg-1.png" title="Number of awards across each UKRI councils for active projects from the available data." alt="Number of awards across each UKRI councils for active projects from the available data."  />
+
+Average award per founding council for active projects ordered by the
+average award:
+
+| Funding org | Number of awards | Total awarded (£) | Average award (£) |
+|:------------|-----------------:|------------------:|------------------:|
+| Innovate UK |            4,442 |     5,218,756,309 |         1,174,866 |
+| UKRI        |              312 |       319,585,236 |         1,024,312 |
+| MRC         |            3,396 |     1,708,965,561 |           503,229 |
+| EPSRC       |           13,652 |     6,297,143,923 |           461,262 |
+| NERC        |            3,036 |     1,224,397,406 |           403,293 |
+| ESRC        |            4,458 |     1,657,106,025 |           371,715 |
+| BBSRC       |            4,594 |     1,392,580,774 |           303,130 |
+| STFC        |            2,530 |       697,858,187 |           275,833 |
+| AHRC        |            2,681 |       432,623,233 |           161,366 |
+| NC3Rs       |              154 |        19,441,902 |           126,246 |
 
 # ESRC data
 
