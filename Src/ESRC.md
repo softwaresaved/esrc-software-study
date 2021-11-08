@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 31/10/21.
+**Last updated**: 08/11/21.
 
 -   [Introduction](#introduction)
 -   [Overall expenditure](#overall-expenditure)
@@ -52,9 +52,9 @@ Research](https://gtr.ukri.org/) (GtR) data snapshot. The data is made
 available under an [Open Government
 Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/),
 and covers the period 01/01/73 to 01/01/30. The GtR data snapshot was
-downloaded from the GtR website on the 11/10/21 and corresponded to data
-last updated by UKRI on the 30th of September 2021. The R markdown
-should work with any future data updates.
+downloaded from the GtR website on the 08/11/21 and corresponded to data
+last updated by UKRI on the 28th October
+2021.<!-- 11/10/21 and corresponded to data last updated by UKRI on the 30th of September 2021. -->
 
 The data set contains 120,865 rows (after some data cleaning), where a
 row corresponds to the record of an award. In this data set 10,834
