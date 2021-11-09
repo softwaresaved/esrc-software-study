@@ -76,7 +76,7 @@ The number of awards given by each council:
 
 <img src="ESRC_files/figure-gfm/NumberOfAwards_ByOrg-1.png" title="Number of awards across each UKRI councils from the available data." alt="Number of awards across each UKRI councils from the available data."  />
 
-Average award per founding councilordered by the average award:
+Average award per founding council ordered by the average award:
 
 | Funding org | Number of awards | Total awarded (£) | Average award (£) |
 |:------------|-----------------:|------------------:|------------------:|
@@ -120,6 +120,11 @@ average award:
 | STFC        |            2,530 |       697,858,187 |           275,833 |
 | AHRC        |            2,681 |       432,623,233 |           161,366 |
 | NC3Rs       |              154 |        19,441,902 |           126,246 |
+
+The distribution of awards by research council for active projects
+(needs normalising).
+
+<img src="ESRC_files/figure-gfm/ActiveAwardDistrPerFundCouncil-1.png" title="Distribution of award size by research council for active projects." alt="Distribution of award size by research council for active projects."  />
 
 # ESRC data
 
