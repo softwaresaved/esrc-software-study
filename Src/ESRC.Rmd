@@ -139,6 +139,21 @@ gtrdat %>% filter(!is.na(AwardPounds))                                          
                                 "Total awarded (£)","Average award (£)"))
 ```
 
+The distribution of awards by research council (needs normalising).
+
+```{r AwardDistrPerFundCouncil, echo = FALSE, fig.alt = "Distribution of award size by research council."}
+
+gtrdat %>% filter(!is.na(AwardPounds) & AwardPounds > 0)                             %>% 
+           select(FundingOrgName, AwardPounds)                                       %>% 
+           ggplot(aes(x = AwardPounds, fill = FundingOrgName)) + 
+           geom_density(alpha = 0.1, na.rm = TRUE) +
+           xlab("Size of award (£)") + 
+           ylab("Distribution of awards") +
+           scale_x_log10() + labs(fill = "Funding Org") +
+           theme_bw() 
+```
+
+
 ## Expenditure for active UKRI projects only 
 
 The graph below only contains values for currently active projects:

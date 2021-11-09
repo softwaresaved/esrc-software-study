@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 08/11/21.
+**Last updated**: 09/11/21.
 
 -   [Introduction](#introduction)
 -   [Overall expenditure](#overall-expenditure)
@@ -90,6 +90,10 @@ Average award per founding councilordered by the average award:
 | BBSRC       |           15,479 |     4,629,630,223 |           299,091 |
 | NC3Rs       |              437 |        71,292,006 |           163,140 |
 | AHRC        |            8,851 |     1,223,218,940 |           138,201 |
+
+The distribution of awards by research council (needs normalising).
+
+<img src="ESRC_files/figure-gfm/AwardDistrPerFundCouncil-1.png" title="Distribution of award size by research council." alt="Distribution of award size by research council."  />
 
 ## Expenditure for active UKRI projects only
 
