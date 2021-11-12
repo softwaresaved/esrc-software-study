@@ -119,8 +119,25 @@ gtrdat %>% filter(!is.na(AwardPounds))                                   %>%
            theme_bw() 
           
 ```
+The average award given by funding council:
 
-Average award per founding council ordered by the average award:
+```{r AvgAwardPerFundCouncilPlot, echo = FALSE, fig.alt = "Average award size given in pounds per funding council."}
+
+gtrdat %>% filter(!is.na(AwardPounds))                                       %>% 
+           select(FundingOrgName, AwardPounds)                               %>% 
+           group_by(FundingOrgName)                                          %>% 
+           summarise(TotalExpenditure = round(sum(AwardPounds)),
+                  TotalAwards = n())                                         %>%
+           mutate(AvgAward = 
+                    as.numeric(round(TotalExpenditure/TotalAwards)))         %>% 
+           ggplot(aes(x = FundingOrgName, y = AvgAward)) + 
+           geom_col(fill="red", colour = "black") +
+           xlab("Funding organisation") + 
+           ylab("Average award given (£)") +
+           theme_bw() 
+```
+
+Average award per founding council ordered by the average award in tabular form:
 
 ```{r AvgAwardPerFundCouncil, echo = FALSE, fig.alt = "Average award size per organisation."}
 
@@ -203,6 +220,24 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))              %>%
            ylab("Number of awards (millions)") +
            theme_bw() 
           
+```
+
+The average award given by funding council for active projects:
+
+```{r AvgAwardPerFundCouncilActProjPlot, echo = FALSE, fig.alt = "Average award size given in pounds per funding council for active projects."}
+
+gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))                  %>% 
+           select(FundingOrgName, AwardPounds)                               %>% 
+           group_by(FundingOrgName)                                          %>% 
+           summarise(TotalExpenditure = round(sum(AwardPounds)),
+                  TotalAwards = n())                                         %>%
+           mutate(AvgAward = 
+                    as.numeric(round(TotalExpenditure/TotalAwards)))         %>% 
+           ggplot(aes(x = FundingOrgName, y = AvgAward)) + 
+           geom_col(fill="red", colour = "black") +
+           xlab("Funding organisation") + 
+           ylab("Average award given (£)") +
+           theme_bw() 
 ```
 
 Average award per founding council for active projects ordered by the average award:

@@ -75,8 +75,12 @@ graph below. Awards that do not have a value defined have been removed.
 The number of awards given by each council:
 
 <img src="ESRC_files/figure-gfm/NumberOfAwards_ByOrg-1.png" title="Number of awards across each UKRI councils from the available data." alt="Number of awards across each UKRI councils from the available data."  />
+The average award given by funding council:
 
-Average award per founding council ordered by the average award:
+<img src="ESRC_files/figure-gfm/AvgAwardPerFundCouncilPlot-1.png" title="Average award size given in pounds per funding council." alt="Average award size given in pounds per funding council."  />
+
+Average award per founding council ordered by the average award in
+tabular form:
 
 | Funding org | Number of awards | Total awarded (£) | Average award (£) |
 |:------------|-----------------:|------------------:|------------------:|
@@ -108,6 +112,10 @@ The graph below only contains values for currently active projects:
 The number of awards given by each council for active projects:
 
 <img src="ESRC_files/figure-gfm/ActiveNumberOfAwards_ByOrg-1.png" title="Number of awards across each UKRI councils for active projects from the available data." alt="Number of awards across each UKRI councils for active projects from the available data."  />
+
+The average award given by funding council for active projects:
+
+<img src="ESRC_files/figure-gfm/AvgAwardPerFundCouncilActProjPlot-1.png" title="Average award size given in pounds per funding council for active projects." alt="Average award size given in pounds per funding council for active projects."  />
 
 Average award per founding council for active projects ordered by the
 average award:
