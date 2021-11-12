@@ -153,6 +153,22 @@ gtrdat %>% filter(!is.na(AwardPounds) & AwardPounds > 0)                        
            theme_bw() 
 ```
 
+The graph with the values scaled:
+
+```{r AwardDistrPerFundCouncilScaled, echo = FALSE, fig.alt = "Distribution of award size by research council with the graphs scaled."}
+
+gtrdat %>% filter(!is.na(AwardPounds) & AwardPounds > 0)                             %>% 
+           select(FundingOrgName, AwardPounds)                                       %>% 
+          group_by(FundingOrgName) %>% 
+          mutate(n = n()) %>% 
+           ggplot(aes(x = AwardPounds, ..scaled.., fill = FundingOrgName)) + 
+           geom_density(alpha = 0.08, na.rm = TRUE) +
+           xlab("Size of award (£)") + 
+           ylab("Distribution of awards") +
+           scale_x_log10() + labs(fill = "Funding Org") +
+           theme_bw() 
+```
+
 
 ## Expenditure for active UKRI projects only 
 
@@ -208,13 +224,26 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))                     
                                 "Total awarded (£)","Average award (£)"))
 ```
 
-The distribution of awards by research council for active projects (needs normalising).
+The distribution of awards by research council for active projects.
 
 ```{r ActiveAwardDistrPerFundCouncil, echo = FALSE, fig.alt = "Distribution of award size by research council for active projects."}
 
 gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds) & AwardPounds > 0)        %>% 
            select(FundingOrgName, AwardPounds)                                       %>% 
            ggplot(aes(x = AwardPounds, fill = FundingOrgName)) + 
+           geom_density( alpha = 0.1, na.rm = TRUE) +
+           xlab("Size of award (£)") + 
+           ylab("Distribution of awards") +
+           scale_x_log10() + labs(fill = "Funding Org") +
+           theme_bw() 
+```
+With the densities scaled:
+
+```{r ActiveAwardDistrPerFundCouncilScaled, echo = FALSE, fig.alt = "Distribution of award size by research council for active projects with the graphs scaled."}
+
+gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds) & AwardPounds > 0)        %>% 
+           select(FundingOrgName, AwardPounds)                                       %>% 
+           ggplot(aes(x = AwardPounds, ..scaled.., fill = FundingOrgName)) + 
            geom_density( alpha = 0.1, na.rm = TRUE) +
            xlab("Size of award (£)") + 
            ylab("Distribution of awards") +

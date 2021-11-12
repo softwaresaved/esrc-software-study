@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 09/11/21.
+**Last updated**: 12/11/21.
 
 -   [Introduction](#introduction)
 -   [Overall expenditure](#overall-expenditure)
@@ -95,6 +95,10 @@ The distribution of awards by research council (needs normalising).
 
 <img src="ESRC_files/figure-gfm/AwardDistrPerFundCouncil-1.png" title="Distribution of award size by research council." alt="Distribution of award size by research council."  />
 
+The graph with the values scaled:
+
+<img src="ESRC_files/figure-gfm/AwardDistrPerFundCouncilScaled-1.png" title="Distribution of award size by research council with the graphs scaled." alt="Distribution of award size by research council with the graphs scaled."  />
+
 ## Expenditure for active UKRI projects only
 
 The graph below only contains values for currently active projects:
@@ -121,10 +125,12 @@ average award:
 | AHRC        |            2,681 |       432,623,233 |           161,366 |
 | NC3Rs       |              154 |        19,441,902 |           126,246 |
 
-The distribution of awards by research council for active projects
-(needs normalising).
+The distribution of awards by research council for active projects.
 
 <img src="ESRC_files/figure-gfm/ActiveAwardDistrPerFundCouncil-1.png" title="Distribution of award size by research council for active projects." alt="Distribution of award size by research council for active projects."  />
+With the densities scaled:
+
+<img src="ESRC_files/figure-gfm/ActiveAwardDistrPerFundCouncilScaled-1.png" title="Distribution of award size by research council for active projects with the graphs scaled." alt="Distribution of award size by research council for active projects with the graphs scaled."  />
 
 # ESRC data
 
