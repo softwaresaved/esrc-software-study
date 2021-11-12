@@ -104,6 +104,21 @@ gtrdat %>% filter(!is.na(AwardPounds))                                   %>%
           
 ```
 
+The same information in tabular format:
+
+```{r funding_ByOrgTable, echo = FALSE, fig.alt = "Expenditure across each UKRI council from the available data in tabular format."}
+
+gtrdat %>% filter(!is.na(AwardPounds))                                     %>% 
+           select(FundingOrgName, AwardPounds)                             %>% 
+           group_by(FundingOrgName)                                        %>% 
+           summarise(TotalExpenditure = round(sum(AwardPounds)/1000000))   %>% 
+           filter(!is.na(TotalExpenditure))                                %>% 
+           arrange(desc(TotalExpenditure))                                 %>% 
+           mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>%
+           kbl(format="pipe", align = c("l","r"), 
+               col.names = c("Funding org", "Total awarded (Million £s)"))          
+          
+```
 The number of awards given by each council:
 
 ```{r NumberOfAwards_ByOrg, echo = FALSE, fig.alt = "Number of awards across each UKRI councils from the available data."}
@@ -119,6 +134,7 @@ gtrdat %>% filter(!is.na(AwardPounds))                                   %>%
            theme_bw() 
           
 ```
+
 The average award given by funding council:
 
 ```{r AvgAwardPerFundCouncilPlot, echo = FALSE, fig.alt = "Average award size given in pounds per funding council."}
@@ -186,6 +202,11 @@ gtrdat %>% filter(!is.na(AwardPounds) & AwardPounds > 0)                        
            theme_bw() 
 ```
 
+### Summary
+
+* Over the time covered by the data, EPSRC has been allocated the most money but they also give the most awards so on average they do not give the highest award.
+* The MRC have been given the third highest amount but, other than UKRI, they give the second highest average award.
+* Of interest to this particular study the ESRC comes in fifth in the total amount awarded and they give the fourth highest number of awards so their average over the research councils comes third.
 
 ## Expenditure for active UKRI projects only 
 
@@ -206,6 +227,21 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))              %>%
           
 ```
 
+The same information in tabular format:
+
+```{r funding_ByOrgTableActProj, echo = FALSE, fig.alt = "Expenditure across each UKRI council from the available data in tabular format for active projects."}
+
+gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))                %>% 
+           select(FundingOrgName, AwardPounds)                             %>% 
+           group_by(FundingOrgName)                                        %>% 
+           summarise(TotalExpenditure = round(sum(AwardPounds)/1000000))   %>% 
+           filter(!is.na(TotalExpenditure))                                %>% 
+           arrange(desc(TotalExpenditure))                                 %>% 
+           mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>%
+           kbl(format="pipe", align = c("l","r"), 
+               col.names = c("Funding org", "Total awarded (Million £s)"))          
+          
+```
 The number of awards given by each council for active projects:
 
 ```{r ActiveNumberOfAwards_ByOrg, echo = FALSE, fig.alt = "Number of awards across each UKRI councils for active projects from the available data."}

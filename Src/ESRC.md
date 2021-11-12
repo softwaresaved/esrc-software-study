@@ -7,6 +7,7 @@ Economic and Social Research Council (ESRC) Data
 -   [Overall expenditure](#overall-expenditure)
     -   [Expenditure for all UKRI
         projects](#expenditure-for-all-ukri-projects)
+        -   [Summary](#summary)
     -   [Expenditure for active UKRI projects
         only](#expenditure-for-active-ukri-projects-only)
 -   [ESRC data](#esrc-data)
@@ -72,9 +73,25 @@ graph below. Awards that do not have a value defined have been removed.
 
 <img src="ESRC_files/figure-gfm/funding_ByOrg-1.png" title="Expenditure across each UKRI council from the available data." alt="Expenditure across each UKRI council from the available data."  />
 
+The same information in tabular format:
+
+| Funding org | Total awarded (Million £s) |
+|:------------|---------------------------:|
+| EPSRC       |                     14,994 |
+| Innovate UK |                     11,709 |
+| MRC         |                      6,076 |
+| BBSRC       |                      4,630 |
+| ESRC        |                      3,357 |
+| NERC        |                      3,073 |
+| STFC        |                      2,275 |
+| AHRC        |                      1,223 |
+| UKRI        |                        323 |
+| NC3Rs       |                         71 |
+
 The number of awards given by each council:
 
 <img src="ESRC_files/figure-gfm/NumberOfAwards_ByOrg-1.png" title="Number of awards across each UKRI councils from the available data." alt="Number of awards across each UKRI councils from the available data."  />
+
 The average award given by funding council:
 
 <img src="ESRC_files/figure-gfm/AvgAwardPerFundCouncilPlot-1.png" title="Average award size given in pounds per funding council." alt="Average award size given in pounds per funding council."  />
@@ -103,11 +120,37 @@ The graph with the values scaled:
 
 <img src="ESRC_files/figure-gfm/AwardDistrPerFundCouncilScaled-1.png" title="Distribution of award size by research council with the graphs scaled." alt="Distribution of award size by research council with the graphs scaled."  />
 
+### Summary
+
+-   Over the time covered by the data, EPSRC has been allocated the most
+    money but they also give the most awards so on average they do not
+    give the highest award.
+-   The MRC have been given the third highest amount but, other than
+    UKRI, they give the second highest average award.
+-   Of interest to this particular study the ESRC comes in fifth in the
+    total amount awarded and they give the fourth highest number of
+    awards so their average over the research councils comes third.
+
 ## Expenditure for active UKRI projects only
 
 The graph below only contains values for currently active projects:
 
 <img src="ESRC_files/figure-gfm/Activefunding_ByOrg_active-1.png" title="Expenditure across all UKRI councils for active projects from the available data." alt="Expenditure across all UKRI councils for active projects from the available data."  />
+
+The same information in tabular format:
+
+| Funding org | Total awarded (Million £s) |
+|:------------|---------------------------:|
+| EPSRC       |                      6,297 |
+| Innovate UK |                      5,219 |
+| MRC         |                      1,709 |
+| ESRC        |                      1,657 |
+| BBSRC       |                      1,393 |
+| NERC        |                      1,224 |
+| STFC        |                        698 |
+| AHRC        |                        433 |
+| UKRI        |                        320 |
+| NC3Rs       |                         19 |
 
 The number of awards given by each council for active projects:
 
