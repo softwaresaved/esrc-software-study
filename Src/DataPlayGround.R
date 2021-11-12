@@ -1,6 +1,6 @@
 #/usr/bin/env Rscript
 #
-# A playground to look at data downloaded from the Gageway to Research.
+# A playground to look at data downloaded from the Gateway to Research.
 #
 
 
