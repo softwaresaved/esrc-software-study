@@ -90,13 +90,18 @@ pids <- c("") #dbQuery(mydb,"SELECT FROM;")
 # Function to collapse a list and separate elements by semicolons
 collapseList <- function(x){paste(unlist(x), collapse = "; ")}
 
+# New data frames
+Projects <- tibble()
+Collaborations <- tibble()
+
 # Loop round the project URLS
 for(i in seq_len(nrow(esrcdat))){
 
   # Project id
   pid <- esrcdat[["ProjectReference"]][i]
 
-  # Check whether we already have the project data
+  # Check whether we already have the project data.
+  # ToDo need to populate the pids properly
   if(pid %in% pids){
     next
   }
@@ -123,12 +128,19 @@ for(i in seq_len(nrow(esrcdat))){
   startdate <- section$start
   endate <- section$end
 
+  # Add to the project tibble.
+  Projects <- add_row(Projects, c(ref, lastRefresh, status, category, title,
+                                  abstract, impact, valuePounds, startdate,
+                                  enddate))
+
   # Collaboration info - a data frame with 11 columns
   collaborationOutput <- pdat$projectOverview$projectComposition$project$output$collaborationOutput
-  # add the grant ref to the dataframe
+  # add the grant ref to the data frame
   collaborationOutput$grantRef <- rep(ref, nrow(collaborationOutput))
 
   section <- pdat$projectOverview$projectComposition$project$output
+
+  # ToDo this is a list.
   intelProp <- section$intellectualPropertyOutput
 
   # Data frame with 8 columns
@@ -136,5 +148,60 @@ for(i in seq_len(nrow(esrcdat))){
 
   # Collapse the area column which is composed of lists (notalways populated)
   policy$area <- sapply(policy$area, collapseList)
+
+  Policy <- add_row(Policy, policy)
+
+  # ToDo check list output
+  productOutput <- section$productOutput
+
+  # ToDo - data frame with 9 columns
+  researchMaterialOutput <- section$researchMaterialOutput
+
+  # ToDo - data frame with 8 columns
+  researchDBandModelOutputs <-  section$researchDatabaseAndModelOutput
+
+  # ToDo - data frame with 9 columns
+  SoftTechOutputs <- section$softwareAndTechnicalProductOutput
+
+  # ToDo - data frame with 9 columns
+  DBandModOutputs <-  section$researchDatabaseAndModelOutput
+
+  # ToDo - list
+  spinOut <-  section$spinOutOutput
+
+  # ToDo - data frame with 6 columns
+  impactSummary <- section$impactSummaryOutput
+
+  # ToDo - data frame with 14 columns
+  furtherFunding <- section$furtherFundingOutput
+
+  # ToDo - list
+  otherResarch <- section$otherResearchOutput
+
+  # ToDo - list
+  exploitation <- section$exploitationOutput
+
+  # ToDo - data frame 10 columns
+  section$disseminationOutput
+
+  # ToDo - list of length 6
+  keyFindings <- section$keyFindingsOutput
+
+  section <- pdat$projectOverview$projectComposition$project
+
+  # ToDo - data frame with 9 columns
+  publications <- section$publication
+
+  # ToDo - data frame with 2 columns
+  identifier <- section$identifier
+
+  # ToDo - list
+  healthCat <- section$healthCategory
+
+  # ToDo - list
+  reasearchAct <- section$researchActivity
+
+  # ToDo - data frame 4 columns
+
 }
 
