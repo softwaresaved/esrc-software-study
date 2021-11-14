@@ -83,6 +83,8 @@ page <- "https://gtr.ukri.org:443/projects?ref=ES/P008003/1"
 pat <- fromJSON(page, simplifyVector = TRUE)
 View(pat)
 
+pat2 <- fromJSON(page, simplifyDataFrame = TRUE, flatten = TRUE)
+View(pat2)
 
 # Get the pids that are already in the database
 pids <- c("") #dbQuery(mydb,"SELECT FROM;")
@@ -202,6 +204,39 @@ for(i in seq_len(nrow(esrcdat))){
   reasearchAct <- section$researchActivity
 
   # ToDo - data frame 4 columns
+  researchSubject <- section$researchSubject
+
+  # ToDo - data frame 4 columns
+  researchTopic <- section$researchTopic
+
+  # ToDo - 4 columns
+  rcukProgram <- section$rcukProgramme
+
+  # Neglecting id and url
+  section <- pdat$projectOverview$projectComposition$leadResearchOrganisation
+  nameLeadOrg <- section$name
+  depLeadOrg <- section$department
+  addresLeadOrg <- collapseList(section$address)
+
+  # Neglecting typeInd, id and url
+
+  section <- pdat$projectOverview$projectComposition
+
+  # ToDo - data frame 7 columns
+  personRole <- section$personRole
+
+  # ToDo - data frame 4 columns
+  collaborator <- section$collaborator
+
+  # ToDo - sta frame 5 columns
+  organisationRole <- section$organisationRole
+
+  # Missing most of the content in the pagedListHolder other than the source
+  # that seem to be publications
+
+  # ToDo - data frame with 9 columns
+  source <- pdat$pagedListHolder$source
+  source$author <- sapply(source$author, collapseList)
 
 }
 
