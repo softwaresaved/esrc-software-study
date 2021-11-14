@@ -69,11 +69,6 @@ esrcdat <- gtrdat %>% filter(FundingOrgName == "ESRC")
 dbfile <- "../Data/esrc.sqlite"
 if(!file.exists(dbfile)){
   mydb <- dbConnect(RSQLite::SQLite(), dbfile)
-
-  # Create the tables
-  dbQuery(mydb, "
-           CREATE TABLE name();
-          ")
 }
 
 ## Get additonal data for ESRC projects -------------------------------
@@ -95,6 +90,7 @@ collapseList <- function(x){paste(unlist(x), collapse = "; ")}
 # New data frames
 Projects <- tibble()
 Collaborations <- tibble()
+Orgnaisations <- tibble()
 
 # Loop round the project URLS
 for(i in seq_len(nrow(esrcdat))){
@@ -121,7 +117,7 @@ for(i in seq_len(nrow(esrcdat))){
   section <- pdat$projectOverview$projectComposition$project
   title <- section$title
   status <- section$status
-  category <- section$grantCategory
+  grantCategory <- section$grantCategory
   ref <- section$grantReference
   abstract <- section$abstractText
   impact <- section$potentialImpactText
@@ -130,95 +126,102 @@ for(i in seq_len(nrow(esrcdat))){
   startdate <- section$start
   endate <- section$end
 
-  # Add to the project tibble.
-  Projects <- add_row(Projects, c(ref, lastRefresh, status, category, title,
-                                  abstract, impact, valuePounds, startdate,
-                                  enddate))
+  if(grantCategory != "Studentship"){
 
-  # Collaboration info - a data frame with 11 columns
-  collaborationOutput <- pdat$projectOverview$projectComposition$project$output$collaborationOutput
-  # add the grant ref to the data frame
-  collaborationOutput$grantRef <- rep(ref, nrow(collaborationOutput))
+    # Collaboration info - a data frame with 11 columns
+    collaborationOutput <- pdat$projectOverview$projectComposition$project$output$collaborationOutput
 
-  section <- pdat$projectOverview$projectComposition$project$output
+    # add the grant ref to the data frame
+    collaborationOutput$grantRef <- rep(ref, nrow(collaborationOutput))
 
-  # ToDo this is a list.
-  intelProp <- section$intellectualPropertyOutput
+    section <- pdat$projectOverview$projectComposition$project$output
 
-  # Data frame with 8 columns
-  policy <- section$policyInfluenceOutput
+    # ToDo - add to Projects
+    intelProp <- paste(unlist(section$intellectualPropertyOutput), collapse="; ")
 
-  # Collapse the area column which is composed of lists (notalways populated)
-  policy$area <- sapply(policy$area, collapseList)
+    # Data frame with 8 columns
+    policy <- section$policyInfluenceOutput
 
-  Policy <- add_row(Policy, policy)
+    # Collapse the area column which is composed of lists (not always populated)
+    policy$area <- sapply(policy$area, collapseList)
 
-  # ToDo check list output
-  productOutput <- section$productOutput
+    # Collapse list
+    productOutput <- paste(unlist(section$productOutput),collapse = "; ")
 
-  # ToDo - data frame with 9 columns
-  researchMaterialOutput <- section$researchMaterialOutput
+    # ToDo - data frame with 9 columns
+    researchMaterialOutput <- section$researchMaterialOutput
 
-  # ToDo - data frame with 8 columns
-  researchDBandModelOutputs <-  section$researchDatabaseAndModelOutput
+    # ToDo - data frame with 8 columns
+    researchDBandModelOutputs <-  section$researchDatabaseAndModelOutput
 
-  # ToDo - data frame with 9 columns
-  SoftTechOutputs <- section$softwareAndTechnicalProductOutput
+    # ToDo - data frame with 9 columns
+    SoftTechOutputs <- section$softwareAndTechnicalProductOutput
 
-  # ToDo - data frame with 9 columns
-  DBandModOutputs <-  section$researchDatabaseAndModelOutput
+    # ToDo - data frame with 9 columns
+    DBandModOutputs <-  section$researchDatabaseAndModelOutput
 
-  # ToDo - list
-  spinOut <-  section$spinOutOutput
+    # ToDo - list
+    spinOut <-  section$spinOutOutput
 
-  # ToDo - data frame with 6 columns
-  impactSummary <- section$impactSummaryOutput
+    # ToDo - data frame with 6 columns
+    impactSummary <- section$impactSummaryOutput
 
-  # ToDo - data frame with 14 columns
-  furtherFunding <- section$furtherFundingOutput
+    # ToDo - data frame with 14 columns
+    furtherFunding <- section$furtherFundingOutput
 
-  # ToDo - list
-  otherResarch <- section$otherResearchOutput
+    # ToDo - list
+    otherResarch <- section$otherResearchOutput
 
-  # ToDo - list
-  exploitation <- section$exploitationOutput
+    # ToDo - list
+    exploitation <- section$exploitationOutput
 
-  # ToDo - data frame 10 columns
-  section$disseminationOutput
+    # ToDo - data frame 10 columns
+    section$disseminationOutput
 
-  # ToDo - list of length 6
-  keyFindings <- section$keyFindingsOutput
+    # ToDo - list of length 6
+    keyFindings <- section$keyFindingsOutput
 
-  section <- pdat$projectOverview$projectComposition$project
+    section <- pdat$projectOverview$projectComposition$project
 
-  # ToDo - data frame with 9 columns
-  publications <- section$publication
+    # ToDo - data frame with 9 columns
+    publications <- section$publication
 
-  # ToDo - data frame with 2 columns
-  identifier <- section$identifier
+    # ToDo - data frame with 2 columns
+    identifier <- section$identifier
 
-  # ToDo - list
-  healthCat <- section$healthCategory
+    # ToDo - list
+    healthCategoty <- section$healthCategory
 
-  # ToDo - list
-  reasearchAct <- section$researchActivity
+    # ToDo - list
+    reasearchActivity <- section$researchActivity
 
-  # ToDo - data frame 4 columns
-  researchSubject <- section$researchSubject
+    # ToDo - data frame 4 columns
+    researchSubject <- section$researchSubject
 
-  # ToDo - data frame 4 columns
-  researchTopic <- section$researchTopic
+    # ToDo - data frame 4 columns
+    researchTopic <- section$researchTopic
 
-  # ToDo - 4 columns
-  rcukProgram <- section$rcukProgramme
+    # ToDo - 4 columns
+    rcukProgram <- section$rcukProgramme
+
+  } # End of no Studentship
 
   # Neglecting id and url
   section <- pdat$projectOverview$projectComposition$leadResearchOrganisation
   nameLeadOrg <- section$name
-  depLeadOrg <- section$department
-  addresLeadOrg <- collapseList(section$address)
+  departmentLeadOrg <- section$department
+  addressLeadOrg <- collapseList(section$address)
 
   # Neglecting typeInd, id and url
+
+  # Add to db tables.
+  Projects <- add_row(Projects, c(ref, lastRefresh, status, grantCategory, title,
+                                  abstract, impact, valuePounds, startdate,
+                                  enddate, intelProp, productOutput))
+
+  Policy <- add_row(Policy, policy)
+
+  Orgnanisations <- add_row(Organisations,c(ref, nameLeadOrg, departmentLeadOrg, addressLeadOrg))
 
   section <- pdat$projectOverview$projectComposition
 
@@ -240,3 +243,6 @@ for(i in seq_len(nrow(esrcdat))){
 
 }
 
+# Write the output
+dbWriteTable(mysql, "Projects",Projects)
+dbWriteTable(mysql, "Collaborations",Collaborations)
