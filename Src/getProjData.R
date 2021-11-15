@@ -1,6 +1,6 @@
 #/usr/bin/env Rscript
 #
-# Get more data from the Gateway to Research.
+# Get more data than is available from the Gateway to Research data snapshot.
 #
 
 
@@ -58,21 +58,23 @@ gtrdat <- gtrdat[!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) < 2050,]
 
 # Look at the ESRC data ---------------------------------------------------
 
-
-## ESRC projects -----------------------------------------------------------
-
 # Filter ESRC data - 10834 rows (about 8.9% of the data)
 esrcdat <- gtrdat %>% filter(FundingOrgName == "ESRC")
 
+## ESRC projects -----------------------------------------------------------
+
+# Database file name
+dbfile <- "../Data/esrc.sqlite"
+
 # Create a sqlite database if it does not exist.
 # DO NOT RUN THIS IF THE DATABASE ALREADY EXISTS AND HAS BEEN POPULATED!
-dbfile <- "../Data/esrc.sqlite"
 if(!file.exists(dbfile)){
   mydb <- dbConnect(RSQLite::SQLite(), dbfile)
 }
 
 ## Get additonal data for ESRC projects -------------------------------
 
+#
 # Temporary test
 page <- "https://gtr.ukri.org:443/projects?ref=ES/P008003/1"
 pat <- fromJSON(page, simplifyVector = TRUE)
@@ -81,19 +83,28 @@ View(pat)
 pat2 <- fromJSON(page, simplifyDataFrame = TRUE, flatten = TRUE)
 View(pat2)
 
+# End Temporary test
+#
+
 # Get the pids that are already in the database
 pids <- c("") #dbQuery(mydb,"SELECT FROM;")
 
 # Function to collapse a list and separate elements by semicolons
 collapseList <- function(x){paste(unlist(x), collapse = "; ")}
+collapseDF <- function(x){paste(x, collapse = ", ")}
 
-# New data frames
+# New data frames that are to become sqlite tables
 Projects <- tibble()
 Collaborations <- tibble()
-Orgnaisations <- tibble()
+Organisations <- tibble()
+Persons <- tibble()
+OrgRole <- tibble()
 
-# Loop round the project URLS
+# Loop round the ESRC project URLS
 for(i in seq_len(nrow(esrcdat))){
+
+  # Reset variables
+  policy <- NULL
 
   # Project id
   pid <- esrcdat[["ProjectReference"]][i]
@@ -104,7 +115,7 @@ for(i in seq_len(nrow(esrcdat))){
     next
   }
 
-  # Project url
+  # Project URL
   purl <- esrcdat[["GTRProjectUrl"]][i]
 
   # Get the project data
@@ -113,12 +124,13 @@ for(i in seq_len(nrow(esrcdat))){
   # Get the bits of the data that we want
   lastRefresh <- pdat$lastRefreshDate
 
-  # Project section in the data
+  ### Project Overview ------
+  # Project composition - project section in the data
   section <- pdat$projectOverview$projectComposition$project
   title <- section$title
   status <- section$status
   grantCategory <- section$grantCategory
-  ref <- section$grantReference
+  grantReference <- section$grantReference
   abstract <- section$abstractText
   impact <- section$potentialImpactText
   section <- pdat$projectOverview$projectComposition$project$fund
@@ -126,13 +138,35 @@ for(i in seq_len(nrow(esrcdat))){
   startdate <- section$start
   endate <- section$end
 
+  ### Lead Research Organisation ------
+  section <- pdat$projectOverview$projectComposition$leadResearchOrganisation
+  nameLeadOrg <- section$name
+  departmentLeadOrg <- section$department
+  addressLeadOrg <- collapseList(section$address)
+  # Neglecting id and url entries
+
+  section <- pdat$projectOverview$projectComposition
+
+  # Information about people involved in the project
+  personRole <- section$personRole
+  presonRole$grantReference <- rep(grantReference, nrow(personRole))
+
+  # Information involved in the bid
+  organisationRole <- section$organisationRole
+  organisationRole$address <- paste(organisationRole$address, collapse = ", ")
+  organisationRole$grantReference <- rep(grantReference, nrow(organisationRole))
+
+  # Studentships do not seem to have entries populated
   if(grantCategory != "Studentship"){
+
+    # ToDo - data frame 4 columns
+    collaborator <- section$collaborator
 
     # Collaboration info - a data frame with 11 columns
     collaborationOutput <- pdat$projectOverview$projectComposition$project$output$collaborationOutput
 
     # add the grant ref to the data frame
-    collaborationOutput$grantRef <- rep(ref, nrow(collaborationOutput))
+    collaborationOutput$grantRef <- rep(grantReference, nrow(collaborationOutput))
 
     section <- pdat$projectOverview$projectComposition$project$output
 
@@ -204,45 +238,39 @@ for(i in seq_len(nrow(esrcdat))){
     # ToDo - 4 columns
     rcukProgram <- section$rcukProgramme
 
+    # Neglecting typeInd, id and url entries
+    # Missing most of the content in the pagedListHolder other than the source
+    # that seem to be publications
+
+    ### pagedListHolder section ----
+    # ToDo - data frame with 9 columns
+    source <- pdat$pagedListHolder$source
+    source$author <- sapply(source$author, collapseList)
+
+
   } # End of no Studentship
 
-  # Neglecting id and url
-  section <- pdat$projectOverview$projectComposition$leadResearchOrganisation
-  nameLeadOrg <- section$name
-  departmentLeadOrg <- section$department
-  addressLeadOrg <- collapseList(section$address)
 
-  # Neglecting typeInd, id and url
 
-  # Add to db tables.
-  Projects <- add_row(Projects, c(ref, lastRefresh, status, grantCategory, title,
+  ## Append data to tibbles -----
+  # These will be used to create db tables.
+  Projects <- add_row(Projects, c(grantReference, lastRefresh, status, grantCategory, title,
                                   abstract, impact, valuePounds, startdate,
                                   enddate, intelProp, productOutput))
 
   Policy <- add_row(Policy, policy)
 
-  Orgnanisations <- add_row(Organisations,c(ref, nameLeadOrg, departmentLeadOrg, addressLeadOrg))
+  Organisations <- add_row(Organisations,c(grantReference, nameLeadOrg, departmentLeadOrg, addressLeadOrg))
 
-  section <- pdat$projectOverview$projectComposition
+  Persons <- add_row(Persons, personRole)
 
-  # ToDo - data frame 7 columns
-  personRole <- section$personRole
+  OrgRole <- add_row(OrgRole, organisationRole)
 
-  # ToDo - data frame 4 columns
-  collaborator <- section$collaborator
-
-  # ToDo - sta frame 5 columns
-  organisationRole <- section$organisationRole
-
-  # Missing most of the content in the pagedListHolder other than the source
-  # that seem to be publications
-
-  # ToDo - data frame with 9 columns
-  source <- pdat$pagedListHolder$source
-  source$author <- sapply(source$author, collapseList)
 
 }
 
 # Write the output
 dbWriteTable(mysql, "Projects",Projects)
 dbWriteTable(mysql, "Collaborations",Collaborations)
+dbWriteTable(mysql, "Organisations",Organisations)
+dbWriteTable(mysql, "OrgRole",OrgRole)
