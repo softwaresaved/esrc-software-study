@@ -11,7 +11,6 @@ library(readr)
 library(lubridate)
 library(dplyr)
 library(jsonlite)
-library(stringr)
 
 # Read the GtR data -----------------------------------------------------------
 
@@ -46,14 +45,16 @@ input_cols <- cols(
 
 # Read the Gateway to Research data
 # Data snapshot from 30th of September 2021.
-# gtrdat <- read_csv("../Data/projectsearch-1636377694679.csv.gz", col_types = input_cols)
+# gtrdat <- read_csv("../Data/projectsearch-1636377694679.csv.gz",
+#                    col_types = input_cols)
 # Data snapshot from 28th October 2021.
-gtrdat <- read_csv("../Data/projectsearch-1633957153275.csv.gz", col_types = input_cols)
+gtrdat <- read_csv("../Data/projectsearch-1633957153275.csv.gz",
+                   col_types = input_cols)
 
 # Clean the data ----------------------------------------------------------
 
 # Remove EndDate >= 2050 or is an NAs - removes 25 values
-gtrdat <- gtrdat[!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) < 2050,]
+gtrdat <- gtrdat[!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) < 2050, ]
 
 # Look at the ESRC data ---------------------------------------------------
 
@@ -62,49 +63,42 @@ esrcdat <- gtrdat %>% filter(FundingOrgName == "ESRC")
 
 ## Get additional data for ESRC projects -------------------------------
 
-# Function to collapse a list and separate elements by semicolons
-collapseList <- function(x){paste(unlist(x), collapse = "; ")}
-collapseDF <- function(x){paste(x, collapse = ", ")}
-
-
 # Loop round the ESRC project URLS
-for(i in seq_len(nrow(esrcdat))){
+for (i in seq_len(nrow(esrcdat))) {
 
   # Project id
   pid <- esrcdat[["ProjectReference"]][i]
 
   # Project Status
-  Status <- esrcdat[["Status"]][i]
+  status <- esrcdat[["Status"]][i]
 
   # Project URL
   purl <- esrcdat[["GTRProjectUrl"]][i]
 
   # Project title
-  Title <- esrcdat[["Title"]][i]
+  title <- esrcdat[["Title"]][i]
 
   # Get the project data
   pdat <- fromJSON(purl, simplifyVector = TRUE)
 
   # Project abstract
-  Abstract <- pdat$projectOverview$projectComposition$project$abstractText
+  abstract <- pdat$projectOverview$projectComposition$project$abstractText
 
   # Text to write out
-  Text <- paste0(purl,"\n\n",Title,"\n\n",Abstract)
+  text <- paste0(purl, "\n\n", title, "\n\n", abstract)
 
   # File to write out to
-  outfile <- paste0(pid,".txt")
+  outfile <- paste0(pid, ".txt")
 
   # Replace forward slashes with underscores in the file name
   outfile <- gsub("/", "_", outfile)
   # Write to file
-  if(Status == "Active"){
-     outfile <- paste0("../Data/Abstracts/Active/",outfile)
-     write(Text, outfile)
+  if (status == "Active") {
+     outfile <- paste0("../Data/Abstracts/Active/", outfile)
+     write(text, outfile)
   } else {
-    outfile <- paste0("../Data/Abstracts/Inactive/",outfile)
-    write(Text, outfile)
+    outfile <- paste0("../Data/Abstracts/Inactive/", outfile)
+    write(text, outfile)
  }
 
 }
-
-
