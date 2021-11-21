@@ -78,8 +78,32 @@ for (i in seq_len(nrow(esrcdat))) {
   # Project title
   title <- esrcdat[["Title"]][i]
 
+  # File to write out to
+  outfile <- paste0(pid, ".txt")
+
+  # Replace forward slashes with underscores in the file name
+  outfile <- gsub("/", "_", outfile)
+  if (status == "Active") {
+    outfile <- paste0("../Data/Abstracts/Active/", outfile)
+  } else {
+    outfile <- paste0("../Data/Abstracts/Inactive/", outfile)
+  }
+
+  # If the file already exists move on to the next
+  if(file.exists(outfile)) {
+    next
+  }
+
+  # Space the downloads
+  Sys.sleep(1)
+
   # Get the project data
-  pdat <- fromJSON(purl, simplifyVector = TRUE)
+  try(pdat <- fromJSON(purl, simplifyVector = TRUE))
+
+  # Check we have data
+  if (is.null(pdat)){
+    next
+  }
 
   # Project abstract
   abstract <- pdat$projectOverview$projectComposition$project$abstractText
@@ -87,18 +111,7 @@ for (i in seq_len(nrow(esrcdat))) {
   # Text to write out
   text <- paste0(purl, "\n\n", title, "\n\n", abstract)
 
-  # File to write out to
-  outfile <- paste0(pid, ".txt")
-
-  # Replace forward slashes with underscores in the file name
-  outfile <- gsub("/", "_", outfile)
   # Write to file
-  if (status == "Active") {
-     outfile <- paste0("../Data/Abstracts/Active/", outfile)
-     write(text, outfile)
-  } else {
-    outfile <- paste0("../Data/Abstracts/Inactive/", outfile)
-    write(text, outfile)
- }
+  write(text, outfile)
 
 }
