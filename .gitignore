@@ -1,3 +1,4 @@
+# Files not to put in the repo.
 .Rproj.user
 .Rhistory
 .RData
@@ -6,3 +7,4 @@
 .DS_Store
 Data/Abstracts
 Data/*.sqlite
+Data/abstracts.zip
