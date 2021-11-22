@@ -81,6 +81,22 @@ downloaded from the GtR website on the 08/11/21 and corresponded to data last up
 
 The data set contains `r format(nrow(gtrdat), big.mark = ",")` rows (after some data cleaning), where a row corresponds to the record of an award. In this data set `r format(nrow(gtrdat[gtrdat$FundingOrgName == "ESRC",]), big.mark = ",")` correspond to ESRC awards.
 
+UK Research Councils were formed in different years (source: [wikipedia](https://en.wikipedia.org/wiki/UK_Research_and_Innovation)) as shown in the table below which has an impact in the interpretation of the data.
+
+| Research Council | Formation |
+|----------------- | ----------|
+| AHRC             | 2005      |
+| BBSRC            | 1994      |
+| EPSRC            | 1994      |
+| ESRC             | 1965      |
+| MRC              | 1913      |
+| NCRS             | 2004      |
+| NERC             | 1965      |
+| STFC             | 2007      |
+| Innovate UK      | 2007      |
+| Research England | 2018      |
+| UKRI             | 2018      |
+
 # Overall expenditure
 
 We start by doing a brief overview of all the data before we focus on the ESRC data.
@@ -172,7 +188,7 @@ gtrdat %>% filter(!is.na(AwardPounds))                                          
                                 "Total awarded (£)","Average award (£)"))
 ```
 
-The distribution of awards by research council (needs normalising).
+The distribution of awards by research council.
 
 ```{r AwardDistrPerFundCouncil, echo = FALSE, fig.alt = "Distribution of award size by research council."}
 
@@ -200,6 +216,43 @@ gtrdat %>% filter(!is.na(AwardPounds) & AwardPounds > 0)                        
            ylab("Distribution of awards") +
            scale_x_log10() + labs(fill = "Funding Org") +
            theme_bw() 
+```
+
+Expenditure by year using the starting year of the award for funds allocated that year per research council:
+
+```{r funding_ByOrgByYear, echo = FALSE, fig.alt = "Expenditure across each UKRI council from the available data by year."}
+
+gtrdat %>% filter(!is.na(AwardPounds)  & !is.na(StartDate))              %>% 
+           select(FundingOrgName, AwardPounds, StartDate)                %>% 
+           mutate(year = year(StartDate))                                %>% 
+           group_by(year, FundingOrgName)                                %>% 
+           summarise(TotalExpenditure = round(sum(AwardPounds)/1e6), 
+                     .groups = "keep")                                   %>% 
+           filter(!is.na(TotalExpenditure))                              %>% 
+           ggplot(aes(x = year, y = TotalExpenditure, fill = FundingOrgName)) + 
+           geom_col(colour="black") +
+           xlab("Year") + labs(fill = "Funding Org") +
+           ylab("Expenditure (in million of pounds)") +
+           theme_bw() + scale_y_log10()
+          
+```
+
+```{r funding_ByOrgByYearPer, echo = FALSE, fig.alt = "Expenditure across each UKRI council from the available data by year."}
+
+gtrdat %>% filter(!is.na(AwardPounds)  & !is.na(StartDate))              %>% 
+           select(FundingOrgName, AwardPounds, StartDate)                %>% 
+           mutate(year = year(StartDate))                                %>% 
+           group_by(year, FundingOrgName)                                %>% 
+           summarise(TotalExpenditure = round(sum(AwardPounds)/1e6), 
+                     .groups = "keep")                                   %>% 
+           filter(!is.na(TotalExpenditure))                              %>% 
+           ggplot(aes(x = year, y = TotalExpenditure, fill = FundingOrgName)) + 
+           geom_col(colour="black", position = "fill") +
+           xlab("Year") + labs(fill = "Funding Org") +
+           ylab("% Expenditure") +
+           theme_bw() + scale_y_continuous(labels = scales::percent)
+
+          
 ```
 
 ### Summary
@@ -242,6 +295,7 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))                %>%
                col.names = c("Funding org", "Total awarded (Million £s)"))          
           
 ```
+
 The number of awards given by each council for active projects:
 
 ```{r ActiveNumberOfAwards_ByOrg, echo = FALSE, fig.alt = "Number of awards across each UKRI councils for active projects from the available data."}
@@ -308,6 +362,7 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds) & AwardPounds > 0)   
            scale_x_log10() + labs(fill = "Funding Org") +
            theme_bw() 
 ```
+
 With the densities scaled:
 
 ```{r ActiveAwardDistrPerFundCouncilScaled, echo = FALSE, fig.alt = "Distribution of award size by research council for active projects with the graphs scaled."}
@@ -323,6 +378,44 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds) & AwardPounds > 0)   
 ```
 
 
+Expenditure by year using the starting year of the award for funds allocated that year per research council for active projects:
+
+```{r funding_ByOrgByYearAct, echo = FALSE, fig.alt = "Expenditure across each UKRI council from the available data by year."}
+
+gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds) & 
+                    !is.na(StartDate))                                   %>% 
+           select(FundingOrgName, AwardPounds, StartDate)                %>% 
+           mutate(year = year(StartDate))                                %>% 
+           group_by(year, FundingOrgName)                                %>% 
+           summarise(TotalExpenditure = round(sum(AwardPounds)/1e6), 
+                     .groups = "keep")                                   %>% 
+           filter(!is.na(TotalExpenditure))                              %>% 
+           ggplot(aes(x = year, y = TotalExpenditure, fill = FundingOrgName)) + 
+           geom_col(colour="black") +
+           xlab("Year") + labs(fill = "Funding Org") +
+           ylab("Expenditure (in million of pounds)") +
+           theme_bw() + scale_y_log10()
+          
+```
+
+```{r funding_ByOrgByYearActPer, echo = FALSE, fig.alt = "Expenditure across each UKRI council from the available data by year."}
+
+gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds)
+                  & !is.na(StartDate))                                   %>% 
+           select(FundingOrgName, AwardPounds, StartDate)                %>% 
+           mutate(year = year(StartDate))                                %>% 
+           group_by(year, FundingOrgName)                                %>% 
+           summarise(TotalExpenditure = round(sum(AwardPounds)/1e6), 
+                     .groups = "keep")                                   %>% 
+           filter(!is.na(TotalExpenditure))                              %>% 
+           ggplot(aes(x = year, y = TotalExpenditure, fill = FundingOrgName)) + 
+           geom_col(colour="black", position = "fill") +
+           xlab("Year") + labs(fill = "Funding Org") +
+           ylab("% Expenditure") +
+           theme_bw() + scale_y_continuous(labels = scales::percent)
+
+          
+```
 # ESRC data
 
 ## Project category awards
@@ -461,7 +554,8 @@ esrcdat %>% filter(Status == "Active")                                          
             ggplot(aes(x = as.numeric(grant_length), fill = ProjectCategory)) + 
             geom_histogram(binwidth = 28, colour="black", position="fill", na.rm = TRUE) + 
             ylab("Number of Awards") + xlab("Award Length (days)") +
-            labs(fill = "Project Category") + theme_bw() + scale_y_continuous(labels = scales::percent)
+            labs(fill = "Project Category") + theme_bw() + 
+            scale_y_continuous(labels = scales::percent)
 ```
 
 Look at the award given by the length of project by project category for active projects.
@@ -692,13 +786,12 @@ esrcdat %>% filter(Status == "Active")                            %>%
             with(suppressWarnings(wordcloud(word, n, colours = pal, ordered.colors = TRUE, max.words = 250))) 
 ```
 
+## Classification of subjects
+
+Classify the department of the Principal Investigator (assuming that the department will be linked to the subject of the award).
+
 # ToDo Items
 
-- [X] Department text needs some cleaning.<br/>
-      Have done some data cleaning.
-- [X] Fix ToC, links do not work.<br/>
-      Auto-numbering the sections was breaking the ToC links.
-- [X] Add ALT tags to images.<br/>
-      Have added ALT tags to the distributions. 
+
 - [ ] Reconcile DTPs from what was scraped from the [ESRC DTP](https://esrc.ukri.org/skills-and-careers/doctoral-training/doctoral-training-partnerships/doctoral-training-partnership-dtp-contacts/) web page and what is in the GtR data file (there are more).
 - [ ] Research title looks interesting for further examination but will require processing to be comprehensible.

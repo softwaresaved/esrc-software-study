@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 12/11/21.
+**Last updated**: 22/11/21.
 
 -   [Introduction](#introduction)
 -   [Overall expenditure](#overall-expenditure)
@@ -10,7 +10,6 @@ Economic and Social Research Council (ESRC) Data
         -   [Summary](#summary)
     -   [Expenditure for active UKRI projects
         only](#expenditure-for-active-ukri-projects-only)
--   [ESRC data](#esrc-data)
     -   [Project category awards](#project-category-awards)
         -   [All projects category
             awards](#all-projects-category-awards)
@@ -42,6 +41,7 @@ Economic and Social Research Council (ESRC) Data
         -   [Active Partnerships](#active-partnerships)
     -   [Award Titles](#award-titles)
         -   [Active award titles](#active-award-titles)
+    -   [Classification of subjects](#classification-of-subjects)
 -   [ToDo Items](#todo-items)
 
 # Introduction
@@ -60,6 +60,25 @@ last updated by UKRI on the 28th October
 The data set contains 120,865 rows (after some data cleaning), where a
 row corresponds to the record of an award. In this data set 10,834
 correspond to ESRC awards.
+
+UK Research Councils were formed in different years (source:
+[wikipedia](https://en.wikipedia.org/wiki/UK_Research_and_Innovation))
+as shown in the table below which has an impact in the interpretation of
+the data.
+
+| Research Council | Formation |
+|------------------|-----------|
+| AHRC             | 2005      |
+| BBSRC            | 1994      |
+| EPSRC            | 1994      |
+| ESRC             | 1965      |
+| MRC              | 1913      |
+| NCRS             | 2004      |
+| NERC             | 1965      |
+| STFC             | 2007      |
+| Innovate UK      | 2007      |
+| Research England | 2018      |
+| UKRI             | 2018      |
 
 # Overall expenditure
 
@@ -112,13 +131,20 @@ tabular form:
 | NC3Rs       |              437 |        71,292,006 |           163,140 |
 | AHRC        |            8,851 |     1,223,218,940 |           138,201 |
 
-The distribution of awards by research council (needs normalising).
+The distribution of awards by research council.
 
 <img src="ESRC_files/figure-gfm/AwardDistrPerFundCouncil-1.png" title="Distribution of award size by research council." alt="Distribution of award size by research council."  />
 
 The graph with the values scaled:
 
 <img src="ESRC_files/figure-gfm/AwardDistrPerFundCouncilScaled-1.png" title="Distribution of award size by research council with the graphs scaled." alt="Distribution of award size by research council with the graphs scaled."  />
+
+Expenditure by year using the starting year of the award for funds
+allocated that year per research council:
+
+<img src="ESRC_files/figure-gfm/funding_ByOrgByYear-1.png" title="Expenditure across each UKRI council from the available data by year." alt="Expenditure across each UKRI council from the available data by year."  />
+
+<img src="ESRC_files/figure-gfm/funding_ByOrgByYearPer-1.png" title="Expenditure across each UKRI council from the available data by year." alt="Expenditure across each UKRI council from the available data by year."  />
 
 ### Summary
 
@@ -179,10 +205,17 @@ average award:
 The distribution of awards by research council for active projects.
 
 <img src="ESRC_files/figure-gfm/ActiveAwardDistrPerFundCouncil-1.png" title="Distribution of award size by research council for active projects." alt="Distribution of award size by research council for active projects."  />
+
 With the densities scaled:
 
 <img src="ESRC_files/figure-gfm/ActiveAwardDistrPerFundCouncilScaled-1.png" title="Distribution of award size by research council for active projects with the graphs scaled." alt="Distribution of award size by research council for active projects with the graphs scaled."  />
 
+Expenditure by year using the starting year of the award for funds
+allocated that year per research council for active projects:
+
+<img src="ESRC_files/figure-gfm/funding_ByOrgByYearAct-1.png" title="Expenditure across each UKRI council from the available data by year." alt="Expenditure across each UKRI council from the available data by year."  />
+
+<img src="ESRC_files/figure-gfm/funding_ByOrgByYearActPer-1.png" title="Expenditure across each UKRI council from the available data by year." alt="Expenditure across each UKRI council from the available data by year."  />
 # ESRC data
 
 ## Project category awards
@@ -581,14 +614,13 @@ some of the longer words have been excluded.
 
 ![](ESRC_files/figure-gfm/ActiveWordCloud-1.png)<!-- -->
 
+## Classification of subjects
+
+Classify the department of the Principal Investigator (assuming that the
+department will be linked to the subject of the award).
+
 # ToDo Items
 
--   [x] Department text needs some cleaning.<br/> Have done some data
-    cleaning.
--   [x] Fix ToC, links do not work.<br/> Auto-numbering the sections was
-    breaking the ToC links.
--   [x] Add ALT tags to images.<br/> Have added ALT tags to the
-    distributions.
 -   [ ] Reconcile DTPs from what was scraped from the [ESRC
     DTP](https://esrc.ukri.org/skills-and-careers/doctoral-training/doctoral-training-partnerships/doctoral-training-partnership-dtp-contacts/)
     web page and what is in the GtR data file (there are more).
