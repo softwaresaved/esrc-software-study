@@ -85,21 +85,22 @@ UK Research Councils were formed in different years (source: [wikipedia](https:/
 
 | Research Council | Formation |
 |----------------- | ----------|
-| AHRC             | 2005      |
-| BBSRC            | 1994      |
-| EPSRC            | 1994      |
-| ESRC             | 1965      |
-| MRC              | 1913      |
-| NCRS             | 2004      |
-| NERC             | 1965      |
-| STFC             | 2007      |
-| Innovate UK      | 2007      |
-| Research England | 2018      |
-| UKRI             | 2018      |
+| Arts and Humanities Research Council (AHRC)                       | 2005  |
+| Biotechnology and Biological Sciences Research Council (BBSRC)    | 1994  |
+| Engineering and Physical Sciences Research Council (EPSRC)        | 1994  |
+| Economic and Social Research Council (ESRC)                       | 1965  |
+| Medical Research Council	(MRC)                                   | 1913  |
+| National Centre for the Replacement, Refinement and Reduction of Animals in Research (NC3RS)  | 2004 |
+| Natural Environment Research Council (NERC)                       | 1965  |
+| Science and Technology Facilities Council (STFC)                  | 2007  |
+| Innovate UK                                                       | 2007  |
+| Research England                                                  | 2018  |
+| UKRI                                                              | 2018  |
 
 # Overall expenditure
 
-We start by doing a brief overview of all the data before we focus on the ESRC data.
+We start by doing a brief overview of all the data obtained from the Gateway to 
+Research before we focus on the ESRC data.
 
 ## Expenditure for all UKRI projects
 
@@ -416,6 +417,7 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds)
 
           
 ```
+
 # ESRC data
 
 ## Project category awards
@@ -438,7 +440,40 @@ esrcdat %>% select(ProjectCategory, AwardPounds)                              %>
                                 "Total Awarded (£)","Average Award (£)")) 
 ```
 
-### Active projects categry awards only
+```{r esrc_categoriesByYear, echo = FALSE}
+
+# Look at the project categories
+esrcdat %>% select(ProjectCategory, AwardPounds, StartDate)                %>% 
+            mutate(Year = year(StartDate))                                 %>% 
+            group_by(Year, ProjectCategory)                                %>% 
+            summarise(TotalExpenditure = round(sum(AwardPounds)/1e6), 
+                     .groups = "keep")                                     %>% 
+            filter(!is.na(TotalExpenditure) & TotalExpenditure > 0)        %>% 
+            ggplot(aes(x = Year, y = TotalExpenditure, fill = ProjectCategory)) + 
+            geom_col(colour="black") +
+            xlab("Year") + labs(fill = "Funding Org") +
+            ylab("Expenditure (million £s)") +
+            theme_bw() + scale_y_log10()
+```
+
+
+```{r esrc_categoriesByPercYear, echo = FALSE}
+
+# Look at the project categories
+esrcdat %>% select(ProjectCategory, AwardPounds, StartDate)                %>% 
+            mutate(Year = year(StartDate))                                 %>% 
+            group_by(Year, ProjectCategory)                                %>% 
+            summarise(TotalExpenditure = round(sum(AwardPounds)/1e6), 
+                     .groups = "keep")                                     %>% 
+            filter(!is.na(TotalExpenditure))                               %>% 
+            ggplot(aes(x = Year, y = TotalExpenditure, fill = ProjectCategory)) + 
+            geom_col(colour="black", position = "fill") +
+            xlab("Year") + labs(fill = "Funding Org") +
+            ylab("% Expenditure") +
+            theme_bw() + scale_y_continuous(labels = scales::percent) 
+```
+
+### Active projects category awards only
 
 This information corresponds to projects that are classified as *Active*.
 
@@ -457,6 +492,42 @@ esrcdat %>% filter(Status == "Active")                                         %
                                 "Total Awarded (£)","Average Award (£)")) 
 
 ```
+
+```{r esrc_categoriesByYearAct, echo = FALSE}
+
+# Look at the project categories
+esrcdat %>% filter(Status == "Active")                                     %>% 
+            select(ProjectCategory, AwardPounds, StartDate)                %>% 
+            mutate(Year = year(StartDate))                                 %>% 
+            group_by(Year, ProjectCategory)                                %>% 
+            summarise(TotalExpenditure = round(sum(AwardPounds)/1e6), 
+                     .groups = "keep")                                     %>% 
+            filter(!is.na(TotalExpenditure) & TotalExpenditure > 0)        %>% 
+            ggplot(aes(x = Year, y = TotalExpenditure, fill = ProjectCategory)) + 
+            geom_col(colour="black") +
+            xlab("Year") + labs(fill = "Funding Org") +
+            ylab("Expenditure (million £s)") +
+            theme_bw() + scale_y_log10()
+```
+
+
+```{r esrc_categoriesByPercYearAct, echo = FALSE}
+
+# Look at the project categories
+esrcdat %>% filter(Status == "Active")                                     %>% 
+            select(ProjectCategory, AwardPounds, StartDate)                %>% 
+            mutate(Year = year(StartDate))                                 %>% 
+            group_by(Year, ProjectCategory)                                %>% 
+            summarise(TotalExpenditure = round(sum(AwardPounds)/1e6), 
+                     .groups = "keep")                                     %>% 
+            filter(!is.na(TotalExpenditure))                               %>% 
+            ggplot(aes(x = Year, y = TotalExpenditure, fill = ProjectCategory)) + 
+            geom_col(colour="black", position = "fill") +
+            xlab("Year") + labs(fill = "Funding Org") +
+            ylab("% Expenditure") +
+            theme_bw() + scale_y_continuous(labels = scales::percent) 
+```
+
 
 ## Award length distribution
 

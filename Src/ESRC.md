@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 22/11/21.
+**Last updated**: 23/11/21.
 
 -   [Introduction](#introduction)
 -   [Overall expenditure](#overall-expenditure)
@@ -10,11 +10,12 @@ Economic and Social Research Council (ESRC) Data
         -   [Summary](#summary)
     -   [Expenditure for active UKRI projects
         only](#expenditure-for-active-ukri-projects-only)
+-   [ESRC data](#esrc-data)
     -   [Project category awards](#project-category-awards)
         -   [All projects category
             awards](#all-projects-category-awards)
-        -   [Active projects categry awards
-            only](#active-projects-categry-awards-only)
+        -   [Active projects category awards
+            only](#active-projects-category-awards-only)
     -   [Award length distribution](#award-length-distribution)
         -   [Award length distribution for all
             projects](#award-length-distribution-for-all-projects)
@@ -66,24 +67,24 @@ UK Research Councils were formed in different years (source:
 as shown in the table below which has an impact in the interpretation of
 the data.
 
-| Research Council | Formation |
-|------------------|-----------|
-| AHRC             | 2005      |
-| BBSRC            | 1994      |
-| EPSRC            | 1994      |
-| ESRC             | 1965      |
-| MRC              | 1913      |
-| NCRS             | 2004      |
-| NERC             | 1965      |
-| STFC             | 2007      |
-| Innovate UK      | 2007      |
-| Research England | 2018      |
-| UKRI             | 2018      |
+| Research Council                                                                             | Formation |
+|----------------------------------------------------------------------------------------------|-----------|
+| Arts and Humanities Research Council (AHRC)                                                  | 2005      |
+| Biotechnology and Biological Sciences Research Council (BBSRC)                               | 1994      |
+| Engineering and Physical Sciences Research Council (EPSRC)                                   | 1994      |
+| Economic and Social Research Council (ESRC)                                                  | 1965      |
+| Medical Research Council (MRC)                                                               | 1913      |
+| National Centre for the Replacement, Refinement and Reduction of Animals in Research (NC3RS) | 2004      |
+| Natural Environment Research Council (NERC)                                                  | 1965      |
+| Science and Technology Facilities Council (STFC)                                             | 2007      |
+| Innovate UK                                                                                  | 2007      |
+| Research England                                                                             | 2018      |
+| UKRI                                                                                         | 2018      |
 
 # Overall expenditure
 
-We start by doing a brief overview of all the data before we focus on
-the ESRC data.
+We start by doing a brief overview of all the data obtained from the
+Gateway to Research before we focus on the ESRC data.
 
 ## Expenditure for all UKRI projects
 
@@ -216,6 +217,7 @@ allocated that year per research council for active projects:
 <img src="ESRC_files/figure-gfm/funding_ByOrgByYearAct-1.png" title="Expenditure across each UKRI council from the available data by year." alt="Expenditure across each UKRI council from the available data by year."  />
 
 <img src="ESRC_files/figure-gfm/funding_ByOrgByYearActPer-1.png" title="Expenditure across each UKRI council from the available data by year." alt="Expenditure across each UKRI council from the available data by year."  />
+
 # ESRC data
 
 ## Project category awards
@@ -233,7 +235,11 @@ Data is sorted by the average award.
 | Fellowship       |            1,415 |       151,376,374 |         106979.77 |
 | Studentship      |            3,028 |                 0 |              0.00 |
 
-### Active projects categry awards only
+![](ESRC_files/figure-gfm/esrc_categoriesByYear-1.png)<!-- -->
+
+![](ESRC_files/figure-gfm/esrc_categoriesByPercYear-1.png)<!-- -->
+
+### Active projects category awards only
 
 This information corresponds to projects that are classified as
 *Active*.
@@ -244,6 +250,10 @@ This information corresponds to projects that are classified as
 | Training Grant   |               72 |       480,410,834 |        6672372.69 |
 | Fellowship       |              284 |        33,284,791 |         117199.97 |
 | Studentship      |            2,870 |                 0 |              0.00 |
+
+![](ESRC_files/figure-gfm/esrc_categoriesByYearAct-1.png)<!-- -->
+
+![](ESRC_files/figure-gfm/esrc_categoriesByPercYearAct-1.png)<!-- -->
 
 ## Award length distribution
 
