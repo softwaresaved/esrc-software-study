@@ -505,7 +505,8 @@ esrcdat %>% filter(Status == "Active")                                     %>%
             filter(!is.na(TotalExpenditure) & TotalExpenditure > 0)        %>% 
             ggplot(aes(x = Year, y = TotalExpenditure, fill = ProjectCategory)) + 
             geom_col(colour="black") +
-            xlab("Year") + labs(fill = "Funding Org") +
+            xlab("Year") + labs(fill = "Funding Org") + 
+            scale_x_continuous(breaks= scales::pretty_breaks()) +
             ylab("Expenditure (million £s)") +
             theme_bw() + scale_y_log10()
 ```
@@ -524,7 +525,7 @@ esrcdat %>% filter(Status == "Active")                                     %>%
             ggplot(aes(x = Year, y = TotalExpenditure, fill = ProjectCategory)) + 
             geom_col(colour="black", position = "fill") +
             xlab("Year") + labs(fill = "Funding Org") +
-            ylab("% Expenditure") +
+            ylab("% Expenditure") + scale_x_continuous(breaks= scales::pretty_breaks()) +
             theme_bw() + scale_y_continuous(labels = scales::percent) 
 ```
 
