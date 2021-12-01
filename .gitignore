@@ -6,5 +6,6 @@
 *.Rproj
 .DS_Store
 Data/Abstracts
+Data/Proj
 Data/*.sqlite
 Data/abstracts.zip
