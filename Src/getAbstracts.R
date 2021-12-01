@@ -1,6 +1,6 @@
 #/usr/bin/env Rscript
 #
-# Get the project abstracts from the Gateway to Research data snapshot.
+# Get the project abstracts from the Gateway to Research web site.
 #
 
 
