@@ -44,17 +44,17 @@ softcols <- c("id", "outcomeId", "title", "description", "type", "impact",
 # Combine active and inactive projects
 projects <- c(active_projs, inactive_projs)
 
-# Loop round active projects
+# Loop round projects
 for (file in projects) {
 
   # Read the json
   jsondat <-  read_json(file, simplifyVector = TRUE)
 
   # Get the project status (Active/Inactive)
-  status <- pdat$projectOverview$projectComposition$project$status
+  status <- jsondat$projectOverview$projectComposition$project$status
 
   # Get the grant reference
-  grantRef <- pdat$projectOverview$projectComposition$project$grantReference
+  grantRef <- jsondat$projectOverview$projectComposition$project$grantReference
 
   # Output section of the json
   output <- jsondat$projectOverview$projectComposition$project$output
@@ -74,7 +74,7 @@ for (file in projects) {
 
     # Add the project status and grant reference to the data frame
     df$status <- rep(status, nrow(df))
-    df$grntReference <- rep(grantRef, nrow(df))
+    df$grantReference <- rep(grantRef, nrow(df))
 
     # Store the data frame
     if (is.null(softout)) {
@@ -89,8 +89,78 @@ for (file in projects) {
 
 }
 
+# Print diagnostic message
 message(count," software outputs out of ",length(projects),
         " projects.")
 
 # Write data to file
 write_csv(softout, "../Data/softwareoutputs.csv")
+
+# Research database and model outputs --------------------------------------
+
+# Count the number of outputs
+count <- 1
+
+# Storage to collect data outputs
+#dataout <- list()
+dataout <-  NULL
+
+# Columns that can appear in a software output df
+datacols <- c("id", "outcomeId", "title", "description", "type", "impact",
+              "url", "providedToOthers", "yearFirstProvided")
+
+# Combine active and inactive projects
+projects <- c(active_projs, inactive_projs)
+#projects <- c(active_projs)
+
+# Loop round active projects
+for (file in projects) {
+
+  # Read the json
+  jsondat <-  read_json(file, simplifyVector = TRUE)
+
+  # Get the project status (Active/Inactive)
+  status <- jsondat$projectOverview$projectComposition$project$status
+
+  # Get the grant reference
+  grantRef <- jsondat$projectOverview$projectComposition$project$grantReference
+
+  # Output section of the json
+  output <- jsondat$projectOverview$projectComposition$project$output
+
+  # Check for software outputs
+  if (length(output$researchDatabaseAndModelOutput) > 0){
+
+    # Copy of the data frame
+    df <- output$researchDatabaseAndModelOutput
+
+    # Convert all columns to character, other get type issues in the next line
+    df <- df %>% mutate(across(everything(), as.character))
+
+    # Add any missing columns if they are not there and populate with "-"s
+    # otherwise not possible to combine data frames.
+    df[datacols[!(datacols %in% names(df))]] <- rep("-", nrow(df))
+
+    # Add the project status and grant reference to the data frame
+    df$status <- rep(status, nrow(df))
+    df$grantReference <- rep(grantRef, nrow(df))
+
+    # Store the data frame
+    if (is.null(dataout)) {
+      dataout <- df
+    } else {
+      dataout <- add_row(dataout, df)
+    }
+    #message("File has software outputs ",file)
+    #dataout[[count]] <- output$researchDatabaseAndModelOutput
+    count <-  count + 1
+  }
+
+}
+
+# Print diagnostic message
+message(count," data outputs out of ",length(projects),
+        " projects.")
+
+# Write data to file
+write_csv(dataout, "../Data/dataoutputs.csv")
