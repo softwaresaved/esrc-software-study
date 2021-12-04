@@ -164,3 +164,28 @@ message(count," data outputs out of ",length(projects),
 
 # Write data to file
 write_csv(dataout, "../Data/dataoutputs.csv")
+
+# Research Topic and Subject ----------------------------------------------
+
+# Collect classification of topics and research project for each project
+
+classification <- data.frame()
+
+# Loop round active projects
+for (file in projects) {
+
+  # Read the json
+  jsondat <-  read_json(file, simplifyVector = TRUE)
+
+  # Get the project status (Active/Inactive)
+  status <- jsondat$projectOverview$projectComposition$project$status
+
+  # Get the grant reference
+  grantRef <- jsondat$projectOverview$projectComposition$project$grantReference
+
+  subject <- jsondat$projectOverview$projectComposition$project$researchSubject
+  names(subject) <- paste0("s.",names(subject))
+  topic <- jsondat$projectOverview$projectComposition$project$researchTopic
+  names(topic) <- paste0("t.", names(topic))
+  d <- merge(subject, topic)
+}
