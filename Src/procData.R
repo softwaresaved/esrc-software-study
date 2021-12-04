@@ -169,7 +169,15 @@ write_csv(dataout, "../Data/dataoutputs.csv")
 
 # Collect classification of topics and research project for each project
 
-classification <- data.frame()
+# Columns that can appear in a software output df
+cols <- c("id", "text", "percentage","encodedTest")
+
+# Combine active and inactive projects
+projects <- c(active_projs, inactive_projs)
+
+# Data frames to store content
+subjectdf <- NULL
+topicdf <- NULL
 
 # Loop round active projects
 for (file in projects) {
@@ -177,15 +185,82 @@ for (file in projects) {
   # Read the json
   jsondat <-  read_json(file, simplifyVector = TRUE)
 
+  # Pointer to project content
+  project <- jsondat$projectOverview$projectComposition$project
+
   # Get the project status (Active/Inactive)
-  status <- jsondat$projectOverview$projectComposition$project$status
+  status <- project$status
 
   # Get the grant reference
-  grantRef <- jsondat$projectOverview$projectComposition$project$grantReference
+  grantRef <- project$grantReference
 
-  subject <- jsondat$projectOverview$projectComposition$project$researchSubject
-  names(subject) <- paste0("s.",names(subject))
-  topic <- jsondat$projectOverview$projectComposition$project$researchTopic
-  names(topic) <- paste0("t.", names(topic))
-  d <- merge(subject, topic)
+  # Grant category (Studentships do not appear to have outputs populated)
+  grantCategory <- project$grantCategory
+
+  # Get the project category
+  subject <- project$researchSubject
+
+  # count the number of subjects/topics
+  subject_count <- 0
+  topic_count <- 0
+
+  if (!is.null(subject) & length(subject) > 0) {
+
+    # Convert content into characters
+    subject <- subject %>% mutate(across(everything(), as.character))
+
+    # Fill any missing columns
+    subject[cols[!(cols %in% names(subject))]] <- rep("-", nrow(subject))
+
+    # Add some additional columns
+    subject$status <- rep(status, nrow(subject))
+    subject$grantReference <- rep(grantRef, nrow(subject))
+    subject$grantCategory <- rep(grantCategory, nrow(subject))
+
+    # Store the content
+    if (is.null(subjectdf)) {
+      subjectdf <-  subject
+    } else {
+      subjectdf <- add_row(subjectdf, subject)
+    }
+    subject_count <- subject_count + 1
+  }
+
+  # Grab the topic
+  topic <- project$researchTopic
+
+  if (!is.null(topic) & length(topic) > 0) {
+
+    # Convert content into characters
+    topic <- topic %>% mutate(across(everything(), as.character))
+
+    # Fill any missing columns
+    topic[cols[!(cols %in% names(topic))]] <- rep("-", nrow(topic))
+
+    # Add some additional columns
+    topic$status <- rep(status, nrow(topic))
+    topic$grantReference <- rep(grantRef, nrow(topic))
+    topic$grantCategory <- rep(grantCategory, nrow(topic))
+
+    # Store the content
+    if (is.null(topicdf)) {
+      topicdf <-  topic
+    } else {
+      topicdf <- add_row(topicdf, topic)
+    }
+
+    topic_count <- topic_count + 1
+
+  }
 }
+
+# Print diagnostic messages
+message(subject_count," data subjects out of ",length(projects),
+        " projects.")
+message(topic_count," data topics out of ",length(projects),
+        " projects.")
+
+# Save the data
+# Write data to file
+write_csv(subjectdf, "../Data/subjects.csv")
+write_csv(topicdf, "../Data/topics.csv")
