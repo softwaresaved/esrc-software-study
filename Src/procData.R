@@ -179,6 +179,10 @@ projects <- c(active_projs, inactive_projs)
 subjectdf <- NULL
 topicdf <- NULL
 
+# count the number of subjects/topics
+subject_count <- 0
+topic_count <- 0
+
 # Loop round active projects
 for (file in projects) {
 
@@ -199,10 +203,6 @@ for (file in projects) {
 
   # Get the project category
   subject <- project$researchSubject
-
-  # count the number of subjects/topics
-  subject_count <- 0
-  topic_count <- 0
 
   if (!is.null(subject) & length(subject) > 0) {
 
