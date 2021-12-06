@@ -169,8 +169,8 @@ write_csv(dataout, "../Data/dataoutputs.csv")
 
 # Collect classification of topics and research project for each project
 
-# Columns that can appear in a software output df
-cols <- c("id", "text", "percentage","encodedTest")
+# Columns that can appear in a software output data frame
+cols <- c("id", "text", "percentage","encodedText")
 
 # Combine active and inactive projects
 projects <- c(active_projs, inactive_projs)
