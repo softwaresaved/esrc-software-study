@@ -119,8 +119,6 @@ B94A2498-60DA-4055-A957-686B6CB42654,Linguistics,0,Linguistics,Active,ES/N018389
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/N019067/2,Research Grant
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/N019067/2,Research Grant
 7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Active,ES/P000142/1,Research Grant
-B94A2498-60DA-4055-A957-686B6CB42654,Linguistics,0,Linguistics,Closed,ES/P00024X/1,Research Grant
-5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Closed,ES/P00024X/1,Research Grant
 541CDC75-F361-4961-9EFE-34B2C8ACE947,History,0,History,Active,ES/P00122X/1,Research Grant
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/P00122X/1,Research Grant
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/P00122X/1,Research Grant
@@ -343,9 +341,6 @@ F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/R004471/1,R
 ACFABADE-E54A-4FC7-B9F5-259A19D97CDB,Social Work,0,Social+Work,Active,ES/R004773/1,Research Grant
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/R004811/1,Research Grant
 5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/R004838/1,Research Grant
-64564C94-AC7F-4056-903D-0AED107A359E,Education,0,Education,Closed,ES/R004943/1,Research Grant
-5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Closed,ES/R004943/1,Research Grant
-F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Closed,ES/R004943/1,Research Grant
 7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Active,ES/R00496X/1,Research Grant
 5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Active,ES/R00496X/1,Research Grant
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/R004978/2,Research Grant
@@ -444,6 +439,11 @@ F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Closed,ES/H005536/1,R
 5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Active,ES/R007810/1,Research Grant
 5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/R007810/1,Research Grant
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/R007810/1,Research Grant
+AEB7EC61-1574-4583-8B00-BD32275F29A6,Complexity Science,0,Complexity+Science,Active,ES/R00787X/2,Research Grant
+7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Active,ES/R00787X/2,Research Grant
+541CDC75-F361-4961-9EFE-34B2C8ACE947,History,0,History,Active,ES/R00787X/2,Research Grant
+020361E1-B8CA-49FD-9149-27D31D21C7A3,Social Anthropology,0,Social+Anthropology,Active,ES/R00787X/2,Research Grant
+F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/R00787X/2,Research Grant
 3A4CB57C-9B22-41A2-AB15-127503299365,Human Geography,0,Human+Geography,Active,ES/R007918/1,Fellowship
 EB5F16BB-2772-4DDE-BD6C-3B7A6914B64C,Info. & commun. Technol.,0,Info.+%26+commun.+Technol.,Active,ES/R007918/1,Fellowship
 FB535BD0-E265-4C0A-8532-32DCB83A3951,"Tools, technologies & methods",0,Tools%2C+technologies+%26+methods,Active,ES/R007918/1,Fellowship
@@ -540,6 +540,7 @@ F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/R011397/1,R
 5D762B83-597E-4E91-B2F7-04CBB955175C,Pol. sci. & internat. studies,0,Pol.+sci.+%26+internat.+studies,Active,ES/R011508/1,Research Grant
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/R011508/1,Research Grant
 5D762B83-597E-4E91-B2F7-04CBB955175C,Pol. sci. & internat. studies,0,Pol.+sci.+%26+internat.+studies,Active,ES/R011540/1,Research Grant
+5D762B83-597E-4E91-B2F7-04CBB955175C,Pol. sci. & internat. studies,0,Pol.+sci.+%26+internat.+studies,Active,ES/R011540/2,Research Grant
 5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Active,ES/R011567/1,Research Grant
 7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Active,ES/R01163X/1,Research Grant
 5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/R01163X/1,Research Grant
@@ -638,8 +639,6 @@ F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/S001417/1,R
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/S00145X/1,Research Grant
 5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/S001611/1,Research Grant
 3A4CB57C-9B22-41A2-AB15-127503299365,Human Geography,0,Human+Geography,Active,ES/S001743/1,Fellowship
-B94A2498-60DA-4055-A957-686B6CB42654,Linguistics,0,Linguistics,Closed,ES/S001778/1,Fellowship
-5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Closed,ES/S001778/1,Fellowship
 C087E953-30F3-4968-B0F3-D48A5998A2B4,Civil eng. & built environment,0,Civil+eng.+%26+built+environment,Active,ES/S001832/1,Research Grant
 E88ECDEE-D58E-417E-A379-9FBB35647A90,Science and Technology Studies,0,Science+and+Technology+Studies,Active,ES/S001832/1,Research Grant
 C087E953-30F3-4968-B0F3-D48A5998A2B4,Civil eng. & built environment,0,Civil+eng.+%26+built+environment,Active,ES/S001875/1,Fellowship
@@ -807,6 +806,9 @@ FB535BD0-E265-4C0A-8532-32DCB83A3951,"Tools, technologies & methods",0,Tools%2C+
 12F57045-398B-4CC0-BF63-76C038A2E247,Cultural & museum studies,0,Cultural+%26+museum+studies,Active,ES/S007016/1,Research Grant
 4A856E02-8C94-4981-B572-E381EEB60DD2,Media,0,Media,Active,ES/S007016/1,Research Grant
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/S007016/1,Research Grant
+12F57045-398B-4CC0-BF63-76C038A2E247,Cultural & museum studies,0,Cultural+%26+museum+studies,Active,ES/S007016/2,Research Grant
+4A856E02-8C94-4981-B572-E381EEB60DD2,Media,0,Media,Active,ES/S007016/2,Research Grant
+F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/S007016/2,Research Grant
 AEB7EC61-1574-4583-8B00-BD32275F29A6,Complexity Science,0,Complexity+Science,Active,ES/S007024/1,Research Grant
 7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Active,ES/S007024/1,Research Grant
 F95121C7-7C31-40CE-BDBC-1E2BF025AEA6,Energy,0,Energy,Active,ES/S007024/1,Research Grant
@@ -1012,6 +1014,8 @@ F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/S012605/1,R
 FB535BD0-E265-4C0A-8532-32DCB83A3951,"Tools, technologies & methods",0,Tools%2C+technologies+%26+methods,Active,ES/S012605/1,Research Grant
 972C8509-5001-4523-9E10-7FA67E2F2E69,Visual arts,0,Visual+arts,Active,ES/S012605/1,Research Grant
 5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Active,ES/S012648/1,Research Grant
+7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Active,ES/S012729/2,Research Grant
+5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Active,ES/S012729/2,Research Grant
 7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Active,ES/S012737/1,Research Grant
 5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Active,ES/S012737/1,Research Grant
 5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/S012737/1,Research Grant
@@ -1197,6 +1201,9 @@ F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/S016058/1,R
 64564C94-AC7F-4056-903D-0AED107A359E,Education,0,Education,Active,ES/S016279/1,Research Grant
 EB5F16BB-2772-4DDE-BD6C-3B7A6914B64C,Info. & commun. Technol.,0,Info.+%26+commun.+Technol.,Active,ES/S016279/1,Research Grant
 5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/S016279/1,Research Grant
+64564C94-AC7F-4056-903D-0AED107A359E,Education,0,Education,Active,ES/S016279/2,Research Grant
+EB5F16BB-2772-4DDE-BD6C-3B7A6914B64C,Info. & commun. Technol.,0,Info.+%26+commun.+Technol.,Active,ES/S016279/2,Research Grant
+5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/S016279/2,Research Grant
 5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/S016333/1,Research Grant
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/S016414/1,Research Grant
 3A4CB57C-9B22-41A2-AB15-127503299365,Human Geography,0,Human+Geography,Active,ES/S016422/1,Research Grant
@@ -1206,6 +1213,8 @@ F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/S016422/1,R
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/S016473/1,Research Grant
 64564C94-AC7F-4056-903D-0AED107A359E,Education,0,Education,Active,ES/S01652X/1,Research Grant
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/S01652X/1,Research Grant
+64564C94-AC7F-4056-903D-0AED107A359E,Education,0,Education,Active,ES/S01652X/2,Research Grant
+F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/S01652X/2,Research Grant
 EBACD6D4-D1E5-4970-8BEC-7F4568EB26BA,Development studies,0,Development+studies,Active,ES/S016589/1,Research Grant
 3A4CB57C-9B22-41A2-AB15-127503299365,Human Geography,0,Human+Geography,Active,ES/S016589/1,Research Grant
 5D762B83-597E-4E91-B2F7-04CBB955175C,Pol. sci. & internat. studies,0,Pol.+sci.+%26+internat.+studies,Active,ES/S016589/1,Research Grant
@@ -1733,9 +1742,6 @@ F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/T00908X/1,R
 5D762B83-597E-4E91-B2F7-04CBB955175C,Pol. sci. & internat. studies,0,Pol.+sci.+%26+internat.+studies,Active,ES/T009128/1,Research Grant
 E88ECDEE-D58E-417E-A379-9FBB35647A90,Science and Technology Studies,0,Science+and+Technology+Studies,Active,ES/T009128/1,Research Grant
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/T009128/1,Research Grant
-5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Closed,ES/T009160/1,Research Grant
-020361E1-B8CA-49FD-9149-27D31D21C7A3,Social Anthropology,0,Social+Anthropology,Closed,ES/T009160/1,Research Grant
-12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Closed,ES/T009160/1,Research Grant
 5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Active,ES/T009160/2,Research Grant
 020361E1-B8CA-49FD-9149-27D31D21C7A3,Social Anthropology,0,Social+Anthropology,Active,ES/T009160/2,Research Grant
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/T009160/2,Research Grant
@@ -2029,6 +2035,7 @@ F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/V002465/1,R
 3A4CB57C-9B22-41A2-AB15-127503299365,Human Geography,0,Human+Geography,Active,ES/V002597/1,Research Grant
 5D762B83-597E-4E91-B2F7-04CBB955175C,Pol. sci. & internat. studies,0,Pol.+sci.+%26+internat.+studies,Active,ES/V002597/1,Research Grant
 E88ECDEE-D58E-417E-A379-9FBB35647A90,Science and Technology Studies,0,Science+and+Technology+Studies,Active,ES/V002600/1,Research Grant
+5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/V002643/1,Research Grant
 5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/V002708/1,Research Grant
 4511FB20-8392-418E-809D-7701FACC03C9,Law & legal studies,0,Law+%26+legal+studies,Active,ES/V002732/1,Research Grant
 5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/V002732/1,Research Grant
@@ -2875,6 +2882,8 @@ EB5F16BB-2772-4DDE-BD6C-3B7A6914B64C,Info. & commun. Technol.,0,Info.+%26+commun
 7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Active,ES/V015826/1,Research Grant
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/V015842/1,Research Grant
 ACFABADE-E54A-4FC7-B9F5-259A19D97CDB,Social Work,0,Social+Work,Active,ES/V015850/1,Research Grant
+48D25546-6ADF-479A-8877-478CCDB1DC1F,Animal Science,0,Animal+Science,Active,ES/V015869/1,Research Grant
+5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/V015869/1,Research Grant
 3A4CB57C-9B22-41A2-AB15-127503299365,Human Geography,0,Human+Geography,Active,ES/V015877/1,Research Grant
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/V015877/1,Research Grant
 EBACD6D4-D1E5-4970-8BEC-7F4568EB26BA,Development studies,0,Development+studies,Active,ES/V015893/1,Research Grant
@@ -2947,6 +2956,8 @@ F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/V016490/1,R
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/V016644/1,Research Grant
 64564C94-AC7F-4056-903D-0AED107A359E,Education,0,Education,Active,ES/V016652/1,Research Grant
 5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Active,ES/V016660/1,Research Grant
+E88ECDEE-D58E-417E-A379-9FBB35647A90,Science and Technology Studies,0,Science+and+Technology+Studies,Active,ES/V016709/1,Research Grant
+12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/V016709/1,Research Grant
 64564C94-AC7F-4056-903D-0AED107A359E,Education,0,Education,Active,ES/V016814/1,Research Grant
 5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/V016814/1,Research Grant
 ACFABADE-E54A-4FC7-B9F5-259A19D97CDB,Social Work,0,Social+Work,Active,ES/V016814/1,Research Grant
@@ -2969,6 +2980,7 @@ E844174D-6A1C-4D2D-8F24-57698F7DA353,Environmental planning,0,Environmental+plan
 3A4CB57C-9B22-41A2-AB15-127503299365,Human Geography,0,Human+Geography,Active,ES/V01692X/1,Research Grant
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/V01692X/1,Research Grant
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/V016938/1,Research Grant
+5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/V016946/1,Research Grant
 E844174D-6A1C-4D2D-8F24-57698F7DA353,Environmental planning,0,Environmental+planning,Active,ES/V016954/1,Research Grant
 3A4CB57C-9B22-41A2-AB15-127503299365,Human Geography,0,Human+Geography,Active,ES/V016954/1,Research Grant
 6723A70B-A523-40AB-9740-B6AD2A0677B7,Medical & health interface,0,Medical+%26+health+interface,Active,ES/V016954/1,Research Grant
@@ -2982,11 +2994,16 @@ F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/V017055/1,R
 7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Active,ES/V017063/1,Research Grant
 5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Active,ES/V017063/1,Research Grant
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/V01708X/1,Research Grant
+5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Active,ES/V017152/1,Research Grant
 64564C94-AC7F-4056-903D-0AED107A359E,Education,0,Education,Active,ES/V017314/1,Research Grant
 6723A70B-A523-40AB-9740-B6AD2A0677B7,Medical & health interface,0,Medical+%26+health+interface,Active,ES/V017314/1,Research Grant
 FB535BD0-E265-4C0A-8532-32DCB83A3951,"Tools, technologies & methods",0,Tools%2C+technologies+%26+methods,Active,ES/V017314/1,Research Grant
 7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Active,ES/V01742X/1,Research Grant
 64564C94-AC7F-4056-903D-0AED107A359E,Education,0,Education,Active,ES/V01742X/1,Research Grant
+12F57045-398B-4CC0-BF63-76C038A2E247,Cultural & museum studies,0,Cultural+%26+museum+studies,Active,ES/V017497/1,Research Grant
+062860E1-C81F-4028-9095-19A5E6455C70,Languages & Literature,0,Languages+%26+Literature,Active,ES/V017497/1,Research Grant
+5D762B83-597E-4E91-B2F7-04CBB955175C,Pol. sci. & internat. studies,0,Pol.+sci.+%26+internat.+studies,Active,ES/V017497/1,Research Grant
+F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/V017497/1,Research Grant
 7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Active,ES/V017543/1,Research Grant
 EB5F16BB-2772-4DDE-BD6C-3B7A6914B64C,Info. & commun. Technol.,0,Info.+%26+commun.+Technol.,Active,ES/V017551/1,Research Grant
 5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Active,ES/V017551/1,Research Grant
@@ -3051,6 +3068,7 @@ EB5F16BB-2772-4DDE-BD6C-3B7A6914B64C,Info. & commun. Technol.,0,Info.+%26+commun
 5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Active,ES/W000628/1,Research Grant
 FB535BD0-E265-4C0A-8532-32DCB83A3951,"Tools, technologies & methods",0,Tools%2C+technologies+%26+methods,Active,ES/W000628/1,Research Grant
 5D762B83-597E-4E91-B2F7-04CBB955175C,Pol. sci. & internat. studies,0,Pol.+sci.+%26+internat.+studies,Active,ES/W000733/1,Research Grant
+5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/W000776/1,Research Grant
 7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Active,ES/W000849/1,Research Grant
 64564C94-AC7F-4056-903D-0AED107A359E,Education,0,Education,Active,ES/W000849/1,Research Grant
 6723A70B-A523-40AB-9740-B6AD2A0677B7,Medical & health interface,0,Medical+%26+health+interface,Active,ES/W000849/1,Research Grant
@@ -3059,9 +3077,12 @@ F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/W000849/1,R
 5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/W000881/1,Research Grant
 ACFABADE-E54A-4FC7-B9F5-259A19D97CDB,Social Work,0,Social+Work,Active,ES/W000881/1,Research Grant
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/W000881/1,Research Grant
+4511FB20-8392-418E-809D-7701FACC03C9,Law & legal studies,0,Law+%26+legal+studies,Active,ES/W00089X/1,Research Grant
 5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/W000946/1,Research Grant
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/W001039/1,Research Grant
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/W001039/1,Research Grant
+4511FB20-8392-418E-809D-7701FACC03C9,Law & legal studies,0,Law+%26+legal+studies,Active,ES/W001098/1,Research Grant
+F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/W001098/1,Research Grant
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/W001101/1,Research Grant
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/W001101/1,Research Grant
 7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Active,ES/W001152/1,Research Grant
@@ -3102,6 +3123,7 @@ F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/W001527/1,R
 E88ECDEE-D58E-417E-A379-9FBB35647A90,Science and Technology Studies,0,Science+and+Technology+Studies,Active,ES/W00156X/1,Research Grant
 7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Active,ES/W001594/1,Research Grant
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/W001594/1,Research Grant
+7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Active,ES/W001683/1,Research Grant
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/W001691/1,Research Grant
 5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Active,ES/W001705/1,Research Grant
 5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/W001721/1,Research Grant
@@ -3127,6 +3149,7 @@ F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/W001853/1,R
 5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Active,ES/W001861/1,Research Grant
 5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/W001861/1,Research Grant
 64564C94-AC7F-4056-903D-0AED107A359E,Education,0,Education,Active,ES/W001950/1,Research Grant
+3A4CB57C-9B22-41A2-AB15-127503299365,Human Geography,0,Human+Geography,Active,ES/W001977/1,Research Grant
 5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/W001985/1,Research Grant
 64564C94-AC7F-4056-903D-0AED107A359E,Education,0,Education,Active,ES/W001993/1,Research Grant
 6723A70B-A523-40AB-9740-B6AD2A0677B7,Medical & health interface,0,Medical+%26+health+interface,Active,ES/W001993/1,Research Grant
@@ -3135,6 +3158,7 @@ F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/W001853/1,R
 5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Active,ES/W002108/1,Research Grant
 5D762B83-597E-4E91-B2F7-04CBB955175C,Pol. sci. & internat. studies,0,Pol.+sci.+%26+internat.+studies,Active,ES/W002108/1,Research Grant
 E88ECDEE-D58E-417E-A379-9FBB35647A90,Science and Technology Studies,0,Science+and+Technology+Studies,Active,ES/W002108/1,Research Grant
+12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/W002302/1,Research Grant
 5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Active,ES/W002507/1,Research Grant
 EBACD6D4-D1E5-4970-8BEC-7F4568EB26BA,Development studies,0,Development+studies,Closed,ES/F003234/1,Fellowship
 5D762B83-597E-4E91-B2F7-04CBB955175C,Pol. sci. & internat. studies,0,Pol.+sci.+%26+internat.+studies,Closed,ES/F003234/1,Fellowship
@@ -3149,7 +3173,15 @@ F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/W003139/1,R
 3A4CB57C-9B22-41A2-AB15-127503299365,Human Geography,0,Human+Geography,Active,ES/W003864/1,Fellowship
 6723A70B-A523-40AB-9740-B6AD2A0677B7,Medical & health interface,0,Medical+%26+health+interface,Active,ES/W003864/1,Fellowship
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/W003864/1,Fellowship
+AEB7EC61-1574-4583-8B00-BD32275F29A6,Complexity Science,0,Complexity+Science,Active,ES/W003937/1,Fellowship
+3A4CB57C-9B22-41A2-AB15-127503299365,Human Geography,0,Human+Geography,Active,ES/W003937/1,Fellowship
+EB5F16BB-2772-4DDE-BD6C-3B7A6914B64C,Info. & commun. Technol.,0,Info.+%26+commun.+Technol.,Active,ES/W003937/1,Fellowship
+DEA11FBC-BEED-4EDD-890B-97D728462D26,Mathematical sciences,0,Mathematical+sciences,Active,ES/W003937/1,Fellowship
+FB535BD0-E265-4C0A-8532-32DCB83A3951,"Tools, technologies & methods",0,Tools%2C+technologies+%26+methods,Active,ES/W003937/1,Fellowship
 541CDC75-F361-4961-9EFE-34B2C8ACE947,History,0,History,Active,ES/W004127/1,Fellowship
+C087E953-30F3-4968-B0F3-D48A5998A2B4,Civil eng. & built environment,0,Civil+eng.+%26+built+environment,Active,ES/W004305/1,Fellowship
+3A4CB57C-9B22-41A2-AB15-127503299365,Human Geography,0,Human+Geography,Active,ES/W004305/1,Fellowship
+DEA11FBC-BEED-4EDD-890B-97D728462D26,Mathematical sciences,0,Mathematical+sciences,Active,ES/W004305/1,Fellowship
 EBACD6D4-D1E5-4970-8BEC-7F4568EB26BA,Development studies,0,Development+studies,Active,ES/W004860/1,Fellowship
 64564C94-AC7F-4056-903D-0AED107A359E,Education,0,Education,Active,ES/W004860/1,Fellowship
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/W004860/1,Fellowship
@@ -3398,6 +3430,7 @@ E88ECDEE-D58E-417E-A379-9FBB35647A90,Science and Technology Studies,0,Science+an
 020361E1-B8CA-49FD-9149-27D31D21C7A3,Social Anthropology,0,Social+Anthropology,Active,ES/W007037/1,Fellowship
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/W007037/1,Fellowship
 972C8509-5001-4523-9E10-7FA67E2F2E69,Visual arts,0,Visual+arts,Active,ES/W007037/1,Fellowship
+64564C94-AC7F-4056-903D-0AED107A359E,Education,0,Education,Active,ES/W007045/1,Fellowship
 64564C94-AC7F-4056-903D-0AED107A359E,Education,0,Education,Active,ES/W007053/1,Fellowship
 B94A2498-60DA-4055-A957-686B6CB42654,Linguistics,0,Linguistics,Active,ES/W007053/1,Fellowship
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/W007053/1,Fellowship
@@ -3447,6 +3480,9 @@ E844174D-6A1C-4D2D-8F24-57698F7DA353,Environmental planning,0,Environmental+plan
 DB058E35-DBAD-4B21-B030-5C3C78825B11,Area Studies,0,Area+Studies,Active,ES/W007673/1,Fellowship
 5D762B83-597E-4E91-B2F7-04CBB955175C,Pol. sci. & internat. studies,0,Pol.+sci.+%26+internat.+studies,Active,ES/W007673/1,Fellowship
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Active,ES/W007673/1,Fellowship
+808111E3-5E04-4CEF-B080-565A81EFD6D0,Demography,0,Demography,Active,ES/W010240/1,Research Grant
+3A4CB57C-9B22-41A2-AB15-127503299365,Human Geography,0,Human+Geography,Active,ES/W010240/1,Research Grant
+12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/W010240/1,Research Grant
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/XX00005/1,Research Grant
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/XX00006/1,Research Grant
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Active,ES/XX00007/1,Research Grant
@@ -13306,6 +13342,8 @@ FB535BD0-E265-4C0A-8532-32DCB83A3951,"Tools, technologies & methods",0,Tools%2C+
 7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Closed,ES/P000177/1,Research Grant
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Closed,ES/P000177/1,Research Grant
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Closed,ES/P000177/1,Research Grant
+B94A2498-60DA-4055-A957-686B6CB42654,Linguistics,0,Linguistics,Closed,ES/P00024X/1,Research Grant
+5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Closed,ES/P00024X/1,Research Grant
 7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Closed,ES/P000274/1,Research Grant
 5D762B83-597E-4E91-B2F7-04CBB955175C,Pol. sci. & internat. studies,0,Pol.+sci.+%26+internat.+studies,Closed,ES/P000274/1,Research Grant
 B94A2498-60DA-4055-A957-686B6CB42654,Linguistics,0,Linguistics,Closed,ES/P000304/1,Research Grant
@@ -14113,6 +14151,9 @@ F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Closed,ES/R004625/1,R
 5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Closed,ES/R004854/1,Research Grant
 12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Closed,ES/R004854/1,Research Grant
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Closed,ES/R004854/1,Research Grant
+64564C94-AC7F-4056-903D-0AED107A359E,Education,0,Education,Closed,ES/R004943/1,Research Grant
+5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Closed,ES/R004943/1,Research Grant
+F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Closed,ES/R004943/1,Research Grant
 F0322ED6-113F-4530-BA5E-562216587E68,Sociology,0,Sociology,Closed,ES/R004978/1,Research Grant
 5D762B83-597E-4E91-B2F7-04CBB955175C,Pol. sci. & internat. studies,0,Pol.+sci.+%26+internat.+studies,Closed,ES/R005052/1,Research Grant
 5D762B83-597E-4E91-B2F7-04CBB955175C,Pol. sci. & internat. studies,0,Pol.+sci.+%26+internat.+studies,Closed,ES/R005060/1,Research Grant
@@ -14269,6 +14310,8 @@ EBACD6D4-D1E5-4970-8BEC-7F4568EB26BA,Development studies,0,Development+studies,C
 7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Closed,ES/S00176X/1,Fellowship
 EB5F16BB-2772-4DDE-BD6C-3B7A6914B64C,Info. & commun. Technol.,0,Info.+%26+commun.+Technol.,Closed,ES/S00176X/1,Fellowship
 E88ECDEE-D58E-417E-A379-9FBB35647A90,Science and Technology Studies,0,Science+and+Technology+Studies,Closed,ES/S00176X/1,Fellowship
+B94A2498-60DA-4055-A957-686B6CB42654,Linguistics,0,Linguistics,Closed,ES/S001778/1,Fellowship
+5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Closed,ES/S001778/1,Fellowship
 5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Closed,ES/S001786/1,Fellowship
 7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Closed,ES/S001794/1,Fellowship
 64564C94-AC7F-4056-903D-0AED107A359E,Education,0,Education,Closed,ES/S001808/1,Research Grant
@@ -14784,6 +14827,9 @@ E844174D-6A1C-4D2D-8F24-57698F7DA353,Environmental planning,0,Environmental+plan
 5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Closed,ES/T009144/1,Fellowship
 B94A2498-60DA-4055-A957-686B6CB42654,Linguistics,0,Linguistics,Closed,ES/T009152/1,Fellowship
 5858EC49-4786-4440-8352-1AB0B6DC5F23,Psychology,0,Psychology,Closed,ES/T009152/1,Fellowship
+5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Closed,ES/T009160/1,Research Grant
+020361E1-B8CA-49FD-9149-27D31D21C7A3,Social Anthropology,0,Social+Anthropology,Closed,ES/T009160/1,Research Grant
+12179D88-04B3-47E9-89E1-B5EE8F895227,Social Policy,0,Social+Policy,Closed,ES/T009160/1,Research Grant
 7D5D2DB2-0A64-42AF-A644-5F541B832A29,Economics,0,Economics,Closed,ES/T009209/1,Fellowship
 5E9AA4EC-49E3-4D6A-B545-79DA07CE39E0,Management & Business Studies,0,Management+%26+Business+Studies,Closed,ES/T009209/1,Fellowship
 DEA11FBC-BEED-4EDD-890B-97D728462D26,Mathematical sciences,0,Mathematical+sciences,Closed,ES/T009217/1,Fellowship

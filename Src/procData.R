@@ -90,7 +90,7 @@ for (file in projects) {
 }
 
 # Print diagnostic message
-message(count," software outputs out of ",length(projects),
+message(count," projects have software outputs out of ",length(projects),
         " projects.")
 
 # Write data to file
@@ -159,7 +159,7 @@ for (file in projects) {
 }
 
 # Print diagnostic message
-message(count," data outputs out of ",length(projects),
+message(count," projects have data outputs out of ",length(projects),
         " projects.")
 
 # Write data to file
