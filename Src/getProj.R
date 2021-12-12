@@ -49,10 +49,10 @@ input_cols <- cols(
 # Data snapshot from 30th of September 2021.
 # gtrdat <- read_csv("../Data/projectsearch-1636377694679.csv.gz",
 #                    col_types = input_cols)
-# Data snapshot from 28th November 2021.
+# Data snapshot from 28th October 2021.
 # gtrdat <- read_csv("../Data/projectsearch-1633957153275.csv.gz",
 #                    col_types = input_cols)
-# Data snapshot from 23rd October 2021.
+# Data snapshot from 23rd November 2021.
 gtrdat <- read_csv("../Data/projectsearch-1639238843837.csv.gz",
                    col_types = input_cols)
 # Clean the data ----------------------------------------------------------
