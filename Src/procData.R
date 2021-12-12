@@ -255,12 +255,11 @@ for (file in projects) {
 }
 
 # Print diagnostic messages
-message(subject_count," data subjects out of ",length(projects),
-        " projects.")
-message(topic_count," data topics out of ",length(projects),
-        " projects.")
+message(subject_count," data subjects (",length(unique(subjectdf$text)),
+        " unique values) in ",length(projects), " projects .")
+message(topic_count," data topics  (",length(unique(topicdf$text)),
+        " unique values) in ",length(projects), " projects.")
 
-# Save the data
 # Write data to file
 write_csv(subjectdf, "../Data/subjects.csv")
 write_csv(topicdf, "../Data/topics.csv")
