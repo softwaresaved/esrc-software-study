@@ -63,7 +63,10 @@ input_cols <- cols(
 # Data snapshot from 30th of September 2021.
 # gtrdat <- read_csv("../Data/projectsearch-1636377694679.csv.gz", col_types = input_cols)
 # Data snapshot from 28th October 2021.
-gtrdat <- read_csv("../Data/projectsearch-1633957153275.csv.gz", col_types = input_cols)
+# gtrdat <- read_csv("../Data/projectsearch-1633957153275.csv.gz", col_types = input_cols)
+# Data snapshot from 23rd November 2021.
+gtrdat <- read_csv("../Data/projectsearch-1639238843837.csv.gz",
+                   col_types = input_cols)
 
 # Remove EndDate >= 2050 or is an NAs - removes 25 values
 gtrdat <- gtrdat[!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) < 2050,]
@@ -77,7 +80,7 @@ esrcdat <- gtrdat %>% filter(FundingOrgName == "ESRC")
 # Introduction
 
 The aim of this document is to provide an overview of expenditure done of the [United Kingdom Research and Innovation](https://www.ukri.org/) (UKRI) ESRC as determined from a [Gateway to Research](https://gtr.ukri.org/) (GtR) data snapshot. The data is made available under an [Open Government Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/), and covers the period `r format(min(gtrdat$StartDate),"%d/%m/%y")` to `r format(max(gtrdat$EndDate, na.rm = TRUE),"%d/%m/%y")`. The GtR data snapshot was
-downloaded from the GtR website on the 08/11/21 and corresponded to data last updated by UKRI on the 28th October 2021.<!-- 11/10/21 and corresponded to data last updated by UKRI on the 30th of September 2021. --> 
+downloaded from the GtR website on the 11/12/21 and corresponded to data last updated by UKRI on the 23rd November 2021.<!-- 28th October 2021.--><!-- 11/10/21 and corresponded to data last updated by UKRI on the 30th of September 2021. --> 
 
 The data set contains `r format(nrow(gtrdat), big.mark = ",")` rows (after some data cleaning), where a row corresponds to the record of an award. In this data set `r format(nrow(gtrdat[gtrdat$FundingOrgName == "ESRC",]), big.mark = ",")` correspond to ESRC awards.
 
@@ -860,7 +863,48 @@ esrcdat %>% filter(Status == "Active")                            %>%
 
 ## Classification of subjects
 
-Classify the department of the Principal Investigator (assuming that the department will be linked to the subject of the award).
+Classify the department of the Principal Investigator (assuming that the department will be linked to the subject of the award) using the following base categories:
+
+* Area Studies
+* Demography
+* Development studies
+* Economics
+* Education
+* Environmental planning
+* History
+* Human Geography
+* Law & legal studies
+* Linguistics
+* Management & business studies
+* Political science. & international studies
+* Psychology
+* Science and Technology Studies
+* Social anthropology
+* Social policy
+* Social work
+* Sociology
+* Tools, technologies & methods
+* Other
+
+```{r ESRC_Categories, echo = FALSE}
+
+# Categories to use
+categories <- c("Area Studies", "Demography", "Development studies", 
+                "Economics", "Education", "Environmental planning", "History", 
+                "Human Geography", "Law & legal studies", "Linguistics", 
+                "Management & business studies", 
+                "Political science. & international studies",
+                "Psychology", "Science and Technology Studies", 
+                "Social anthropology", "Social policy",
+                "Social work", "Sociology", "Tools, technologies & methods", 
+                "Other")
+
+# Assign categories
+esrcdat$Category <- NULL
+
+grep("Politic", esrcdat$CleanDep, value = TRUE, ignore.case = TRUE)
+
+```
 
 # ToDo Items
 
