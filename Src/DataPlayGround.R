@@ -2,7 +2,10 @@
 #
 # A playground to look at data downloaded from the Gateway to Research.
 #
-
+# GtR data dictionary:
+#
+#    https://gtr.ukri.org/resources/GtRDataDictionary.pdf
+#
 
 # Required packages -------------------------------------------------------
 
@@ -14,6 +17,7 @@ library(ggplot2)
 library(stringr)
 library(rvest)
 library(xml2)
+library(fmsb) # radar/spider charts (https://www.datanovia.com/en/blog/beautiful-radar-chart-in-r-using-fmsb-and-ggplot-packages/)
 
 # Read the data -----------------------------------------------------------
 
@@ -47,8 +51,15 @@ input_cols <- cols(
 )
 
 # Read the Gateway to Research data
-gtrdat <- read_csv("../Data/projectsearch-1633957153275.csv.gz", col_types = input_cols)
-
+# Data snapshot from 30th of September 2021.
+# gtrdat <- read_csv("../Data/projectsearch-1636377694679.csv.gz",
+#                    col_types = input_cols)
+# Data snapshot from 28th October 2021.
+# gtrdat <- read_csv("../Data/projectsearch-1633957153275.csv.gz",
+#                    col_types = input_cols)
+# Data snapshot from 23rd November 2021.
+gtrdat <- read_csv("../Data/projectsearch-1639238843837.csv.gz",
+                   col_types = input_cols)
 
 # Explore the data --------------------------------------------------------
 
@@ -63,11 +74,20 @@ sum(is.na(gtrdat$EndDate))        # Number of NAs in the end date - 203
 min(gtrdat$EndDate, na.rm = TRUE) # 2004-08-31
 max(gtrdat$EndDate, na.rm = TRUE) # 3202-10-31 !!! Typo?
 
-# More on project end dates
-gtrdat[max(gtrdat$EndDate, na.rm = TRUE) == "3202-10-31"]
-sum(year(gtrdat$EndDate) > 2035, na.rm = TRUE) # 51
+# identify the problem project, sent a cheeky email to the GtR folks on 12/12/21.
+gtrdat[!is.na(gtrdat$EndDate) &
+         gtrdat$EndDate == max(gtrdat$EndDate, na.rm = TRUE),
+       c("GTRProjectUrl","EndDate")]
+
+# More on project end dates problems
+gtrdat[!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) > 2050,
+       c("GTRProjectUrl","EndDate")]
+gtrdat[!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) < 2050 & year(gtrdat$EndDate) > 2035,
+       c("GTRProjectUrl","EndDate")]
+sum(!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) > 2035, na.rm = TRUE) # 51
 sum(is.na(gtrdat$EndDate)) # 250
 
+# End dates beyond 2035
 # "2050-03-31" "2121-10-08" "3202-10-31" "2121-03-31" "3023-03-31"
 unique(gtrdat[["EndDate"]][!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) > 2035])
 
@@ -75,8 +95,9 @@ unique(gtrdat[["EndDate"]][!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) > 2035]
 length(gtrdat[["EndDate"]][!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) > 2035])
 
 # Do the 2050 end dates make sense? No
-gtrdat[year(gtrdat$EndDate) == 2050, c("FundingOrgName","ProjectCategory","AwardPounds")] # [year(gtrdat$EndDate) == 2050]
-gtrdat[year(gtrdat$EndDate) == 2050,"FundingOrgName"]
+gtrdat[!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) == 2050,
+       c("FundingOrgName","ProjectCategory","AwardPounds")] # [year(gtrdat$EndDate) == 2050]
+gtrdat[!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) == 2050,"FundingOrgName"]
 
 # How many funding org names are missing? 0
 sum(is.na(gtrdat$FundingOrgName))
@@ -84,22 +105,29 @@ sum(is.na(gtrdat[["FundingOrgName"]])) # 0
 
 # Find unique project categories
 unique(gtrdat$ProjectCategory)
+length(unique(gtrdat$ProjectCategory))
 
-# Clean the data ----------------------------------------------------------
+# Count the different categories
+gtrdat %>%  select(ProjectCategory)     %>%
+            group_by(ProjectCategory)   %>%
+            tally()                     %>%
+            arrange(desc(n))
 
-# Remove EndDate >= 2050 or is an NAs - removes 25 values
+## Clean the data ----------------------------------------------------------
+
+# Remove EndDate >= 2050 or is an NAs - removes 25 values, for
 gtrdat <- gtrdat[!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) < 2050,]
 
-
+# Problem data
+gtrdat[!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) > 2050,]
 
 # Look at the ESRC data ---------------------------------------------------
 
-
-## ESRC projects -----------------------------------------------------------
-
-# Filter ESRC data - 10834 rows (about 8.9% of the data)
+# Filter ESRC data - changes for different data snapshots
 esrcdat <- gtrdat %>% filter(FundingOrgName == "ESRC")
 
+# Find out how many rows
+nrow(esrcdat)
 
 ## ESRC Project categories -------------------------------------------------
 
@@ -111,3 +139,122 @@ esrcdat %>% select(ProjectCategory, AwardPounds)                   %>%
             mutate(AverageAward = TotalAward/Number)               %>%
             arrange(desc(AverageAward))
 
+
+## Subjects and Topics -----------------------------------------------------
+
+
+### Subjects ----------------------------------------------------------------
+
+
+# Define subject column types
+columns <- cols(
+  id = col_character(),
+  text = col_character(),
+  percentage = col_double(),
+  encodedText = col_character(),
+  status = col_character(),
+  grantReference = col_character(),
+  grantCategory = col_character()
+)
+
+# read in the subject data
+subjects <- read_csv(file = "../Data/subjects.csv", col_types = columns)
+
+# Grant categories - no studentships
+unique(subjects$grantCategory) # "Research Grant", "Fellowship", "Training Grant"
+
+# Number of unique subjects
+length(unique(subjects$text)) # 70
+
+# Number of unique active subjects
+nrow(unique(subjects[subjects$status == "Active", "text"])) # 63
+
+# Enumerate subjects for active projects
+subjects %>% filter(status == "Active") %>%
+             select(text)               %>%
+             group_by(text)             %>%
+             tally()                    %>%
+             arrange(desc(n))
+
+# decode subject
+subjects$decodedText <- gsub("\\+", " ", URLdecode(subjects$encodedText))
+
+# Show the unique subjects
+unique(subjects$decodedText)  # 70 of them
+
+### Topics ----------------------------------------------------------------
+
+# Define the topic column types
+topics_cols <- cols(
+  id = col_character(),
+  text = col_character(),
+  encodedText = col_character(),
+  percentage = col_character(),
+  status = col_character(),
+  grantReference = col_character(),
+  grantCategory = col_character()
+)
+
+# Read the data
+topics <- read_csv(file = "../Data/topics.csv", col_types = topics_cols)
+
+# Grant categories - "Studentship" "Research Grant" "Training Grant" "Fellowship"
+unique(topics$grantCategory)
+
+# Number of topics
+length(unique(topics$text)) # 396
+
+# Number of topics for active projects
+nrow(unique(topics[topics$status == "Active","text"])) # 328
+
+# Top topics
+topics %>%  filter(status == "Active") %>%
+            select(text)               %>%
+            group_by(text)             %>%
+            tally()                    %>%
+            arrange(desc(n)) -> topicsN
+
+# Encoded topics
+unique(topics$encodedText)
+
+# Create a new column
+topics$decodedText <- gsub("\\+", " ", URLdecode(topics$encodedText))
+
+# Unique values
+unique(topics$decodedText) # 394
+
+## Data and Software Outputs -----------------------------------------------
+
+# Read the software outputs data
+softouts_cols = cols(
+  id = col_character(),
+  outcomeId = col_character(),
+  title = col_character(),
+  description = col_character(),
+  type = col_character(),
+  impact = col_character(),
+  openSourceLicense = col_character(),
+  yearFirstProvided = col_double(),
+  url = col_character(),
+  status = col_character(),
+  grantReference = col_character()
+)
+softouts <- read_csv(file = "../Data/softwareoutputs.csv",
+                     col_types = softouts_cols)
+
+# Read the data outputs data
+dataouts_cols <- cols(
+  id = col_character(),
+  outcomeId = col_character(),
+  title = col_character(),
+  description = col_character(),
+  type = col_character(),
+  impact = col_character(),
+  providedToOthers = col_logical(),
+  yearFirstProvided = col_character(),
+  url = col_character(),
+  status = col_character(),
+  grantReference = col_character()
+)
+dataouts <- read_csv(file = "../Data/dataoutputs.csv",
+                     col_types = dataouts_cols)
