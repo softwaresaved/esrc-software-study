@@ -7,7 +7,7 @@
 #    https://gtr.ukri.org/resources/GtRDataDictionary.pdf
 #
 
-# Required packages -------------------------------------------------------
+# Load required packages -------------------------------------------------------
 
 # Load packages to be used
 library(readr)
@@ -75,6 +75,8 @@ min(gtrdat$EndDate, na.rm = TRUE) # 2004-08-31
 max(gtrdat$EndDate, na.rm = TRUE) # 3202-10-31 !!! Typo?
 
 # identify the problem project, sent a cheeky email to the GtR folks on 12/12/21.
+# It is not their responsibility to fix this data. It would have to be followed
+# up with the appropriate dep through Je-s (https://je-s.rcuk.ac.uk/).
 gtrdat[!is.na(gtrdat$EndDate) &
          gtrdat$EndDate == max(gtrdat$EndDate, na.rm = TRUE),
        c("GTRProjectUrl","EndDate")]
@@ -181,6 +183,10 @@ subjects$decodedText <- gsub("\\+", " ", URLdecode(subjects$encodedText))
 
 # Show the unique subjects
 unique(subjects$decodedText)  # 70 of them
+
+# Join with the original data
+esrc_subjects <- esrcdat %>%
+                 left_join(subjects, by = c("ProjectReference" = "grantReference"))
 
 ### Topics ----------------------------------------------------------------
 
