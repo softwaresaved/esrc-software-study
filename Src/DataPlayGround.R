@@ -184,9 +184,85 @@ subjects$decodedText <- gsub("\\+", " ", URLdecode(subjects$encodedText))
 # Show the unique subjects
 unique(subjects$decodedText)  # 70 of them
 
+# percentages
+subjects$percentage[subjects$percentage > 0]
+length(subjects$percentage[subjects$percentage > 0]) # Only 7 entries > 0
+
 # Join with the original data
 esrc_subjects <- esrcdat %>%
-                 left_join(subjects, by = c("ProjectReference" = "grantReference"))
+                 left_join(subjects, by = c("ProjectReference" = "grantReference")) %>%
+                 select( -percentage, -status, -grantCategory)
+
+# Categories to use
+categories <- c("Area Studies",
+                "Demography",
+                "Development studies",
+                "Economics",
+                "Education",
+                "Environmental planning",
+                "History",
+                "Human Geography",
+                "Law & legal studies",
+                "Linguistics",
+                "Management & business studies",
+                "Political science. & international studies",
+                "Psychology",
+                "Science and Technology Studies",
+                "Social anthropology",
+                "Social policy",
+                "Social work",
+                "Sociology",
+                "Tools, technologies & methods",
+                "Other")
+
+# is the decoded text the same as the text?
+nrow(esrc_subjects) # 20019
+sum(esrc_subjects$text == esrc_subjects$decodedText, na.rm = TRUE) # 15819
+sum(is.na(esrc_subjects$text)) # 4200
+sum(is.na(esrc_subjects$decodedText)) # 4200
+# check if there are differences in the values between the text column and the
+# decodedText column.
+for (i in seq_len(nrow(esrc_subjects))) {
+  if(!is.na(esrc_subjects$text[i]) & !is.na(esrc_subjects$decodedText[i]) &
+     esrc_subjects$text[i] != esrc_subjects$decodedText[i]){
+    message("Different ", esrc_subjects$text[i], " vs ",
+            esrc_subjects$decodedText[i])
+  }
+}
+
+
+# Assign subjects to the categories
+esrc_subjects$catgory <-  NULL
+
+# Set an uncategorised label
+esrc_subjects$category[is.na(esrc_subjects$text)] <- "Uncategorised"
+
+# Need to reduce the following 71 categories to the above 21 categories
+# including "Other" and "Uncategorised:
+#
+# Management & Business Studies, Development studies, RCUK Programmes,
+# Social Policy, Climate & Climate Change, Education, Human Geography, NA,
+# Genetics & development, Psychology, Social Work, Environmental planning,
+# Sociology, Media, Science and Technology Studies,
+# "Tools, technologies & methods", Pol. sci. & internat. studies,
+# Law & legal studies, "Ecol, biodivers. & systematics",
+# Civil eng. & built environment, Social Anthropology, Economics,
+# Info. & commun. Technol., Languages & Literature, Linguistics,
+# Medical & health interface, History, Visual arts, Demography, Design,
+# Demography & human geography, Complexity Science,
+# "Pollution, waste & resources", Terrest. & freshwater environ.,
+# Agri-environmental science, Food science & nutrition,
+# Environmental Engineering, Manufacturing, Drama & theatre studies,
+# Area Studies, Cultural & museum studies, Philosophy, Animal Science, Energy,
+# Mathematical sciences, Archaeology, Music, "Theology, divinity & religion"
+# Library & information studies, Astronomy - observation, Astronomy - theory,
+# Particle Astrophysics, Bioengineering, Cell biology, Process engineering,
+# Omic sciences & technologies, Systems engineering, Marine environments,
+# Atmospheric phys. & chemistry, Plant & crop science, Electrical Engineering,
+# Dance, Chemical measurement, Geosciences, Microbial sciences,
+# Mechanical Engineering, Classics, Catalysis & surfaces, Materials sciences,
+# Instrument. sensor & detectors, Materials Processing
+
 
 ### Topics ----------------------------------------------------------------
 
