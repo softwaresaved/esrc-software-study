@@ -264,6 +264,42 @@ esrc_subjects$category[is.na(esrc_subjects$text)] <- "Uncategorised"
 # Instrument. sensor & detectors, Materials Processing
 
 
+# Function to select the right entries and reduce typing
+sel <- function(parseString){
+  return(grepl(parseString, esrc_subjects$text, ignore.case = TRUE))
+}
+
+# assign the categories based on the subjects
+esrc_subjects$category[sel("area")] <- "Area Studies"
+# This also takes Demography and human geography, the latter being another category
+esrc_subjects$category[sel("^demography")] <- "Demography"
+esrc_subjects$category[sel("^development")] <- "Development studies"
+esrc_subjects$category[sel("economics")] <- "Economics"
+esrc_subjects$category[sel("education")] <-  "Education"
+esrc_subjects$category[sel("planning")] <- "Environmental planning"
+esrc_subjects$category[sel("history")] <- "History"
+esrc_subjects$category[sel("^human geography")] <- "Human Geography"
+esrc_subjects$category[sel("law")] <- "Law & legal studies"
+esrc_subjects$category[sel("languages|linguistics")] <- "Linguistics"
+esrc_subjects$category[sel("management")] <- "Management & business studies"
+esrc_subjects$category[sel("pol\\.")] <- "Political science. & international studies"
+esrc_subjects$category[sel("psychology")] <- "Psychology"
+esrc_subjects$category[sel("^science")] <- "Science and Technology Studies"
+esrc_subjects$category[sel("anthropology")] <- "Social anthropology"
+esrc_subjects$category[sel("policy")] <- "Social policy"
+esrc_subjects$category[sel("work")] <- "Social work"
+esrc_subjects$category[sel("sociology")] <- "Sociology"
+esrc_subjects$category[sel("tools|instrument|measurement")] <- "Tools, technologies & methods"
+# Things that do not seem to fit any of the above categories
+esrc_subjects$category[sel(paste0("rcuk|astro|dance|music|gene|museum|",
+                                  "theology|science(s)?$|engineering$|drama|",
+                                  "philo|arch|^omic|bio|info|class|",
+                                  "atmos|design|vis|med|^cat|mar|ener|",
+                                  "manu|materi|clim|poll|terr|civ|food")
+                           )] <- "Other"
+
+unique(esrc_subjects$text[sel("^demography")])
+
 ### Topics ----------------------------------------------------------------
 
 # Define the topic column types
