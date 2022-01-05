@@ -220,6 +220,7 @@ nrow(esrc_subjects) # 20019
 sum(esrc_subjects$text == esrc_subjects$decodedText, na.rm = TRUE) # 15819
 sum(is.na(esrc_subjects$text)) # 4200
 sum(is.na(esrc_subjects$decodedText)) # 4200
+
 # check if there are differences in the values between the text column and the
 # decodedText column.
 for (i in seq_len(nrow(esrc_subjects))) {
