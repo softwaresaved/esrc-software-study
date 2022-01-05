@@ -298,6 +298,11 @@ esrc_subjects$category[sel(paste0("rcuk|astro|dance|music|gene|museum|",
                                   "manu|materi|clim|poll|terr|civ|food")
                            )] <- "Other"
 
+# Check all have been assigned
+if(any(is.na(esrc_subjects$category))){
+  warning("There are some unassigned categories!")
+}
+
 unique(esrc_subjects$text[sel("^demography")])
 
 ### Topics ----------------------------------------------------------------
