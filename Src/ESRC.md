@@ -42,7 +42,7 @@ Economic and Social Research Council (ESRC) Data
         -   [Active Partnerships](#active-partnerships)
     -   [Award Titles](#award-titles)
         -   [Active award titles](#active-award-titles)
-    -   [Classification of subjects](#classification-of-subjects)
+    -   [Classification by category](#classification-by-category)
 -   [ToDo Items](#todo-items)
 
 # Introduction
@@ -632,7 +632,7 @@ some of the longer words have been excluded.
 
 ![](ESRC_files/figure-gfm/ActiveWordCloud-1.png)<!-- -->
 
-## Classification of subjects
+## Classification by category
 
 Classify the department of the Principal Investigator (assuming that the
 department will be linked to the subject of the award) using the
@@ -659,55 +659,59 @@ following base categories:
 -   Tools, technologies & methods
 -   Other
 
-Derived from decomposition of previous ESRC expenditure in [ESRC
-application and success rate data and
-analysis](https://www.ukri.org/publications/esrc-application-and-success-rate-data-and-analysis/)
-reports. The GtR subject classification has been mapped to the above
-scheme and where no such data is available the “Unclassified” type is
-used.
+The categories are derived from decomposition of previous ESRC
+expenditure reports at [ESRC application and success rate data and
+analysis](https://www.ukri.org/publications/esrc-application-and-success-rate-data-and-analysis/).
+The GtR subject classification for projects has been mapped to the above
+scheme and where a project subject is not provided an “Unclassified”
+type is used.
 
-Mapped GtR subjects to categories according to:
+There are 73 subject types and 21 categories described above plus the
+`Uncategorised` type for the cases where this information has not been
+provided. The GtR subjects for ESRC projects have been mapped to
+categories according to:
 
--   Area Studies: Area Studies
--   Demography: Demography, Demography & human geography
--   Development studies: Development studies
--   Economics: Economics
--   Education: Education
--   Environmental planning: Environmental planning
--   History: History
--   Human Geography: Human Geography
--   Law & legal studies: Law & legal studies
--   Linguistics: Linguistics, Languages & Literature
--   Management & business studies: Management & Business Studies
--   Political science. & international studies: Pol. sci. & internat.
-    studies
--   Psychology: Psychology
--   Science and Technology Studies: Science and Technology Studies
--   Social anthropology: Social Anthropology
--   Social policy: Social Policy
--   Social work: Social Work
--   Sociology: Sociology
--   Tools, technologies & methods: “Tools, technologies & methods”
--   Other: RCUK Programmes, Genetics & development, Climate & Climate
-    Change, Media, “Ecol, biodivers. & systematics”, Civil eng. & built
-    environment, Info. & commun. Technol., Medical & health interface,
-    Visual arts, Design, Complexity Science, “Pollution, waste &
-    resources”, Terrest. & freshwater environ., Agri-environmental
-    science, Food science & nutrition, Environmental Engineering,
-    Manufacturing, Drama & theatre studies, Cultural & museum studies,
-    Philosophy, Animal Science, Energy, Mathematical sciences,
-    Archaeology, Music, “Theology, divinity & religion”, Library &
-    information studies, Astronomy - observation, Astronomy - theory,
-    Particle Astrophysics, Bioengineering, Cell biology, Process
+-   **Area Studies**: Area Studies
+-   **Demography**: Demography, Demography & human geography
+-   **Development studies**: Development studies
+-   **Economics**: Economics
+-   **Education**: Education
+-   **Environmental planning**: Environmental planning
+-   **History**: History
+-   **Human Geography**: Human Geography
+-   **Law & legal studies**: Law & legal studies
+-   **Linguistics**: Linguistics, Languages & Literature
+-   **Management & business studies**: Management & Business Studies
+-   **Political science. & international studies**: Pol. sci. &
+    internat. studies
+-   **Psychology**: Psychology
+-   **Science and Technology Studies**: Science and Technology Studies
+-   **Social anthropology**: Social Anthropology
+-   **Social policy**: Social Policy
+-   **Social work**: Social Work
+-   **Sociology**: Sociology
+-   **Tools, technologies & methods**: “Tools, technologies & methods”
+-   **Other**: RCUK Programmes, Genetics & development, Climate &
+    Climate Change, Media, “Ecol, biodivers. & systematics”, Civil eng.
+    & built environment, Info. & commun. Technol., Medical & health
+    interface, Visual arts, Design, Complexity Science, “Pollution,
+    waste & resources”, Terrest. & freshwater environ.,
+    Agri-environmental science, Food science & nutrition, Environmental
+    Engineering, Manufacturing, Drama & theatre studies, Cultural &
+    museum studies, Philosophy, Animal Science, Energy, Mathematical
+    sciences, Archaeology, Music, “Theology, divinity & religion”,
+    Library & information studies, Astronomy - observation, Astronomy -
+    theory, Particle Astrophysics, Bioengineering, Cell biology, Process
     engineering, Omic sciences & technologies, Systems engineering,
     Marine environments, Atmospheric phys. & chemistry, Plant & crop
     science, Electrical Engineering, Dance, Chemical measurement,
     Geosciences, Microbial sciences, Mechanical Engineering, Classics,
     Catalysis & surfaces, Materials sciences, Instrument. sensor &
     detectors, Materials Processing
--   Uncategorised: NA
+-   **Uncategorised**: NA
 
-Looking at the number and award amount for these categories we get:
+For all projects, this gives a breakdown of the number of awards and
+amount awarded as:
 
 | Category                                   | Number of awards | Award (£)     |
 |:-------------------------------------------|:-----------------|:--------------|
@@ -733,7 +737,9 @@ Looking at the number and award amount for these categories we get:
 | Science and Technology Studies             | 152              | 61,595,683    |
 | Area Studies                               | 129              | 48,469,980    |
 
-Looking at the `Other` category in more detail:
+The `Other` category dominates by award amount though the
+`Uncategorised` dominate by numbers. Looking at the `Other` category in
+more detail:
 
 | Subject                        | Number of awards | Award (£)   |
 |:-------------------------------|:-----------------|:------------|
@@ -785,8 +791,10 @@ Looking at the `Other` category in more detail:
 | Particle Astrophysics          | 1                | 154,236     |
 | Catalysis & surfaces           | 1                | 120,083     |
 
-There are some large items near the top. If we only focus on currently
-active projects we get:
+There are some large items near the top. Also, some of the items would
+not usually fall under the ESRC area.
+
+If we only focus on currently active projects we get:
 
 | Category                                   | Number of awards | Award (£)   |
 |:-------------------------------------------|:-----------------|:------------|
