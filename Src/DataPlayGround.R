@@ -232,8 +232,8 @@ for (i in seq_len(nrow(esrc_subjects))) {
 }
 
 
-# Assign subjects to the categories
-esrc_subjects$catgory <-  NULL
+# Create new column
+esrc_subjects$category <- rep("-",nrow(esrc_subjects))
 
 # Set an uncategorised label
 esrc_subjects$category[is.na(esrc_subjects$text)] <- "Uncategorised"
@@ -300,8 +300,9 @@ esrc_subjects$category[sel(paste0("rcuk|astro|dance|music|gene|museum|",
                            )] <- "Other"
 
 # Check all have been assigned
-if(any(is.na(esrc_subjects$category))){
-  warning("There are some unassigned categories!")
+if(any(esrc_subjects$category == "-")) {
+  warning("There are some unassigned categories: ",
+          unique(esrc_subjects$text[is.na(esrc_subjects$category)]))
 }
 
 unique(esrc_subjects$text[sel("^demography")])
