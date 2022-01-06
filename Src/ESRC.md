@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 12/12/21.
+**Last updated**: 06/01/22.
 
 -   [Introduction](#introduction)
 -   [Overall expenditure](#overall-expenditure)
@@ -81,6 +81,10 @@ the data.
 | Research England                                                                             | 2018      |
 | UKRI                                                                                         | 2018      |
 
+Although strictly speaking it was the *Social Science Research Council*
+(SSRC) that came into being in 1965 and it was not until 1983 that the
+SSRC was renamed the Economic and Social Research Council (ESRC).
+
 # Overall expenditure
 
 We start by doing a brief overview of all the data obtained from the
@@ -142,10 +146,6 @@ The graph with the values scaled:
 
 Expenditure by year using the starting year of the award for funds
 allocated that year per research council:
-
-    ## Warning: Transformation introduced infinite values in continuous y-axis
-
-    ## Warning: Removed 1 rows containing missing values (geom_col).
 
 <img src="ESRC_files/figure-gfm/funding_ByOrgByYear-1.png" title="Expenditure across each UKRI council from the available data by year." alt="Expenditure across each UKRI council from the available data by year."  />
 
@@ -217,10 +217,6 @@ With the densities scaled:
 
 Expenditure by year using the starting year of the award for funds
 allocated that year per research council for active projects:
-
-    ## Warning: Transformation introduced infinite values in continuous y-axis
-
-    ## Warning: Removed 1 rows containing missing values (geom_col).
 
 <img src="ESRC_files/figure-gfm/funding_ByOrgByYearAct-1.png" title="Expenditure across each UKRI council from the available data by year." alt="Expenditure across each UKRI council from the available data by year."  />
 
@@ -663,965 +659,205 @@ following base categories:
 -   Tools, technologies & methods
 -   Other
 
-<!-- -->
+Derived from decomposition of previous ESRC expenditure in [ESRC
+application and success rate data and
+analysis](https://www.ukri.org/publications/esrc-application-and-success-rate-data-and-analysis/)
+reports. The GtR subject classification has been mapped to the above
+scheme and where no such data is available the “Unclassified” type is
+used.
 
-    ##   [1] "Politics and International Studies"      
-    ##   [2] "Hist, Anthrop, Philos & Politics"        
-    ##   [3] "International Politics"                  
-    ##   [4] "Politics"                                
-    ##   [5] "Politics and International Relations"    
-    ##   [6] "Politics and International Studies"      
-    ##   [7] "Politics & International Relation"       
-    ##   [8] "Social and Political Science"            
-    ##   [9] "Hist, Anthrop, Philos & Politics"        
-    ##  [10] "Politics"                                
-    ##  [11] "Politics and International Relations"    
-    ##  [12] "Politics"                                
-    ##  [13] "Politics and International Studies"      
-    ##  [14] "International Politics"                  
-    ##  [15] "Politics and International Relations"    
-    ##  [16] "Social and Political Science"            
-    ##  [17] "Social and Political Science"            
-    ##  [18] "Economic, Social & Political Sci"        
-    ##  [19] "Politics"                                
-    ##  [20] "Politics and International Relations"    
-    ##  [21] "Social and Political Science"            
-    ##  [22] "Geography Politics and Sociology"        
-    ##  [23] "Social & Political Science"              
-    ##  [24] "Politics"                                
-    ##  [25] "Politics and International Studies"      
-    ##  [26] "Politics Philosophy Lang & Comms Studies"
-    ##  [27] "Social and Political Science"            
-    ##  [28] "Politics"                                
-    ##  [29] "Politics & International Relation"       
-    ##  [30] "Social and Political Science"            
-    ##  [31] "Social & Political Science"              
-    ##  [32] "Social and Political Science"            
-    ##  [33] "Politics and International Studies"      
-    ##  [34] "Politics"                                
-    ##  [35] "Politics, History & International Rel"   
-    ##  [36] "Geography Politics and Sociology"        
-    ##  [37] "Politics and International Relations"    
-    ##  [38] "Politics"                                
-    ##  [39] "Politics"                                
-    ##  [40] "Social and Political Science"            
-    ##  [41] "Social & Political Science"              
-    ##  [42] "Political Science"                       
-    ##  [43] "Social & Political Science"              
-    ##  [44] "Politics and International Relations"    
-    ##  [45] "Social and Political Science"            
-    ##  [46] "Political Science"                       
-    ##  [47] "Law, Politics and Sociology"             
-    ##  [48] "Political Economy"                       
-    ##  [49] "Politics"                                
-    ##  [50] "Politics Philosophy Lang & Comms Studies"
-    ##  [51] "Social & Political Science"              
-    ##  [52] "Politics"                                
-    ##  [53] "Politics"                                
-    ##  [54] "Politics, Languages and Int Studies"     
-    ##  [55] "Social and Political Science"            
-    ##  [56] "Politics Philosophy and Religion"        
-    ##  [57] "Politics Philosophy and Religion"        
-    ##  [58] "Politics"                                
-    ##  [59] "Social and Political Science"            
-    ##  [60] "Social & Political Science"              
-    ##  [61] "Politics and International Relations"    
-    ##  [62] "Economic, Social & Political Sci"        
-    ##  [63] "Politics"                                
-    ##  [64] "Economic, Social & Political Sci"        
-    ##  [65] "Politics"                                
-    ##  [66] "Politics"                                
-    ##  [67] "Political Science"                       
-    ##  [68] "Social and Political Science"            
-    ##  [69] "Politics and International Studies"      
-    ##  [70] "Politics"                                
-    ##  [71] "Political Science"                       
-    ##  [72] "Politics"                                
-    ##  [73] "Economic, Social & Political Sci"        
-    ##  [74] "Politics"                                
-    ##  [75] "Geography Politics and Sociology"        
-    ##  [76] "Social & Political Science"              
-    ##  [77] "Geography Politics and Sociology"        
-    ##  [78] "Social and Political Science"            
-    ##  [79] "Social & Political Science"              
-    ##  [80] "Social & Political Science"              
-    ##  [81] "Social and Political Science"            
-    ##  [82] "Law, Politics and Sociology"             
-    ##  [83] "Social and Political Science"            
-    ##  [84] "Social and Political Science"            
-    ##  [85] "Politics"                                
-    ##  [86] "Economic, Social & Political Sci"        
-    ##  [87] "Economic, Social & Political Sci"        
-    ##  [88] "Law, Politics and Sociology"             
-    ##  [89] "Politics and International Relations"    
-    ##  [90] "Social and Political Science"            
-    ##  [91] "Politics and International Studies"      
-    ##  [92] "Politics"                                
-    ##  [93] "Social and Political Science"            
-    ##  [94] "Social and Political Science"            
-    ##  [95] "Politics and International Relations"    
-    ##  [96] "Social & Political Science"              
-    ##  [97] "Economic, Social & Political Sci"        
-    ##  [98] "Politics and International Relations"    
-    ##  [99] "Geography Politics and Sociology"        
-    ## [100] "Geography Politics and Sociology"        
-    ## [101] "Politics and International Studies"      
-    ## [102] "Social and Political Science"            
-    ## [103] "History and Politics"                    
-    ## [104] "Politics"                                
-    ## [105] "Politics"                                
-    ## [106] "Politics"                                
-    ## [107] "Economic, Social & Political Sci"        
-    ## [108] "Geography Politics and Sociology"        
-    ## [109] "Geography Politics and Sociology"        
-    ## [110] "Economic, Social & Political Sci"        
-    ## [111] "Politics & International Relation"       
-    ## [112] "Politics and International Relations"    
-    ## [113] "Economic, Social & Political Sci"        
-    ## [114] "Economic, Social & Political Sci"        
-    ## [115] "Social and Political Science"            
-    ## [116] "Politics & International Relation"       
-    ## [117] "Social and Political Science"            
-    ## [118] "Politics"                                
-    ## [119] "Social and Political Science"            
-    ## [120] "Economic, Social & Political Sci"        
-    ## [121] "Politics and International Studies"      
-    ## [122] "Politics"                                
-    ## [123] "Law, Politics and Sociology"             
-    ## [124] "Social and Political Science"            
-    ## [125] "Social and Political Science"            
-    ## [126] "Politics"                                
-    ## [127] "Politics"                                
-    ## [128] "Economic, Social & Political Sci"        
-    ## [129] "Social & Political Science"              
-    ## [130] "Politics"                                
-    ## [131] "Political Science"                       
-    ## [132] "Politics"                                
-    ## [133] "Social and Political Science"            
-    ## [134] "Politics"                                
-    ## [135] "Geography Politics and Sociology"        
-    ## [136] "Social & Political Science"              
-    ## [137] "Geography Politics and Sociology"        
-    ## [138] "International Politics"                  
-    ## [139] "Social and Political Science"            
-    ## [140] "Politics and International Studies"      
-    ## [141] "Geography Politics and Sociology"        
-    ## [142] "Politics and International Studies"      
-    ## [143] "Social & Political Science"              
-    ## [144] "Politics & International Relation"       
-    ## [145] "Politics and International Studies"      
-    ## [146] "Politics & International Relation"       
-    ## [147] "Political Science"                       
-    ## [148] "Political Economy"                       
-    ## [149] "Geography Politics and Sociology"        
-    ## [150] "Politics"                                
-    ## [151] "Political Economy"                       
-    ## [152] "Politics and International Studies"      
-    ## [153] "Social and Political Science"            
-    ## [154] "Politics and International Relations"    
-    ## [155] "Social and Political Science"            
-    ## [156] "Politics and International Studies"      
-    ## [157] "Politics and International Studies"      
-    ## [158] "Politics and International Relations"    
-    ## [159] "Social and Political Science"            
-    ## [160] "Social and Political Science"            
-    ## [161] "Politics"                                
-    ## [162] "Social and Political Science"            
-    ## [163] "Social and Political Science"            
-    ## [164] "Politics and International Studies"      
-    ## [165] "Politics"                                
-    ## [166] "Politics"                                
-    ## [167] "Politics and International Relations"    
-    ## [168] "Economic, Social & Political Sci"        
-    ## [169] "Politics"                                
-    ## [170] "Social and Political Science"            
-    ## [171] "Area Stud, Hist, Politics & Lit"         
-    ## [172] "Geography Politics and Sociology"        
-    ## [173] "Social & Political Science"              
-    ## [174] "Geography Politics and Sociology"        
-    ## [175] "Politics & International Relation"       
-    ## [176] "Politics, Languages and Int Studies"     
-    ## [177] "Social and Political Science"            
-    ## [178] "Social and Political Science"            
-    ## [179] "Politics"                                
-    ## [180] "Politics"                                
-    ## [181] "Hist, Anthrop, Philos & Politics"        
-    ## [182] "Politics"                                
-    ## [183] "Politics Philosophy and Religion"        
-    ## [184] "Social & Political Science"              
-    ## [185] "Politics"                                
-    ## [186] "International Politics"                  
-    ## [187] "Geography Politics and Sociology"        
-    ## [188] "Politics"                                
-    ## [189] "Political Economy"                       
-    ## [190] "Politics and International Relations"    
-    ## [191] "Political Economy"                       
-    ## [192] "Social & Political Science"              
-    ## [193] "Economic, Social & Political Sci"        
-    ## [194] "Social and Political Science"            
-    ## [195] "Social and Political Science"            
-    ## [196] "Political Science"                       
-    ## [197] "Social and Political Science"            
-    ## [198] "Politics"                                
-    ## [199] "Politics"                                
-    ## [200] "Politics and International Relations"    
-    ## [201] "Politics & International Relation"       
-    ## [202] "Politics and International Studies"      
-    ## [203] "Economic, Social & Political Sci"        
-    ## [204] "Social and Political Science"            
-    ## [205] "Politics"                                
-    ## [206] "Political Science"                       
-    ## [207] "Geography Politics and Sociology"        
-    ## [208] "Geography Politics and Sociology"        
-    ## [209] "Social and Political Science"            
-    ## [210] "Politics and International Relations"    
-    ## [211] "Politics and International Relations"    
-    ## [212] "Social and Political Science"            
-    ## [213] "Politics and International Relations"    
-    ## [214] "Political Science"                       
-    ## [215] "Social & Political Science"              
-    ## [216] "Social and Political Science"            
-    ## [217] "Social & Political Science"              
-    ## [218] "Politics"                                
-    ## [219] "Politics"                                
-    ## [220] "Politics and International Relations"    
-    ## [221] "Economic, Social & Political Sci"        
-    ## [222] "Social and Political Science"            
-    ## [223] "Political Economy"                       
-    ## [224] "Politics and International Relations"    
-    ## [225] "Social and Political Science"            
-    ## [226] "Politics"                                
-    ## [227] "Politics and International Studies"      
-    ## [228] "Social and Political Science"            
-    ## [229] "Geography Politics and Sociology"        
-    ## [230] "International Politics"                  
-    ## [231] "Politics and International Studies"      
-    ## [232] "Politics"                                
-    ## [233] "Social and Political Science"            
-    ## [234] "Politics"                                
-    ## [235] "Politics"                                
-    ## [236] "Social and Political Science"            
-    ## [237] "Politics"                                
-    ## [238] "Politics and International Studies"      
-    ## [239] "Economic, Social & Political Sci"        
-    ## [240] "Economic, Social & Political Sci"        
-    ## [241] "Social & Political Science"              
-    ## [242] "Economic, Social & Political Sci"        
-    ## [243] "Politics"                                
-    ## [244] "Politics"                                
-    ## [245] "Economics & Politics"                    
-    ## [246] "Social and Political Science"            
-    ## [247] "Hist, Anthrop, Philos & Politics"        
-    ## [248] "Politics & International Relation"       
-    ## [249] "Social and Political Science"            
-    ## [250] "Politics"                                
-    ## [251] "Social and Political Science"            
-    ## [252] "Social and Political Science"            
-    ## [253] "Politics and International Relations"    
-    ## [254] "Politics"                                
-    ## [255] "Geography Politics and Sociology"        
-    ## [256] "Political, Social and International"     
-    ## [257] "Area Stud, Hist, Politics & Lit"         
-    ## [258] "Politics and International Studies"      
-    ## [259] "Political Economy"                       
-    ## [260] "International Politics"                  
-    ## [261] "Social and Political Science"            
-    ## [262] "Social and Political Science"            
-    ## [263] "Social and Political Science"            
-    ## [264] "Politics"                                
-    ## [265] "Geography Politics and Sociology"        
-    ## [266] "Geography Politics and Sociology"        
-    ## [267] "Politics and International Relations"    
-    ## [268] "Politics and International Relations"    
-    ## [269] "Geography Politics and Sociology"        
-    ## [270] "International Politics"                  
-    ## [271] "Politics"                                
-    ## [272] "Politics"                                
-    ## [273] "Geography Politics and Sociology"        
-    ## [274] "Social and Political Science"            
-    ## [275] "Politics and International Studies"      
-    ## [276] "Politics"                                
-    ## [277] "Politics"                                
-    ## [278] "Politics, Languages and Int Studies"     
-    ## [279] "Politics and International Studies"      
-    ## [280] "Politics and International Studies"      
-    ## [281] "Economic, Social & Political Sci"        
-    ## [282] "Politics and International Studies"      
-    ## [283] "Economic, Social & Political Sci"        
-    ## [284] "International Politics"                  
-    ## [285] "Geography Politics and Sociology"        
-    ## [286] "Social & Political Science"              
-    ## [287] "Political Economy"                       
-    ## [288] "Politics & International Relation"       
-    ## [289] "Politics & International Relation"       
-    ## [290] "Politics"                                
-    ## [291] "Geography Politics and Sociology"        
-    ## [292] "Politics & International Relation"       
-    ## [293] "Politics"                                
-    ## [294] "Geography Politics and Sociology"        
-    ## [295] "Geography Politics and Sociology"        
-    ## [296] "Politics"                                
-    ## [297] "Area Stud, Hist, Politics & Lit"         
-    ## [298] "Politics and International Relations"    
-    ## [299] "Political, Social and International"     
-    ## [300] "International Politics"                  
-    ## [301] "Economic, Social & Political Sci"        
-    ## [302] "Politics and International Relations"    
-    ## [303] "Politics and International Relations"    
-    ## [304] "Geography Politics and Sociology"        
-    ## [305] "Politics and International Studies"      
-    ## [306] "Politics"                                
-    ## [307] "Geography Politics and Sociology"        
-    ## [308] "Politics and International Studies"      
-    ## [309] "Politics & International Relation"       
-    ## [310] "Politics"                                
-    ## [311] "Social & Political Science"              
-    ## [312] "Politics"                                
-    ## [313] "Economic, Social & Political Sci"        
-    ## [314] "Politics and International Studies"      
-    ## [315] "Politics"                                
-    ## [316] "Politics"                                
-    ## [317] "Geography Politics and Sociology"        
-    ## [318] "Politics and International Studies"      
-    ## [319] "Politics Philosophy Lang & Comms Studies"
-    ## [320] "Politics"                                
-    ## [321] "Politics"                                
-    ## [322] "Politics"                                
-    ## [323] "Politics and International Relations"    
-    ## [324] "Politics and International Studies"      
-    ## [325] "Social and Political Science"            
-    ## [326] "Social and Political Science"            
-    ## [327] "Political Economy"                       
-    ## [328] "Politics"                                
-    ## [329] "Politics"                                
-    ## [330] "Social & Political Science"              
-    ## [331] "Politics & International Relation"       
-    ## [332] "Politics & International Relation"       
-    ## [333] "Social & Political Science"              
-    ## [334] "Politics & International Relation"       
-    ## [335] "Social & Political Science"              
-    ## [336] "Politics"                                
-    ## [337] "Politics and International Studies"      
-    ## [338] "Geography Politics and Sociology"        
-    ## [339] "Politics"                                
-    ## [340] "Geography Politics and Sociology"        
-    ## [341] "Social and Political Science"            
-    ## [342] "Social and Political Science"            
-    ## [343] "Politics and International Studies"      
-    ## [344] "Social and Political Science"            
-    ## [345] "Law, Politics and Sociology"             
-    ## [346] "Geography Politics and Sociology"        
-    ## [347] "Politics"                                
-    ## [348] "Law, Politics and Sociology"             
-    ## [349] "Politics Philosophy Lang & Comms Studies"
-    ## [350] "Social & Political Science"              
-    ## [351] "Social and Political Science"            
-    ## [352] "Politics and International Relations"    
-    ## [353] "Politics and International Relations"    
-    ## [354] "Economic, Social & Political Sci"        
-    ## [355] "Politics and International Relations"    
-    ## [356] "Geography Politics and Sociology"        
-    ## [357] "Politics and International Studies"      
-    ## [358] "Politics and International Studies"      
-    ## [359] "Social and Political Science"            
-    ## [360] "Politics and International Studies"      
-    ## [361] "Geography Politics and Sociology"        
-    ## [362] "Hist, Anthrop, Philos & Politics"        
-    ## [363] "Economic, Social & Political Sci"        
-    ## [364] "Law, Politics and Sociology"             
-    ## [365] "Economic, Social & Political Sci"        
-    ## [366] "Social & Political Science"              
-    ## [367] "Politics & International Relation"       
-    ## [368] "Economic, Social & Political Sci"        
-    ## [369] "Politics"                                
-    ## [370] "Social and Political Science"            
-    ## [371] "Political Science"                       
-    ## [372] "Social and Political Science"            
-    ## [373] "Geography Politics and Sociology"        
-    ## [374] "Hist, Anthrop, Philos & Politics"        
-    ## [375] "Political Economy"                       
-    ## [376] "Geography Politics and Sociology"        
-    ## [377] "Politics, Philosophy & History"          
-    ## [378] "Social and Political Science"            
-    ## [379] "Politics"                                
-    ## [380] "Social & Political Science"              
-    ## [381] "Politics"                                
-    ## [382] "Hist, Anthrop, Philos & Politics"        
-    ## [383] "Politics"                                
-    ## [384] "Political Science"                       
-    ## [385] "Politics"                                
-    ## [386] "Social and Political Science"            
-    ## [387] "Social and Political Science"            
-    ## [388] "Politics and International Studies"      
-    ## [389] "Social and Political Science"            
-    ## [390] "Politics"                                
-    ## [391] "Social and Political Science"            
-    ## [392] "Economic, Social & Political Sci"        
-    ## [393] "Politics and International Relations"    
-    ## [394] "Geography Politics and Sociology"        
-    ## [395] "Hist, Anthrop, Philos & Politics"        
-    ## [396] "Political Economy"                       
-    ## [397] "Social and Political Science"            
-    ## [398] "Geography Politics and Sociology"        
-    ## [399] "Social and Political Science"            
-    ## [400] "Economic, Social & Political Sci"        
-    ## [401] "Geography Politics and Sociology"        
-    ## [402] "Politics"                                
-    ## [403] "Geography Politics and Sociology"        
-    ## [404] "Area Stud, Hist, Politics & Lit"         
-    ## [405] "Politics"                                
-    ## [406] "Social and Political Science"            
-    ## [407] "Politics"                                
-    ## [408] "Social & Political Science"              
-    ## [409] "Politics"                                
-    ## [410] "Politics"                                
-    ## [411] "Political Economy"                       
-    ## [412] "Economic, Social & Political Sci"        
-    ## [413] "Politics and International Studies"      
-    ## [414] "Social & Political Science"              
-    ## [415] "Politics Philosophy Lang & Comms Studies"
-    ## [416] "Geography Politics and Sociology"        
-    ## [417] "Politics"                                
-    ## [418] "Politics & International Relation"       
-    ## [419] "Social & Political Science"              
-    ## [420] "Area Stud, Hist, Politics & Lit"         
-    ## [421] "Political Economy"                       
-    ## [422] "Politics"                                
-    ## [423] "Politics and International Relations"    
-    ## [424] "Politics and International Studies"      
-    ## [425] "Politics and International Relations"    
-    ## [426] "Politics and International Studies"      
-    ## [427] "Politics and International Studies"      
-    ## [428] "Social and Political Science"            
-    ## [429] "Law, Politics and Sociology"             
-    ## [430] "Social and Political Science"            
-    ## [431] "Politics and International Relations"    
-    ## [432] "International Politics"                  
-    ## [433] "Hist, Anthrop, Philos & Politics"        
-    ## [434] "Social & Political Science"              
-    ## [435] "Geography Politics and Sociology"        
-    ## [436] "Politics"                                
-    ## [437] "Politics"                                
-    ## [438] "Politics and International Studies"      
-    ## [439] "Politics and International Studies"      
-    ## [440] "Politics"                                
-    ## [441] "Geography Politics and Sociology"        
-    ## [442] "Economic, Social & Political Sci"        
-    ## [443] "Social and Political Science"            
-    ## [444] "Economic, Social & Political Sci"        
-    ## [445] "Political Science"                       
-    ## [446] "Politics"                                
-    ## [447] "Politics"                                
-    ## [448] "Social and Political Science"            
-    ## [449] "Politics and International Studies"      
-    ## [450] "Politics & International Relation"       
-    ## [451] "Geography Politics and Sociology"        
-    ## [452] "Economic, Social & Political Sci"        
-    ## [453] "Area Stud, Hist, Politics & Lit"         
-    ## [454] "Law, Politics and Sociology"             
-    ## [455] "Geography Politics and Sociology"        
-    ## [456] "Politics"                                
-    ## [457] "Political Science"                       
-    ## [458] "Politics and International Relations"    
-    ## [459] "Politics"                                
-    ## [460] "Politics and International Studies"      
-    ## [461] "Social and Political Science"            
-    ## [462] "Geography Politics and Sociology"        
-    ## [463] "International Politics"                  
-    ## [464] "Geography Politics and Sociology"        
-    ## [465] "Politics Philosophy and Religion"        
-    ## [466] "Politics and International Studies"      
-    ## [467] "Social and Political Science"            
-    ## [468] "International Politics"                  
-    ## [469] "Political Science"                       
-    ## [470] "Politics and International Relations"    
-    ## [471] "Economic, Social & Political Sci"        
-    ## [472] "Politics"                                
-    ## [473] "Social & Political Science"              
-    ## [474] "Politics"                                
-    ## [475] "Social and Political Science"            
-    ## [476] "Politics"                                
-    ## [477] "Politics"                                
-    ## [478] "Social & Political Science"              
-    ## [479] "Politics"                                
-    ## [480] "Politics"                                
-    ## [481] "Politics"                                
-    ## [482] "Social & Political Science"              
-    ## [483] "Politics, Languages and Int Studies"     
-    ## [484] "Geography Politics and Sociology"        
-    ## [485] "Area Stud, Hist, Politics & Lit"         
-    ## [486] "Social & Political Science"              
-    ## [487] "Social and Political Science"            
-    ## [488] "Politics and Public Policy"              
-    ## [489] "Politics"                                
-    ## [490] "Geography Politics and Sociology"        
-    ## [491] "Politics"                                
-    ## [492] "Politics"                                
-    ## [493] "Geography Politics and Sociology"        
-    ## [494] "Political Science"                       
-    ## [495] "Politics"                                
-    ## [496] "Social and Political Science"            
-    ## [497] "Social & Political Science"              
-    ## [498] "Politics and International Studies"      
-    ## [499] "Politics, Languages and Int Studies"     
-    ## [500] "Law, Politics and Sociology"             
-    ## [501] "Politics and International Studies"      
-    ## [502] "Politics"                                
-    ## [503] "Politics"                                
-    ## [504] "Economic, Social & Political Sci"        
-    ## [505] "Economic, Social & Political Sci"        
-    ## [506] "Social and Political Science"            
-    ## [507] "Politics"                                
-    ## [508] "Politics"                                
-    ## [509] "Social & Political Science"              
-    ## [510] "Politics"                                
-    ## [511] "Politics"                                
-    ## [512] "Politics & International Relation"       
-    ## [513] "Social & Political Science"              
-    ## [514] "Politics and International Studies"      
-    ## [515] "International Politics"                  
-    ## [516] "Social and Political Science"            
-    ## [517] "Politics and International Relations"    
-    ## [518] "Politics"                                
-    ## [519] "Economic, Social & Political Sci"        
-    ## [520] "Politics"                                
-    ## [521] "Political Economy"                       
-    ## [522] "Social and Political Science"            
-    ## [523] "Politics"                                
-    ## [524] "Social & Political Science"              
-    ## [525] "Politics"                                
-    ## [526] "Politics and International Relations"    
-    ## [527] "Politics"                                
-    ## [528] "Politics"                                
-    ## [529] "Social and Political Science"            
-    ## [530] "Economic, Social & Political Sci"        
-    ## [531] "Political, Social and International"     
-    ## [532] "Geography Politics and Sociology"        
-    ## [533] "Politics and International Relations"    
-    ## [534] "Politics and International Studies"      
-    ## [535] "Politics and International Studies"      
-    ## [536] "Politics"                                
-    ## [537] "Politics"                                
-    ## [538] "Law, Politics and Sociology"             
-    ## [539] "Politics"                                
-    ## [540] "Social and Political Science"            
-    ## [541] "Politics"                                
-    ## [542] "Politics and International Relations"    
-    ## [543] "Social & Political Science"              
-    ## [544] "Politics"                                
-    ## [545] "Politics"                                
-    ## [546] "Politics, Internatl Relations & Philos"  
-    ## [547] "Politics"                                
-    ## [548] "Politics Philosophy Lang & Comms Studies"
-    ## [549] "Social and Political Science"            
-    ## [550] "Politics and International Relations"    
-    ## [551] "Political Economy"                       
-    ## [552] "Social & Political Science"              
-    ## [553] "Social and Political Science"            
-    ## [554] "Politics, History and Law"               
-    ## [555] "Social & Political Science"              
-    ## [556] "Politics & International Relation"       
-    ## [557] "Political Science"                       
-    ## [558] "Social and Political Science"            
-    ## [559] "Social and Political Science"            
-    ## [560] "Social and Political Science"            
-    ## [561] "Politics and International Studies"      
-    ## [562] "Geography Politics and Sociology"        
-    ## [563] "Geography Politics and Sociology"        
-    ## [564] "Economic, Social & Political Sci"        
-    ## [565] "Geography Politics and Sociology"        
-    ## [566] "Politics"                                
-    ## [567] "Politics"                                
-    ## [568] "Social and Political Science"            
-    ## [569] "Politics"                                
-    ## [570] "International Politics"                  
-    ## [571] "Politics and International Relations"    
-    ## [572] "Politics"                                
-    ## [573] "Social and Political Science"            
-    ## [574] "Economic, Social & Political Sci"        
-    ## [575] "Social and Political Science"            
-    ## [576] "Politics"                                
-    ## [577] "Law, Politics and Sociology"             
-    ## [578] "Politics and International Studies"      
-    ## [579] "Social and Political Science"            
-    ## [580] "Politics"                                
-    ## [581] "Politics & International Relation"       
-    ## [582] "Politics"                                
-    ## [583] "Politics"                                
-    ## [584] "Politics and International Studies"      
-    ## [585] "Politics"                                
-    ## [586] "Politics and International Studies"      
-    ## [587] "Politics"                                
-    ## [588] "Social & Political Science"              
-    ## [589] "Politics"                                
-    ## [590] "Politics"                                
-    ## [591] "Economic, Social & Political Sci"        
-    ## [592] "Social and Political Science"            
-    ## [593] "Social & Political Science"              
-    ## [594] "Politics and International Studies"      
-    ## [595] "Politics"                                
-    ## [596] "Politics and International Studies"      
-    ## [597] "Politics"                                
-    ## [598] "Social & Political Science"              
-    ## [599] "Geography Politics and Sociology"        
-    ## [600] "Politics and International Relations"    
-    ## [601] "Politics"                                
-    ## [602] "Economic, Social & Political Sci"        
-    ## [603] "Geography Politics and Sociology"        
-    ## [604] "Politics and International Relations"    
-    ## [605] "Political Economy"                       
-    ## [606] "Politics and International Relations"    
-    ## [607] "Social and Political Science"            
-    ## [608] "Social and Political Science"            
-    ## [609] "Social and Political Science"            
-    ## [610] "Politics"                                
-    ## [611] "Social and Political Science"            
-    ## [612] "Social and Political Science"            
-    ## [613] "Politics and International Studies"      
-    ## [614] "Hist, Anthrop, Philos & Politics"        
-    ## [615] "Social & Political Science"              
-    ## [616] "Social & Political Science"              
-    ## [617] "Social & Political Science"              
-    ## [618] "Politics"                                
-    ## [619] "Economic, Social & Political Sci"        
-    ## [620] "Politics Philosophy and Religion"        
-    ## [621] "Geography Politics and Sociology"        
-    ## [622] "Economic, Social & Political Sci"        
-    ## [623] "Political Science"                       
-    ## [624] "Social and Political Science"            
-    ## [625] "Politics and International Studies"      
-    ## [626] "Politics and International Relations"    
-    ## [627] "Law, Politics and Sociology"             
-    ## [628] "Economic, Social & Political Sci"        
-    ## [629] "Politics"                                
-    ## [630] "Social and Political Science"            
-    ## [631] "Political Economy"                       
-    ## [632] "Social & Political Science"              
-    ## [633] "Politics, Internatl Relations & Philos"  
-    ## [634] "Politics and International Studies"      
-    ## [635] "Law, Politics and Sociology"             
-    ## [636] "Social and Political Science"            
-    ## [637] "Politics and International Relations"    
-    ## [638] "Politics"                                
-    ## [639] "Politics & International Relation"       
-    ## [640] "Politics"                                
-    ## [641] "Economic, Social & Political Sci"        
-    ## [642] "Government and Politics"                 
-    ## [643] "Politics"                                
-    ## [644] "Political Science"                       
-    ## [645] "Politics and International Studies"      
-    ## [646] "Politics and International Studies"      
-    ## [647] "Politics"                                
-    ## [648] "Politics & International Relation"       
-    ## [649] "Political Economy"                       
-    ## [650] "Politics, Languages and Int Studies"     
-    ## [651] "Politics"                                
-    ## [652] "Social and Political Science"            
-    ## [653] "Geography Politics and Sociology"        
-    ## [654] "Politics and International Relations"    
-    ## [655] "Social and Political Science"            
-    ## [656] "Social & Political Science"              
-    ## [657] "Politics"                                
-    ## [658] "Politics & International Relation"       
-    ## [659] "Geography Politics and Sociology"        
-    ## [660] "Politics"                                
-    ## [661] "Politics and International Studies"      
-    ## [662] "Politics, Languages and Int Studies"     
-    ## [663] "Politics"                                
-    ## [664] "Politics, History and Law"               
-    ## [665] "Economic, Social & Political Sci"        
-    ## [666] "Politics and International Studies"      
-    ## [667] "Social & Political Science"              
-    ## [668] "Politics and International Studies"      
-    ## [669] "Social and Political Science"            
-    ## [670] "Politics"                                
-    ## [671] "Politics and International Relations"    
-    ## [672] "International Politics"                  
-    ## [673] "Politics and International Relations"    
-    ## [674] "Politics and International Studies"      
-    ## [675] "Politics"                                
-    ## [676] "Politics and International Studies"      
-    ## [677] "Politics and International Studies"      
-    ## [678] "Geography Politics and Sociology"        
-    ## [679] "Politics and International Studies"      
-    ## [680] "Politics and International Studies"      
-    ## [681] "Geography Politics and Sociology"        
-    ## [682] "Political Economy"                       
-    ## [683] "Social and Political Science"            
-    ## [684] "Geography Politics and Sociology"        
-    ## [685] "Politics"                                
-    ## [686] "Social and Political Science"            
-    ## [687] "Area Stud, Hist, Politics & Lit"         
-    ## [688] "Politics & International Relation"       
-    ## [689] "Politics and International Relations"    
-    ## [690] "Political Economy"                       
-    ## [691] "Law, Politics and Sociology"             
-    ## [692] "Social & Political Science"              
-    ## [693] "Politics and International Studies"      
-    ## [694] "Political Science"                       
-    ## [695] "Geography Politics and Sociology"        
-    ## [696] "Social and Political Science"            
-    ## [697] "Politics"                                
-    ## [698] "Politics"                                
-    ## [699] "Politics and International Studies"      
-    ## [700] "Hist, Anthrop, Philos & Politics"        
-    ## [701] "Politics"                                
-    ## [702] "Politics and International Studies"      
-    ## [703] "Social & Political Science"              
-    ## [704] "Politics"                                
-    ## [705] "Geography Politics and Sociology"        
-    ## [706] "Politics"                                
-    ## [707] "Social and Political Science"            
-    ## [708] "Economic, Social & Political Sci"        
-    ## [709] "Geography Politics and Sociology"        
-    ## [710] "Geography Politics and Sociology"        
-    ## [711] "Politics"                                
-    ## [712] "Social and Political Science"            
-    ## [713] "Politics"                                
-    ## [714] "Social and Political Science"            
-    ## [715] "Politics"                                
-    ## [716] "Politics and International Studies"      
-    ## [717] "Economic, Social & Political Sci"        
-    ## [718] "Politics & International Relation"       
-    ## [719] "Social and Political Science"            
-    ## [720] "Geography Politics and Sociology"        
-    ## [721] "Politics"                                
-    ## [722] "Geography Politics and Sociology"        
-    ## [723] "Law, Politics and Sociology"             
-    ## [724] "Economic, Social & Political Sci"        
-    ## [725] "Political Science"                       
-    ## [726] "Economic, Social & Political Sci"        
-    ## [727] "Geography Politics and Sociology"        
-    ## [728] "Social and Political Science"            
-    ## [729] "International Politics"                  
-    ## [730] "Politics"                                
-    ## [731] "Social and Political Science"            
-    ## [732] "Area Stud, Hist, Politics & Lit"         
-    ## [733] "Social and Political Science"            
-    ## [734] "Politics"                                
-    ## [735] "Politics"                                
-    ## [736] "Geography Politics and Sociology"        
-    ## [737] "Social & Political Science"              
-    ## [738] "Politics"                                
-    ## [739] "International Politics"                  
-    ## [740] "Politics Int Stu and Philosophy"         
-    ## [741] "Social & Political Science"              
-    ## [742] "Politics and International Relations"    
-    ## [743] "Political Economy"                       
-    ## [744] "Hist, Anthrop, Philos & Politics"        
-    ## [745] "Geography Politics and Sociology"        
-    ## [746] "Social and Political Science"            
-    ## [747] "Social and Political Science"            
-    ## [748] "Politics"                                
-    ## [749] "Politics and International Studies"      
-    ## [750] "Geography Politics and Sociology"        
-    ## [751] "Economic, Social & Political Sci"        
-    ## [752] "Social & Political Science"              
-    ## [753] "Politics"                                
-    ## [754] "Geography Politics and Sociology"        
-    ## [755] "Law, Politics and Sociology"             
-    ## [756] "Social and Political Science"            
-    ## [757] "Politics and International Studies"      
-    ## [758] "Political, Social and International"     
-    ## [759] "Politics"                                
-    ## [760] "Social and Political Science"            
-    ## [761] "Politics and International Studies"      
-    ## [762] "Social and Political Science"            
-    ## [763] "Politics"                                
-    ## [764] "Politics and Public Policy"              
-    ## [765] "Politics and International Studies"      
-    ## [766] "Social and Political Science"            
-    ## [767] "Social & Political Science"              
-    ## [768] "Economic, Social & Political Sci"        
-    ## [769] "Politics and International Studies"      
-    ## [770] "Social & Political Science"              
-    ## [771] "Social and Political Science"            
-    ## [772] "Political Economy"                       
-    ## [773] "Social and Political Science"            
-    ## [774] "Social & Political Science"              
-    ## [775] "Politics and International Studies"      
-    ## [776] "Economic, Social & Political Sci"        
-    ## [777] "Politics"                                
-    ## [778] "Politics and International Studies"      
-    ## [779] "Social & Political Science"              
-    ## [780] "Economic, Social & Political Sci"        
-    ## [781] "Politics and International Studies"      
-    ## [782] "Politics"                                
-    ## [783] "Social & Political Science"              
-    ## [784] "Politics and Public Policy"              
-    ## [785] "Social & Political Science"              
-    ## [786] "Geography Politics and Sociology"        
-    ## [787] "Politics"                                
-    ## [788] "Politics"                                
-    ## [789] "Politics"                                
-    ## [790] "Social and Political Science"            
-    ## [791] "Geography Politics and Sociology"        
-    ## [792] "Social and Political Science"            
-    ## [793] "Politics and International Studies"      
-    ## [794] "Hist, Anthrop, Philos & Politics"        
-    ## [795] "Politics"                                
-    ## [796] "Social & Political Science"              
-    ## [797] "Politics"                                
-    ## [798] "Political Economy"                       
-    ## [799] "Economic, Social & Political Sci"        
-    ## [800] "Social & Political Science"              
-    ## [801] "Politics"                                
-    ## [802] "Social & Political Science"              
-    ## [803] "Politics and International Relations"    
-    ## [804] "Politics"                                
-    ## [805] "Political Science"                       
-    ## [806] "Politics and International Relations"    
-    ## [807] "Social & Political Science"              
-    ## [808] "Area Stud, Hist, Politics & Lit"         
-    ## [809] "Politics & International Relation"       
-    ## [810] "Social and Political Science"            
-    ## [811] "Politics"                                
-    ## [812] "Law, Politics and Sociology"             
-    ## [813] "Politics"                                
-    ## [814] "Politics, Internatl Relations & Philos"  
-    ## [815] "Social & Political Science"              
-    ## [816] "Political Economy"                       
-    ## [817] "Politics"                                
-    ## [818] "Politics"                                
-    ## [819] "Geography Politics and Sociology"        
-    ## [820] "Political Science"                       
-    ## [821] "Politics and International Relations"    
-    ## [822] "Politics"                                
-    ## [823] "Politics"                                
-    ## [824] "Social and Political Science"            
-    ## [825] "Social & Political Science"              
-    ## [826] "Social & Political Science"              
-    ## [827] "Politics"                                
-    ## [828] "Social & Political Science"              
-    ## [829] "Politics"                                
-    ## [830] "Geography Politics and Sociology"        
-    ## [831] "Social and Political Science"            
-    ## [832] "Economic, Social & Political Sci"        
-    ## [833] "Politics"                                
-    ## [834] "Social & Political Science"              
-    ## [835] "Politics"                                
-    ## [836] "Politics and International Relations"    
-    ## [837] "International Politics"                  
-    ## [838] "Geography Politics and Sociology"        
-    ## [839] "Law, Politics and Sociology"             
-    ## [840] "Hist, Anthrop, Philos & Politics"        
-    ## [841] "Social & Political Science"              
-    ## [842] "Politics"                                
-    ## [843] "Social and Political Science"            
-    ## [844] "Economics and Politics"                  
-    ## [845] "Economic, Social & Political Sci"        
-    ## [846] "Economic, Social & Political Sci"        
-    ## [847] "Politics"                                
-    ## [848] "Geography Politics and Sociology"        
-    ## [849] "Politics"                                
-    ## [850] "Hist, Anthrop, Philos & Politics"        
-    ## [851] "Law, Politics and Sociology"             
-    ## [852] "Political Economy"                       
-    ## [853] "Politics, Philosophy & History"          
-    ## [854] "Social & Political Science"              
-    ## [855] "Politics"                                
-    ## [856] "Politics and International Relations"    
-    ## [857] "Social & Political Science"              
-    ## [858] "Politics & International Relation"       
-    ## [859] "Politics"                                
-    ## [860] "Politics"                                
-    ## [861] "Politics"                                
-    ## [862] "Politics"                                
-    ## [863] "International Politics"                  
-    ## [864] "Hist, Anthrop, Philos & Politics"        
-    ## [865] "Politics and International Studies"      
-    ## [866] "Economic, Social & Political Sci"        
-    ## [867] "Politics and International Studies"      
-    ## [868] "Politics"                                
-    ## [869] "Social and Political Science"            
-    ## [870] "Politics and International Studies"      
-    ## [871] "Politics, Languages and Int Studies"     
-    ## [872] "Social and Political Science"            
-    ## [873] "Politics and International Studies"      
-    ## [874] "Politics Philosophy and Religion"        
-    ## [875] "Social and Political Science"            
-    ## [876] "Politics & International Relation"       
-    ## [877] "Politics and International Relations"    
-    ## [878] "Economics & Politics"                    
-    ## [879] "Social & Political Science"              
-    ## [880] "Social and Political Science"            
-    ## [881] "Geography Politics and Sociology"        
-    ## [882] "Politics Philosophy Lang & Comms Studies"
-    ## [883] "Law, Politics and Sociology"             
-    ## [884] "Social and Political Science"            
-    ## [885] "Politics and International Relations"    
-    ## [886] "Social & Political Science"              
-    ## [887] "Social and Political Science"            
-    ## [888] "Politics"                                
-    ## [889] "Social and Political Science"            
-    ## [890] "Political Science"                       
-    ## [891] "Geography Politics and Sociology"        
-    ## [892] "Social & Political Science"              
-    ## [893] "Politics"                                
-    ## [894] "Economic, Social & Political Sci"        
-    ## [895] "Hist, Anthrop, Philos & Politics"        
-    ## [896] "Social and Political Science"            
-    ## [897] "Social and Political Science"            
-    ## [898] "Social and Political Science"            
-    ## [899] "Geography Politics and Sociology"        
-    ## [900] "Politics"                                
-    ## [901] "Politics"                                
-    ## [902] "Politics"                                
-    ## [903] "Area Stud, Hist, Politics & Lit"         
-    ## [904] "Politics and International Studies"      
-    ## [905] "Social and Political Science"            
-    ## [906] "Economic, Social & Political Sci"        
-    ## [907] "Politics"                                
-    ## [908] "Social and Political Science"            
-    ## [909] "Social & Political Science"              
-    ## [910] "Politics and International Studies"      
-    ## [911] "Economic, Social & Political Sci"        
-    ## [912] "Social and Political Science"            
-    ## [913] "Politics"                                
-    ## [914] "Politics, Languages and Int Studies"     
-    ## [915] "Social and Political Science"            
-    ## [916] "Political Science"                       
-    ## [917] "Economic, Social & Political Sci"        
-    ## [918] "Politics and International Studies"      
-    ## [919] "Hist, Anthrop, Philos & Politics"        
-    ## [920] "Geography Politics and Sociology"        
-    ## [921] "Politics and International Relations"    
-    ## [922] "Politics Philosophy Lang & Comms Studies"
-    ## [923] "Politics Philosophy and Religion"        
-    ## [924] "Geography Politics and Sociology"        
-    ## [925] "Politics"                                
-    ## [926] "Social and Political Science"            
-    ## [927] "Politics"                                
-    ## [928] "Politics"                                
-    ## [929] "Politics"                                
-    ## [930] "Geography Politics and Sociology"        
-    ## [931] "Politics, Languages and Int Studies"     
-    ## [932] "Political Science"                       
-    ## [933] "Politics & International Relation"       
-    ## [934] "Social & Political Science"              
-    ## [935] "Area Stud, Hist, Politics & Lit"         
-    ## [936] "Politics and International Studies"      
-    ## [937] "Social and Political Science"            
-    ## [938] "Social and Political Science"            
-    ## [939] "Social and Political Science"            
-    ## [940] "Economic, Social & Political Sci"        
-    ## [941] "Political Economy"                       
-    ## [942] "International Politics"                  
-    ## [943] "Social & Political Science"              
-    ## [944] "Politics"                                
-    ## [945] "Economic, Social & Political Sci"        
-    ## [946] "Politics"                                
-    ## [947] "Economic, Social & Political Sci"        
-    ## [948] "Political Science"                       
-    ## [949] "Politics"                                
-    ## [950] "Politics and International Studies"      
-    ## [951] "Economic, Social & Political Sci"        
-    ## [952] "Social and Political Science"            
-    ## [953] "Social and Political Science"            
-    ## [954] "Politics"                                
-    ## [955] "Politics & International Relation"       
-    ## [956] "Political Economy"                       
-    ## [957] "Politics"
+Mapped GtR subjects to categories according to:
+
+-   Area Studies: Area Studies
+-   Demography: Demography, Demography & human geography
+-   Development studies: Development studies
+-   Economics: Economics
+-   Education: Education
+-   Environmental planning: Environmental planning
+-   History: History
+-   Human Geography: Human Geography
+-   Law & legal studies: Law & legal studies
+-   Linguistics: Linguistics, Languages & Literature
+-   Management & business studies: Management & Business Studies
+-   Political science. & international studies: Pol. sci. & internat.
+    studies
+-   Psychology: Psychology
+-   Science and Technology Studies: Science and Technology Studies
+-   Social anthropology: Social Anthropology
+-   Social policy: Social Policy
+-   Social work: Social Work
+-   Sociology: Sociology
+-   Tools, technologies & methods: “Tools, technologies & methods”
+-   Other: RCUK Programmes, Genetics & development, Climate & Climate
+    Change, Media, “Ecol, biodivers. & systematics”, Civil eng. & built
+    environment, Info. & commun. Technol., Medical & health interface,
+    Visual arts, Design, Complexity Science, “Pollution, waste &
+    resources”, Terrest. & freshwater environ., Agri-environmental
+    science, Food science & nutrition, Environmental Engineering,
+    Manufacturing, Drama & theatre studies, Cultural & museum studies,
+    Philosophy, Animal Science, Energy, Mathematical sciences,
+    Archaeology, Music, “Theology, divinity & religion”, Library &
+    information studies, Astronomy - observation, Astronomy - theory,
+    Particle Astrophysics, Bioengineering, Cell biology, Process
+    engineering, Omic sciences & technologies, Systems engineering,
+    Marine environments, Atmospheric phys. & chemistry, Plant & crop
+    science, Electrical Engineering, Dance, Chemical measurement,
+    Geosciences, Microbial sciences, Mechanical Engineering, Classics,
+    Catalysis & surfaces, Materials sciences, Instrument. sensor &
+    detectors, Materials Processing
+-   Uncategorised: NA
+
+Looking at the number and award amount for these categories we get:
+
+| Category                                   | Number of awards | Award (£)     |
+|:-------------------------------------------|:-----------------|:--------------|
+| Other                                      | 1,720            | 1,309,234,143 |
+| Economics                                  | 1,205            | 977,428,081   |
+| Sociology                                  | 2,120            | 973,573,071   |
+| Uncategorised                              | 4,200            | 669,095,758   |
+| Psychology                                 | 1,563            | 576,619,954   |
+| Social policy                              | 1,144            | 561,063,960   |
+| Demography                                 | 736              | 430,479,646   |
+| Development studies                        | 900              | 402,851,786   |
+| Education                                  | 835              | 402,210,888   |
+| Human Geography                            | 593              | 390,230,574   |
+| Tools, technologies & methods              | 605              | 386,282,277   |
+| Political science. & international studies | 1,164            | 358,095,877   |
+| Management & business studies              | 788              | 330,816,871   |
+| Social anthropology                        | 494              | 170,802,980   |
+| Law & legal studies                        | 474              | 148,830,877   |
+| Linguistics                                | 394              | 119,954,626   |
+| History                                    | 318              | 114,823,355   |
+| Environmental planning                     | 273              | 101,139,857   |
+| Social work                                | 212              | 86,945,821    |
+| Science and Technology Studies             | 152              | 61,595,683    |
+| Area Studies                               | 129              | 48,469,980    |
+
+Looking at the `Other` category in more detail:
+
+| Subject                        | Number of awards | Award (£)   |
+|:-------------------------------|:-----------------|:------------|
+| RCUK Programmes                | 376              | 327,072,642 |
+| Medical & health interface     | 296              | 313,307,633 |
+| Genetics & development         | 31               | 95,931,632  |
+| Info. & commun. Technol.       | 143              | 89,426,259  |
+| Civil eng. & built environment | 80               | 50,878,362  |
+| Climate & Climate Change       | 63               | 47,109,029  |
+| Visual arts                    | 56               | 35,161,484  |
+| Mathematical sciences          | 41               | 33,321,846  |
+| Design                         | 59               | 30,522,406  |
+| Agri-environmental science     | 45               | 29,990,577  |
+| Complexity Science             | 35               | 24,456,399  |
+| Library & information studies  | 8                | 24,365,609  |
+| Media                          | 82               | 24,324,123  |
+| Energy                         | 39               | 22,011,030  |
+| Ecol, biodivers. & systematics | 25               | 19,386,080  |
+| Animal Science                 | 47               | 17,671,897  |
+| Food science & nutrition       | 43               | 16,667,374  |
+| Philosophy                     | 46               | 14,391,571  |
+| Theology, divinity & religion  | 19               | 12,174,365  |
+| Pollution, waste & resources   | 17               | 10,958,985  |
+| Cultural & museum studies      | 45               | 9,677,686   |
+| Environmental Engineering      | 8                | 9,585,824   |
+| Terrest. & freshwater environ. | 11               | 9,306,244   |
+| Mechanical Engineering         | 4                | 6,121,077   |
+| Microbial sciences             | 7                | 5,341,318   |
+| Drama & theatre studies        | 13               | 4,189,840   |
+| Omic sciences & technologies   | 5                | 2,984,565   |
+| Manufacturing                  | 12               | 2,681,523   |
+| Atmospheric phys. & chemistry  | 2                | 2,485,475   |
+| Systems engineering            | 4                | 2,447,945   |
+| Bioengineering                 | 3                | 2,349,845   |
+| Geosciences                    | 10               | 2,303,237   |
+| Music                          | 10               | 1,922,717   |
+| Electrical Engineering         | 8                | 1,799,765   |
+| Marine environments            | 4                | 1,534,490   |
+| Cell biology                   | 3                | 1,103,904   |
+| Plant & crop science           | 1                | 876,346     |
+| Archaeology                    | 5                | 755,745     |
+| Materials Processing           | 1                | 614,537     |
+| Classics                       | 1                | 604,605     |
+| Dance                          | 2                | 304,808     |
+| Materials sciences             | 3                | 286,101     |
+| Process engineering            | 3                | 244,452     |
+| Astronomy - observation        | 1                | 154,236     |
+| Astronomy - theory             | 1                | 154,236     |
+| Particle Astrophysics          | 1                | 154,236     |
+| Catalysis & surfaces           | 1                | 120,083     |
+
+There are some large items near the top. If we only focus on currently
+active projects we get:
+
+| Category                                   | Number of awards | Award (£)   |
+|:-------------------------------------------|:-----------------|:------------|
+| Other                                      | 693              | 930,538,696 |
+| Uncategorised                              | 3,480            | 525,669,962 |
+| Economics                                  | 233              | 460,369,620 |
+| Sociology                                  | 409              | 388,269,450 |
+| Social policy                              | 233              | 280,841,039 |
+| Human Geography                            | 246              | 263,433,315 |
+| Development studies                        | 193              | 218,904,193 |
+| Psychology                                 | 307              | 192,422,408 |
+| Demography                                 | 49               | 185,308,260 |
+| Education                                  | 163              | 160,058,416 |
+| Management & business studies              | 144              | 142,451,796 |
+| Political science. & international studies | 193              | 120,737,876 |
+| Tools, technologies & methods              | 70               | 105,021,249 |
+| Law & legal studies                        | 95               | 66,171,046  |
+| Social anthropology                        | 102              | 62,749,981  |
+| Social work                                | 47               | 45,960,023  |
+| Environmental planning                     | 50               | 43,212,649  |
+| Science and Technology Studies             | 66               | 38,907,035  |
+| Area Studies                               | 60               | 33,095,666  |
+| Linguistics                                | 61               | 26,028,868  |
+| History                                    | 47               | 19,738,089  |
+
+and again looking to see how the `Other` category breakdown for active
+projects only:
+
+| Subject                        | Number of awards | Award (£)   |
+|:-------------------------------|:-----------------|:------------|
+| RCUK Programmes                | 139              | 284,394,917 |
+| Medical & health interface     | 124              | 212,894,423 |
+| Genetics & development         | 4                | 61,270,745  |
+| Info. & commun. Technol.       | 65               | 48,791,910  |
+| Civil eng. & built environment | 33               | 37,605,408  |
+| Climate & Climate Change       | 25               | 33,386,120  |
+| Visual arts                    | 32               | 30,473,965  |
+| Library & information studies  | 1                | 21,847,174  |
+| Agri-environmental science     | 17               | 20,963,719  |
+| Design                         | 27               | 20,055,994  |
+| Mathematical sciences          | 13               | 19,648,064  |
+| Energy                         | 17               | 17,387,671  |
+| Media                          | 30               | 14,457,597  |
+| Ecol, biodivers. & systematics | 10               | 14,224,739  |
+| Pollution, waste & resources   | 9                | 9,540,993   |
+| Environmental Engineering      | 6                | 9,534,670   |
+| Theology, divinity & religion  | 5                | 8,909,886   |
+| Complexity Science             | 16               | 8,768,043   |
+| Food science & nutrition       | 19               | 7,990,182   |
+| Terrest. & freshwater environ. | 5                | 7,690,792   |
+| Animal Science                 | 14               | 7,293,905   |
+| Philosophy                     | 14               | 4,598,585   |
+| Cultural & museum studies      | 15               | 4,107,551   |
+| Drama & theatre studies        | 8                | 3,471,565   |
+| Microbial sciences             | 2                | 2,874,555   |
+| Atmospheric phys. & chemistry  | 2                | 2,485,475   |
+| Bioengineering                 | 2                | 2,271,473   |
+| Systems engineering            | 3                | 2,181,855   |
+| Electrical Engineering         | 7                | 1,772,626   |
+| Geosciences                    | 4                | 1,647,627   |
+| Marine environments            | 3                | 1,382,052   |
+| Music                          | 4                | 1,255,555   |
+| Manufacturing                  | 5                | 1,228,365   |
+| Cell biology                   | 3                | 1,103,904   |
+| Plant & crop science           | 1                | 876,346     |
+| Materials Processing           | 1                | 614,537     |
+| Classics                       | 1                | 604,605     |
+| Omic sciences & technologies   | 2                | 430,295     |
+| Mechanical Engineering         | 3                | 395,522     |
+| Process engineering            | 1                | 95,408      |
+| Archaeology                    | 1                | 9,878       |
 
 # ToDo Items
 

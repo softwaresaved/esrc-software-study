@@ -100,6 +100,9 @@ UK Research Councils were formed in different years (source: [wikipedia](https:/
 | Research England                                                  | 2018  |
 | UKRI                                                              | 2018  |
 
+Although strictly speaking it was the *Social Science Research Council* (SSRC) that
+came into being in 1965 and it was not until 1983 that the SSRC was renamed the Economic and Social Research Council (ESRC).
+
 # Overall expenditure
 
 We start by doing a brief overview of all the data obtained from the Gateway to 
@@ -114,12 +117,12 @@ Expenditure for the whole period under consideration is shown in the graph below
 gtrdat %>% filter(!is.na(AwardPounds))                                   %>% 
            select(FundingOrgName, AwardPounds)                           %>% 
            group_by(FundingOrgName)                                      %>% 
-           summarise(TotalExpenditure = round(sum(AwardPounds)/1000000)) %>% 
+           summarise(TotalExpenditure = round(sum(AwardPounds)/1e6))     %>% 
            filter(!is.na(TotalExpenditure))                              %>% 
            ggplot(aes(x = FundingOrgName, y = TotalExpenditure)) + 
            geom_col(colour="black",fill="red") +
            xlab("Funding organisation") + 
-           ylab("Expenditure (in million of pounds)") +
+           ylab("Expenditure (million £s)") +
            theme_bw() + scale_y_log10()
           
 ```
@@ -131,7 +134,7 @@ The same information in tabular format:
 gtrdat %>% filter(!is.na(AwardPounds))                                     %>% 
            select(FundingOrgName, AwardPounds)                             %>% 
            group_by(FundingOrgName)                                        %>% 
-           summarise(TotalExpenditure = round(sum(AwardPounds)/1000000))   %>% 
+           summarise(TotalExpenditure = round(sum(AwardPounds)/1e6))       %>% 
            filter(!is.na(TotalExpenditure))                                %>% 
            arrange(desc(TotalExpenditure))                                 %>% 
            mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>%
@@ -183,7 +186,7 @@ gtrdat %>% filter(!is.na(AwardPounds))                                          
            summarise(TotalExpenditure = round(sum(AwardPounds)),
                   TotalAwards = n())                                                %>%
            mutate(AvgAward = 
-                    as.numeric(round(TotalExpenditure/TotalAwards)))         %>% 
+                    as.numeric(round(TotalExpenditure/TotalAwards)))                %>% 
            select(FundingOrgName, TotalAwards, TotalExpenditure, AvgAward)          %>% 
            arrange(desc(as.numeric(AvgAward)))                                      %>% 
            mutate(across(where(is.numeric), ~ format(., big.mark = ",")))           %>%
@@ -232,9 +235,9 @@ gtrdat %>% filter(!is.na(AwardPounds)  & !is.na(StartDate))              %>%
            group_by(year, FundingOrgName)                                %>% 
            summarise(TotalExpenditure = round(sum(AwardPounds)/1e6), 
                      .groups = "keep")                                   %>% 
-           filter(!is.na(TotalExpenditure))                              %>% 
+           filter(!is.na(TotalExpenditure) & TotalExpenditure > 0)       %>% 
            ggplot(aes(x = year, y = TotalExpenditure, fill = FundingOrgName)) + 
-           geom_col(colour="black") +
+           geom_col(colour="black", na.rm = TRUE) +
            xlab("Year") + labs(fill = "Funding Org") +
            ylab("Expenditure (in million of pounds)") +
            theme_bw() + scale_y_log10()
@@ -274,7 +277,7 @@ The graph below only contains values for currently active projects:
 gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))              %>% 
            select(FundingOrgName, AwardPounds)                           %>% 
            group_by(FundingOrgName)                                      %>% 
-           summarise(TotalExpenditure = round(sum(AwardPounds)/1000000)) %>% 
+           summarise(TotalExpenditure = round(sum(AwardPounds)/1e6))     %>% 
            filter(!is.na(TotalExpenditure))                              %>% 
            ggplot(aes(x = FundingOrgName, y = TotalExpenditure)) + 
            geom_col(colour="black",fill="red") +
@@ -291,7 +294,7 @@ The same information in tabular format:
 gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))                %>% 
            select(FundingOrgName, AwardPounds)                             %>% 
            group_by(FundingOrgName)                                        %>% 
-           summarise(TotalExpenditure = round(sum(AwardPounds)/1000000))   %>% 
+           summarise(TotalExpenditure = round(sum(AwardPounds)/1e6))       %>% 
            filter(!is.na(TotalExpenditure))                                %>% 
            arrange(desc(TotalExpenditure))                                 %>% 
            mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>%
@@ -393,11 +396,11 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds) &
            group_by(year, FundingOrgName)                                %>% 
            summarise(TotalExpenditure = round(sum(AwardPounds)/1e6), 
                      .groups = "keep")                                   %>% 
-           filter(!is.na(TotalExpenditure))                              %>% 
+           filter(!is.na(TotalExpenditure) & TotalExpenditure > 0)       %>% 
            ggplot(aes(x = year, y = TotalExpenditure, fill = FundingOrgName)) + 
-           geom_col(colour="black") +
+           geom_col(colour="black", na.rm = TRUE) +
            xlab("Year") + labs(fill = "Funding Org") +
-           ylab("Expenditure (in million of pounds)") +
+           ylab("Expenditure (million of £s)") +
            theme_bw() + scale_y_log10()
           
 ```
@@ -886,23 +889,263 @@ Classify the department of the Principal Investigator (assuming that the departm
 * Tools, technologies & methods
 * Other
 
-```{r ESRC_Categories, echo = FALSE}
+Derived from decomposition of previous ESRC expenditure in 
+[ESRC application and success rate data and analysis](https://www.ukri.org/publications/esrc-application-and-success-rate-data-and-analysis/)
+reports. The GtR subject classification has been mapped to the above scheme
+and where no such data is available the "Unclassified" type is used.
+
+```{r Read_subjects, echo = FALSE}
 
 # Categories to use
-categories <- c("Area Studies", "Demography", "Development studies", 
-                "Economics", "Education", "Environmental planning", "History", 
-                "Human Geography", "Law & legal studies", "Linguistics", 
-                "Management & business studies", 
+categories <- c("Area Studies",
+                "Demography",
+                "Development studies",
+                "Economics",
+                "Education",
+                "Environmental planning",
+                "History",
+                "Human Geography",
+                "Law & legal studies",
+                "Linguistics",
+                "Management & business studies",
                 "Political science. & international studies",
-                "Psychology", "Science and Technology Studies", 
-                "Social anthropology", "Social policy",
-                "Social work", "Sociology", "Tools, technologies & methods", 
+                "Psychology",
+                "Science and Technology Studies",
+                "Social anthropology",
+                "Social policy",
+                "Social work",
+                "Sociology",
+                "Tools, technologies & methods",
                 "Other")
 
-# Assign categories
-esrcdat$Category <- NULL
+# Define subject column types  to read from file
+columns <- cols(
+  id = col_character(),
+  text = col_character(),
+  percentage = col_double(),
+  encodedText = col_character(),
+  status = col_character(),
+  grantReference = col_character(),
+  grantCategory = col_character()
+)
 
-grep("Politic", esrcdat$CleanDep, value = TRUE, ignore.case = TRUE)
+# read in the subject data
+subjects <- read_csv(file = "../Data/subjects.csv", col_types = columns)
+
+# Join with the esrc data
+esrc_subjects <- esrcdat %>%
+                 left_join(subjects, by = c("ProjectReference" = "grantReference")) %>%
+                 select( -percentage, -status, -grantCategory)
+```
+
+```{r Assign_categories, echo = FALSE}
+
+# Create new column
+esrc_subjects$category <- rep("-",nrow(esrc_subjects))
+
+# Set an uncategorised label
+esrc_subjects$category[is.na(esrc_subjects$text)] <- "Uncategorised"
+
+# Need to reduce the following 71 categories to the above 21 categories
+# including "Other" and "Uncategorised:
+#
+# Management & Business Studies, Development studies, RCUK Programmes,
+# Social Policy, Climate & Climate Change, Education, Human Geography, NA,
+# Genetics & development, Psychology, Social Work, Environmental planning,
+# Sociology, Media, Science and Technology Studies,
+# "Tools, technologies & methods", Pol. sci. & internat. studies,
+# Law & legal studies, "Ecol, biodivers. & systematics",
+# Civil eng. & built environment, Social Anthropology, Economics,
+# Info. & commun. Technol., Languages & Literature, Linguistics,
+# Medical & health interface, History, Visual arts, Demography, Design,
+# Demography & human geography, Complexity Science,
+# "Pollution, waste & resources", Terrest. & freshwater environ.,
+# Agri-environmental science, Food science & nutrition,
+# Environmental Engineering, Manufacturing, Drama & theatre studies,
+# Area Studies, Cultural & museum studies, Philosophy, Animal Science, Energy,
+# Mathematical sciences, Archaeology, Music, "Theology, divinity & religion"
+# Library & information studies, Astronomy - observation, Astronomy - theory,
+# Particle Astrophysics, Bioengineering, Cell biology, Process engineering,
+# Omic sciences & technologies, Systems engineering, Marine environments,
+# Atmospheric phys. & chemistry, Plant & crop science, Electrical Engineering,
+# Dance, Chemical measurement, Geosciences, Microbial sciences,
+# Mechanical Engineering, Classics, Catalysis & surfaces, Materials sciences,
+# Instrument. sensor & detectors, Materials Processing
+
+# Mapping:
+#
+# Area Studies: Area Studies
+# Demography: Demography, Demography & human geography
+# Development studies: Development studies
+# Economics: Economics
+# Education: Education
+# Environmental planning: Environmental planning
+# History: History
+# Human Geography: Human Geography
+# Law & legal studies: Law & legal studies
+# Linguistics: Linguistics, Languages & Literature
+# Management & business studies: Management & Business Studies
+# Political science. & international studies: Pol. sci. & internat. studies
+# Psychology: Psychology
+# Science and Technology Studies: Science and Technology Studies
+# Social anthropology: Social Anthropology
+# Social policy: Social Policy
+# Social work: Social Work
+# Sociology: Sociology
+# Tools, technologies & methods: "Tools, technologies & methods"
+# Other: RCUK Programmes, Genetics & development, Climate & Climate Change,
+#        Media, "Ecol, biodivers. & systematics", Civil eng. & built environment,
+#        Info. & commun. Technol., Medical & health interface,
+#        Visual arts, Design, Complexity Science, "Pollution, waste & resources",
+#        Terrest. & freshwater environ., Agri-environmental science,
+#        Food science & nutrition, Environmental Engineering,
+#        Manufacturing, Drama & theatre studies, Cultural & museum studies,
+#        Philosophy, Animal Science, Energy, Mathematical sciences, Archaeology,
+#        Music, "Theology, divinity & religion", Library & information studies,
+#        Astronomy - observation, Astronomy - theory,
+#        Particle Astrophysics, Bioengineering, Cell biology, Process engineering,
+#        Omic sciences & technologies, Systems engineering, Marine environments,
+#        Atmospheric phys. & chemistry, Plant & crop science, Electrical Engineering,
+#        Dance, Chemical measurement, Geosciences, Microbial sciences,
+#        Mechanical Engineering, Classics, Catalysis & surfaces, Materials sciences,
+#        Instrument. sensor & detectors, Materials Processing
+# Unclassified: NA
+
+# Function to select the right entries and reduce typing
+sel <- function(parseString){
+  return(grepl(parseString, esrc_subjects$text, ignore.case = TRUE))
+}
+
+# assign the categories based on the subjects
+esrc_subjects$category[sel("area")] <- "Area Studies"
+# This also takes Demography and human geography, the latter being another category
+esrc_subjects$category[sel("^demography")] <- "Demography"
+esrc_subjects$category[sel("^development")] <- "Development studies"
+esrc_subjects$category[sel("economics")] <- "Economics"
+esrc_subjects$category[sel("education")] <-  "Education"
+esrc_subjects$category[sel("planning")] <- "Environmental planning"
+esrc_subjects$category[sel("history")] <- "History"
+esrc_subjects$category[sel("^human geography")] <- "Human Geography"
+esrc_subjects$category[sel("law")] <- "Law & legal studies"
+esrc_subjects$category[sel("languages|linguistics")] <- "Linguistics"
+esrc_subjects$category[sel("management")] <- "Management & business studies"
+esrc_subjects$category[sel("pol\\.")] <- "Political science. & international studies"
+esrc_subjects$category[sel("psychology")] <- "Psychology"
+esrc_subjects$category[sel("^science")] <- "Science and Technology Studies"
+esrc_subjects$category[sel("anthropology")] <- "Social anthropology"
+esrc_subjects$category[sel("policy")] <- "Social policy"
+esrc_subjects$category[sel("work")] <- "Social work"
+esrc_subjects$category[sel("sociology")] <- "Sociology"
+esrc_subjects$category[sel("tools|instrument|measurement")] <- "Tools, technologies & methods"
+# Things that do not seem to fit any of the above categories
+esrc_subjects$category[sel(paste0("rcuk|astro|dance|music|gene|museum|",
+                                  "theology|science(s)?$|engineering$|drama|",
+                                  "philo|arch|^omic|bio|info|class|",
+                                  "atmos|design|vis|med|^cat|mar|ener|",
+                                  "manu|materi|clim|poll|terr|civ|food")
+                           )] <- "Other"
+
+# Check all have been assigned
+if(any(esrc_subjects$category == "-")) {
+  warning("There are some unassigned categories: ",
+          unique(esrc_subjects$text[is.na(esrc_subjects$category)]))
+}
+
+```
+
+Mapped GtR subjects to categories according to:
+
+* Area Studies: Area Studies
+* Demography: Demography, Demography & human geography
+* Development studies: Development studies
+* Economics: Economics
+* Education: Education
+* Environmental planning: Environmental planning
+* History: History
+* Human Geography: Human Geography
+* Law & legal studies: Law & legal studies
+* Linguistics: Linguistics, Languages & Literature
+* Management & business studies: Management & Business Studies
+* Political science. & international studies: Pol. sci. & internat. studies
+* Psychology: Psychology
+* Science and Technology Studies: Science and Technology Studies
+* Social anthropology: Social Anthropology
+* Social policy: Social Policy
+* Social work: Social Work
+* Sociology: Sociology
+* Tools, technologies & methods: "Tools, technologies & methods"
+* Other: RCUK Programmes, Genetics & development, Climate & Climate Change,
+       Media, "Ecol, biodivers. & systematics", Civil eng. & built environment,
+       Info. & commun. Technol., Medical & health interface,
+       Visual arts, Design, Complexity Science, "Pollution, waste & resources",
+       Terrest. & freshwater environ., Agri-environmental science,
+       Food science & nutrition, Environmental Engineering,
+       Manufacturing, Drama & theatre studies, Cultural & museum studies,
+       Philosophy, Animal Science, Energy, Mathematical sciences, Archaeology,
+       Music, "Theology, divinity & religion", Library & information studies,
+       Astronomy - observation, Astronomy - theory,
+       Particle Astrophysics, Bioengineering, Cell biology, Process engineering,
+       Omic sciences & technologies, Systems engineering, Marine environments,
+       Atmospheric phys. & chemistry, Plant & crop science, Electrical Engineering,
+       Dance, Chemical measurement, Geosciences, Microbial sciences,
+       Mechanical Engineering, Classics, Catalysis & surfaces, Materials sciences,
+       Instrument. sensor & detectors, Materials Processing
+* Uncategorised: NA
+
+Looking at the number and award amount for these categories we get:
+
+```{r categories1, echo = FALSE}
+
+esrc_subjects %>% select(category, AwardPounds)                                   %>% 
+                  group_by(category)                                              %>% 
+                  summarise(Number = n(), Amount = sum(AwardPounds))              %>%
+                  mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
+                  arrange(desc(Amount))                                           %>% 
+                  kable(format="pipe", align= c("l","l","l"), 
+                  col.names = c("Category", "Number of awards","Award (£)"))    
+```
+
+Looking at the `Other` category in more detail:
+
+```{r categories2, echo = FALSE}
+
+esrc_subjects %>% filter(category == "Other")                                     %>% 
+                  select(text, AwardPounds)                                       %>%
+                  group_by(text)                                                  %>% 
+                  summarise(Number= n(), Amount = sum(AwardPounds))               %>% 
+                  mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
+                  arrange(desc(Amount)) %>% 
+                  kable(format="pipe", align= c("l","l","l"), 
+                  col.names = c("Subject", "Number of awards","Award (£)"))  
+```
+
+There are some large items near the top. If we only focus on currently active projects 
+we get:
+
+```{r categories3, echo = FALSE}
+
+esrc_subjects %>% filter(Status == "Active")                                      %>% 
+                  select(category, AwardPounds)                                   %>% 
+                  group_by(category)                                              %>% 
+                  summarise(Number = n(), Amount = sum(AwardPounds))              %>%
+                  mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
+                  arrange(desc(Amount))                                           %>% 
+                  kable(format="pipe", align= c("l","l","l"), 
+                  col.names = c("Category", "Number of awards","Award (£)"))  
+```
+
+and again looking to see how the `Other` category breakdown for active projects only:
+
+```{r categories4, echo = FALSE}
+
+esrc_subjects %>% filter(category == "Other" & Status == "Active")                %>% 
+                  select(text, AwardPounds)                                       %>%
+                  group_by(text)                                                  %>% 
+                  summarise(Number= n(), Amount = sum(AwardPounds))               %>% 
+                  mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
+                  arrange(desc(Amount)) %>% 
+                  kable(format="pipe", align= c("l","l","l"), 
+                  col.names = c("Subject", "Number of awards","Award (£)"))    
 
 ```
 
