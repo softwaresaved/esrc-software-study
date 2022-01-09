@@ -46,14 +46,8 @@ input_cols <- cols(
 )
 
 # Read the Gateway to Research data
-# Data snapshot from 30th of September 2021.
-# gtrdat <- read_csv("../Data/projectsearch-1636377694679.csv.gz",
-#                    col_types = input_cols)
-# Data snapshot from 28th October 2021.
-# gtrdat <- read_csv("../Data/projectsearch-1633957153275.csv.gz",
-#                    col_types = input_cols)
-# Data snapshot from 23rd November 2021.
-gtrdat <- read_csv("../Data/projectsearch-1639238843837.csv.gz",
+# Data snapshot from 14th December 2021.
+gtrdat <- read_csv("../Data/projectsearch-1641548655542.csv.gz",
                    col_types = input_cols)
 # Clean the data ----------------------------------------------------------
 
