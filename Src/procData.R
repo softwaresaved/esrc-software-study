@@ -34,7 +34,6 @@ inactive_projs <- paste0("../Data/Proj/Inactive/",inactive_projs)
 count <- 1
 
 # Storage to collect software outputs
-#softout <- list()
 softout <-  NULL
 
 # Columns that can appear in a software output df
@@ -82,8 +81,7 @@ for (file in projects) {
     } else {
       softout <- add_row(softout, df)
     }
-    #message("File has software outputs ",file)
-    # softout[[count]] <- output$softwareAndTechnicalProductOutput
+    # Update the number of software outputs
     count <-  count + 1
   }
 
@@ -102,7 +100,6 @@ write_csv(softout, "../Data/softwareoutputs.csv")
 count <- 1
 
 # Storage to collect data outputs
-#dataout <- list()
 dataout <-  NULL
 
 # Columns that can appear in a software output df
@@ -111,7 +108,6 @@ datacols <- c("id", "outcomeId", "title", "description", "type", "impact",
 
 # Combine active and inactive projects
 projects <- c(active_projs, inactive_projs)
-#projects <- c(active_projs)
 
 # Loop round active projects
 for (file in projects) {
@@ -151,8 +147,8 @@ for (file in projects) {
     } else {
       dataout <- add_row(dataout, df)
     }
-    #message("File has software outputs ",file)
-    #dataout[[count]] <- output$researchDatabaseAndModelOutput
+
+    # Increment data outputs by one
     count <-  count + 1
   }
 
