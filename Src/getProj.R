@@ -1,4 +1,4 @@
-#/usr/bin/env Rscript
+#!/usr/bin/env Rscript
 #
 # Code to get json dished from the Gateway to Research web site as opposed
 # to hitting the web-site multiple times. This can be run again to download
@@ -9,10 +9,10 @@
 # Required packages -------------------------------------------------------
 
 # Load packages to be used
-library(readr)
-library(lubridate)
-library(dplyr)
-library(jsonlite)
+library(readr, quietly = TRUE)
+library(lubridate, quietly = TRUE)
+library(dplyr, quietly = TRUE)
+library(jsonlite, quietly = TRUE)
 
 # Read the GtR data -----------------------------------------------------------
 
@@ -45,10 +45,11 @@ input_cols <- cols(
   PIId = col_character()
 )
 
-# Read the Gateway to Research data
+# Read the Gateway to Research data snapshot.
 # Data snapshot from 14th December 2021.
 gtrdat <- read_csv("../Data/projectsearch-1641548655542.csv.gz",
                    col_types = input_cols)
+
 # Clean the data ----------------------------------------------------------
 
 # Remove EndDate >= 2050 or is an NAs - removes 25 values
@@ -70,7 +71,7 @@ for (i in seq_len(nrow(esrcdat))) {
   # Project id
   pid <- esrcdat[["ProjectReference"]][i]
 
-  # Project Status
+  # Project Status - Active/Closed
   status <- esrcdat[["Status"]][i]
 
   # Project URL
@@ -85,9 +86,10 @@ for (i in seq_len(nrow(esrcdat))) {
   # Replace forward slashes with underscores in the file name
   filename <- gsub("/", "_", outfile)
 
-  # Check if the status of a project has changed, i.e. a json file has already
-  # been downloaded as an active project but th project is now closed, remove
-  # the file to download a new instance in case it has changed.
+  # Check whether the status of a project has changed, i.e. a json file has
+  # already been downloaded as an active project but the project status is now
+  # Closed, if this is the case remove the existing file and download a new
+  # instance.
   if (status == "Closed" & file.exists(paste0("../Data/Proj/Active/", filename))){
     file.remove(paste0("../Data/Proj/Active/", filename))
     message("Removed ", paste0("../Data/Proj/Active/", filename))
@@ -106,17 +108,17 @@ for (i in seq_len(nrow(esrcdat))) {
   }
 
   # Space the downloads
-  Sys.sleep(1)
+  Sys.sleep(2)
 
   # Get the project data
   try(pdat <- fromJSON(purl, simplifyVector = TRUE))
 
-  # Check we have data
+  # Check we have data, if not go to the next project
   if (is.null(pdat)){
     next
   }
 
-  # count a new project downloaded
+  # count that a new project downloaded
   newproject <-  newproject + 1
 
   # Write to file
