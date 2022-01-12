@@ -1,4 +1,4 @@
-#/usr/bin/env Rscript
+#!/usr/bin/env Rscript
 #
 # Process local version of the data (json files).
 #
@@ -6,10 +6,10 @@
 
 # Set-up -------------------------------------------------------------------
 
-library(jsonlite)
-library(tibble)
-library(dplyr)
-library(readr)
+library(jsonlite, quietly = TRUE)
+library(tibble, quietly = TRUE)
+library(dplyr, quietly = TRUE)
+library(readr, quietly = TRUE)
 
 # Load data ---------------------------------------------------------------
 
@@ -182,10 +182,10 @@ topic_count <- 0
 # Loop round active projects
 for (file in projects) {
 
-  # Read the json
+  # Read in the project json content
   jsondat <-  read_json(file, simplifyVector = TRUE)
 
-  # Pointer to project content
+  # Pointer to relevant json project content
   project <- jsondat$projectOverview$projectComposition$project
 
   # Get the project status (Active/Inactive)
@@ -200,9 +200,10 @@ for (file in projects) {
   # Get the project category
   subject <- project$researchSubject
 
+  # Add to a subjects df if there is content
   if (!is.null(subject) & length(subject) > 0) {
 
-    # Convert content into characters
+    # Convert all the content into characters
     subject <- subject %>% mutate(across(everything(), as.character))
 
     # Fill any missing columns
@@ -219,6 +220,8 @@ for (file in projects) {
     } else {
       subjectdf <- add_row(subjectdf, subject)
     }
+
+    # Increase the subjects by one
     subject_count <- subject_count + 1
   }
 
