@@ -8,7 +8,7 @@
 
 library(jsonlite, quietly = TRUE)
 library(tibble, quietly = TRUE)
-library(dplyr, quietly = TRUE)
+library(dplyr, quietly = TRUE, warn.conflicts = FALSE)
 library(readr, quietly = TRUE)
 
 # Load data ---------------------------------------------------------------
