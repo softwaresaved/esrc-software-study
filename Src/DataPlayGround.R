@@ -1,4 +1,4 @@
-#/usr/bin/env Rscript
+#!/usr/bin/env Rscript
 #
 # A playground to look at data downloaded from the Gateway to Research.
 #
@@ -10,12 +10,12 @@
 # Load required packages -------------------------------------------------------
 
 # Load packages to be used
-library(readr)
-library(lubridate)
-library(dplyr)
-library(ggplot2)
-library(stringr)
-library(rvest)
+library(readr, quietly = TRUE)
+library(lubridate, quietly = TRUE, warn.conflicts = FALSE)
+library(dplyr, warn.conflicts = FALSE)
+library(ggplot2, quietly = TRUE)
+library(stringr, warn.conflicts = FALSE)
+library(rvest, warn.conflicts = FALSE)
 library(xml2)
 library(fmsb) # radar/spider charts (https://www.datanovia.com/en/blog/beautiful-radar-chart-in-r-using-fmsb-and-ggplot-packages/)
 
@@ -56,7 +56,10 @@ gtrdat <- read_csv("../Data/projectsearch-1641548655542.csv.gz",
                    col_types = input_cols)
 
 # Explore the data --------------------------------------------------------
-
+#
+# The number in comments correspond to values returned for one of the GtR
+# snapshots which may change from snapshot to snapshot.
+#
 
 # Number of rows
 nrow(gtrdat) # 121,119
@@ -122,11 +125,12 @@ gtrdat[!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) > 2050,]
 # Filter ESRC data - changes for different data snapshots
 esrcdat <- gtrdat %>% filter(FundingOrgName == "ESRC")
 
-# Find out how many rows
+# Find out how many rows (equivalent to projects)
 nrow(esrcdat)
+nrow(esrcdat[esrcdat$Status == "Active",])
+nrow(esrcdat[esrcdat$Status == "Closed",])
 
 ## ESRC Project categories -------------------------------------------------
-
 
 # Look at the project categories
 esrcdat %>% select(ProjectCategory, AwardPounds)                   %>%
@@ -172,8 +176,27 @@ subjects %>% filter(status == "Active") %>%
              tally()                    %>%
              arrange(desc(n))
 
+# More than one subject may be assigned to a project so assign a fraction for
+# each contribution (this may not reflect the reality of the situation where
+# one of the subjects should dominate over the others but it is not possible to determine
+# this from the raw data).
+nrow(subjects[subjects$grantReference == "ES/H005536/1",]) # should be 3
+subjects[subjects$grantReference == "ES/H005536/1",]
+
+subjects %>% select(grantReference)         %>%
+             group_by(grantReference)       %>%
+             mutate(N = n())                %>%
+             mutate(fracContrib = 1/N)
+
+# Add a number of subjects assigned and a fraction contribution column to the data
+subjects <- subjects                       %>%
+            group_by(grantReference)       %>%
+            mutate(Nsub = n())             %>%
+            mutate(fracContrib = 1/N)
+
 # decode subject
 subjects$decodedText <- gsub("\\+", " ", URLdecode(subjects$encodedText))
+any(subjects$text != subjects$decodedText) # Fields are equivalent
 
 # Show the unique subjects
 unique(subjects$decodedText)  # 70 of them
@@ -181,6 +204,7 @@ unique(subjects$decodedText)  # 70 of them
 # percentages
 subjects$percentage[subjects$percentage > 0]
 length(subjects$percentage[subjects$percentage > 0]) # Only 7 entries > 0
+
 
 # Join with the original data
 esrc_subjects <- esrcdat %>%
@@ -341,6 +365,19 @@ topics$decodedText <- gsub("\\+", " ", URLdecode(topics$encodedText))
 
 # Unique values
 unique(topics$decodedText) # 394
+
+# Look at subjects and topics combined
+sub_top <- subjects %>%
+           left_join(topics, by = c("grantReference"), suffix = c(".s", ".t"))
+
+# There duplicates in the data
+nrow(sub_top)
+
+nrow(subjects)   # 15903
+length(unique(subjects$grantReference)) # 7180
+
+nrow(topics) # 23708
+length(unique(topics$grantReference)) #11382
 
 ## Data and Software Outputs -----------------------------------------------
 
