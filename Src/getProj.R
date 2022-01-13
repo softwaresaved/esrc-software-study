@@ -11,7 +11,7 @@
 # Load packages to be used
 library(readr, quietly = TRUE)
 library(lubridate, quietly = TRUE)
-library(dplyr, quietly = TRUE)
+library(dplyr, quietly = TRUE, warn.conflicts = FALSE)
 library(jsonlite, quietly = TRUE)
 
 # Read the GtR data -----------------------------------------------------------
