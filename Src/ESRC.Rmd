@@ -862,7 +862,9 @@ esrcdat %>% filter(Status == "Active")                            %>%
 
 ## Classification by category
 
-Classify the department of the Principal Investigator (assuming that the department will be linked to the subject of the award) using the following base categories:
+Classify the department of the Principal Investigator (assuming that the 
+department will be linked to the subject of the award) using the following base 
+categories:
 
 * Area Studies
 * Demography
@@ -927,10 +929,22 @@ columns <- cols(
 # read in the subject data
 subjects <- read_csv(file = "../Data/subjects.csv", col_types = columns)
 
+# Add a number of subjects assigned and a fraction contribution column to the data
+subjects <- subjects                                %>%
+            group_by(grantReference)                %>%
+            mutate(Nsub = n())                      %>%
+            mutate(fracContrib = round(1/Nsub, 3))  %>% 
+            rename(subject = text, encodedSubject = encodedText)
+
 # Join with the esrc data
 esrc_subjects <- esrcdat %>%
                  left_join(subjects, by = c("ProjectReference" = "grantReference")) %>%
                  select( -percentage, -status, -grantCategory)
+
+# Provide values for Nsub (1) and the fracContrib (1) when there is no subject
+esrc_subjects$Nsub[is.na(esrc_subjects$subject)] <- 1
+esrc_subjects$fracContrib[is.na(esrc_subjects$subject)] <- 1
+
 ```
 
 ```{r Assign_categories, echo = FALSE}
@@ -939,7 +953,7 @@ esrc_subjects <- esrcdat %>%
 esrc_subjects$category <- rep("-",nrow(esrc_subjects))
 
 # Set an uncategorised label
-esrc_subjects$category[is.na(esrc_subjects$text)] <- "Uncategorised"
+esrc_subjects$category[is.na(esrc_subjects$subject)] <- "Uncategorised"
 
 # Need to reduce the following 71 categories to the above 21 categories
 # including "Other" and "Uncategorised:
@@ -1008,7 +1022,7 @@ esrc_subjects$category[is.na(esrc_subjects$text)] <- "Uncategorised"
 
 # Function to select the right entries and reduce typing
 sel <- function(parseString){
-  return(grepl(parseString, esrc_subjects$text, ignore.case = TRUE))
+  return(grepl(parseString, esrc_subjects$subject, ignore.case = TRUE))
 }
 
 # assign the categories based on the subjects
@@ -1043,7 +1057,7 @@ esrc_subjects$category[sel(paste0("rcuk|astro|dance|music|gene|museum|",
 # Check all have been assigned
 if(any(esrc_subjects$category == "-")) {
   warning("There are some unassigned categories: ",
-          unique(esrc_subjects$text[is.na(esrc_subjects$category)]))
+          unique(esrc_subjects$subject[is.na(esrc_subjects$category)]))
 }
 
 ```
@@ -1087,17 +1101,32 @@ There are 73 subject types and 21 categories described above plus the `Uncategor
        Instrument. sensor & detectors, Materials Processing
 * **Uncategorised**: NA
 
-For all projects, this gives a breakdown of the number of awards and amount awarded as:
+A project might be assigned more than one subject, where this is the case if the
+project has been assigned with n subjects then each will contribute 1/n to the 
+classification count and wil be assigned a contribution of Award_amount/n to each
+subject. Taking this into account for each project, this gives a breakdown of the 
+number of awards and amount awarded as:
 
 ```{r categories1, echo = FALSE}
 
-esrc_subjects %>% select(category, AwardPounds)                                   %>% 
+# Generate stats for the categories
+esrc_subjects %>% select(category, AwardPounds, fracContrib)                      %>% 
+
                   group_by(category)                                              %>% 
-                  summarise(Number = n(), Amount = sum(AwardPounds))              %>%
+                  summarise(Contribution = round(sum(fracContrib),1), 
+                            Amount = sum(fracContrib*AwardPounds))                %>%
+                  mutate(totContrib = sum(Contribution), totAmount = sum(Amount)) %>% 
+                  mutate(percContrib = round(Contribution/totContrib,2)*100,
+                         perAward = round(Amount/totAmount,2) * 100)              %>%
+                    
+                  select(-totContrib, -totAmount)                                 %>% 
+                  relocate(percContrib, .after = Contribution)                    %>% 
+                  relocate(perAward, .after = Amount)                             %>% 
                   mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
                   arrange(desc(Amount))                                           %>% 
-                  kable(format="pipe", align= c("l","l","l"), 
-                  col.names = c("Category", "Number of awards","Award (£)"))    
+                  kable(format="pipe", align= rep("l",5), 
+                  col.names = c("Category", "Number of awards","Number %", "Award (£)",
+                                "Award %"))    
 ```
 
 The `Other` category dominates by award amount though the `Uncategorised` dominate by numbers. Looking at the `Other` category in more detail:
@@ -1105,13 +1134,22 @@ The `Other` category dominates by award amount though the `Uncategorised` domina
 ```{r categories2, echo = FALSE}
 
 esrc_subjects %>% filter(category == "Other")                                     %>% 
-                  select(text, AwardPounds)                                       %>%
-                  group_by(text)                                                  %>% 
-                  summarise(Number= n(), Amount = sum(AwardPounds))               %>% 
+                  select(subject, AwardPounds, fracContrib)                       %>%
+                  group_by(subject)                                               %>% 
+                  summarise(Contribution= round(sum(fracContrib),1), 
+                            Amount = sum(fracContrib * AwardPounds))              %>% 
+                  mutate(totContrib = sum(Contribution), totAmount = sum(Amount)) %>% 
+                  mutate(percContrib = round(Contribution/totContrib,2)*100,
+                         perAward = round(Amount/totAmount,2) * 100)              %>%
+                    
+                  select(-totContrib, -totAmount)                                 %>% 
+                  relocate(percContrib, .after = Contribution)                    %>% 
+                  relocate(perAward, .after = Amount)                             %>% 
                   mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
                   arrange(desc(Amount)) %>% 
-                  kable(format="pipe", align= c("l","l","l"), 
-                  col.names = c("Subject", "Number of awards","Award (£)"))  
+                  kable(format="pipe", align= rep("l", 5), 
+                  col.names = c("Subject", "Number of awards","Number %", 
+                                "Award (£)", "Award %"))  
 ```
 
 There are some large items near the top. Also, some of the items would not usually fall under the ESRC area.
@@ -1121,13 +1159,22 @@ If we only focus on currently active projects we get:
 ```{r categories3, echo = FALSE}
 
 esrc_subjects %>% filter(Status == "Active")                                      %>% 
-                  select(category, AwardPounds)                                   %>% 
+                  select(category, AwardPounds, fracContrib)                      %>% 
                   group_by(category)                                              %>% 
-                  summarise(Number = n(), Amount = sum(AwardPounds))              %>%
+                  summarise(Contribution = round(sum(fracContrib),1), 
+                            Amount = sum(fracContrib*AwardPounds))                %>%
+                  mutate(totContrib = sum(Contribution), totAmount = sum(Amount)) %>% 
+                  mutate(percContrib = round(Contribution/totContrib,2)*100,
+                         perAward = round(Amount/totAmount,2) * 100)              %>%
+                    
+                  select(-totContrib, -totAmount)                                 %>% 
+                  relocate(percContrib, .after = Contribution)                    %>% 
+                  relocate(perAward, .after = Amount)                             %>% 
                   mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
                   arrange(desc(Amount))                                           %>% 
-                  kable(format="pipe", align= c("l","l","l"), 
-                  col.names = c("Category", "Number of awards","Award (£)"))  
+                  kable(format="pipe", align= rep("l",5), 
+                  col.names = c("Category", "Number of awards","Number %", "Award (£)",
+                                "Award %"))   
 ```
 
 and again looking to see how the `Other` category breakdown for active projects only:
@@ -1135,16 +1182,87 @@ and again looking to see how the `Other` category breakdown for active projects 
 ```{r categories4, echo = FALSE}
 
 esrc_subjects %>% filter(category == "Other" & Status == "Active")                %>% 
-                  select(text, AwardPounds)                                       %>%
-                  group_by(text)                                                  %>% 
-                  summarise(Number= n(), Amount = sum(AwardPounds))               %>% 
+                   select(subject, AwardPounds, fracContrib)                       %>%
+                  group_by(subject)                                               %>% 
+                  summarise(Contribution= round(sum(fracContrib),1), 
+                            Amount = sum(fracContrib * AwardPounds))              %>% 
+                  mutate(totContrib = sum(Contribution), totAmount = sum(Amount)) %>% 
+                  mutate(percContrib = round(Contribution/totContrib,2)*100,
+                         perAward = round(Amount/totAmount,2) * 100)              %>%
+                    
+                  select(-totContrib, -totAmount)                                 %>% 
+                  relocate(percContrib, .after = Contribution)                    %>% 
+                  relocate(perAward, .after = Amount)                             %>% 
                   mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
                   arrange(desc(Amount)) %>% 
-                  kable(format="pipe", align= c("l","l","l"), 
-                  col.names = c("Subject", "Number of awards","Award (£)"))    
+                  kable(format="pipe", align= rep("l", 5), 
+                  col.names = c("Subject", "Number of awards","Number %", 
+                                "Award (£)", "Award %"))   
 
 ```
 
+Ignoring the `Other` and `Uncategorised` categories and considering only active
+projects:
+
+```{r categories5, echo = FALSE}
+
+esrc_subjects %>% filter(category != "Other" & category != "Uncategorised" & 
+                         Status == "Active")                                      %>% 
+                  select(category, AwardPounds, fracContrib)                      %>%
+                  group_by(category)                                              %>% 
+                  summarise(Contribution= round(sum(fracContrib),1), 
+                            Amount = sum(fracContrib * AwardPounds))              %>% 
+                  mutate(totContrib = sum(Contribution), totAmount = sum(Amount)) %>% 
+                  mutate(percContrib = round(Contribution/totContrib,2)*100,
+                         perAward = round(Amount/totAmount,2) * 100)              %>%
+                    
+                  select(-totContrib, -totAmount)                                 %>% 
+                  relocate(percContrib, .after = Contribution)                    %>% 
+                  relocate(perAward, .after = Amount)                             %>% 
+                  mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
+                  arrange(desc(Amount)) %>% 
+                  kable(format="pipe", align= rep("l", 5), 
+                  col.names = c("Category", "Number of awards","Number %", 
+                                "Award (£)", "Award %"))  
+```
+```{r AwardPiePlot, echo = FALSE}
+
+
+esrc_subjects %>% filter(category != "Other" & category != "Uncategorised" & 
+                         Status == "Active")                                       %>% 
+                  select(category, AwardPounds, fracContrib)                       %>%
+                  group_by(category)                                               %>% 
+                  summarise(Contribution= sum(fracContrib), 
+                            Amount = sum(fracContrib * AwardPounds))               %>%
+                  mutate(totContrib = sum(Contribution), totAmount = sum(Amount))  %>%
+                  mutate(perContrib = Contribution/totContrib, 
+                         perAmount = Amount/totAmount)                             %>% 
+                  ggplot(aes(x = "", y = perAmount, fill = category )) + 
+                  geom_bar(width = 1, stat = "identity", colour = "black") + 
+                  coord_polar("y", start = 0) + 
+                  scale_y_continuous(labels = scales::percent) +
+                  #geom_text(aes(y = perAmount/3 + c(0, cumsum(perAmount)[-length(perAmount)]), label = paste(round(perAmount*100),"%")), size = 3) +
+                  theme_bw() + labs(x = "", y = "By % of awards in £s")
+```
+
+```{r NumberOfAwardsPiePlot, echo = FALSE}
+
+
+esrc_subjects %>% filter(category != "Other" & category != "Uncategorised" & 
+                         Status == "Active")                                       %>% 
+                  select(category, AwardPounds, fracContrib)                       %>%
+                  group_by(category)                                               %>% 
+                  summarise(Contribution= sum(fracContrib), 
+                            Amount = sum(fracContrib * AwardPounds))               %>%
+                  mutate(totContrib = sum(Contribution), totAmount = sum(Amount))  %>%
+                  mutate(perContrib = Contribution/totContrib, 
+                         perAmount = Amount/totAmount)                             %>% 
+                  ggplot(aes(x = "", y = perContrib, fill = category )) + 
+                  geom_bar(width = 1, stat = "identity", colour = "black") + 
+                  coord_polar("y", start = 0) + 
+                  scale_y_continuous(labels = scales::percent) +
+                  theme_bw() + labs(x = "", y = "By % of the number of awards")
+```
 # ToDo Items
 
 

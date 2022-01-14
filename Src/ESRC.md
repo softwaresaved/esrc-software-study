@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 09/01/22.
+**Last updated**: 14/01/22.
 
 -   [Introduction](#introduction)
 -   [Overall expenditure](#overall-expenditure)
@@ -43,7 +43,6 @@ Economic and Social Research Council (ESRC) Data
     -   [Award Titles](#award-titles)
         -   [Active award titles](#active-award-titles)
     -   [Classification by category](#classification-by-category)
--   [ToDo Items](#todo-items)
 
 # Introduction
 
@@ -708,164 +707,196 @@ categories according to:
     detectors, Materials Processing
 -   **Uncategorised**: NA
 
-For all projects, this gives a breakdown of the number of awards and
+A project might be assigned more than one subject, where this is the
+case if the project has been assigned with n subjects then each will
+contribute 1/n to the classification count and wil be assigned a
+contribution of Award_amount/n to each subject. Taking this into account
+for each project, this gives a breakdown of the number of awards and
 amount awarded as:
 
-| Category                                   | Number of awards | Award (£)     |
-|:-------------------------------------------|:-----------------|:--------------|
-| Other                                      | 1,720            | 1,311,250,067 |
-| Economics                                  | 1,205            | 978,230,645   |
-| Sociology                                  | 2,120            | 973,955,668   |
-| Uncategorised                              | 4,263            | 724,784,068   |
-| Psychology                                 | 1,563            | 576,929,956   |
-| Social policy                              | 1,144            | 562,516,384   |
-| Demography                                 | 736              | 430,754,904   |
-| Education                                  | 835              | 402,230,848   |
-| Development studies                        | 899              | 402,079,038   |
-| Human Geography                            | 592              | 390,171,780   |
-| Tools, technologies & methods              | 605              | 386,410,786   |
-| Political science. & international studies | 1,164            | 358,106,266   |
-| Management & business studies              | 788              | 331,180,924   |
-| Social anthropology                        | 494              | 170,802,980   |
-| Law & legal studies                        | 474              | 148,830,916   |
-| Linguistics                                | 394              | 119,954,626   |
-| History                                    | 318              | 114,823,355   |
-| Environmental planning                     | 273              | 101,139,857   |
-| Social work                                | 212              | 86,945,821    |
-| Science and Technology Studies             | 152              | 61,595,683    |
-| Area Studies                               | 129              | 48,469,980    |
+| Category                                   | Number of awards | Number % | Award (£)   | Award % |
+|:-------------------------------------------|:-----------------|:---------|:------------|:--------|
+| Uncategorised                              | 4,221.0          | 37       | 665,357,094 | 19      |
+| Other                                      | 589.1            | 5        | 374,090,771 | 11      |
+| Economics                                  | 631.0            | 6        | 350,446,800 | 10      |
+| Sociology                                  | 891.4            | 8        | 314,115,114 | 9       |
+| Psychology                                 | 1,000.3          | 9        | 274,214,005 | 8       |
+| Social policy                              | 452.9            | 4        | 211,431,755 | 6       |
+| Political science. & international studies | 591.0            | 5        | 149,586,948 | 4       |
+| Education                                  | 402.3            | 4        | 147,731,646 | 4       |
+| Development studies                        | 352.6            | 3        | 137,453,872 | 4       |
+| Tools, technologies & methods              | 248.7            | 2        | 130,892,258 | 4       |
+| Management & business studies              | 426.8            | 4        | 127,884,702 | 4       |
+| Demography                                 | 310.2            | 3        | 121,923,338 | 4       |
+| Human Geography                            | 229.0            | 2        | 118,266,370 | 3       |
+| Linguistics                                | 206.7            | 2        | 58,908,374  | 2       |
+| Social anthropology                        | 206.1            | 2        | 56,211,001  | 2       |
+| Law & legal studies                        | 215.1            | 2        | 55,422,107  | 2       |
+| History                                    | 137.4            | 1        | 40,321,048  | 1       |
+| Environmental planning                     | 113.8            | 1        | 38,005,706  | 1       |
+| Social work                                | 88.0             | 1        | 30,329,434  | 1       |
+| Science and Technology Studies             | 58.7             | 1        | 22,544,127  | 1       |
+| Area Studies                               | 40.6             | 0        | 13,385,031  | 0       |
 
 The `Other` category dominates by award amount though the
 `Uncategorised` dominate by numbers. Looking at the `Other` category in
 more detail:
 
-| Subject                        | Number of awards | Award (£)   |
-|:-------------------------------|:-----------------|:------------|
-| RCUK Programmes                | 376              | 327,072,642 |
-| Medical & health interface     | 296              | 313,436,142 |
-| Genetics & development         | 31               | 95,931,632  |
-| Info. & commun. Technol.       | 143              | 89,554,768  |
-| Civil eng. & built environment | 80               | 51,607,446  |
-| Climate & Climate Change       | 63               | 47,109,029  |
-| Visual arts                    | 56               | 35,161,484  |
-| Mathematical sciences          | 41               | 34,050,930  |
-| Design                         | 59               | 30,797,664  |
-| Agri-environmental science     | 45               | 29,990,577  |
-| Complexity Science             | 35               | 24,456,399  |
-| Library & information studies  | 8                | 24,391,089  |
-| Media                          | 82               | 24,324,123  |
-| Energy                         | 39               | 22,011,030  |
-| Ecol, biodivers. & systematics | 25               | 19,386,080  |
-| Animal Science                 | 47               | 17,671,897  |
-| Food science & nutrition       | 43               | 16,667,374  |
-| Philosophy                     | 46               | 14,391,571  |
-| Theology, divinity & religion  | 19               | 12,174,365  |
-| Pollution, waste & resources   | 17               | 10,958,985  |
-| Cultural & museum studies      | 45               | 9,677,686   |
-| Environmental Engineering      | 8                | 9,585,824   |
-| Terrest. & freshwater environ. | 11               | 9,306,244   |
-| Mechanical Engineering         | 4                | 6,121,077   |
-| Microbial sciences             | 7                | 5,341,318   |
-| Drama & theatre studies        | 13               | 4,189,840   |
-| Omic sciences & technologies   | 5                | 2,984,565   |
-| Manufacturing                  | 12               | 2,681,523   |
-| Atmospheric phys. & chemistry  | 2                | 2,485,475   |
-| Systems engineering            | 4                | 2,447,945   |
-| Bioengineering                 | 3                | 2,349,845   |
-| Geosciences                    | 10               | 2,303,237   |
-| Music                          | 10               | 1,922,717   |
-| Electrical Engineering         | 8                | 1,799,765   |
-| Marine environments            | 4                | 1,534,490   |
-| Cell biology                   | 3                | 1,103,904   |
-| Plant & crop science           | 1                | 876,346     |
-| Archaeology                    | 5                | 755,745     |
-| Materials Processing           | 1                | 614,537     |
-| Classics                       | 1                | 604,605     |
-| Dance                          | 2                | 304,808     |
-| Materials sciences             | 3                | 286,101     |
-| Process engineering            | 3                | 244,452     |
-| Astronomy - observation        | 1                | 154,236     |
-| Astronomy - theory             | 1                | 154,236     |
-| Particle Astrophysics          | 1                | 154,236     |
-| Catalysis & surfaces           | 1                | 120,083     |
+| Subject                        | Number of awards | Number % | Award (£)      | Award % |
+|:-------------------------------|:-----------------|:---------|:---------------|:--------|
+| RCUK Programmes                | 155.0            | 26       | 123,439,927.26 | 33      |
+| Medical & health interface     | 105.5            | 18       | 80,771,464.80  | 22      |
+| Info. & commun. Technol.       | 47.8             | 8        | 25,315,323.50  | 7       |
+| Genetics & development         | 9.9              | 2        | 20,700,521.88  | 6       |
+| Civil eng. & built environment | 25.4             | 4        | 14,348,275.64  | 4       |
+| Climate & Climate Change       | 17.5             | 3        | 11,297,757.63  | 3       |
+| Mathematical sciences          | 16.1             | 3        | 9,623,869.32   | 3       |
+| Design                         | 18.3             | 3        | 8,094,228.89   | 2       |
+| Visual arts                    | 15.1             | 3        | 7,053,320.66   | 2       |
+| Agri-environmental science     | 12.3             | 2        | 6,737,178.83   | 2       |
+| Energy                         | 12.7             | 2        | 6,600,896.93   | 2       |
+| Media                          | 26.4             | 4        | 6,578,338.90   | 2       |
+| Animal Science                 | 17.5             | 3        | 6,129,281.47   | 2       |
+| Complexity Science             | 8.6              | 1        | 5,450,926.71   | 1       |
+| Library & information studies  | 2.2              | 0        | 4,979,172.85   | 1       |
+| Ecol, biodivers. & systematics | 6.8              | 1        | 4,864,975.33   | 1       |
+| Food science & nutrition       | 14.3             | 2        | 4,789,333.81   | 1       |
+| Philosophy                     | 14.7             | 2        | 4,239,294.46   | 1       |
+| Theology, divinity & religion  | 6.5              | 1        | 3,116,895.69   | 1       |
+| Cultural & museum studies      | 13.8             | 2        | 2,752,950.93   | 1       |
+| Environmental Engineering      | 2.2              | 0        | 2,403,605.88   | 1       |
+| Pollution, waste & resources   | 4.8              | 1        | 2,105,474.31   | 1       |
+| Terrest. & freshwater environ. | 2.5              | 0        | 1,546,208.29   | 0       |
+| Microbial sciences             | 1.7              | 0        | 1,280,770.64   | 0       |
+| Mechanical Engineering         | 1.0              | 0        | 1,258,921.07   | 0       |
+| Manufacturing                  | 5.3              | 1        | 1,073,287.01   | 0       |
+| Drama & theatre studies        | 3.8              | 1        | 1,021,262.05   | 0       |
+| Bioengineering                 | 1.2              | 0        | 795,586.51     | 0       |
+| Marine environments            | 1.9              | 0        | 751,153.37     | 0       |
+| Omic sciences & technologies   | 1.5              | 0        | 684,902.92     | 0       |
+| Music                          | 3.9              | 1        | 632,967.92     | 0       |
+| Atmospheric phys. & chemistry  | 0.4              | 0        | 577,551.45     | 0       |
+| Geosciences                    | 2.5              | 0        | 536,919.14     | 0       |
+| Systems engineering            | 1.0              | 0        | 509,597.37     | 0       |
+| Electrical Engineering         | 2.4              | 0        | 507,161.59     | 0       |
+| Cell biology                   | 0.7              | 0        | 286,269.60     | 0       |
+| Archaeology                    | 1.3              | 0        | 206,572.00     | 0       |
+| Materials Processing           | 0.3              | 0        | 204,640.82     | 0       |
+| Classics                       | 0.3              | 0        | 201,333.46     | 0       |
+| Plant & crop science           | 0.2              | 0        | 175,269.20     | 0       |
+| Dance                          | 1.0              | 0        | 152,404.00     | 0       |
+| Materials sciences             | 0.8              | 0        | 81,695.26      | 0       |
+| Process engineering            | 0.8              | 0        | 67,583.81      | 0       |
+| Astronomy - observation        | 0.2              | 0        | 38,559.00      | 0       |
+| Astronomy - theory             | 0.2              | 0        | 38,559.00      | 0       |
+| Particle Astrophysics          | 0.2              | 0        | 38,559.00      | 0       |
+| Catalysis & surfaces           | 0.2              | 0        | 30,020.75      | 0       |
 
 There are some large items near the top. Also, some of the items would
 not usually fall under the ESRC area.
 
 If we only focus on currently active projects we get:
 
-| Category                                   | Number of awards | Award (£)   |
-|:-------------------------------------------|:-----------------|:------------|
-| Other                                      | 690              | 931,668,998 |
-| Uncategorised                              | 3,530            | 581,358,272 |
-| Economics                                  | 233              | 461,172,184 |
-| Sociology                                  | 409              | 388,286,635 |
-| Social policy                              | 232              | 282,206,351 |
-| Human Geography                            | 244              | 262,936,634 |
-| Development studies                        | 192              | 218,131,445 |
-| Psychology                                 | 306              | 192,006,375 |
-| Demography                                 | 49               | 185,583,518 |
-| Education                                  | 164              | 160,239,617 |
-| Management & business studies              | 144              | 142,815,849 |
-| Political science. & international studies | 192              | 120,221,612 |
-| Tools, technologies & methods              | 69               | 104,912,857 |
-| Law & legal studies                        | 95               | 66,171,085  |
-| Social anthropology                        | 102              | 62,749,981  |
-| Social work                                | 47               | 45,960,023  |
-| Environmental planning                     | 51               | 43,351,814  |
-| Science and Technology Studies             | 66               | 38,907,035  |
-| Area Studies                               | 59               | 33,045,267  |
-| Linguistics                                | 61               | 26,028,868  |
-| History                                    | 47               | 19,738,089  |
+| Category                                   | Number of awards | Number % | Award (£)   | Award % |
+|:-------------------------------------------|:-----------------|:---------|:------------|:--------|
+| Uncategorised                              | 3,499.0          | 70       | 524,231,858 | 30      |
+| Other                                      | 225.3            | 5        | 265,753,172 | 15      |
+| Economics                                  | 124.3            | 3        | 149,327,425 | 9       |
+| Social policy                              | 102.4            | 2        | 116,707,405 | 7       |
+| Sociology                                  | 170.7            | 3        | 111,993,415 | 6       |
+| Psychology                                 | 178.0            | 4        | 84,534,261  | 5       |
+| Human Geography                            | 96.5             | 2        | 77,531,039  | 4       |
+| Development studies                        | 69.4             | 1        | 63,823,495  | 4       |
+| Education                                  | 81.9             | 2        | 60,149,023  | 3       |
+| Political science. & international studies | 100.4            | 2        | 49,913,001  | 3       |
+| Management & business studies              | 66.9             | 1        | 49,858,340  | 3       |
+| Demography                                 | 17.8             | 0        | 48,343,804  | 3       |
+| Tools, technologies & methods              | 26.1             | 1        | 29,496,702  | 2       |
+| Law & legal studies                        | 45.2             | 1        | 22,429,396  | 1       |
+| Social work                                | 20.0             | 0        | 16,681,853  | 1       |
+| Social anthropology                        | 40.0             | 1        | 16,437,605  | 1       |
+| Science and Technology Studies             | 25.1             | 1        | 13,142,325  | 1       |
+| Environmental planning                     | 16.7             | 0        | 11,459,591  | 1       |
+| Linguistics                                | 28.4             | 1        | 10,401,719  | 1       |
+| Area Studies                               | 18.7             | 0        | 8,518,577   | 0       |
+| History                                    | 18.7             | 0        | 6,384,249   | 0       |
 
 and again looking to see how the `Other` category breakdown for active
 projects only:
 
-| Subject                        | Number of awards | Award (£)   |
-|:-------------------------------|:-----------------|:------------|
-| RCUK Programmes                | 138              | 283,868,264 |
-| Medical & health interface     | 123              | 212,935,820 |
-| Genetics & development         | 4                | 61,270,745  |
-| Info. & commun. Technol.       | 65               | 48,920,419  |
-| Civil eng. & built environment | 33               | 38,334,492  |
-| Climate & Climate Change       | 25               | 33,386,120  |
-| Visual arts                    | 32               | 30,473,965  |
-| Library & information studies  | 1                | 21,872,654  |
-| Agri-environmental science     | 17               | 21,052,485  |
-| Mathematical sciences          | 13               | 20,377,148  |
-| Design                         | 27               | 20,331,252  |
-| Energy                         | 17               | 17,387,671  |
-| Media                          | 30               | 14,457,597  |
-| Ecol, biodivers. & systematics | 10               | 14,224,739  |
-| Pollution, waste & resources   | 9                | 9,540,993   |
-| Environmental Engineering      | 6                | 9,534,670   |
-| Theology, divinity & religion  | 5                | 8,909,886   |
-| Complexity Science             | 16               | 8,768,043   |
-| Terrest. & freshwater environ. | 5                | 7,690,792   |
-| Food science & nutrition       | 18               | 7,629,559   |
-| Animal Science                 | 14               | 7,293,905   |
-| Philosophy                     | 14               | 4,598,585   |
-| Cultural & museum studies      | 15               | 4,107,551   |
-| Drama & theatre studies        | 8                | 3,471,565   |
-| Microbial sciences             | 2                | 2,874,555   |
-| Atmospheric phys. & chemistry  | 2                | 2,485,475   |
-| Bioengineering                 | 2                | 2,271,473   |
-| Systems engineering            | 3                | 2,181,855   |
-| Electrical Engineering         | 7                | 1,772,626   |
-| Geosciences                    | 4                | 1,647,627   |
-| Marine environments            | 3                | 1,382,052   |
-| Music                          | 4                | 1,255,555   |
-| Manufacturing                  | 5                | 1,228,365   |
-| Cell biology                   | 3                | 1,103,904   |
-| Plant & crop science           | 1                | 876,346     |
-| Materials Processing           | 1                | 614,537     |
-| Classics                       | 1                | 604,605     |
-| Omic sciences & technologies   | 2                | 430,295     |
-| Mechanical Engineering         | 3                | 395,522     |
-| Process engineering            | 1                | 95,408      |
-| Archaeology                    | 1                | 9,878       |
+| Subject                        | Number of awards | Number % | Award (£)      | Award % |
+|:-------------------------------|:-----------------|:---------|:---------------|:--------|
+| RCUK Programmes                | 44.4             | 20       | 106,081,955.86 | 40      |
+| Medical & health interface     | 47.2             | 21       | 55,403,526.69  | 21      |
+| Info. & commun. Technol.       | 21.6             | 10       | 14,204,817.64  | 5       |
+| Genetics & development         | 1.1              | 0        | 12,334,983.47  | 5       |
+| Civil eng. & built environment | 9.9              | 4        | 9,740,177.38   | 4       |
+| Climate & Climate Change       | 6.3              | 3        | 7,364,257.44   | 3       |
+| Visual arts                    | 8.7              | 4        | 5,879,008.92   | 2       |
+| Energy                         | 6.1              | 3        | 5,079,798.13   | 2       |
+| Design                         | 8.6              | 4        | 5,073,718.63   | 2       |
+| Mathematical sciences          | 4.9              | 2        | 4,836,541.97   | 2       |
+| Library & information studies  | 0.2              | 0        | 4,374,530.80   | 2       |
+| Agri-environmental science     | 4.2              | 2        | 4,141,181.48   | 2       |
+| Media                          | 9.6              | 4        | 3,809,453.08   | 1       |
+| Ecol, biodivers. & systematics | 2.6              | 1        | 3,514,057.75   | 1       |
+| Animal Science                 | 4.9              | 2        | 2,518,378.15   | 1       |
+| Environmental Engineering      | 1.8              | 1        | 2,390,817.38   | 1       |
+| Food science & nutrition       | 6.2              | 3        | 2,313,858.48   | 1       |
+| Theology, divinity & religion  | 1.9              | 1        | 2,048,856.04   | 1       |
+| Complexity Science             | 3.8              | 2        | 1,883,484.66   | 1       |
+| Pollution, waste & resources   | 2.6              | 1        | 1,733,429.88   | 1       |
+| Philosophy                     | 4.8              | 2        | 1,401,094.35   | 1       |
+| Cultural & museum studies      | 5.5              | 2        | 1,246,266.87   | 0       |
+| Terrest. & freshwater environ. | 1.2              | 1        | 1,208,434.99   | 0       |
+| Drama & theatre studies        | 2.5              | 1        | 874,282.45     | 0       |
+| Bioengineering                 | 0.7              | 0        | 756,400.51     | 0       |
+| Microbial sciences             | 0.5              | 0        | 755,576.74     | 0       |
+| Marine environments            | 1.5              | 1        | 700,391.52     | 0       |
+| Manufacturing                  | 2.3              | 1        | 582,225.10     | 0       |
+| Atmospheric phys. & chemistry  | 0.4              | 0        | 577,551.45     | 0       |
+| Electrical Engineering         | 2.2              | 1        | 501,733.79     | 0       |
+| Systems engineering            | 0.7              | 0        | 443,074.87     | 0       |
+| Music                          | 1.5              | 1        | 397,558.25     | 0       |
+| Geosciences                    | 0.9              | 0        | 359,453.36     | 0       |
+| Cell biology                   | 0.7              | 0        | 286,269.60     | 0       |
+| Omic sciences & technologies   | 0.8              | 0        | 206,730.20     | 0       |
+| Materials Processing           | 0.3              | 0        | 204,640.82     | 0       |
+| Classics                       | 0.3              | 0        | 201,333.46     | 0       |
+| Plant & crop science           | 0.2              | 0        | 175,269.20     | 0       |
+| Mechanical Engineering         | 0.8              | 0        | 113,810.07     | 0       |
+| Process engineering            | 0.3              | 0        | 31,770.86      | 0       |
+| Archaeology                    | 0.2              | 0        | 2,469.50       | 0       |
 
-# ToDo Items
+Ignoring the `Other` and `Uncategorised` categories and considering only
+active projects:
+
+| Category                                   | Number of awards | Number % | Award (£)   | Award % |
+|:-------------------------------------------|:-----------------|:---------|:------------|:--------|
+| Economics                                  | 124.3            | 10       | 149,327,425 | 16      |
+| Social policy                              | 102.4            | 8        | 116,707,405 | 12      |
+| Sociology                                  | 170.7            | 14       | 111,993,415 | 12      |
+| Psychology                                 | 178.0            | 14       | 84,534,261  | 9       |
+| Human Geography                            | 96.5             | 8        | 77,531,039  | 8       |
+| Development studies                        | 69.4             | 6        | 63,823,495  | 7       |
+| Education                                  | 81.9             | 7        | 60,149,023  | 6       |
+| Political science. & international studies | 100.4            | 8        | 49,913,001  | 5       |
+| Management & business studies              | 66.9             | 5        | 49,858,340  | 5       |
+| Demography                                 | 17.8             | 1        | 48,343,804  | 5       |
+| Tools, technologies & methods              | 26.1             | 2        | 29,496,702  | 3       |
+| Law & legal studies                        | 45.2             | 4        | 22,429,396  | 2       |
+| Social work                                | 20.0             | 2        | 16,681,853  | 2       |
+| Social anthropology                        | 40.0             | 3        | 16,437,605  | 2       |
+| Science and Technology Studies             | 25.1             | 2        | 13,142,325  | 1       |
+| Environmental planning                     | 16.7             | 1        | 11,459,591  | 1       |
+| Linguistics                                | 28.4             | 2        | 10,401,719  | 1       |
+| Area Studies                               | 18.7             | 1        | 8,518,577   | 1       |
+| History                                    | 18.7             | 1        | 6,384,249   | 1       |
+
+![](ESRC_files/figure-gfm/AwardPiePlot-1.png)<!-- -->
+
+![](ESRC_files/figure-gfm/NumberOfAwardsPiePlot-1.png)<!-- --> # ToDo
+Items
 
 -   [ ] Reconcile DTPs from what was scraped from the [ESRC
     DTP](https://esrc.ukri.org/skills-and-careers/doctoral-training/doctoral-training-partnerships/doctoral-training-partnership-dtp-contacts/)
