@@ -55,6 +55,10 @@ Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version
 and covers the period 01/01/73 to 01/01/30. The GtR data snapshot
 corresponded to data last updated by UKRI on the 14th December 2021.
 
+The R markdown that generated this analysis is available at:
+
+-   <https://github.com/softwaresaved/esrc-software-study/blob/main/Src/ESRC.Rmd>
+
 The data set contains 126,198 rows (after some data cleaning), where a
 row corresponds to the record of an award. In this data set 11,414
 correspond to ESRC awards.

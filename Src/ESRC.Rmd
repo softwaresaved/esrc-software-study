@@ -78,6 +78,10 @@ esrcdat <- gtrdat %>% filter(FundingOrgName == "ESRC")
 
 The aim of this document is to provide an overview of expenditure done of the [United Kingdom Research and Innovation](https://www.ukri.org/) (UKRI) ESRC as determined from a [Gateway to Research](https://gtr.ukri.org/) (GtR) data snapshot. The data is made available under an [Open Government Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/), and covers the period `r format(min(gtrdat$StartDate),"%d/%m/%y")` to `r format(max(gtrdat$EndDate, na.rm = TRUE),"%d/%m/%y")`. The GtR data snapshot corresponded to data last updated by UKRI on the 14th December 2021.
 
+The R markdown that generated this analysis is available at: 
+
+* https://github.com/softwaresaved/esrc-software-study/blob/main/Src/ESRC.Rmd
+
 The data set contains `r format(nrow(gtrdat), big.mark = ",")` rows (after some data cleaning), where a row corresponds to the record of an award. In this data set `r format(nrow(gtrdat[gtrdat$FundingOrgName == "ESRC",]), big.mark = ",")` correspond to ESRC awards.
 
 UK Research Councils were formed in different years (source: [wikipedia](https://en.wikipedia.org/wiki/UK_Research_and_Innovation)) as shown in the table below which has an impact in the interpretation of the data.
