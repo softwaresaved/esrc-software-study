@@ -59,9 +59,9 @@ input_cols <- cols(
                     PIId = col_character()
 )
 
-# Read the Gateway to Research data
-# Data snapshot from 14th December 2021.
-gtrdat <- read_csv("../Data/projectsearch-1641548655542.csv.gz",
+# Read the Gateway to Research data snapshot.
+# Data snapshot from 24th January 2022.
+gtrdat <- read_csv("../Data/projectsearch-1643375201476.csv.gz",
                    col_types = input_cols)
 
 # Remove EndDate >= 2050 or is an NAs - removes 49 values
@@ -76,7 +76,7 @@ esrcdat <- gtrdat %>% filter(FundingOrgName == "ESRC")
 
 # Introduction
 
-The aim of this document is to provide an overview of expenditure done of the [United Kingdom Research and Innovation](https://www.ukri.org/) (UKRI) ESRC as determined from a [Gateway to Research](https://gtr.ukri.org/) (GtR) data snapshot. The data is made available under an [Open Government Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/), and covers the period `r format(min(gtrdat$StartDate),"%d/%m/%y")` to `r format(max(gtrdat$EndDate, na.rm = TRUE),"%d/%m/%y")`. The GtR data snapshot corresponded to data last updated by UKRI on the 14th December 2021.
+The aim of this document is to provide an overview of expenditure done of the [United Kingdom Research and Innovation](https://www.ukri.org/) (UKRI) ESRC as determined from a [Gateway to Research](https://gtr.ukri.org/) (GtR) data snapshot. The data is made available under an [Open Government Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/), and covers the period `r format(min(gtrdat$StartDate),"%d/%m/%y")` to `r format(max(gtrdat$EndDate, na.rm = TRUE),"%d/%m/%y")`. The GtR data snapshot corresponded to data last updated by UKRI on the 24th January 2022.
 
 The R markdown that generated this analysis is available at: 
 

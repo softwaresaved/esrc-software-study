@@ -10,7 +10,7 @@
 
 # Load packages to be used
 library(readr, quietly = TRUE)
-library(lubridate, quietly = TRUE)
+library(lubridate, quietly = TRUE, warn.conflicts = FALSE)
 library(dplyr, quietly = TRUE, warn.conflicts = FALSE)
 library(jsonlite, quietly = TRUE)
 
@@ -46,8 +46,8 @@ input_cols <- cols(
 )
 
 # Read the Gateway to Research data snapshot.
-# Data snapshot from 14th December 2021.
-gtrdat <- read_csv("../Data/projectsearch-1641548655542.csv.gz",
+# Data snapshot from 24th January 2022.
+gtrdat <- read_csv("../Data/projectsearch-1643375201476.csv.gz",
                    col_types = input_cols)
 
 # Clean the data ----------------------------------------------------------
@@ -127,4 +127,4 @@ for (i in seq_len(nrow(esrcdat))) {
 }
 
 # Print a message about the new projects downloaded
-message("Data for ", newproject, " new projects was downloaded.")
+message("Data for ", newproject, " new projects were downloaded.")
