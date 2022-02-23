@@ -15,7 +15,10 @@ library(ggplot2)    # For plots
 library(kableExtra) # For wiki friendly plots
 library(fsmb)       # For Spider/Radar diagrams
 
-# Load GtR data -----------------------------------------------------------
+
+# Gateway to Research (GtR) data ------------------------------------------
+
+## Read GtR data -----------------------------------------------------------
 
 # Columns to read
 input_cols <- cols(
@@ -79,6 +82,8 @@ categories <- c("Area Studies",
                 "Tools, technologies & methods",
                 "Other")
 
+## Read subjects -----------------------------------------------------------
+
 # Define subject column types  to read from file
 columns <- cols(
   id = col_character(),
@@ -108,6 +113,9 @@ esrc_subjects <- esrcdat %>%
 # Provide values for Nsub (1) and the fracContrib (1) when there is no subject
 esrc_subjects$Nsub[is.na(esrc_subjects$subject)] <- 1
 esrc_subjects$fracContrib[is.na(esrc_subjects$subject)] <- 1
+
+
+## Map subjects to categories ----------------------------------------------
 
 # Subject to category mappings:
 #
@@ -193,6 +201,10 @@ if(any(esrc_subjects$category == "-")) {
           unique(esrc_subjects$subject[is.na(esrc_subjects$category)]))
 }
 
+
+## Poulations of categories ------------------------------------------------
+
+
 # Plot the contribution of each category by number
 esrc_subjects %>% group_by(category)                    %>%
                   summarise(NGrants = n(), Contributions = sum(fracContrib),
@@ -201,7 +213,9 @@ esrc_subjects %>% group_by(category)                    %>%
                        col.names = c("Category", "Number of awards","Contributions",
                         "Award (£)", "Unique PIs"))
 
-# Load survey data --------------------------------------------------------
+# Survey data --------------------------------------------------------
+
+# Read survey data --------------------------------------------------------
 
 # File containing the survey population distribution
 xlfile <- "~/Downloads/results-for-a-digital-met-2022-02-22-1223.xlsx"
