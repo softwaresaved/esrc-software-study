@@ -241,31 +241,27 @@ create_radarchart <- function(data, color = "#00AFBB",
 GtRpop %>% mutate(totGrants = sum(NGrants), totContrib = sum(Contributions),
                    totMoney = sum(Money), totPIs = sum(PIs)) %>%
            group_by(category) %>%
-           summarise(normGrants = sum(NGrants)/totGrants,
-                   normContribs = sum(Contributions)/totContrib,
-                   normMoney = sum(Money)/totMoney,
-                   normPIs = sum(PIs)/totPIs) -> normGtRpop
+           summarise(Grants = sum(NGrants)/totGrants,
+                     Contribs = sum(Contributions)/totContrib,
+                     Money = sum(Money)/totMoney,
+                     PIs = sum(PIs)/totPIs) -> normGtRpop
 
 # Create a new row with the minimum and maximum for each column
-#normGtRpop <- rbind(normGtRpop, c("Min", normGtRpop %>% summarise(across(2:ncol(normGtRpop), min)) %>% as.numeric()))
-#normGtRpop <- rbind(normGtRpop, c("Max", normGtRpop %>% summarise(across(2:ncol(normGtRpop), max)) %>% as.numeric()))
-
 normGtRpop <- add_row(normGtRpop,category = "Min", normGtRpop %>% summarise(across(2:ncol(normGtRpop), min)), .after = 0)
 normGtRpop <- add_row(normGtRpop,category = "Max", normGtRpop %>% summarise(across(2:ncol(normGtRpop), max)), .after = 0)
 
-normGtRpop <- as.data.frame(normGtRpop)
-row.names(normGtRpop) <- normGtRpop$category
 normGtRpop[c(1,2,3),-1]
 create_radarchart(normGtRpop[c(1,2,3),-1])
-labels <-  c("Grants","PIs","Money","FractionalContrib")
+
+# Loop round the different categories.
+# Row 1 is the max value for the corresponding column.
+# Rwo 2 is the min value for the corresponding column.
+for(i in seq(3, nrow(normGtRpop))){
+  create_radarchart(normGtRpop[c(1,2,i),-1], title = normGtRpop$category[i])
+}
+
 create_radarchart(normGtRpop[c(1,2,3),-1], title = normGtRpop$category[3])
 
-
-
-
-normGtRpop[c(1,22,23),]
-
-create_radarchart(normGtRpop[c(1,22,23),])
 
 # Survey data --------------------------------------------------------
 
