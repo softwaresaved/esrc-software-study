@@ -221,7 +221,7 @@ GtRpop  %>% kable(format="pipe", align= rep("l", 5),
 PItot <- sum(GtRpop$PIs)
 
 GtRpop %>% select(category, PIs) %>%
-       ggplot(aes(x = category,y = PIs, fill = category)) +
+       ggplot(aes(x = category, y = PIs, fill = category)) +
        geom_col() +
        theme_bw() + theme(legend.position = "none") +
        theme(axis.text.x = element_text(angle = -90, vjust = 0, hjust = 0)) +
@@ -231,11 +231,33 @@ GtRpop %>% select(category, PIs) %>%
 NGrantTot <- sum(GtRpop$NGrants)
 
 GtRpop %>% select(category, NGrants) %>%
-  ggplot(aes(x = category,y = NGrants, fill = category)) +
+  ggplot(aes(x = category, y = NGrants, fill = category)) +
   geom_col() +
   theme_bw() + theme(legend.position = "none") +
   theme(axis.text.x = element_text(angle = -90, vjust = 0, hjust=0)) +
   xlab("Category") + ylab(paste0("Number of grants (N = ",NGrantTot,")"))
+
+# Number of contributions
+NContTot <- sum(GtRpop$Contributions)
+
+GtRpop %>% select(category, Contributions) %>%
+  ggplot(aes(x = category, y = Contributions, fill = category)) +
+  geom_col() +
+  theme_bw() + theme(legend.position = "none") +
+  theme(axis.text.x = element_text(angle = -90, vjust = 0, hjust=0)) +
+  xlab("Category") + ylab(paste0("Number of fractional Contributions (N = ", NContTot,")"))
+
+# Money
+N <-  1e6
+MoneyTot <- round(sum(GtRpop$Money)/N)
+
+GtRpop %>% select(category, Money) %>%
+  mutate(myMoney = Money/N) %>%
+  ggplot(aes(x = category, y = myMoney, fill = category)) +
+  geom_col() +
+  theme_bw() + theme(legend.position = "none") +
+  theme(axis.text.x = element_text(angle = -90, vjust = 0, hjust=0)) +
+  xlab("Category") + ylab(paste0("Amount awarded (Million £s, Tot = £", MoneyTot," Millions)"))
 
 ## Radar plot ---------------------------------------------------------------
 
