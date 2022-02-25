@@ -221,11 +221,21 @@ GtRpop  %>% kable(format="pipe", align= rep("l", 5),
 PItot <- sum(GtRpop$PIs)
 
 GtRpop %>% select(category, PIs) %>%
-       ggplot(aes(x=category,y=PIs, fill = category)) +
+       ggplot(aes(x = category,y = PIs, fill = category)) +
        geom_col() +
        theme_bw() + theme(legend.position = "none") +
-       theme(axis.text.x = element_text(angle = -90, vjust = 0, hjust=0)) +
-       xlab("Category") + ylab(paste0("Number of PIs (N=",PItot,")"))
+       theme(axis.text.x = element_text(angle = -90, vjust = 0, hjust = 0)) +
+       xlab("Category") + ylab(paste0("Number of PIs (N =",PItot,")"))
+
+# Number of grants
+NGrantTot <- sum(GtRpop$NGrants)
+
+GtRpop %>% select(category, NGrants) %>%
+  ggplot(aes(x = category,y = NGrants, fill = category)) +
+  geom_col() +
+  theme_bw() + theme(legend.position = "none") +
+  theme(axis.text.x = element_text(angle = -90, vjust = 0, hjust=0)) +
+  xlab("Category") + ylab(paste0("Number of grants (N = ",NGrantTot,")"))
 
 ## Radar plot ---------------------------------------------------------------
 
