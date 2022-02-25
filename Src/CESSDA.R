@@ -21,25 +21,28 @@ mbrs <- read_html(aboutCessda)
 mbrs %>% html_elements("p.title") %>% html_element("a") %>% html_attr("href") -> mbr_pages
 
 # Tibble to store partner URLs
-purls <- tibble(u = NA, o = NA)
+purls <- tibble(url = NA, originator = NA)
 
 # Loop over the members and create a list of the member sites
 for(about in mbr_pages){
 
-  # Create the member url in CESSDA
+  # Create the member url from the CESSDA path info
   murl <- paste0(wwwroot, about)
 
-  # Read the page
+  # Read the page pointed to by the URL
   p <- read_html(murl)
 
-  # Extract the partner URL
+  # Extract the partner URL for their website
   purl <- p %>% html_elements("div.content-body") %>% html_element("a") %>% html_attr("href")
 
-  # If not NA save
+  # If the url is not an NA add to the tibble
   if(!is.na(purl)){
-    purls <- add_row(purls, u = purl, o = murl)
+    purls <- add_row(purls, url = purl, originator = murl)
   }
 }
+
+# Remove any NAs
+purls <-  purls %>% filter(!is.na(url) | !is.na(originator))
 
 # write the results to a csv file
 write_csv(purls,"../Data/CESSDA.csv")
