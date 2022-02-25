@@ -13,7 +13,8 @@ library(readr)      # For reading data
 library(lubridate)  # For manipulating data
 library(ggplot2)    # For plots
 library(kableExtra) # For wiki friendly plots
-library(fsmb)       # For Spider/Radar diagrams
+library(fmsb)       # For Spider/Radar diagrams
+library(tibble)
 
 
 # Gateway to Research (GtR) data ------------------------------------------
@@ -208,10 +209,63 @@ if(any(esrc_subjects$category == "-")) {
 # Plot the contribution of each category by number
 esrc_subjects %>% group_by(category)                    %>%
                   summarise(NGrants = n(), Contributions = sum(fracContrib),
-                            Money = sum(AwardPounds), PIs=length(unique(PIId))) %>%
-                 kable(format="pipe", align= rep("l", 5),
+                            Money = sum(AwardPounds), PIs=length(unique(PIId))) -> GtRpop
+
+# Tabulate basic populations
+GtRpop  %>% kable(format="pipe", align= rep("l", 5),
                        col.names = c("Category", "Number of awards","Contributions",
                         "Award (£)", "Unique PIs"))
+
+## Radar plot ---------------------------------------------------------------
+
+# Function from:
+# https://www.datanovia.com/en/blog/beautiful-radar-chart-in-r-using-fmsb-and-ggplot-packages/
+create_radarchart <- function(data, color = "#00AFBB",
+                              vlabels = colnames(data), vlcex = 0.7,
+                              caxislabels = NULL, title = NULL, ...){
+  radarchart(
+    data, axistype = 1,
+    # Customize the polygon
+    pcol = color, pfcol = scales::alpha(color, 0.5), plwd = 2, plty = 1,
+    # Customize the grid
+    cglcol = "grey", cglty = 1, cglwd = 0.8,
+    # Customize the axis
+    axislabcol = "grey",
+    # Variable labels
+    vlcex = vlcex, vlabels = vlabels,
+    caxislabels = caxislabels, title = title, ...
+  )
+}
+
+# Normalise populations
+GtRpop %>% mutate(totGrants = sum(NGrants), totContrib = sum(Contributions),
+                   totMoney = sum(Money), totPIs = sum(PIs)) %>%
+           group_by(category) %>%
+           summarise(normGrants = sum(NGrants)/totGrants,
+                   normContribs = sum(Contributions)/totContrib,
+                   normMoney = sum(Money)/totMoney,
+                   normPIs = sum(PIs)/totPIs) -> normGtRpop
+
+# Create a new row with the minimum and maximum for each column
+#normGtRpop <- rbind(normGtRpop, c("Min", normGtRpop %>% summarise(across(2:ncol(normGtRpop), min)) %>% as.numeric()))
+#normGtRpop <- rbind(normGtRpop, c("Max", normGtRpop %>% summarise(across(2:ncol(normGtRpop), max)) %>% as.numeric()))
+
+normGtRpop <- add_row(normGtRpop,category = "Min", normGtRpop %>% summarise(across(2:ncol(normGtRpop), min)), .after = 0)
+normGtRpop <- add_row(normGtRpop,category = "Max", normGtRpop %>% summarise(across(2:ncol(normGtRpop), max)), .after = 0)
+
+normGtRpop <- as.data.frame(normGtRpop)
+row.names(normGtRpop) <- normGtRpop$category
+normGtRpop[c(1,2,3),-1]
+create_radarchart(normGtRpop[c(1,2,3),-1])
+labels <-  c("Grants","PIs","Money","FractionalContrib")
+create_radarchart(normGtRpop[c(1,2,3),-1], title = normGtRpop$category[3])
+
+
+
+
+normGtRpop[c(1,22,23),]
+
+create_radarchart(normGtRpop[c(1,22,23),])
 
 # Survey data --------------------------------------------------------
 
