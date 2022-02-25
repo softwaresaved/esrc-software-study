@@ -203,7 +203,7 @@ if(any(esrc_subjects$category == "-")) {
 }
 
 
-## Poulations of categories ------------------------------------------------
+## Populations of categories ------------------------------------------------
 
 
 # Plot the contribution of each category by number
@@ -215,6 +215,17 @@ esrc_subjects %>% group_by(category)                    %>%
 GtRpop  %>% kable(format="pipe", align= rep("l", 5),
                        col.names = c("Category", "Number of awards","Contributions",
                         "Award (£)", "Unique PIs"))
+## Bar plots ---------------------------------------------------------------
+
+# PIs
+PItot <- sum(GtRpop$PIs)
+
+GtRpop %>% select(category, PIs) %>%
+       ggplot(aes(x=category,y=PIs, fill = category)) +
+       geom_col() +
+       theme_bw() + theme(legend.position = "none") +
+       theme(axis.text.x = element_text(angle = -90, vjust = 0, hjust=0)) +
+       xlab("Category") + ylab(paste0("Number of PIs (N=",PItot,")"))
 
 ## Radar plot ---------------------------------------------------------------
 
