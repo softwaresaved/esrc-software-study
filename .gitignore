@@ -10,3 +10,4 @@ Data/Proj
 Data/*.sqlite
 Data/abstracts.zip
 *.xlsx
+Data/HESA/
