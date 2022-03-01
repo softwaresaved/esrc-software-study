@@ -205,6 +205,8 @@ if(any(esrc_subjects$category == "-")) {
 
 ## Populations of categories ------------------------------------------------
 
+# Remove the uncategorised category
+esrc_subjects <- esrc_subjects %>% filter(category != "Uncategorised")
 
 # Plot the contribution of each category by number
 esrc_subjects %>% group_by(category)                    %>%
@@ -215,14 +217,23 @@ esrc_subjects %>% group_by(category)                    %>%
 GtRpop  %>% kable(format="pipe", align= rep("l", 5),
                        col.names = c("Category", "Number of awards","Contributions",
                         "Award (£)", "Unique PIs"))
+
 ## Bar plots ---------------------------------------------------------------
 
 # PIs
 PItot <- sum(GtRpop$PIs)
 
-GtRpop %>% select(category, PIs) %>%
-       ggplot(aes(x = category, y = PIs, fill = category)) +
+GtRpop %>% select(category, PIs)    %>%
+       group_by(category)           %>%
+       mutate(pct = sum(PIs)/PItot) %>%
+       ggplot(aes(x = category,
+                  y = PIs,
+                  fill = category,
+                  label = scales::percent(pct, accuracy = 0.1))) +
        geom_col() +
+       geom_text(position = position_dodge(width = .9),
+                 vjust = -0.5,
+                 size = 3) +
        theme_bw() + theme(legend.position = "none") +
        theme(axis.text.x = element_text(angle = -90, vjust = 0, hjust = 0)) +
        xlab("Category") + ylab(paste0("Number of PIs (N =",PItot,")"))
@@ -230,9 +241,17 @@ GtRpop %>% select(category, PIs) %>%
 # Number of grants
 NGrantTot <- sum(GtRpop$NGrants)
 
-GtRpop %>% select(category, NGrants) %>%
-  ggplot(aes(x = category, y = NGrants, fill = category)) +
+GtRpop %>% select(category, NGrants)   %>%
+  group_by(category)                   %>%
+  mutate(pct = sum(NGrants)/NGrantTot) %>%
+  ggplot(aes(x = category,
+             y = NGrants,
+             fill = category,
+             label = scales::percent(pct, accuracy = 0.1))) +
   geom_col() +
+  geom_text(position = position_dodge(width = .9),
+            vjust = -0.5,
+            size = 3) +
   theme_bw() + theme(legend.position = "none") +
   theme(axis.text.x = element_text(angle = -90, vjust = 0, hjust=0)) +
   xlab("Category") + ylab(paste0("Number of grants (N = ",NGrantTot,")"))
@@ -240,9 +259,17 @@ GtRpop %>% select(category, NGrants) %>%
 # Number of contributions
 NContTot <- sum(GtRpop$Contributions)
 
-GtRpop %>% select(category, Contributions) %>%
-  ggplot(aes(x = category, y = Contributions, fill = category)) +
+GtRpop %>% select(category, Contributions)   %>%
+  group_by(category)                         %>%
+  mutate(pct = sum(Contributions)/NContTot)  %>%
+  ggplot(aes(x = category,
+             y = Contributions,
+             fill = category,
+             label = scales::percent(pct, accuracy = 0.1))) +
   geom_col() +
+  geom_text(position = position_dodge(width = .9),
+            vjust = -0.5,
+            size = 3) +
   theme_bw() + theme(legend.position = "none") +
   theme(axis.text.x = element_text(angle = -90, vjust = 0, hjust=0)) +
   xlab("Category") + ylab(paste0("Number of fractional Contributions (N = ", NContTot,")"))
@@ -252,9 +279,14 @@ N <-  1e6
 MoneyTot <- round(sum(GtRpop$Money)/N)
 
 GtRpop %>% select(category, Money) %>%
-  mutate(myMoney = Money/N) %>%
-  ggplot(aes(x = category, y = myMoney, fill = category)) +
+  mutate(myMoney = Money/N)        %>%
+  group_by(category)                         %>%
+  mutate(pct = sum(myMoney)/MoneyTot)  %>%
+  ggplot(aes(x = category, y = myMoney, fill = category, label = scales::percent(pct, accuracy = 0.1))) +
   geom_col() +
+  geom_text(position = position_dodge(width = .9),
+            vjust = -0.5,
+            size = 3) +
   theme_bw() + theme(legend.position = "none") +
   theme(axis.text.x = element_text(angle = -90, vjust = 0, hjust=0)) +
   xlab("Category") + ylab(paste0("Amount awarded (Million £s, Tot = £", MoneyTot," Millions)"))
