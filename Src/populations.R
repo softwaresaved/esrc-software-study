@@ -278,11 +278,14 @@ GtRpop %>% select(category, Contributions)   %>%
 N <-  1e6
 MoneyTot <- round(sum(GtRpop$Money)/N)
 
-GtRpop %>% select(category, Money) %>%
-  mutate(myMoney = Money/N)        %>%
+GtRpop %>% select(category, Money)           %>%
+  mutate(myMoney = Money/N)                  %>%
   group_by(category)                         %>%
-  mutate(pct = sum(myMoney)/MoneyTot)  %>%
-  ggplot(aes(x = category, y = myMoney, fill = category, label = scales::percent(pct, accuracy = 0.1))) +
+  mutate(pct = sum(myMoney)/MoneyTot)        %>%
+  ggplot(aes(x = category,
+             y = myMoney,
+             fill = category,
+             label = scales::percent(pct, accuracy = 0.1))) +
   geom_col() +
   geom_text(position = position_dodge(width = .9),
             vjust = -0.5,
@@ -313,17 +316,22 @@ create_radarchart <- function(data, color = "#00AFBB",
 }
 
 # Normalise populations
-GtRpop %>% mutate(totGrants = sum(NGrants), totContrib = sum(Contributions),
-                   totMoney = sum(Money), totPIs = sum(PIs)) %>%
-           group_by(category) %>%
+GtRpop %>% mutate(totGrants = sum(NGrants),
+                  totContrib = sum(Contributions),
+                  totMoney = sum(Money),
+                  totPIs = sum(PIs))        %>%
+           group_by(category)               %>%
            summarise(Grants = sum(NGrants)/totGrants,
                      Contribs = sum(Contributions)/totContrib,
                      Money = sum(Money)/totMoney,
                      PIs = sum(PIs)/totPIs) -> normGtRpop
 
 # Create a new row with the minimum and maximum for each column
-normGtRpop <- add_row(normGtRpop,category = "Min", normGtRpop %>% summarise(across(2:ncol(normGtRpop), min)), .after = 0)
-normGtRpop <- add_row(normGtRpop,category = "Max", normGtRpop %>% summarise(across(2:ncol(normGtRpop), max)), .after = 0)
+normGtRpop <- add_row(normGtRpop,category = "Min",
+                      normGtRpop %>% summarise(across(2:ncol(normGtRpop), min)), .after = 0)
+
+normGtRpop <- add_row(normGtRpop,category = "Max",
+                      normGtRpop %>% summarise(across(2:ncol(normGtRpop), max)), .after = 0)
 
 normGtRpop[c(1,2,3),-1]
 create_radarchart(normGtRpop[c(1,2,3),-1])
