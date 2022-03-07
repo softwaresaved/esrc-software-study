@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 30/01/22.
+**Last updated**: 07/03/22.
 
 -   [Introduction](#introduction)
 -   [Overall expenditure](#overall-expenditure)
@@ -53,14 +53,14 @@ Research](https://gtr.ukri.org/) (GtR) data snapshot. The data is made
 available under an [Open Government
 Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/),
 and covers the period 01/01/73 to 01/01/30. The GtR data snapshot
-corresponded to data last updated by UKRI on the 24th January 2022.
+corresponded to data last updated by UKRI on the 24th February 2022.
 
 The R markdown that generated this analysis is available at:
 
 -   <https://github.com/softwaresaved/esrc-software-study/blob/main/Src/ESRC.Rmd>
 
-The data set contains 127,310 rows (after some data cleaning), where a
-row corresponds to the record of an award. In this data set 11,511
+The data set contains 128,238 rows (after some data cleaning), where a
+row corresponds to the record of an award. In this data set 11,598
 correspond to ESRC awards.
 
 UK Research Councils were formed in different years (source:
@@ -102,15 +102,15 @@ The same information in tabular format:
 
 | Funding org | Total awarded (Million £s) |
 |:------------|---------------------------:|
-| EPSRC       |                     15,150 |
-| Innovate UK |                     11,882 |
-| MRC         |                      6,243 |
-| BBSRC       |                      4,713 |
-| ESRC        |                      3,462 |
-| NERC        |                      3,159 |
-| STFC        |                      2,334 |
-| AHRC        |                      1,253 |
-| UKRI        |                        382 |
+| EPSRC       |                     15,262 |
+| Innovate UK |                     11,940 |
+| MRC         |                      6,268 |
+| BBSRC       |                      4,732 |
+| ESRC        |                      3,501 |
+| NERC        |                      3,350 |
+| STFC        |                      2,364 |
+| AHRC        |                      1,261 |
+| UKRI        |                        392 |
 | NC3Rs       |                         73 |
 
 The number of awards given by each council:
@@ -126,16 +126,16 @@ tabular form:
 
 | Funding org | Number of awards | Total awarded (£) | Average award (£) |
 |:------------|-----------------:|------------------:|------------------:|
-| UKRI        |              383 |       381,505,040 |           996,097 |
-| MRC         |           10,130 |     6,242,641,739 |           616,253 |
-| Innovate UK |           24,776 |    11,881,879,389 |           479,572 |
-| EPSRC       |           32,948 |    15,149,675,762 |           459,806 |
-| STFC        |            7,051 |     2,334,229,990 |           331,049 |
-| ESRC        |           11,511 |     3,461,867,257 |           300,744 |
-| NERC        |           10,709 |     3,158,524,093 |           294,941 |
-| BBSRC       |           16,113 |     4,713,298,744 |           292,515 |
-| NC3Rs       |              462 |        73,371,692 |           158,813 |
-| AHRC        |            9,570 |     1,253,095,309 |           130,940 |
+| UKRI        |              393 |       391,911,795 |           997,231 |
+| MRC         |           10,166 |     6,267,924,420 |           616,558 |
+| Innovate UK |           25,000 |    11,939,854,589 |           477,594 |
+| EPSRC       |           33,238 |    15,261,747,133 |           459,166 |
+| STFC        |            7,112 |     2,364,288,736 |           332,437 |
+| NERC        |           10,759 |     3,350,291,272 |           311,394 |
+| ESRC        |           11,598 |     3,501,153,022 |           301,876 |
+| BBSRC       |           16,178 |     4,732,082,523 |           292,501 |
+| NC3Rs       |              463 |        73,384,156 |           158,497 |
+| AHRC        |            9,662 |     1,261,472,322 |           130,560 |
 
 The distribution of awards by research council.
 
@@ -173,15 +173,15 @@ The same information in tabular format:
 
 | Funding org | Total awarded (Million £s) |
 |:------------|---------------------------:|
-| EPSRC       |                      6,199 |
-| Innovate UK |                      4,796 |
-| ESRC        |                      1,729 |
-| MRC         |                      1,724 |
-| BBSRC       |                      1,375 |
-| NERC        |                      1,262 |
-| STFC        |                        710 |
-| AHRC        |                        434 |
-| UKRI        |                        374 |
+| EPSRC       |                      6,304 |
+| Innovate UK |                      4,791 |
+| ESRC        |                      1,766 |
+| MRC         |                      1,745 |
+| NERC        |                      1,443 |
+| BBSRC       |                      1,367 |
+| STFC        |                        741 |
+| AHRC        |                        443 |
+| UKRI        |                        382 |
 | NC3Rs       |                         21 |
 
 The number of awards given by each council for active projects:
@@ -197,16 +197,16 @@ average award:
 
 | Funding org | Number of awards | Total awarded (£) | Average award (£) |
 |:------------|-----------------:|------------------:|------------------:|
-| Innovate UK |            3,454 |     4,796,162,197 |         1,388,582 |
-| UKRI        |              374 |       373,625,923 |           999,000 |
-| MRC         |            3,368 |     1,724,325,577 |           511,973 |
-| EPSRC       |           15,170 |     6,198,838,743 |           408,625 |
-| NERC        |            3,283 |     1,262,488,593 |           384,553 |
-| ESRC        |            4,868 |     1,729,032,756 |           355,183 |
-| BBSRC       |            4,538 |     1,375,109,452 |           303,021 |
-| STFC        |            2,671 |       710,343,756 |           265,947 |
-| AHRC        |            3,266 |       433,821,009 |           132,829 |
-| NC3Rs       |              172 |        20,746,514 |           120,619 |
+| Innovate UK |            3,448 |     4,790,776,011 |         1,389,436 |
+| UKRI        |              382 |       382,101,075 |         1,000,265 |
+| MRC         |            3,386 |     1,745,442,053 |           515,488 |
+| NERC        |            3,323 |     1,443,216,024 |           434,311 |
+| EPSRC       |           15,385 |     6,303,746,217 |           409,733 |
+| ESRC        |            4,944 |     1,766,391,182 |           357,280 |
+| BBSRC       |            4,538 |     1,366,783,223 |           301,186 |
+| STFC        |            2,719 |       740,988,391 |           272,522 |
+| AHRC        |            3,352 |       443,171,889 |           132,211 |
+| NC3Rs       |              172 |        20,698,414 |           120,340 |
 
 The distribution of awards by research council for active projects.
 
@@ -235,10 +235,10 @@ Data is sorted by the average award.
 
 | Project Catgeory | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:-----------------|-----------------:|------------------:|------------------:|
-| Research Grant   |            6,055 |     2,735,065,463 |         451703.63 |
+| Research Grant   |            6,112 |     2,773,237,214 |         453736.46 |
 | Training Grant   |              403 |       574,573,855 |        1425741.58 |
-| Fellowship       |            1,423 |       152,227,939 |         106976.77 |
-| Studentship      |            3,630 |                 0 |              0.00 |
+| Fellowship       |            1,434 |       153,341,953 |         106933.02 |
+| Studentship      |            3,649 |                 0 |              0.00 |
 
 ![](ESRC_files/figure-gfm/esrc_categoriesByYear-1.png)<!-- -->
 
@@ -251,10 +251,10 @@ This information corresponds to projects that are classified as
 
 | Project Catgeory | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:-----------------|-----------------:|------------------:|------------------:|
+| Research Grant   |            1,262 |     1,253,900,235 |         993581.80 |
 | Training Grant   |               65 |       479,756,418 |        7380867.97 |
-| Fellowship       |              269 |        31,620,515 |         117548.38 |
-| Research Grant   |            1,207 |     1,217,655,823 |        1008828.35 |
-| Studentship      |            3,327 |                 0 |              0.00 |
+| Fellowship       |              280 |        32,734,529 |         116909.03 |
+| Studentship      |            3,337 |                 0 |              0.00 |
 
 ![](ESRC_files/figure-gfm/esrc_categoriesByYearAct-1.png)<!-- -->
 
@@ -278,14 +278,14 @@ The top 15 active projects:
 
 |                               Lead Org |       Category | Total awarded (£) |                                                           Project title |
 |---------------------------------------:|---------------:|------------------:|------------------------------------------------------------------------:|
-|                    University of Essex | Research Grant |        44,619,972 | Understanding Society: The UK Household Longitudinal Survey Waves 13-15 |
+|                    University of Essex | Research Grant |        49,115,852 | Understanding Society: The UK Household Longitudinal Survey Waves 13-15 |
 |              University College London | Research Grant |        36,267,415 |                Centre for Longitudinal Studies, Resource Centre 2015-20 |
 |                    University of Essex | Research Grant |        31,987,749 |                                      Understanding Society Waves 6 to 8 |
+|                    University of Essex | Research Grant |        31,322,728 |                                             UK Data Service (2017-2022) |
 |                    University of Essex | Research Grant |        30,212,001 |  Understanding Society: The UK Household Longitudinal Study: Waves 9-11 |
 |                University of Edinburgh | Training Grant |        27,538,201 |                       Scottish ESRC Doctoral Training Centre DTC 2011 - |
 |               University of Manchester | Research Grant |        26,621,454 |                                              The Productivity Institute |
 |                University of Liverpool | Training Grant |        24,932,784 |                       North West ESRC Doctoral Training Centre DTG 2011 |
-|                    University of Essex | Research Grant |        21,872,654 |                                             UK Data Service (2017-2022) |
 |                University of Sheffield | Training Grant |        21,107,576 |                       White Rose ESRC Doctoral Training Centre DTG 2011 |
 |                   University of Oxford | Training Grant |        19,130,626 |             University of Oxford ESRC Doctoral Training Centre DTG 2011 |
 |                    Coventry University | Research Grant |        18,759,063 |              GCRF South-South Migration, Inequality and Development Hub |
@@ -306,21 +306,21 @@ below.
 
 | Number of days | Project Category | Number of projects |
 |---------------:|:-----------------|-------------------:|
-|           1460 | Studentship      |                748 |
-|           1095 | Studentship      |                309 |
-|           1095 | Research Grant   |                187 |
-|           1277 | Studentship      |                161 |
-|           1094 | Studentship      |                155 |
-|            364 | Fellowship       |                152 |
-|           1460 | Research Grant   |                 95 |
+|           1460 | Studentship      |                740 |
+|           1095 | Studentship      |                300 |
+|           1095 | Research Grant   |                188 |
+|           1277 | Studentship      |                159 |
+|           1094 | Studentship      |                152 |
+|            364 | Fellowship       |                151 |
+|           1460 | Research Grant   |                 99 |
 |           1552 | Studentship      |                 85 |
 |           1464 | Studentship      |                 74 |
+|           1187 | Studentship      |                 71 |
+|            729 | Research Grant   |                 69 |
 |           1094 | Research Grant   |                 69 |
-|            729 | Research Grant   |                 68 |
-|           1187 | Studentship      |                 68 |
-|            364 | Research Grant   |                 64 |
-|           1461 | Studentship      |                 64 |
-|           1642 | Studentship      |                 52 |
+|            545 | Research Grant   |                 62 |
+|           1461 | Studentship      |                 62 |
+|            364 | Research Grant   |                 61 |
 
 Percentage of award types by time length.
 
@@ -340,18 +340,18 @@ ordered by the total award given is shown in the table below.
 
 | Region                   | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:-------------------------|-----------------:|------------------:|------------------:|
-| Unknown                  |            3,818 |     1,124,425,937 |         294506.53 |
-| London                   |            1,663 |       461,285,854 |         277381.75 |
-| South East               |            1,626 |       414,940,920 |         255191.22 |
-| East of England          |              209 |       336,963,720 |        1612266.60 |
-| Scotland                 |            1,167 |       330,911,448 |         283557.37 |
-| North West               |              788 |       205,574,192 |         260880.95 |
-| South West               |              567 |       144,930,664 |         255609.64 |
-| West Midlands            |              410 |       116,905,099 |         285134.39 |
-| East Midlands            |              432 |        88,022,212 |         203755.12 |
-| Wales                    |              217 |        78,798,631 |         363127.33 |
+| Unknown                  |            3,864 |     1,134,062,731 |         293494.50 |
+| London                   |            1,671 |       461,842,582 |         276386.94 |
+| South East               |            1,639 |       424,296,552 |         258875.26 |
+| East of England          |              211 |       351,069,242 |        1663835.27 |
+| Scotland                 |            1,172 |       334,226,244 |         285175.98 |
+| North West               |              793 |       206,831,592 |         260821.68 |
+| South West               |              570 |       145,368,501 |         255032.46 |
+| West Midlands            |              412 |       117,187,816 |         284436.45 |
+| East Midlands            |              435 |        88,354,612 |         203114.05 |
+| Wales                    |              216 |        77,994,514 |         361085.71 |
+| Yorkshire and The Humber |              324 |        55,799,858 |         172221.78 |
 | Northern Ireland         |              156 |        55,209,650 |         353908.01 |
-| Yorkshire and The Humber |              323 |        54,989,802 |         170247.07 |
 | Outside UK               |               87 |        42,660,826 |         490354.32 |
 | North East               |               46 |         5,720,679 |         124362.59 |
 | NA                       |                2 |           527,623 |         263811.50 |
@@ -363,18 +363,18 @@ by the total award given is shown in the table below.
 
 | Region                   | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:-------------------------|-----------------:|------------------:|------------------:|
-| Unknown                  |            1,773 |       586,504,674 |         330797.90 |
-| East of England          |               74 |       207,814,821 |        2808308.39 |
-| London                   |              692 |       201,440,437 |         291098.90 |
-| South East               |              677 |       184,916,569 |         273141.17 |
-| Scotland                 |              461 |       165,407,851 |         358802.28 |
-| North West               |              310 |        96,919,588 |         312643.83 |
-| South West               |              240 |        76,801,701 |         320007.09 |
-| West Midlands            |              138 |        66,331,462 |         480662.77 |
-| Wales                    |              112 |        43,063,341 |         384494.12 |
-| East Midlands            |              173 |        38,563,080 |         222907.98 |
-| Northern Ireland         |               58 |        22,834,484 |         393698.00 |
-| Yorkshire and The Humber |              120 |        18,645,570 |         155379.75 |
+| Unknown                  |            1,817 |       596,141,468 |         328091.07 |
+| East of England          |               76 |       221,920,343 |        2920004.51 |
+| London                   |              698 |       202,710,650 |         290416.40 |
+| South East               |              686 |       191,757,717 |         279530.20 |
+| Scotland                 |              464 |       168,722,647 |         363626.39 |
+| North West               |              314 |        98,176,988 |         312665.57 |
+| South West               |              245 |        77,239,538 |         315263.42 |
+| West Midlands            |              140 |        66,614,179 |         475815.56 |
+| Wales                    |              111 |        42,259,224 |         380713.73 |
+| East Midlands            |              176 |        38,895,480 |         220997.05 |
+| Northern Ireland         |               57 |        22,834,484 |         400604.98 |
+| Yorkshire and The Humber |              120 |        19,329,286 |         161077.38 |
 | Outside UK               |               26 |        17,845,281 |         686356.96 |
 | North East               |               13 |         1,843,525 |         141809.62 |
 | NA                       |                1 |           100,372 |         100372.00 |
@@ -394,23 +394,23 @@ award.
 | University of Cape Town                 |                6 |         5,670,678 |         945113.00 |
 | University of the West of England       |               51 |         4,717,707 |          92504.06 |
 | Canterbury Christ Church University     |                2 |           181,236 |          90618.00 |
+| Manchester Metropolitan University      |               67 |         5,998,762 |          89533.76 |
 | Office for National Statistics          |                2 |        17,898,948 |        8949474.00 |
-| Manchester Metropolitan University      |               67 |         5,987,200 |          89361.19 |
 | University of the Highlands and Islands |                3 |           264,465 |          88155.00 |
-| University of the Arts London           |                3 |           262,006 |          87335.33 |
 | Quadram Institute Bioscience            |                1 |            87,062 |          87062.00 |
 | Johns Hopkins University                |                1 |           865,561 |         865561.00 |
 | University of Huddersfield              |               11 |           950,591 |          86417.36 |
 | University of Hertfordshire             |               14 |         1,136,235 |          81159.64 |
-| University of Wales, Lampeter           |                1 |           804,117 |         804117.00 |
+| University of Wales Trinity St David    |                1 |           804,117 |         804117.00 |
 | Aberystwyth University                  |               37 |         2,830,742 |          76506.54 |
 | University of Michigan                  |                3 |         2,240,913 |         746971.00 |
-| Institute of Development Studies        |               35 |        25,427,751 |         726507.17 |
+| University of the Arts London           |                4 |           297,934 |          74483.50 |
 | National Institute of Public Health     |                1 |           722,163 |         722163.00 |
 | Birmingham City University              |                8 |           577,158 |          72144.75 |
 | University of Hull                      |               45 |         3,241,152 |          72025.60 |
 | University of East London               |               24 |         1,721,019 |          71709.12 |
 | Bournemouth University                  |               12 |           855,831 |          71319.25 |
+| Institute of Development Studies        |               36 |        25,506,408 |         708511.33 |
 | University of Bolton                    |                1 |            70,844 |          70844.00 |
 | SAHFOS                                  |                1 |               700 |            700.00 |
 
@@ -419,164 +419,166 @@ award.
 This only shows the top 25 organisations with active projects by the
 average value of the award.
 
-| Org                                 | Number of Awards | Total Awarded (£) | Average Award (£) |
-|:------------------------------------|-----------------:|------------------:|------------------:|
-| Harvard University                  |                1 |            99,739 |          99739.00 |
-| Canterbury Christ Church University |                1 |            99,731 |          99731.00 |
-| Cranfield University                |                3 |         2,943,034 |         981011.33 |
-| Birmingham City University          |                3 |           290,043 |          96681.00 |
-| University of Exeter                |              126 |        12,150,354 |          96431.38 |
-| Institute of Development Studies    |               12 |        11,561,657 |         963471.42 |
-| Brunel University                   |               12 |         1,142,782 |          95231.83 |
-| University of Surrey                |               24 |        22,821,261 |         950885.88 |
-| Manchester Metropolitan University  |               38 |         3,592,748 |          94546.00 |
-| University of Derby                 |                2 |           187,847 |          93923.50 |
-| University of East London           |               10 |            93,668 |           9366.80 |
-| University of California, Berkeley  |                1 |            93,460 |          93460.00 |
-| University of Brighton              |               38 |           342,106 |           9002.79 |
-| Office for National Statistics      |                2 |        17,898,948 |        8949474.00 |
-| Institute for Fiscal Studies        |               19 |        16,400,339 |         863175.74 |
-| University of St Andrews            |               26 |         2,149,900 |          82688.46 |
-| University of Cape Town             |                4 |         3,264,723 |         816180.75 |
-| Open University                     |               35 |         2,835,776 |          81022.17 |
-| University of Wales, Lampeter       |                1 |           804,117 |         804117.00 |
-| University of Bradford              |                4 |           313,743 |          78435.75 |
-| University of Plymouth              |                8 |           597,548 |          74693.50 |
-| Goldsmiths College                  |               22 |         1,587,713 |          72168.77 |
-| Washington University in St Louis   |                1 |           713,698 |         713698.00 |
-| University of Michigan              |                1 |           697,241 |         697241.00 |
-| University of Salford               |                2 |         1,384,158 |         692079.00 |
+| Org                                  | Number of Awards | Total Awarded (£) | Average Award (£) |
+|:-------------------------------------|-----------------:|------------------:|------------------:|
+| Harvard University                   |                1 |            99,739 |          99739.00 |
+| Canterbury Christ Church University  |                1 |            99,731 |          99731.00 |
+| University of the Arts London        |                2 |           197,701 |          98850.50 |
+| Birmingham City University           |                3 |           290,043 |          96681.00 |
+| Manchester Metropolitan University   |               38 |         3,604,310 |          94850.26 |
+| University of Derby                  |                2 |           187,847 |          93923.50 |
+| University of East London            |               10 |            93,668 |           9366.80 |
+| University of California, Berkeley   |                1 |            93,460 |          93460.00 |
+| University of Surrey                 |               25 |        22,930,331 |         917213.24 |
+| University of Brighton               |               38 |           342,106 |           9002.79 |
+| Institute of Development Studies     |               13 |        11,640,314 |         895408.77 |
+| Office for National Statistics       |                2 |        17,898,948 |        8949474.00 |
+| Brunel University                    |               14 |         1,234,276 |          88162.57 |
+| Institute for Fiscal Studies         |               19 |        16,400,339 |         863175.74 |
+| University of St Andrews             |               26 |         2,149,900 |          82688.46 |
+| University of Cape Town              |                4 |         3,264,723 |         816180.75 |
+| University of Wales Trinity St David |                1 |           804,117 |         804117.00 |
+| Open University                      |               37 |         2,950,128 |          79733.19 |
+| University of Bradford               |                4 |           313,743 |          78435.75 |
+| Cranfield University                 |                4 |         2,993,439 |         748359.75 |
+| University of Plymouth               |                8 |           597,548 |          74693.50 |
+| Goldsmiths College                   |               22 |         1,587,713 |          72168.77 |
+| Washington University in St Louis    |                1 |           713,698 |         713698.00 |
+| University of Michigan               |                1 |           697,241 |         697241.00 |
+| University of Salford                |                2 |         1,384,158 |         692079.00 |
 
 The same table ordered by the number of awards:
 
 | Org                                  | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:-------------------------------------|-----------------:|------------------:|------------------:|
-| University College London            |              296 |       194,599,979 |         657432.36 |
-| University of Oxford                 |              237 |        85,839,596 |         362192.39 |
-| London School of Economics & Pol Sci |              222 |        77,519,250 |         349185.81 |
-| Cardiff University                   |              217 |        57,349,429 |         264283.08 |
-| King’s College London                |              216 |        56,984,830 |         263818.66 |
-| University of Cambridge              |              198 |        43,193,441 |         218148.69 |
-| University of Manchester             |              162 |        53,518,331 |         330360.07 |
-| University of Sheffield              |              159 |        62,891,234 |         395542.35 |
-| University of Southampton            |              139 |        49,997,549 |         359694.60 |
-| University of Edinburgh              |              137 |        92,042,652 |         671844.18 |
-| University of Leeds                  |              137 |        27,638,144 |         201738.28 |
-| University of Birmingham             |              130 |        17,588,411 |         135295.47 |
-| University of Bristol                |              130 |        63,677,099 |         489823.84 |
-| University of Exeter                 |              126 |        12,150,354 |          96431.38 |
-| University of Glasgow                |              125 |        39,117,813 |         312942.50 |
-| Durham University                    |              118 |        30,243,433 |         256300.28 |
-| University of Liverpool              |              110 |        53,970,874 |         490644.31 |
-| Newcastle University                 |              109 |        24,592,252 |         225616.99 |
-| Lancaster University                 |              103 |        25,097,440 |         243664.47 |
-| University of Warwick                |               98 |        39,187,834 |         399875.86 |
-| University of Nottingham             |               89 |        16,958,637 |         190546.48 |
+| University College London            |              299 |       194,907,944 |         651866.03 |
+| University of Oxford                 |              234 |        83,325,112 |         356090.22 |
+| London School of Economics & Pol Sci |              224 |        78,281,421 |         349470.63 |
+| Cardiff University                   |              221 |        57,730,832 |         261225.48 |
+| King’s College London                |              216 |        57,064,736 |         264188.59 |
+| University of Cambridge              |              210 |        43,301,780 |         206198.95 |
+| University of Manchester             |              163 |        53,837,183 |         330289.47 |
+| University of Sheffield              |              162 |        63,279,551 |         390614.51 |
+| University of Leeds                  |              140 |        27,757,429 |         198267.35 |
+| University of Southampton            |              140 |        50,057,303 |         357552.16 |
+| University of Edinburgh              |              139 |        92,166,008 |         663064.81 |
+| University of Bristol                |              134 |        64,005,811 |         477655.31 |
+| University of Birmingham             |              133 |        18,524,190 |         139279.62 |
+| University of Exeter                 |              128 |        17,303,084 |         135180.34 |
+| University of Glasgow                |              126 |        42,004,979 |         333372.85 |
+| Durham University                    |              121 |        31,044,809 |         256568.67 |
+| University of Liverpool              |              113 |        54,090,187 |         478674.22 |
+| Newcastle University                 |              110 |        24,667,367 |         224248.79 |
+| Lancaster University                 |              106 |        26,024,426 |         245513.45 |
+| University of Warwick                |               99 |        39,237,211 |         396335.46 |
+| University of Nottingham             |               90 |        17,019,837 |         189109.30 |
 | Queen Mary, University of London     |               85 |        10,693,466 |         125805.48 |
-| University of York                   |               83 |        16,535,404 |         199221.73 |
-| University of Bath                   |               79 |         9,354,963 |         118417.25 |
-| University of Essex                  |               68 |       182,114,604 |        2678155.94 |
+| University of York                   |               84 |        17,345,460 |         206493.57 |
+| University of Bath                   |               80 |         9,464,088 |         118301.10 |
+| University of Sussex                 |               70 |        38,201,879 |         545741.13 |
 
 ## Department awards
 
 ### Department awards for all projects
 
-There are 1186 unique departments. The table below only shows
+There are 1193 unique departments. The table below only shows
 departments that have 30 or more occurrences. The Departments below have
 been ‘cleaned’ to remove minor differences, e.g. Cardiff Business School
 to Business School and so on.
 
 | Department                              | Number | Percent | Total Awarded (£) |
 |:----------------------------------------|-------:|--------:|------------------:|
-| Psychology                              |    894 |    7.77 |       155,614,681 |
-| Social Science                          |    608 |    5.28 |       210,502,199 |
-| Geography                               |    459 |    3.99 |       136,390,345 |
-| Economics                               |    439 |    3.81 |       103,758,414 |
-| Education                               |    361 |    3.14 |        79,823,635 |
-| Sociology                               |    304 |    2.64 |        78,779,479 |
-| Law                                     |    270 |    2.35 |        49,215,495 |
-| Business School                         |    269 |    2.34 |        94,174,908 |
-| Politics                                |    217 |    1.89 |        25,418,624 |
-| Social and Political Science            |    153 |    1.33 |        63,475,942 |
-| Management                              |    150 |    1.30 |        23,519,136 |
-| Applied Social Science                  |    141 |    1.22 |        17,401,675 |
-| Anthropology                            |    109 |    0.95 |        14,001,257 |
-| Experimental Psychology                 |     99 |    0.86 |        22,121,224 |
-| Sociology & Social Policy               |     94 |    0.82 |        11,305,140 |
-| Politics and International Studies      |     92 |    0.80 |        24,352,975 |
-| International Development               |     88 |    0.76 |        14,311,022 |
-| Geography Politics and Sociology        |     86 |    0.75 |         7,949,894 |
-| Environment, Education and Development  |     85 |    0.74 |        24,160,525 |
-| Social & Political Science              |     83 |    0.72 |        34,955,714 |
-| History                                 |     79 |    0.69 |         7,457,117 |
-| Health Science                          |     79 |    0.69 |        22,638,619 |
-| Epidemiology and Public Health          |     77 |    0.67 |        23,441,020 |
+| Psychology                              |    900 |    7.76 |       157,057,277 |
+| Social Science                          |    613 |    5.29 |       211,559,770 |
+| Geography                               |    461 |    3.97 |       141,559,264 |
+| Economics                               |    442 |    3.81 |       104,120,091 |
+| Education                               |    362 |    3.12 |        80,037,535 |
+| Sociology                               |    305 |    2.63 |        78,900,111 |
+| Law                                     |    274 |    2.36 |        49,478,411 |
+| Business School                         |    270 |    2.33 |       102,424,723 |
+| Politics                                |    217 |    1.87 |        25,418,624 |
+| Social and Political Science            |    153 |    1.32 |        63,475,942 |
+| Management                              |    150 |    1.29 |        23,519,136 |
+| Applied Social Science                  |    141 |    1.22 |        17,468,953 |
+| Anthropology                            |    109 |    0.94 |        14,001,257 |
+| Experimental Psychology                 |     99 |    0.85 |        22,121,224 |
+| Sociology & Social Policy               |     94 |    0.81 |        11,305,140 |
+| Politics and International Studies      |     94 |    0.81 |        24,352,975 |
+| International Development               |     89 |    0.77 |        14,311,022 |
+| Geography Politics and Sociology        |     87 |    0.75 |         8,025,009 |
+| Environment, Education and Development  |     86 |    0.74 |        24,263,499 |
+| Social & Political Science              |     83 |    0.72 |        37,683,118 |
+| History                                 |     82 |    0.71 |         8,271,728 |
+| Health Science                          |     79 |    0.68 |        22,207,732 |
+| Epidemiology and Public Health          |     77 |    0.66 |        23,441,020 |
 | IFS Research Team                       |     76 |    0.66 |        51,097,083 |
-| Economic, Social & Political Sci        |     71 |    0.62 |        58,163,997 |
-| Research Department                     |     66 |    0.57 |        27,509,469 |
-| Psychological Science                   |     64 |    0.56 |         9,177,714 |
+| Economic, Social & Political Sci        |     71 |    0.61 |        58,163,997 |
+| Research Department                     |     67 |    0.58 |        27,588,126 |
+| Psychological Science                   |     64 |    0.55 |         9,177,714 |
 | Politics and International Relations    |     61 |    0.53 |         4,890,554 |
-| Policy Studies                          |     58 |    0.50 |        12,665,105 |
-| Geography and Planning                  |     58 |    0.50 |         2,274,800 |
-| Global Studies                          |     56 |    0.49 |        11,758,682 |
-| Social and Economic Research            |     54 |    0.47 |       194,928,356 |
-| Arts, Humanities & Social Sci           |     49 |    0.43 |                 0 |
-| Health and Life Science                 |     49 |    0.43 |         5,496,272 |
+| Geography and Planning                  |     60 |    0.52 |         2,315,174 |
+| Policy Studies                          |     59 |    0.51 |        12,709,461 |
+| Global Studies                          |     56 |    0.48 |        11,758,682 |
+| Social and Economic Research            |     55 |    0.47 |       199,533,399 |
+| Health and Life Science                 |     49 |    0.42 |         5,496,272 |
+| Arts, Humanities & Social Sci           |     49 |    0.42 |                 0 |
+| Criminology                             |     48 |    0.41 |        22,873,570 |
 | Government                              |     47 |    0.41 |         6,983,337 |
-| Criminology                             |     47 |    0.41 |        22,701,715 |
 | Philosophy Psychology & Language        |     47 |    0.41 |        10,023,375 |
 | Unlisted                                |     45 |    0.39 |         4,878,100 |
 | Public Health and Policy                |     44 |    0.38 |        15,936,964 |
 | Social and Policy Science               |     44 |    0.38 |         3,718,498 |
-| Education and Professional Studies      |     41 |    0.36 |         7,147,045 |
-| Linguistics and English Language        |     39 |    0.34 |        12,826,299 |
-| War Studies                             |     39 |    0.34 |        22,296,750 |
+| Education and Professional Studies      |     41 |    0.35 |         7,147,045 |
+| War Studies                             |     40 |    0.34 |        22,376,656 |
+| Linguistics and English Language        |     40 |    0.34 |        12,876,502 |
 | Sociological Studies                    |     36 |    0.31 |         5,576,363 |
+| Planning and Geography                  |     36 |    0.31 |         4,486,429 |
 | Arts Languages and Cultures             |     35 |    0.30 |         3,272,010 |
-| Finance                                 |     34 |    0.30 |        11,313,590 |
-| Planning and Geography                  |     34 |    0.30 |         4,192,112 |
+| Finance                                 |     34 |    0.29 |        11,313,590 |
+| Leeds University Business School (LUBS) |     33 |    0.28 |         4,581,168 |
 | Social Pol Sociology & Social Res       |     32 |    0.28 |         3,551,396 |
-| Social Policy                           |     32 |    0.28 |         4,424,327 |
 | Politics & International Relation       |     32 |    0.28 |         8,133,864 |
-| Leeds University Business School (LUBS) |     32 |    0.28 |         4,535,411 |
+| Social Policy                           |     32 |    0.28 |         4,424,327 |
+| Arts and Social Sci (FASS)              |     31 |    0.27 |         6,624,205 |
 | Epidemiology and Population Health      |     31 |    0.27 |         6,422,547 |
 | Geographical Science                    |     31 |    0.27 |         2,822,791 |
+| Social Anthropology                     |     30 |    0.26 |         4,212,208 |
 | Economic Performance                    |     30 |    0.26 |        31,240,968 |
-| Arts and Social Sci (FASS)              |     30 |    0.26 |         6,559,757 |
 
 ### Department awards for active projects only
 
-There are 652 unique departments for active projects (1186 for all
+There are 662 unique departments for active projects (1193 for all
 projects). The table below only shows cases that have 30 or more
 occurrences in active projects.
 
 | Department                           | Number | Percent | Total Awarded (£) |
 |:-------------------------------------|-------:|--------:|------------------:|
-| Psychology                           |    366 |    7.52 |        54,803,276 |
-| Social Science                       |    254 |    5.22 |       106,982,520 |
-| Geography                            |    199 |    4.09 |        86,535,215 |
-| Education                            |    176 |    3.62 |        44,658,886 |
-| Economics                            |    166 |    3.41 |        37,744,052 |
-| Sociology                            |    148 |    3.04 |        39,063,482 |
-| Law                                  |    136 |    2.79 |        12,991,523 |
-| Business School                      |    112 |    2.30 |        58,939,883 |
-| Politics                             |    100 |    2.05 |         8,268,647 |
-| Applied Social Science               |     78 |    1.60 |         8,636,766 |
-| Sociology & Social Policy            |     60 |    1.23 |         2,536,700 |
-| Anthropology                         |     56 |    1.15 |         2,759,406 |
-| Management                           |     54 |    1.11 |         9,652,115 |
-| Economic, Social & Political Sci     |     53 |    1.09 |        45,040,523 |
-| Arts, Humanities & Social Sci        |     49 |    1.01 |                 0 |
-| Geography Politics and Sociology     |     48 |    0.99 |         2,472,517 |
-| History                              |     45 |    0.92 |         1,442,202 |
-| Epidemiology and Public Health       |     44 |    0.90 |         9,484,655 |
-| Health Science                       |     41 |    0.84 |         5,095,211 |
-| Social & Political Science           |     40 |    0.82 |        21,309,445 |
-| Geography and Planning               |     39 |    0.80 |           668,248 |
-| Social and Political Science         |     39 |    0.80 |        42,150,481 |
-| Experimental Psychology              |     37 |    0.76 |         5,573,677 |
-| International Development            |     33 |    0.68 |         3,842,947 |
-| Politics and International Relations |     31 |    0.64 |         1,725,275 |
+| Psychology                           |    369 |    7.46 |        56,245,872 |
+| Social Science                       |    259 |    5.24 |       108,040,091 |
+| Geography                            |    201 |    4.07 |        91,704,134 |
+| Education                            |    177 |    3.58 |        42,643,897 |
+| Economics                            |    169 |    3.42 |        38,105,729 |
+| Sociology                            |    150 |    3.03 |        39,184,114 |
+| Law                                  |    140 |    2.83 |        13,254,439 |
+| Business School                      |    113 |    2.29 |        67,189,698 |
+| Politics                             |    100 |    2.02 |         8,268,647 |
+| Applied Social Science               |     78 |    1.58 |         8,704,044 |
+| Sociology & Social Policy            |     60 |    1.21 |         2,536,700 |
+| Anthropology                         |     56 |    1.13 |         2,759,406 |
+| Management                           |     54 |    1.09 |         9,652,115 |
+| Economic, Social & Political Sci     |     53 |    1.07 |        45,040,523 |
+| Arts, Humanities & Social Sci        |     49 |    0.99 |                 0 |
+| Geography Politics and Sociology     |     49 |    0.99 |         2,547,632 |
+| History                              |     48 |    0.97 |         2,256,813 |
+| Epidemiology and Public Health       |     44 |    0.89 |         9,484,655 |
+| Health Science                       |     41 |    0.83 |         4,664,324 |
+| Geography and Planning               |     40 |    0.81 |           708,622 |
+| Social & Political Science           |     40 |    0.81 |        24,036,849 |
+| Social and Political Science         |     39 |    0.79 |        42,150,481 |
+| Experimental Psychology              |     36 |    0.73 |         5,288,082 |
+| International Development            |     34 |    0.69 |         4,556,432 |
+| Politics and International Relations |     31 |    0.63 |         1,725,275 |
+| Politics and International Studies   |     30 |    0.61 |        15,045,532 |
 
 ## Doctoral Training Partnerships
 
@@ -587,32 +589,32 @@ Currently active doctoral partnerships ordered by the start date.
 | Lead Organisation                    | Department                              | Start    | End      |  Award (£) |
 |:-------------------------------------|:----------------------------------------|:---------|:---------|-----------:|
 | University College London            | Economics                               | 01/10/11 | 02/10/21 | 14,505,856 |
+| University of Surrey                 | Psychology                              | 01/10/11 | 02/10/22 | 11,094,593 |
 | University of Nottingham             | Research and Graduate Services          | 01/10/11 | 02/10/22 |  7,964,843 |
 | London School of Economics & Pol Sci | Research & Project Development Division | 01/10/11 | 02/10/21 | 15,316,412 |
-| University of Surrey                 | Psychology                              | 01/10/11 | 02/10/22 | 11,094,593 |
 | University of Southampton            | Sch of Economic, Social & Political Sci | 01/10/11 | 02/10/22 |  8,164,941 |
-| University of Cambridge              | Board of Graduate Studies               | 01/10/11 | 02/10/22 | 10,015,074 |
-| University of Sussex                 | Research and Enterprise Services        | 01/10/11 | 02/10/22 |  4,865,866 |
 | University of Essex                  | Sociology                               | 01/10/11 | 02/10/22 |  7,884,208 |
-| University College London            | Doctoral School                         | 01/10/11 | 02/10/22 | 12,927,461 |
+| University of Sussex                 | Research and Enterprise Services        | 01/10/11 | 02/10/22 |  4,865,866 |
 | University of Oxford                 | Social Sciences Division                | 01/10/11 | 02/10/22 | 19,130,626 |
-| University of Bristol                | Research and Enterprise Development     | 01/10/11 | 02/10/21 | 17,563,914 |
-| King’s College London                | SSPP School Office                      | 01/10/11 | 31/03/22 |  7,150,273 |
+| University College London            | Doctoral School                         | 01/10/11 | 02/10/22 | 12,927,461 |
+| University of Cambridge              | Board of Graduate Studies               | 01/10/11 | 02/10/22 | 10,015,074 |
 | University of Liverpool              | Sch of Law and Social Justice           | 01/10/11 | 01/10/22 | 24,932,784 |
-| Durham University                    | Archaeology                             | 01/10/11 | 30/09/23 | 11,794,305 |
+| King’s College London                | SSPP School Office                      | 01/10/11 | 31/03/22 |  7,150,273 |
+| University of Bristol                | Research and Enterprise Development     | 01/10/11 | 02/10/21 | 17,563,914 |
 | University of Edinburgh              | Sch of Social and Political Science     | 01/10/11 | 02/10/21 | 27,538,201 |
-| Cardiff University                   | Registry                                | 01/10/11 | 02/10/22 | 14,946,728 |
+| Durham University                    | Archaeology                             | 01/10/11 | 30/09/23 | 11,794,305 |
 | Queen Mary, University of London     | English                                 | 01/10/11 | 02/10/21 |  5,087,223 |
+| Cardiff University                   | Registry                                | 01/10/11 | 02/10/22 | 14,946,728 |
 | University of Birmingham             | The Registrar                           | 01/10/11 | 02/04/22 |  6,277,485 |
 | University of Sheffield              | Geography                               | 01/10/11 | 02/10/22 | 21,107,576 |
 | University of Warwick                | Politics and International Studies      | 03/10/11 | 02/04/22 | 12,411,023 |
 | London Business School               | Research and Faculty Office             | 01/08/17 | 02/10/21 |    346,071 |
-| University of Cambridge              | Criminology                             | 01/10/17 | 30/09/27 | 12,988,673 |
 | University of Bristol                | Education                               | 01/10/17 | 30/09/27 | 17,756,940 |
+| University of Cambridge              | Criminology                             | 01/10/17 | 30/09/27 | 12,988,673 |
 | University of Leeds                  | Sch of Geography                        | 01/10/17 | 30/09/24 |  2,346,732 |
 | University College London            | Epidemiology and Public Health          | 01/10/17 | 30/09/24 |  2,154,131 |
-| University College London            | Doctoral School                         | 01/10/17 | 30/09/27 | 18,280,789 |
 | University of Edinburgh              | Sch of Geosciences                      | 01/10/17 | 30/09/27 | 17,392,901 |
+| University College London            | Doctoral School                         | 01/10/17 | 30/09/27 | 18,280,789 |
 | University of Essex                  | Registry                                | 01/10/17 | 30/09/27 | 11,813,676 |
 | University of Liverpool              | Sch of Law and Social Justice           | 01/10/17 | 30/09/27 | 17,857,544 |
 | University of Oxford                 | Social Sciences Division                | 01/10/17 | 30/09/27 | 12,256,023 |
@@ -622,8 +624,8 @@ Currently active doctoral partnerships ordered by the start date.
 | University of Warwick                | Sociology                               | 01/10/17 | 30/09/27 | 12,497,302 |
 | University of Sheffield              | Geography                               | 01/10/17 | 30/09/27 | 15,429,313 |
 | University of Southampton            | Sch of Economic, Social & Political Sci | 01/10/17 | 30/09/27 | 14,988,643 |
-| University College London            | Epidemiology and Public Health          | 01/10/20 | 30/09/26 |  1,453,720 |
 | University of the West of England    | Faculty of Health and Life Sciences     | 01/10/20 | 01/10/24 |          0 |
+| University College London            | Epidemiology and Public Health          | 01/10/20 | 30/09/26 |  1,453,720 |
 
 ## Award Titles
 
@@ -721,25 +723,25 @@ amount awarded as:
 
 | Category                                   | Number of awards | Number % | Award (£)   | Award % |
 |:-------------------------------------------|:-----------------|:---------|:------------|:--------|
-| Uncategorised                              | 4,285.0          | 37       | 665,615,815 | 19      |
-| Other                                      | 593.9            | 5        | 376,990,603 | 11      |
-| Economics                                  | 637.0            | 6        | 354,430,643 | 10      |
-| Sociology                                  | 893.1            | 8        | 314,574,326 | 9       |
-| Psychology                                 | 1,003.3          | 9        | 275,371,896 | 8       |
-| Social policy                              | 455.5            | 4        | 212,411,059 | 6       |
-| Political science. & international studies | 592.6            | 5        | 150,072,584 | 4       |
-| Education                                  | 404.4            | 4        | 149,107,165 | 4       |
-| Development studies                        | 354.3            | 3        | 138,417,897 | 4       |
-| Tools, technologies & methods              | 249.2            | 2        | 131,290,142 | 4       |
-| Management & business studies              | 427.5            | 4        | 130,509,841 | 4       |
-| Demography                                 | 310.9            | 3        | 122,918,047 | 4       |
-| Human Geography                            | 230.3            | 2        | 120,360,376 | 3       |
-| Linguistics                                | 207.7            | 2        | 59,703,237  | 2       |
+| Uncategorised                              | 4,371.0          | 38       | 687,544,897 | 20      |
+| Other                                      | 594.2            | 5        | 382,159,475 | 11      |
+| Economics                                  | 637.0            | 5        | 357,290,793 | 10      |
+| Sociology                                  | 893.4            | 8        | 317,472,941 | 9       |
+| Psychology                                 | 1,002.3          | 9        | 274,941,009 | 8       |
+| Social policy                              | 455.5            | 4        | 213,401,189 | 6       |
+| Political science. & international studies | 593.2            | 5        | 150,166,125 | 4       |
+| Education                                  | 404.4            | 3        | 149,107,165 | 4       |
+| Development studies                        | 354.3            | 3        | 140,307,912 | 4       |
+| Management & business studies              | 427.8            | 4        | 132,403,634 | 4       |
+| Tools, technologies & methods              | 249.2            | 2        | 131,290,878 | 4       |
+| Demography                                 | 310.9            | 3        | 123,839,627 | 4       |
+| Human Geography                            | 230.3            | 2        | 121,043,925 | 3       |
+| Linguistics                                | 208.0            | 2        | 59,793,504  | 2       |
 | Social anthropology                        | 207.7            | 2        | 57,527,621  | 2       |
-| Law & legal studies                        | 214.7            | 2        | 55,436,890  | 2       |
+| Law & legal studies                        | 215.1            | 2        | 55,447,256  | 2       |
 | History                                    | 139.1            | 1        | 40,842,776  | 1       |
 | Environmental planning                     | 114.7            | 1        | 39,250,443  | 1       |
-| Social work                                | 88.9             | 1        | 30,635,280  | 1       |
+| Social work                                | 88.9             | 1        | 30,921,156  | 1       |
 | Science and Technology Studies             | 58.7             | 1        | 22,544,127  | 1       |
 | Area Studies                               | 41.0             | 0        | 13,496,626  | 0       |
 
@@ -749,26 +751,26 @@ more detail:
 
 | Subject                        | Number of awards | Number % | Award (£)      | Award % |
 |:-------------------------------|:-----------------|:---------|:---------------|:--------|
-| RCUK Programmes                | 155.0            | 26       | 123,439,927.26 | 33      |
-| Medical & health interface     | 106.5            | 18       | 81,283,427.94  | 22      |
-| Info. & commun. Technol.       | 48.5             | 8        | 25,925,848.40  | 7       |
-| Genetics & development         | 9.9              | 2        | 20,700,521.88  | 5       |
-| Civil eng. & built environment | 25.4             | 4        | 14,348,275.64  | 4       |
+| RCUK Programmes                | 155.0            | 26       | 123,439,927.26 | 32      |
+| Medical & health interface     | 106.5            | 18       | 82,182,603.94  | 22      |
+| Info. & commun. Technol.       | 48.5             | 8        | 25,926,584.20  | 7       |
+| Genetics & development         | 9.9              | 2        | 21,599,697.88  | 6       |
+| Civil eng. & built environment | 25.4             | 4        | 15,031,089.01  | 4       |
 | Climate & Climate Change       | 17.8             | 3        | 11,621,809.92  | 3       |
-| Mathematical sciences          | 16.1             | 3        | 9,623,869.32   | 3       |
-| Design                         | 18.8             | 3        | 8,116,154.89   | 2       |
+| Mathematical sciences          | 16.1             | 3        | 10,307,418.49  | 3       |
+| Design                         | 18.8             | 3        | 8,138,558.46   | 2       |
 | Visual arts                    | 15.4             | 3        | 7,164,430.77   | 2       |
+| Library & information studies  | 2.2              | 0        | 6,869,187.65   | 2       |
 | Agri-environmental science     | 12.3             | 2        | 6,737,178.83   | 2       |
 | Media                          | 26.2             | 4        | 6,710,051.26   | 2       |
 | Energy                         | 12.7             | 2        | 6,600,896.93   | 2       |
 | Animal Science                 | 17.5             | 3        | 6,129,281.47   | 2       |
-| Complexity Science             | 8.6              | 1        | 5,450,926.71   | 1       |
+| Complexity Science             | 8.6              | 1        | 5,451,662.50   | 1       |
 | Ecol, biodivers. & systematics | 7.5              | 1        | 5,144,719.31   | 1       |
 | Food science & nutrition       | 14.5             | 2        | 4,981,417.06   | 1       |
-| Library & information studies  | 2.2              | 0        | 4,979,172.85   | 1       |
 | Philosophy                     | 14.7             | 2        | 4,239,294.46   | 1       |
 | Theology, divinity & religion  | 7.0              | 1        | 3,518,954.19   | 1       |
-| Cultural & museum studies      | 13.6             | 2        | 2,662,684.18   | 1       |
+| Cultural & museum studies      | 13.8             | 2        | 2,752,950.93   | 1       |
 | Environmental Engineering      | 2.2              | 0        | 2,403,605.88   | 1       |
 | Pollution, waste & resources   | 4.8              | 1        | 2,105,474.31   | 1       |
 | Terrest. & freshwater environ. | 2.9              | 0        | 1,809,238.00   | 0       |
@@ -804,25 +806,25 @@ If we only focus on currently active projects we get:
 
 | Category                                   | Number of awards | Number % | Award (£)   | Award % |
 |:-------------------------------------------|:-----------------|:---------|:------------|:--------|
-| Uncategorised                              | 3,468.0          | 71       | 523,234,670 | 30      |
-| Other                                      | 219.8            | 5        | 266,381,881 | 15      |
-| Economics                                  | 117.7            | 2        | 151,029,884 | 9       |
-| Sociology                                  | 160.4            | 3        | 109,718,752 | 6       |
-| Social policy                              | 96.1             | 2        | 109,424,060 | 6       |
-| Psychology                                 | 168.7            | 3        | 82,813,799  | 5       |
-| Human Geography                            | 90.0             | 2        | 78,178,376  | 5       |
-| Development studies                        | 64.3             | 1        | 63,345,970  | 4       |
-| Education                                  | 74.2             | 2        | 59,102,790  | 3       |
-| Management & business studies              | 62.4             | 1        | 51,231,152  | 3       |
-| Demography                                 | 17.1             | 0        | 48,958,346  | 3       |
-| Political science. & international studies | 96.0             | 2        | 47,840,237  | 3       |
-| Tools, technologies & methods              | 25.0             | 1        | 29,751,943  | 2       |
-| Law & legal studies                        | 43.2             | 1        | 22,163,787  | 1       |
+| Uncategorised                              | 3,545.0          | 72       | 545,163,752 | 31      |
+| Other                                      | 219.5            | 4        | 271,407,955 | 15      |
+| Economics                                  | 117.7            | 2        | 153,890,034 | 9       |
+| Sociology                                  | 160.7            | 3        | 112,617,367 | 6       |
+| Social policy                              | 95.6             | 2        | 109,299,745 | 6       |
+| Psychology                                 | 166.2            | 3        | 82,113,774  | 5       |
+| Human Geography                            | 90.0             | 2        | 78,861,925  | 4       |
+| Development studies                        | 64.8             | 1        | 65,592,728  | 4       |
+| Education                                  | 73.7             | 1        | 57,988,345  | 3       |
+| Management & business studies              | 62.8             | 1        | 53,124,945  | 3       |
+| Demography                                 | 17.1             | 0        | 49,879,926  | 3       |
+| Political science. & international studies | 97.1             | 2        | 48,290,520  | 3       |
+| Tools, technologies & methods              | 25.0             | 1        | 29,752,678  | 2       |
+| Law & legal studies                        | 43.5             | 1        | 22,174,153  | 1       |
 | Social anthropology                        | 40.0             | 1        | 17,537,490  | 1       |
-| Social work                                | 20.3             | 0        | 16,894,296  | 1       |
+| Social work                                | 20.3             | 0        | 17,180,172  | 1       |
 | Science and Technology Studies             | 24.0             | 0        | 13,085,266  | 1       |
 | Environmental planning                     | 16.3             | 0        | 12,565,266  | 1       |
-| Linguistics                                | 28.0             | 1        | 11,015,382  | 1       |
+| Linguistics                                | 28.2             | 1        | 11,105,649  | 1       |
 | Area Studies                               | 17.8             | 0        | 8,292,006   | 0       |
 | History                                    | 18.4             | 0        | 6,370,477   | 0       |
 
@@ -831,17 +833,17 @@ projects only:
 
 | Subject                        | Number of awards | Number % | Award (£)      | Award % |
 |:-------------------------------|:-----------------|:---------|:---------------|:--------|
-| RCUK Programmes                | 42.9             | 20       | 105,591,657.39 | 40      |
-| Medical & health interface     | 45.9             | 21       | 55,604,666.95  | 21      |
-| Info. & commun. Technol.       | 21.3             | 10       | 14,580,301.82  | 5       |
-| Genetics & development         | 1.1              | 1        | 12,334,983.47  | 5       |
-| Civil eng. & built environment | 9.1              | 4        | 9,666,526.13   | 4       |
+| RCUK Programmes                | 42.9             | 20       | 105,591,657.39 | 39      |
+| Medical & health interface     | 45.4             | 21       | 56,361,045.45  | 21      |
+| Info. & commun. Technol.       | 21.3             | 10       | 14,581,037.62  | 5       |
+| Genetics & development         | 1.1              | 1        | 13,234,159.47  | 5       |
+| Civil eng. & built environment | 9.1              | 4        | 10,349,339.50  | 4       |
 | Climate & Climate Change       | 6.4              | 3        | 7,657,472.98   | 3       |
+| Library & information studies  | 0.2              | 0        | 6,264,545.60   | 2       |
 | Visual arts                    | 9.0              | 4        | 5,990,119.03   | 2       |
-| Design                         | 9.1              | 4        | 5,095,644.63   | 2       |
+| Mathematical sciences          | 4.9              | 2        | 5,520,091.14   | 2       |
+| Design                         | 9.1              | 4        | 5,118,048.20   | 2       |
 | Energy                         | 5.2              | 2        | 4,937,286.71   | 2       |
-| Mathematical sciences          | 4.9              | 2        | 4,836,541.97   | 2       |
-| Library & information studies  | 0.2              | 0        | 4,374,530.80   | 2       |
 | Agri-environmental science     | 3.8              | 2        | 4,094,839.53   | 2       |
 | Media                          | 9.1              | 4        | 3,860,665.02   | 1       |
 | Ecol, biodivers. & systematics | 3.3              | 2        | 3,793,801.73   | 1       |
@@ -849,11 +851,11 @@ projects only:
 | Theology, divinity & religion  | 2.4              | 1        | 2,450,914.54   | 1       |
 | Animal Science                 | 4.4              | 2        | 2,419,112.65   | 1       |
 | Environmental Engineering      | 1.8              | 1        | 2,390,817.38   | 1       |
-| Complexity Science             | 3.8              | 2        | 1,883,484.66   | 1       |
+| Complexity Science             | 3.8              | 2        | 1,884,220.46   | 1       |
 | Pollution, waste & resources   | 2.1              | 1        | 1,630,963.38   | 1       |
 | Terrest. & freshwater environ. | 1.6              | 1        | 1,471,464.70   | 1       |
 | Philosophy                     | 4.1              | 2        | 1,242,766.84   | 0       |
-| Cultural & museum studies      | 4.9              | 2        | 1,075,499.70   | 0       |
+| Cultural & museum studies      | 5.1              | 2        | 1,165,766.45   | 0       |
 | Drama & theatre studies        | 2.5              | 1        | 874,282.45     | 0       |
 | Bioengineering                 | 0.7              | 0        | 756,400.51     | 0       |
 | Microbial sciences             | 0.5              | 0        | 755,576.74     | 0       |
@@ -878,23 +880,23 @@ active projects:
 
 | Category                                   | Number of awards | Number % | Award (£)   | Award % |
 |:-------------------------------------------|:-----------------|:---------|:------------|:--------|
-| Economics                                  | 117.7            | 10       | 151,029,884 | 16      |
-| Sociology                                  | 160.4            | 14       | 109,718,752 | 12      |
-| Social policy                              | 96.1             | 8        | 109,424,060 | 12      |
-| Psychology                                 | 168.7            | 14       | 82,813,799  | 9       |
-| Human Geography                            | 90.0             | 8        | 78,178,376  | 8       |
-| Development studies                        | 64.3             | 5        | 63,345,970  | 7       |
-| Education                                  | 74.2             | 6        | 59,102,790  | 6       |
-| Management & business studies              | 62.4             | 5        | 51,231,152  | 5       |
-| Demography                                 | 17.1             | 1        | 48,958,346  | 5       |
-| Political science. & international studies | 96.0             | 8        | 47,840,237  | 5       |
-| Tools, technologies & methods              | 25.0             | 2        | 29,751,943  | 3       |
-| Law & legal studies                        | 43.2             | 4        | 22,163,787  | 2       |
+| Economics                                  | 117.7            | 10       | 153,890,034 | 16      |
+| Sociology                                  | 160.7            | 14       | 112,617,367 | 12      |
+| Social policy                              | 95.6             | 8        | 109,299,745 | 12      |
+| Psychology                                 | 166.2            | 14       | 82,113,774  | 9       |
+| Human Geography                            | 90.0             | 8        | 78,861,925  | 8       |
+| Development studies                        | 64.8             | 5        | 65,592,728  | 7       |
+| Education                                  | 73.7             | 6        | 57,988,345  | 6       |
+| Management & business studies              | 62.8             | 5        | 53,124,945  | 6       |
+| Demography                                 | 17.1             | 1        | 49,879,926  | 5       |
+| Political science. & international studies | 97.1             | 8        | 48,290,520  | 5       |
+| Tools, technologies & methods              | 25.0             | 2        | 29,752,678  | 3       |
+| Law & legal studies                        | 43.5             | 4        | 22,174,153  | 2       |
 | Social anthropology                        | 40.0             | 3        | 17,537,490  | 2       |
-| Social work                                | 20.3             | 2        | 16,894,296  | 2       |
+| Social work                                | 20.3             | 2        | 17,180,172  | 2       |
 | Science and Technology Studies             | 24.0             | 2        | 13,085,266  | 1       |
 | Environmental planning                     | 16.3             | 1        | 12,565,266  | 1       |
-| Linguistics                                | 28.0             | 2        | 11,015,382  | 1       |
+| Linguistics                                | 28.2             | 2        | 11,105,649  | 1       |
 | Area Studies                               | 17.8             | 2        | 8,292,006   | 1       |
 | History                                    | 18.4             | 2        | 6,370,477   | 1       |
 
