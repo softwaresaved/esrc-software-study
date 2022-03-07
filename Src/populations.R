@@ -51,8 +51,8 @@ input_cols <- cols(
 )
 
 # Read the Gateway to Research data snapshot.
-# Data snapshot from 24th January 2022.
-gtrdat <- read_csv("../Data/projectsearch-1643375201476.csv.gz",
+# Data snapshot from 24th February 2022.
+gtrdat <- read_csv("../Data/projectsearch-1646403729132.csv.gz",
                    col_types = input_cols)
 
 # Filter out the ESRC data
