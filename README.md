@@ -2,6 +2,12 @@
 
 This is a repository for a UKRI Economic and Social Research Council (ESRC) funded project to understand the software used to analyse social sciences data. 
 
+This is done by:
+
+* Desk research which is examining prior related work and a look at the size of the community by looking at [Gateway to Reserach](https://gtr.ukri.org/) which details work funded by the UK Research Councils (our interest clearly lies with the ESRC) and data from [HESA](https://www.hesa.ac.uk/).
+* A survey sampling the views and software in the community. The JISC [Online surveys](https://www.onlinesurveys.ac.uk/) was used to this end. A pdf copy of the survey used is available here: [esrc-survey.pdf](Docs/esrc-survey.pdf).
+* A set of interviews with members from the community.
+
 Any software produced is made available under a BSD 2-Clause licence and any data and other non-software derivative is made available under a CC-BY 4.0 International Licence.
 
 Exceptions to this are:
