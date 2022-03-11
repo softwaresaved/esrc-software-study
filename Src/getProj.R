@@ -13,6 +13,7 @@ library(readr, quietly = TRUE)
 library(lubridate, quietly = TRUE, warn.conflicts = FALSE)
 library(dplyr, quietly = TRUE, warn.conflicts = FALSE)
 library(jsonlite, quietly = TRUE)
+library(httr)
 
 # Read the GtR data -----------------------------------------------------------
 
@@ -65,6 +66,18 @@ esrcdat <- gtrdat %>% filter(FundingOrgName == "ESRC")
 # Count new projects downloaded
 newproject <- 0
 
+# Make the output directory hierarchy
+outdir1 <- "../Data/Proj/Active"
+outdir2 <- "../Data/Proj/Inactive"
+
+if(!dir.exists(outdir1)){
+  dir.create(outdir1, recursive = TRUE)
+}
+
+if(!dir.exists(outdir2)){
+  dir.create(outdir2, recursive = TRUE)
+}
+
 # Loop round the ESRC project URLS
 for (i in seq_len(nrow(esrcdat))) {
 
@@ -111,7 +124,30 @@ for (i in seq_len(nrow(esrcdat))) {
   Sys.sleep(2)
 
   # Get the project data
-  try(pdat <- fromJSON(purl, simplifyVector = TRUE))
+  # Send the request to the URL specified
+  resp <- GET(purl,
+              config = list(
+                              accept("application/vnd.rcuk.gtr.xml-v7"),
+                              user_agent("httr GtR client 0.1.")
+                            )
+              )
+
+  # Check for errors in the response.
+  if (http_error(resp)) {
+    stop(
+      sprintf(
+        "GtR API request failed [%s].\nURL: %s.\n",
+        status_code(resp),
+        resp$url
+      ),
+      call. = FALSE
+    )
+  }
+
+  #try(pdat <- fromJSON(purl, simplifyVector = TRUE))
+  # Extract the content of the response
+  pdat <- jsonlite::fromJSON(content(resp, as = "text"),
+                             simplifyVector = TRUE)
 
   # Check we have data, if not go to the next project
   if (is.null(pdat)){
