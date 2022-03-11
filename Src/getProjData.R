@@ -12,7 +12,6 @@ library(lubridate)
 library(dplyr)
 library(jsonlite)
 library(stringr)
-library(DBI)
 
 # Read the GtR data -----------------------------------------------------------
 
@@ -62,27 +61,8 @@ esrcdat <- gtrdat %>% filter(FundingOrgName == "ESRC")
 ## ESRC projects -----------------------------------------------------------
 
 # Database file name
-dbfile <- "../Data/esrc.sqlite"
 
-# Create a sqlite database if it does not exist.
-# DO NOT RUN THIS IF THE DATABASE ALREADY EXISTS AND HAS BEEN POPULATED!
-if(!file.exists(dbfile)){
-  mydb <- dbConnect(RSQLite::SQLite(), dbfile)
-}
-
-## Get additonal data for ESRC projects -------------------------------
-
-#
-# Temporary test
-page <- "https://gtr.ukri.org:443/projects?ref=ES/P008003/1"
-pat <- fromJSON(page, simplifyVector = TRUE)
-View(pat)
-
-pat2 <- fromJSON(page, simplifyDataFrame = TRUE, flatten = TRUE)
-View(pat2)
-
-# End Temporary test
-#
+## Get additional data for ESRC projects -------------------------------
 
 # Get the pids that are already in the database
 pids <- c("") #dbQuery(mydb,"SELECT FROM;")
