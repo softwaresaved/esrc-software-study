@@ -866,22 +866,6 @@ esrcdat %>% filter(Status == "Active")                                      %>%
 
 ## Award Titles
 
-### Active award titles
-
-A word cloud made from the award titles using the top 250 words thogh some of the longer words have been excluded.
-
-```{r ActiveWordCloud, echo = FALSE}
-pal <- brewer.pal(9,"BuGn")
-
-esrcdat %>% filter(Status == "Active")                            %>%
-            select(Title)                                         %>% 
-            unnest_tokens(word, Title)                            %>% 
-            anti_join(stop_words, by="word")                      %>% 
-            suppressWarnings(filter(!str_detect(word, "^[0-9]"))) %>% 
-            count(word, sort = TRUE)                              %>%
-            with(suppressWarnings(wordcloud(word, n, colours = pal, ordered.colors = TRUE, max.words = 250))) 
-```
-
 ## Classification by category
 
 Classify the department of the Principal Investigator (assuming that the 
