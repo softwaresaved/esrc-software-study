@@ -441,8 +441,9 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds)
 The project categories for the ESRC awards covers the period `r format(min(esrcdat$StartDate),"%d/%m/%y")` to `r format(max(esrcdat$EndDate, na.rm = TRUE),"%d/%m/%y")` (project start dates - to project end dates).  However, as previously stated data only projects that started from 2008 onwards will be considered from 
 this point onwards reduces the number of records from `r nrow(esrcdat)` to `r nrow(esrcdat[year(esrcdat$StartDate) >= 2008,])`.
 
-```{r start_dates_from_2008}
+```{r start_dates_from_2008,  echo = FALSE}
 
+# Only consider ESRC projects whose start project >= 2008
 esrcdat <- esrcdat[year(esrcdat$StartDate) >= 2008,]
 ```
 

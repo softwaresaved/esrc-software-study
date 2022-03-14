@@ -247,10 +247,6 @@ previously stated data only projects that started from 2008 onwards will
 be considered from this point onwards reduces the number of records from
 11598 to 10374.
 
-``` r
-esrcdat <- esrcdat[year(esrcdat$StartDate) >= 2008,]
-```
-
 No explicit expenditure data seems to be provided for *Studentships*.
 Data is sorted by the average award.
 
