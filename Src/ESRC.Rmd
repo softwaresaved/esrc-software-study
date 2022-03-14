@@ -438,7 +438,7 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds)
 ### All projects category awards
 
 The project categories for the ESRC awards covers the period `r format(min(esrcdat$StartDate),"%d/%m/%y")` to `r format(max(esrcdat$EndDate, na.rm = TRUE),"%d/%m/%y")` (project start dates - to project end dates).  However, as previously stated data only projects that started from 2008 onwards will be considered from 
-this point onwards reduces the number of records from `r nrow(esrcdat)` to `r nrow(esrcdat[year(esrcdat$StartDate) >= 2008,])`.
+this point onwards reduces the number of records from `r format(nrow(esrcdat), big.mark = ",")` to `r format(nrow(esrcdat[year(esrcdat$StartDate) >= 2008,]), big.mark = ",")`.
 
 ```{r start_dates_from_2008,  echo = FALSE}
 
@@ -449,7 +449,7 @@ esrcdat <- esrcdat[year(esrcdat$StartDate) >= 2008,]
 
 No explicit expenditure data seems to be provided for *Studentships*. Data is sorted by the average award.
 
-```{r esrc_categories, echo = FALSE}
+```{r esrc_categories, echo = FALSE, alt.fig ="Expenditure over time showing project categories."}
 
 # Look at the project categories
 esrcdat %>% select(ProjectCategory, AwardPounds)                              %>% 
@@ -463,7 +463,9 @@ esrcdat %>% select(ProjectCategory, AwardPounds)                              %>
                                 "Total Awarded (£)","Average Award (£)")) 
 ```
 
-```{r esrc_categoriesByYear, echo = FALSE}
+The same diagram with each year shown as a percentage:
+
+```{r esrc_categoriesByYear, echo = FALSE, alt.fig ="Expenditure as a percentage over time showing project categories."}
 
 # Look at the project categories
 esrcdat %>% select(ProjectCategory, AwardPounds, StartDate)                %>% 
@@ -474,7 +476,7 @@ esrcdat %>% select(ProjectCategory, AwardPounds, StartDate)                %>%
             filter(!is.na(TotalExpenditure) & TotalExpenditure > 0)        %>% 
             ggplot(aes(x = Year, y = TotalExpenditure, fill = ProjectCategory)) + 
             geom_col(colour="black") +
-            xlab("Year") + labs(fill = "Funding Org") +
+            xlab("Year") + labs(fill = "Project Category") +
             ylab("Expenditure (million £s)") +
             theme_bw() + scale_y_log10()
 ```
@@ -491,7 +493,7 @@ esrcdat %>% select(ProjectCategory, AwardPounds, StartDate)                %>%
             filter(!is.na(TotalExpenditure))                               %>% 
             ggplot(aes(x = Year, y = TotalExpenditure, fill = ProjectCategory)) + 
             geom_col(colour="black", position = "fill") +
-            xlab("Year") + labs(fill = "Funding Org") +
+            xlab("Year") + labs(fill = "Project Category") +
             ylab("% Expenditure") +
             theme_bw() + scale_y_continuous(labels = scales::percent) 
 ```
@@ -528,7 +530,7 @@ esrcdat %>% filter(Status == "Active")                                     %>%
             filter(!is.na(TotalExpenditure) & TotalExpenditure > 0)        %>% 
             ggplot(aes(x = Year, y = TotalExpenditure, fill = ProjectCategory)) + 
             geom_col(colour="black") +
-            xlab("Year") + labs(fill = "Funding Org") + 
+            xlab("Year") + labs(fill = "Project Category") + 
             scale_x_continuous(breaks= scales::pretty_breaks()) +
             ylab("Expenditure (million £s)") +
             theme_bw() + scale_y_log10()
@@ -547,7 +549,7 @@ esrcdat %>% filter(Status == "Active")                                     %>%
             filter(!is.na(TotalExpenditure))                               %>% 
             ggplot(aes(x = Year, y = TotalExpenditure, fill = ProjectCategory)) + 
             geom_col(colour="black", position = "fill") +
-            xlab("Year") + labs(fill = "Funding Org") +
+            xlab("Year") + labs(fill = "Project Category") +
             ylab("% Expenditure") + scale_x_continuous(breaks= scales::pretty_breaks()) +
             theme_bw() + scale_y_continuous(labels = scales::percent) 
 ```

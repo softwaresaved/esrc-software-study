@@ -41,7 +41,6 @@ Economic and Social Research Council (ESRC) Data
         Partnerships](#doctoral-training-partnerships)
         -   [Active Partnerships](#active-partnerships)
     -   [Award Titles](#award-titles)
-        -   [Active award titles](#active-award-titles)
     -   [Classification by category](#classification-by-category)
 
 # Introduction
@@ -245,7 +244,7 @@ The project categories for the ESRC awards covers the period 01/01/06 to
 30/09/29 (project start dates - to project end dates). However, as
 previously stated data only projects that started from 2008 onwards will
 be considered from this point onwards reduces the number of records from
-11598 to 10374.
+11,598 to 10,374.
 
 No explicit expenditure data seems to be provided for *Studentships*.
 Data is sorted by the average award.
@@ -256,6 +255,8 @@ Data is sorted by the average award.
 | Training Grant   |              403 |       574,573,855 |        1425741.58 |
 | Fellowship       |            1,156 |       125,637,540 |         108682.99 |
 | Studentship      |            3,649 |                 0 |              0.00 |
+
+The same diagram with each year shown as a percentage:
 
 ![](ESRC_files/figure-gfm/esrc_categoriesByYear-1.png)<!-- -->
 
@@ -639,13 +640,6 @@ Currently active doctoral partnerships ordered by the start date.
 | University College London            | Epidemiology and Public Health          | 01/10/20 | 30/09/26 |  1,453,720 |
 
 ## Award Titles
-
-### Active award titles
-
-A word cloud made from the award titles using the top 250 words thogh
-some of the longer words have been excluded.
-
-![](ESRC_files/figure-gfm/ActiveWordCloud-1.png)<!-- -->
 
 ## Classification by category
 
