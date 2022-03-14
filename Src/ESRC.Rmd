@@ -578,14 +578,16 @@ With a y log scale.
 ```{r award_lengths_log, echo = FALSE, fig.alt = "Histogram of the length distribution for all projects."}
 
 # The as.numeric() is a workaround for https://github.com/tidyverse/ggplot2/issues/1377
-esrcdat %>% select(StartDate, EndDate, ProjectCategory)                         %>% 
-            filter(!is.na(StartDate) & !is.na(EndDate))                         %>% 
-            mutate(grant_length = difftime(EndDate, StartDate,units = "weeks")) %>% 
+esrcdat %>% select(StartDate, EndDate, ProjectCategory)                           %>% 
+            filter(!is.na(StartDate) & !is.na(EndDate) )                          %>% 
+            mutate(grant_length = difftime(EndDate, StartDate,units = "weeks"))   %>% 
+            filter(grant_length >= 1) %>% 
             ggplot(aes(x = as.numeric(grant_length), fill = ProjectCategory)) + 
-            geom_histogram(binwidth = 28, colour="black") + 
+            geom_histogram(binwidth = 28, colour="black", na.rm = TRUE) + 
             ylab("Number of Awards") + xlab("Award Length (weeks)") +
             labs(fill = "Project Category") + theme_bw() + 
-            scale_y_continuous(trans = "pseudo_log")
+            #scale_y_log10(oob = scales::oob_censor_any)
+            scale_y_continuous(trans = "log1p", oob = scales::oob_squish_any)
 ```
 
 Look at the award given by the length of project by project category for all projects.
@@ -605,7 +607,7 @@ esrcdat %>% select(StartDate, EndDate, ProjectCategory, AwardPounds) %>%
             labs(fill = "Project Category") + theme_bw()
 ```
 
-The top 15 active projects:
+The top 15 active projects by award level:
 
 ```{r top15_active_projects, echo = FALSE}
 
@@ -637,7 +639,21 @@ esrcdat %>% filter(Status == "Active")                                          
             ylab("Number of Awards") + xlab("Award Length (days)") +
             labs(fill = "Project Category") + theme_bw()
 ```
+As a log plot:
 
+```{r award_lengths_active_log, echo = FALSE, fig.alt = "Histogram as a log plot of the length distribution for active projects only."}
+
+# The as.numeric() is a workaround for https://github.com/tidyverse/ggplot2/issues/1377
+esrcdat %>% filter(Status == "Active")                                          %>% 
+            select(StartDate, EndDate, ProjectCategory)                         %>% 
+            filter(!is.na(StartDate) & !is.na(EndDate))                         %>% 
+            mutate(grant_length = difftime(EndDate, StartDate,units = "days")) %>% 
+            ggplot(aes(x = as.numeric(grant_length), fill = ProjectCategory)) + 
+            geom_histogram(binwidth = 28, colour="black", na.rm = TRUE) + 
+            ylab("Number of Awards") + xlab("Award Length (days)") +
+            labs(fill = "Project Category") + theme_bw() +
+            scale_y_continuous(trans = "log1p")
+```
 The top length of awards lie by project category in days is tabulated below.
 
 ```{r award_lengths_active_table, echo = FALSE}
