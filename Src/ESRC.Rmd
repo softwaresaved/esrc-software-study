@@ -24,7 +24,6 @@ library(knitr)
 library(kableExtra)
 library(tidytext)
 library(RColorBrewer)
-library(wordcloud)
 library(leaflet)
 
 # Do not use scientific notation
