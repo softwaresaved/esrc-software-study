@@ -296,7 +296,7 @@ all projects.
 
 <img src="ESRC_files/figure-gfm/award_lengthsVsAwardSize-1.png" title="Award length vs Award size projects." alt="Award length vs Award size projects."  />
 
-The top 15 active projects:
+The top 15 active projects by award level:
 
 |                               Lead Org |       Category | Total awarded (£) |                                                           Project title |
 |---------------------------------------:|---------------:|------------------:|------------------------------------------------------------------------:|
@@ -322,7 +322,9 @@ The same information as provided above but only for *Active* projects.
 The maximum funding period corresponds to 4382 days.
 
 <img src="ESRC_files/figure-gfm/award_lengths_active-1.png" title="Histogram of the length distribution for active projects only." alt="Histogram of the length distribution for active projects only."  />
+As a log plot:
 
+<img src="ESRC_files/figure-gfm/award_lengths_active_log-1.png" title="Histogram as a log plot of the length distribution for active projects only." alt="Histogram as a log plot of the length distribution for active projects only."  />
 The top length of awards lie by project category in days is tabulated
 below.
 
