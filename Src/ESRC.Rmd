@@ -76,13 +76,13 @@ esrcdat <- gtrdat %>% filter(FundingOrgName == "ESRC")
 
 # Introduction
 
-The aim of this document is to provide an overview of expenditure done of the [United Kingdom Research and Innovation](https://www.ukri.org/) (UKRI) ESRC as determined from a [Gateway to Research](https://gtr.ukri.org/) (GtR) data snapshot. The data is made available under an [Open Government Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/), and covers the period `r format(min(gtrdat$StartDate),"%d/%m/%y")` to `r format(max(gtrdat$EndDate, na.rm = TRUE),"%d/%m/%y")`. The GtR data snapshot corresponded to data last updated by UKRI on the 24th February 2022.
+The aim of this document is to provide an overview of the awards provided by the [United Kingdom Research and Innovation](https://www.ukri.org/)'s (UKRI) [Economics and Social Sciences Research Council](https://esrc.ukri.org/) (ESRC) as determined from a [Gateway to Research](https://gtr.ukri.org/) (GtR) data snapshot update from the the 24th February 2022 - these data snapshots update come out roughly every month. The data is made available under an [Open Government Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/), and covers the period from `r format(min(gtrdat$StartDate),"%d/%m/%y")` to `r format(max(gtrdat$EndDate, na.rm = TRUE),"%d/%m/%y")`. 
 
 The R markdown that generated this analysis is available at: 
 
 * https://github.com/softwaresaved/esrc-software-study/blob/main/Src/ESRC.Rmd
 
-The data set contains `r format(nrow(gtrdat), big.mark = ",")` rows (after some data cleaning), where a row corresponds to the record of an award. In this data set `r format(nrow(gtrdat[gtrdat$FundingOrgName == "ESRC",]), big.mark = ",")` correspond to ESRC awards.
+The entire data set consists of `r format(nrow(gtrdat), big.mark = ",")` rows for all research councils, where each row corresponds to a record of an award. Within this data set `r format(nrow(gtrdat[gtrdat$FundingOrgName == "ESRC",]), big.mark = ",")` rows (`r scales::percent(nrow(gtrdat[gtrdat$FundingOrgName == "ESRC",])/nrow(gtrdat))`) correspond to ESRC awards.
 
 UK Research Councils were formed in different years (source: [wikipedia](https://en.wikipedia.org/wiki/UK_Research_and_Innovation)) as shown in the table below which has an impact in the interpretation of the data.
 
@@ -100,17 +100,17 @@ UK Research Councils were formed in different years (source: [wikipedia](https:/
 | Research England                                                  | 2018  |
 | UKRI                                                              | 2018  |
 
-Although strictly speaking it was the *Social Science Research Council* (SSRC) that
-came into being in 1965 and it was not until 1983 that the SSRC was renamed the Economic and Social Research Council (ESRC).
+Although, strictly speaking, it was the *Social Science Research Council* (SSRC) that
+came into being in 1965, it was not until 1983 that the SSRC was renamed the Economic and Social Research Council (ESRC).
 
 # Overall expenditure
 
 We start by doing a brief overview of all the data obtained from the Gateway to 
-Research before we focus on the ESRC data.
+Research before we go on to focus on the ESRC data.
 
 ## Expenditure for all UKRI projects
 
-Expenditure for the whole period under consideration is shown in the graph below. Awards that do not have a value defined have been removed.
+Expenditure for the whole period under consideration is shown in the graph below. Awards that do not have an awards value defined have been removed.
 
 ```{r funding_ByOrg, echo = FALSE, fig.alt = "Expenditure across each UKRI council from the available data."}
 
@@ -142,7 +142,8 @@ gtrdat %>% filter(!is.na(AwardPounds))                                     %>%
                col.names = c("Funding org", "Total awarded (Million £s)"))          
           
 ```
-The number of awards given by each council:
+
+The number of awards given by each council over the whole data period:
 
 ```{r NumberOfAwards_ByOrg, echo = FALSE, fig.alt = "Number of awards across each UKRI councils from the available data."}
 
@@ -209,7 +210,7 @@ gtrdat %>% filter(!is.na(AwardPounds) & AwardPounds > 0)                        
            theme_bw() 
 ```
 
-The graph with the values scaled:
+The graph with the values for each research council normalised:
 
 ```{r AwardDistrPerFundCouncilScaled, echo = FALSE, fig.alt = "Distribution of award size by research council with the graphs scaled."}
 
@@ -244,6 +245,8 @@ gtrdat %>% filter(!is.na(AwardPounds)  & !is.na(StartDate))              %>%
           
 ```
 
+The same information by percent expenditure for each year.
+
 ```{r funding_ByOrgByYearPer, echo = FALSE, fig.alt = "Expenditure across each UKRI council from the available data by year."}
 
 gtrdat %>% filter(!is.na(AwardPounds)  & !is.na(StartDate))              %>% 
@@ -262,15 +265,20 @@ gtrdat %>% filter(!is.na(AwardPounds)  & !is.na(StartDate))              %>%
           
 ```
 
+Although there seems to be historical data for the MRC, ESRC and STFC it seems to make more sense
+to start looking at the data from 2008 (this will be applied later).
+
 ### Summary
 
 * Over the time covered by the data, EPSRC has been allocated the most money but they also give the most awards so on average they do not give the highest award.
 * The MRC have been given the third highest amount but, other than UKRI, they give the second highest average award.
 * Of interest to this particular study the ESRC comes in fifth in the total amount awarded and they give the fourth highest number of awards so their average over the research councils comes third.
+* At a later point only data from 2008 and onwards will be considered.
 
 ## Expenditure for active UKRI projects only 
 
-The graph below only contains values for currently active projects:
+The graph below only contains values for currently active projects, i.e. whose end date extends beyond
+the date at which the GtR data snapshot was produced:
 
 ```{r Activefunding_ByOrg_active, echo = FALSE, fig.alt = "Expenditure across all UKRI councils for active projects from the available data."}
 
@@ -341,7 +349,7 @@ Average award per founding council for active projects ordered by the average aw
 
 ```{r ActiveAvgAwardPerFundCouncil, echo = FALSE, fig.alt = "Average award size per organisation for active projects."}
 
-gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))                        %>% 
+gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))                         %>% 
            select(FundingOrgName, AwardPounds)                                      %>% 
            group_by(FundingOrgName)                                                 %>% 
            summarise(TotalExpenditure = round(sum(AwardPounds)),
@@ -370,7 +378,7 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds) & AwardPounds > 0)   
            theme_bw() 
 ```
 
-With the densities scaled:
+With the densities normalised for each research council:
 
 ```{r ActiveAwardDistrPerFundCouncilScaled, echo = FALSE, fig.alt = "Distribution of award size by research council for active projects with the graphs scaled."}
 
@@ -430,7 +438,16 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds)
 
 ### All projects category awards
 
-The project categories for the ESRC awards covering the period `r format(min(esrcdat$StartDate),"%d/%m/%y")` to `r format(max(esrcdat$EndDate, na.rm = TRUE),"%d/%m/%y")`. No explicit data seems to be provided for *Studentships*. Data is sorted by the average award.
+The project categories for the ESRC awards covers the period `r format(min(esrcdat$StartDate),"%d/%m/%y")` to `r format(max(esrcdat$EndDate, na.rm = TRUE),"%d/%m/%y")` (project start dates - to project end dates).  However, as previously stated data only projects that started from 2008 onwards will be considered from 
+this point onwards reduces the number of records from `r nrow(esrcdat)` to `r nrow(esrcdat[year(esrcdat$StartDate) >= 2008,])`.
+
+```{r start_dates_from_2008}
+
+esrcdat <- esrcdat[year(esrcdat$StartDate) >= 2008,]
+```
+
+
+No explicit expenditure data seems to be provided for *Studentships*. Data is sorted by the average award.
 
 ```{r esrc_categories, echo = FALSE}
 
