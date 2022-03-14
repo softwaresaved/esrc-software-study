@@ -564,13 +564,28 @@ The award length distribution of the award lengths binned into 28-day periods is
 ```{r award_lengths, echo = FALSE, fig.alt = "Histogram of the length distribution for all projects."}
 
 # The as.numeric() is a workaround for https://github.com/tidyverse/ggplot2/issues/1377
-esrcdat %>% select(StartDate, EndDate, ProjectCategory) %>% 
-            filter(!is.na(StartDate) & !is.na(EndDate)) %>% 
+esrcdat %>% select(StartDate, EndDate, ProjectCategory)                         %>% 
+            filter(!is.na(StartDate) & !is.na(EndDate))                         %>% 
             mutate(grant_length = difftime(EndDate, StartDate,units = "weeks")) %>% 
             ggplot(aes(x = as.numeric(grant_length), fill = ProjectCategory)) + 
             geom_histogram(binwidth = 28, colour="black") + 
             ylab("Number of Awards") + xlab("Award Length (weeks)") +
             labs(fill = "Project Category") + theme_bw()
+```
+
+With a y log scale.
+
+```{r award_lengths_log, echo = FALSE, fig.alt = "Histogram of the length distribution for all projects."}
+
+# The as.numeric() is a workaround for https://github.com/tidyverse/ggplot2/issues/1377
+esrcdat %>% select(StartDate, EndDate, ProjectCategory)                         %>% 
+            filter(!is.na(StartDate) & !is.na(EndDate))                         %>% 
+            mutate(grant_length = difftime(EndDate, StartDate,units = "weeks")) %>% 
+            ggplot(aes(x = as.numeric(grant_length), fill = ProjectCategory)) + 
+            geom_histogram(binwidth = 28, colour="black") + 
+            ylab("Number of Awards") + xlab("Award Length (weeks)") +
+            labs(fill = "Project Category") + theme_bw() + 
+            scale_y_continuous(trans = "pseudo_log")
 ```
 
 Look at the award given by the length of project by project category for all projects.
