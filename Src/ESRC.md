@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 14/03/22.
+**Last updated**: 15/03/22.
 
 -   [Introduction](#introduction)
 -   [Overall expenditure](#overall-expenditure)
@@ -287,7 +287,7 @@ periods is shown below.
 
 <img src="ESRC_files/figure-gfm/award_lengths-1.png" title="Histogram of the length distribution for all projects." alt="Histogram of the length distribution for all projects."  />
 
-With a y log scale.
+The same info with a y log1p (ln(x + 1)) scale.
 
 <img src="ESRC_files/figure-gfm/award_lengths_log-1.png" title="Histogram of the length distribution for all projects." alt="Histogram of the length distribution for all projects."  />
 
@@ -319,14 +319,16 @@ The top 15 active projects by award level:
 ### Award length distribution for active projects only
 
 The same information as provided above but only for *Active* projects.
-The maximum funding period corresponds to 4382 days.
+The maximum funding period corresponds to 4,382 days.
 
 <img src="ESRC_files/figure-gfm/award_lengths_active-1.png" title="Histogram of the length distribution for active projects only." alt="Histogram of the length distribution for active projects only."  />
+
 As a log plot:
 
 <img src="ESRC_files/figure-gfm/award_lengths_active_log-1.png" title="Histogram as a log plot of the length distribution for active projects only." alt="Histogram as a log plot of the length distribution for active projects only."  />
-The top length of awards lie by project category in days is tabulated
-below.
+
+Where the longest awards lie in term of days by project category is
+tabulated below.
 
 | Number of days | Project Category | Number of projects |
 |---------------:|:-----------------|-------------------:|
@@ -410,7 +412,7 @@ by the total award given is shown in the table below.
 This only shows the top 25 organisations by the average value of the
 award.
 
-| Org                                     | Number of Awards | Total Awarded (£) | Average Award (£) |
+| Organisation                            | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:----------------------------------------|-----------------:|------------------:|------------------:|
 | University of Huddersfield              |                9 |           884,820 |          98313.33 |
 | University of the West of England       |               45 |         4,406,789 |          97928.64 |

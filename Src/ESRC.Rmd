@@ -573,7 +573,7 @@ esrcdat %>% select(StartDate, EndDate, ProjectCategory)                         
             labs(fill = "Project Category") + theme_bw()
 ```
 
-With a y log scale.
+The same info with a y log1p (ln(x + 1)) scale.
 
 ```{r award_lengths_log, echo = FALSE, fig.alt = "Histogram of the length distribution for all projects."}
 
@@ -625,7 +625,7 @@ esrcdat %>% filter(Status == "Active" & AwardPounds > 10e6)                  %>%
 
 ### Award length distribution for active projects only
 
-The same information as provided above but only for *Active* projects. The maximum funding period corresponds to `r as.numeric(max(difftime(esrcdat[["EndDate"]][esrcdat$Status == "Active"], esrcdat[["StartDate"]][esrcdat$Status == "Active"], units = "days")))` days.
+The same information as provided above but only for *Active* projects. The maximum funding period corresponds to `r format(as.numeric(max(difftime(esrcdat[["EndDate"]][esrcdat$Status == "Active"], esrcdat[["StartDate"]][esrcdat$Status == "Active"], units = "days"))), big.mark = ",")` days.
 
 ```{r award_lengths_active, echo = FALSE, fig.alt = "Histogram of the length distribution for active projects only."}
 
@@ -639,7 +639,8 @@ esrcdat %>% filter(Status == "Active")                                          
             ylab("Number of Awards") + xlab("Award Length (days)") +
             labs(fill = "Project Category") + theme_bw()
 ```
-As a log plot:
+
+As a log1p (ln(x + 1)) plot:
 
 ```{r award_lengths_active_log, echo = FALSE, fig.alt = "Histogram as a log plot of the length distribution for active projects only."}
 
@@ -654,7 +655,8 @@ esrcdat %>% filter(Status == "Active")                                          
             labs(fill = "Project Category") + theme_bw() +
             scale_y_continuous(trans = "log1p")
 ```
-The top length of awards lie by project category in days is tabulated below.
+
+Where the longest awards lie in term of days by project category is tabulated below.
 
 ```{r award_lengths_active_table, echo = FALSE}
 
@@ -667,7 +669,7 @@ esrcdat %>% filter(Status == "Active")                                          
             arrange(desc(n))                                                                %>% 
             head(15)                                                                        %>% 
             kbl(format="pipe", align = c("r","l","r"), 
-                col.names = c("Number of days","Project Category","Number of projects"))
+                col.names = c("Number of days","Project Category","Number of projects")) 
 ```
 
 Percentage of award types by time length.
@@ -701,7 +703,7 @@ esrcdat %>% filter(Status == "Active")                                          
             geom_point(alpha = 0.25) + 
             ylab("Awards (£)") + xlab("Award Length (days)") + scale_y_log10() +
             facet_wrap(vars(ProjectCategory)) +
-            labs(fill = "Project Category") + theme_bw()
+            labs(colour = "Project Category") + theme_bw()
 ```
 
 ## Regional distribution of awards
@@ -756,7 +758,7 @@ esrcdat %>% select(LeadROName, AwardPounds)                                     
             mutate(across(where(is.numeric), ~ format(., big.mark = ",")))      %>% 
             slice_head(n = 25)                                                  %>% 
             kbl(format="pipe", align = c("l",rep("r",3)),
-                col.names = c("Org", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
+                col.names = c("Organisation", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
 ```
 
 ### Funding by lead organisation for active projects only
