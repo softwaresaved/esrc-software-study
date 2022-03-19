@@ -63,6 +63,15 @@ career_order <-  c("Junior","Early","Mid","Senior","Other","-")
 # 3	Non-binary person
 # 4	Prefer not to disclose
 # 5	Other
+data$Q21 <- gsub( "1", "Woman", data$Q21)
+data$Q21 <- gsub( "2", "Man", data$Q21)
+data$Q21 <- gsub( "3", "Non-binary person", data$Q21)
+data$Q21 <- gsub( "4", "Prefer not to disclose", data$Q21)
+data$Q21 <- gsub( "5", "Other", data$Q21)
+
+data$Q21[is.na(data$Q21)] <- "-"
+
+gender_order <-  c("Woman", "Man", "Other", "Prefer not to disclose", "Non-binary person", "-")
 
 # Look at the questions ---------------------------------------------------
 
@@ -101,5 +110,9 @@ data %>% select(create=Q2_1, reuse=Q2_2, career=Q20)                   %>%
 
 ## Q21 Gender --------------------------------------------------------------
 
-data %>% select(Q21) %>%
-         mutate()
+data %>% select(gender = Q21) %>%
+         mutate(gender = factor(gender, levels = gender_order)) %>%
+         ggplot(aes(x = gender)) + geom_bar() +
+         theme_bw() +
+         xlab("Gender") + ylab("Number")
+
