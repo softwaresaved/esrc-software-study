@@ -21,54 +21,21 @@ data <- read_xlsx("../Data/survey-results.xlsx")
 # Read in a question key
 key <- read_xlsx("../Data/survey-results-key.xlsx")
 
-
-# Look at the questions ---------------------------------------------------
+# Remap data ------------------------------------------------------------
 
 ## Q2 Do you create or re-use data to undertake your research? --------
 # 1	Create new data (including primary data collection and data generation)
 # 2	Re-use existing data
 
-# Relabel career stage with NAs as other
-data$Q20[is.na(data$Q20)] <- "Other"
+# Create new data
+data$Q2_1 <- gsub("0","nocreate",data$Q2_1)
+data$Q2_1 <- gsub("1","create",data$Q2_1)
 
-# Establish a career stage order
-career_order <-  c("Junior","Early","Mid","Senior","Other")
+# Reuse data
+data$Q2_2 <- gsub("0","noreuse",data$Q2_2)
+data$Q2_1 <- gsub("1","create",data$Q2_1)
 
-# Bar chart of the use of data ßsegmented by career stage
-data %>% select(create=Q2_1, reuse=Q2_2, career=Q20)                         %>%
-         mutate(create = recode(create, `0` = "nocreate" , `1` = "create"),
-                reuse = recode(reuse, `0` = "noreuse", `1` = "reuse"),
-                career = recode(career, `1` = "Junior", `2` = "Early",
-                                `3` = "Mid", `4` = "Senior", `5` = "Other")) %>%
-        mutate(career = factor(career, levels = career_order))               %>%
-        pivot_longer(cols = c("create", "reuse"), values_to = "datause")     %>%
-        select(!name)                                                        %>%
-        ggplot(aes(x = datause, fill = career)) +
-        geom_bar(colour = "black",) +
-        theme_bw() +
-        xlab("Use of data") + ylab("Number of responses") +
-        geom_text(aes(x = datause, label = ..count..),
-                  position = position_stack(vjust = 0.5), stat = "count", colour = "black") +
-        scale_fill_brewer(palette = "Set1", name = "Career stage", breaks = career_order)
-
-data %>% select(create=Q2_1, reuse=Q2_2, career=Q20)                   %>%
-  mutate(create = recode(create, `0` = "nocreate" , `1` = "create"),
-         reuse = recode(reuse, `0` = "noreuse", `1` = "reuse"),
-         career = recode(career, `1` = "Junior", `2` = "Early",
-                         `3` = "Mid", `4` = "Senior", `5` = "Other"))  %>%
-  mutate(career = factor(career, levels = career_order))               %>%
-  pivot_longer(cols = c("create", "reuse"), values_to = "datause")     %>%
-  select(!name)                                                        %>%
-  ggplot(aes(x = datause, fill = career)) +
-  geom_bar(position = "fill", colour = "black") +
-  theme_bw() +
-  xlab("Use of data") + ylab("Number of responses") +
-  labs(fill = "Career stage") +
-  scale_fill_discrete(breaks = career_order) +
-  scale_y_continuous(labels = scales::percent)
-
-# Q20 career stage --------------------------------------------------------
-#
+## Q20 career stage ------------------------------------------------------
 # 1	Phase 1 - Junior (e.g. PhD candidate, Junior Research Software Engineer)
 # 2	Phase 2 - Early (e.g Research Assistant/Associate, first grant holder,
 #             Lecturer, Research Software Engineer)
@@ -78,11 +45,61 @@ data %>% select(create=Q2_1, reuse=Q2_2, career=Q20)                   %>%
 #             Research Computing, Distinguished Engineer, Chief Data Scientist)
 # 5	Other
 
+data$Q20 <- gsub("1", "Junior", data$Q20)
+data$Q20 <- gsub("2", "Early", data$Q20)
+data$Q20 <- gsub("3", "Mid", data$Q20)
+data$Q20 <- gsub("4", "Senior", data$Q20)
+data$Q20 <- gsub("5", "Other", data$Q20)
 
-# Q21 Gender --------------------------------------------------------------
+# Remap NAs to "-"
+data$Q20[is.na(data$Q20)] <- "-"
+
+# Establish a career stage order
+career_order <-  c("Junior","Early","Mid","Senior","Other","-")
+
+## Gender ------------------------------------------------------------------
 # 1	Woman
 # 2	Man
 # 3	Non-binary person
 # 4	Prefer not to disclose
 # 5	Other
 
+# Look at the questions ---------------------------------------------------
+
+## Q2 Do you create or re-use data to undertake your research? --------
+# 1	Create new data (including primary data collection and data generation)
+# 2	Re-use existing data
+
+# Bar chart of the use of data ßsegmented by career stage
+data %>% select(create = Q2_1, reuse = Q2_2, career = Q20) %>%
+         pivot_longer(cols = c("create", "reuse"), values_to = "datause")     %>%
+         select(!name)                                                        %>%
+        ggplot(aes(x = datause, fill = factor(career, levels = career_order))) +
+        geom_bar(colour = "black") +
+        theme_bw() +
+        xlab("Use of data") + ylab("Number of responses") +
+        geom_text(aes(x = datause, label = ..count..),
+                  position = position_stack(vjust = 0.5), stat = "count", colour = "black") +
+        scale_fill_brewer(palette = "Set1", name = "Career stage", breaks = career_order)
+
+# Percentage segments
+data %>% select(create=Q2_1, reuse=Q2_2, career=Q20)                   %>%
+  pivot_longer(cols = c("create", "reuse"), values_to = "datause")     %>%
+  select(!name)                                                        %>%
+  ggplot(aes(x = datause, fill = factor(career, levels = career_order))) +
+  geom_bar(position = "fill", colour = "black") +
+  theme_bw() +
+  xlab("Use of data") + ylab("Number of responses") +
+  labs(fill = "Career stage") +
+  scale_fill_brewer(palette = "Set1", name = "Career stage", breaks = career_order) +
+  scale_y_continuous(labels = scales::percent)
+
+
+## Q20 career stage --------------------------------------------------------
+
+
+
+## Q21 Gender --------------------------------------------------------------
+
+data %>% select(Q21) %>%
+         mutate()
