@@ -110,9 +110,21 @@ data %>% select(create=Q2_1, reuse=Q2_2, career=Q20)                   %>%
 
 ## Q21 Gender --------------------------------------------------------------
 
+# Bar chart of gender population
 data %>% select(gender = Q21) %>%
          mutate(gender = factor(gender, levels = gender_order)) %>%
-         ggplot(aes(x = gender)) + geom_bar() +
+         ggplot(aes(x = gender)) +
+         geom_bar() +
          theme_bw() +
+         geom_text(aes(label = ..count..), position = position_stack(vjust = 0.5), stat = "count", colour = "white") +
          xlab("Gender") + ylab("Number")
 
+# Gender vs Career stage
+data %>% select(gender = Q21, career = Q20) %>%
+         group_by(gender, career)           %>%
+         mutate(size = n())                 %>%
+         ggplot(aes(x = factor(gender, levels = gender_order), y = factor(career, levels = career_order), colour = size)) +
+         geom_point(aes(size = size)) + theme_bw() +
+         geom_text(aes(x = factor(gender, levels = gender_order), y = factor(career, levels = career_order), label = size), vjust = 2) +
+         xlab("Gender") + ylab("Career stage") + theme(legend.position = "none") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
