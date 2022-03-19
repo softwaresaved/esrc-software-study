@@ -73,7 +73,7 @@ data$Q21[is.na(data$Q21)] <- "-"
 
 gender_order <-  c("Woman", "Man", "Other", "Prefer not to disclose", "Non-binary person", "-")
 
-# Look at the questions ---------------------------------------------------
+# Look at the question data ---------------------------------------------------
 
 ## Q2 Do you create or re-use data to undertake your research? --------
 # 1	Create new data (including primary data collection and data generation)
@@ -104,9 +104,14 @@ data %>% select(create=Q2_1, reuse=Q2_2, career=Q20)                   %>%
   scale_y_continuous(labels = scales::percent)
 
 
-## Q20 career stage --------------------------------------------------------
+## Q20 Career stage --------------------------------------------------------
 
-
+# Bar chart of the career stages
+data %>%  select(career = Q20) %>%
+          ggplot(aes(x = factor(career, levels = career_order))) +
+          geom_bar() +
+          theme_bw() +
+          xlab("Career stage") + ylab("Number")
 
 ## Q21 Gender --------------------------------------------------------------
 
