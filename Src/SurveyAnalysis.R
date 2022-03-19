@@ -4,7 +4,7 @@
 #
 
 
-# Load pcackages ----------------------------------------------------------
+# Load packages ----------------------------------------------------------
 
 library(readxl)
 library(dplyr)
@@ -15,12 +15,16 @@ library(RColorBrewer)
 
 # Read then data ----------------------------------------------------------
 
+# Read in the survey results
 data <- read_xlsx("../Data/survey-results.xlsx")
 
+# Read in a question key
 key <- read_xlsx("../Data/survey-results-key.xlsx")
 
 
-# Q2 Do you create or re-use data to undertake your research? --------
+# Look at the questions ---------------------------------------------------
+
+## Q2 Do you create or re-use data to undertake your research? --------
 # 1	Create new data (including primary data collection and data generation)
 # 2	Re-use existing data
 
