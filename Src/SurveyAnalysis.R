@@ -35,6 +35,33 @@ data$Q2_1 <- gsub("1","create",data$Q2_1)
 data$Q2_2 <- gsub("0","noreuse",data$Q2_2)
 data$Q2_1 <- gsub("1","create",data$Q2_1)
 
+
+## Q3 Sharing data ------------------------------------------------------------
+# 1	I have not yet shared my data
+# 2	I have licensed my data to allow it to be shared
+# 3	I have shared my data with individuals/groups that have requested access
+# 4	I created a DOI (or other unique identifier) to make my data findable
+# 5	I have promoted my data as an accessible resource in my publications
+# 6	I have deposited my data in a repository
+# 7	Other
+
+data$Q3_1 <- gsub("1", "Not shared", data$Q3_1)
+data$Q3_2 <- gsub("1", "Licensed", data$Q3_2)
+data$Q3_3 <- gsub("1", "Restricted sharing", data$Q3_3)
+data$Q3_4 <- gsub("1", "DOI", data$Q_4)
+data$Q3_5 <- gsub("1", "Ptromoted", data$Q_5)
+data$Q3_6 <- gsub("1", "In Repo", data$Q3_6)
+data$Q3_7 <- gsub("1", "Other", data$Q3_7)
+
+
+## Q6 open source ----------------------------------------------------------
+# 1	Yes
+# 2	No
+
+data$Q6 <- gsub("1", "Yes", data$Q6)
+data$Q6 <- gsub("2", "No", data$Q6)
+data$Q6[is.na(data$Q6)] <-  "-"
+
 ## Q20 career stage ------------------------------------------------------
 # 1	Phase 1 - Junior (e.g. PhD candidate, Junior Research Software Engineer)
 # 2	Phase 2 - Early (e.g Research Assistant/Associate, first grant holder,
@@ -83,13 +110,13 @@ gender_order <-  c("Woman", "Man", "Other", "Prefer not to disclose", "Non-binar
 data %>% select(create = Q2_1, reuse = Q2_2, career = Q20) %>%
          pivot_longer(cols = c("create", "reuse"), values_to = "datause")     %>%
          select(!name)                                                        %>%
-        ggplot(aes(x = datause, fill = factor(career, levels = career_order))) +
-        geom_bar(colour = "black") +
-        theme_bw() +
-        xlab("Use of data") + ylab("Number of responses") +
-        geom_text(aes(x = datause, label = ..count..),
+         ggplot(aes(x = datause, fill = factor(career, levels = career_order))) +
+         geom_bar(colour = "black") +
+         theme_bw() +
+         xlab("Use of data") + ylab("Number of responses") +
+         geom_text(aes(x = datause, label = ..count..),
                   position = position_stack(vjust = 0.5), stat = "count", colour = "black") +
-        scale_fill_brewer(palette = "Set1", name = "Career stage", breaks = career_order)
+         scale_fill_brewer(palette = "Set1", name = "Career stage", breaks = career_order)
 
 # Percentage segments
 data %>% select(create=Q2_1, reuse=Q2_2, career=Q20)                   %>%
@@ -104,6 +131,13 @@ data %>% select(create=Q2_1, reuse=Q2_2, career=Q20)                   %>%
   scale_y_continuous(labels = scales::percent)
 
 
+## Q6 use of open source ---------------------------------------------------
+
+data %>% select(Q6) %>%
+        ggplot(aes(x = Q6)) + geom_bar() + theme_bw() +
+        xlab("Use of Open Source") + ylab("Number") +
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5)
+
 ## Q20 Career stage --------------------------------------------------------
 
 # Bar chart of the career stages
@@ -111,7 +145,9 @@ data %>%  select(career = Q20) %>%
           ggplot(aes(x = factor(career, levels = career_order))) +
           geom_bar() +
           theme_bw() +
-          xlab("Career stage") + ylab("Number")
+          xlab("Career stage") + ylab("Number")  +
+          geom_text(aes(x = factor(career, levels = career_order), label = ..count..),
+                    position = position_stack(vjust = 0.5), stat = "count", colour = "white")
 
 ## Q21 Gender --------------------------------------------------------------
 
