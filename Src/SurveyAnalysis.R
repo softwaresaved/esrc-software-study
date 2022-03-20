@@ -54,6 +54,48 @@ data$Q3_6 <- gsub("1", "In Repo", data$Q3_6)
 data$Q3_7 <- gsub("1", "Other", data$Q3_7)
 
 
+## Q4 use of software ------------------------------------------------------
+# 1	Animation and Storyboarding, e.g. Scratch, Storyteller
+# 2	AudioTools, e.g. Music Algorithms, Paperphone
+# 3	Authoring and publishing tools, e.g. Twine, Oppia
+# 4	Code versioning, e.g. GitHub
+# 5	Content Management Systems (CMS), e.g. WordPress, Mura
+# 6	CrowdSourcing, e.g. AllOurIdeas
+# 7	Exhibition/Collection Tools, e.g. Omeka, Neatline
+# 8	Internet Research Tools, e.g. Google tools or Wikipedia tools
+# 9	Machine Learning and Artificial Intelligence, e.g. leximancer
+# 10	Mapping Tools and Platforms, Geographic Information Systems, e.g. QGIS, CartoDB, ArcGIS
+# 11	MindMapping Tools, e.g. DebateGraph
+# 12	Network Analysis, e.g. GEPHI
+# 13	Programming Languages, e.g. Python, MATLAB
+# 14	Qualitative analyses, e.g. NVivo
+# 15	Simulation Tools, e.g. NetLogo
+# 16	Spreadsheets, e.g. Excel, Google Sheets
+# 17	Statistical analysis, e.g. R, SPSS, Stata, SAS
+# 18	Text Analysis Tools, e.g. Voyant, Linguistic Corpuses, Entity Recognizers
+# 19	Text Collation Tools, e.g. Juxta Commons
+# 20	Text Encoding, e.g. Oxygen XML
+# 21	Text and Data Wrangling, e.g. Overview, OpenRefine
+# 22	Topic Modelling, e.g. Leximancer
+# 23	Transcription services, e.g. otter.ai
+# 24	Video and Film Analysis, e.g. Cinemetrics
+# 25	Visualisation Tools, e.g. D3.js, Tableau
+# 26	Other
+software <-  c("AnimationStoryborarding", "Autdiotools", "AuthoringPublishing",
+               "CodeVersioning", "CMS", "CrowdSourcing", "ExhibionCollection",
+               "internetResearchTools", "ML_AI", "GIS", "MindMapping",
+               "NetworkAnalysis", "ProgLanguagues", "QualitativeAnalysis",
+               "SimulationTools","Spreadsheets","StatisticalAnalysis",
+               "TextAnalysis", "TextCollation", "TextEncoding", "DataWrangling",
+               "TopicModelling", "Transcription","VideoFilmAnal", "Visualisation",
+               "Other")
+
+for(i in seq_len(26)){
+  q <- paste0("Q4_",i)
+  data[q] <- gsub("1", software[i], data[[q]])
+}
+
+
 ## Q6 open source ----------------------------------------------------------
 # 1	Yes
 # 2	No
@@ -130,13 +172,24 @@ data %>% select(create=Q2_1, reuse=Q2_2, career=Q20)                   %>%
   scale_fill_brewer(palette = "Set1", name = "Career stage", breaks = career_order) +
   scale_y_continuous(labels = scales::percent)
 
+## Q4 use of software ------------------------------------------------------
+data %>% select(num_range("Q4_",1:26))                              %>%
+         pivot_longer(cols = everything(), values_to = "software")  %>%
+         filter(software != 0)                                      %>%
+         select(-name)                                              %>%
+         ggplot(aes(x = software, fill = software)) +
+         geom_bar(colour = "black") +
+         theme_bw() +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         ylab("Number") + xlab("Software used") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3)
 
 ## Q6 use of open source ---------------------------------------------------
 
 data %>% select(Q6) %>%
         ggplot(aes(x = Q6)) + geom_bar() + theme_bw() +
         xlab("Use of Open Source") + ylab("Number") +
-  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5)
+        geom_text(aes(label = ..count..), stat = "count", vjust = -0.5)
 
 ## Q20 Career stage --------------------------------------------------------
 
