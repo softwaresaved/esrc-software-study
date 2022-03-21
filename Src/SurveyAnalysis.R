@@ -44,25 +44,24 @@ data$Q2_1 <- gsub("1","create",data$Q2_1)
 # 6	I have deposited my data in a repository
 # 7	Other
 
-data$Q3_1 <- gsub("1", "Not shared", data$Q3_1)
-data$Q3_2 <- gsub("1", "Licensed", data$Q3_2)
-data$Q3_3 <- gsub("1", "Restricted sharing", data$Q3_3)
-data$Q3_4 <- gsub("1", "DOI", data$Q_4)
-data$Q3_5 <- gsub("1", "Ptromoted", data$Q_5)
-data$Q3_6 <- gsub("1", "In Repo", data$Q3_6)
-data$Q3_7 <- gsub("1", "Other", data$Q3_7)
+sharing <- c("NotShared","Licensed","RestrictedSharing","CreatedDOI",
+             "Publications","Repository","Other")
 
+for( i in seq_len(7)){
+  q <- paste0("Q3_",i)
+  data[q] <- gsub("1", sharing[i], data[[q]])
+}
 
 ## Q4 Use of software ------------------------------------------------------
-# 1	Animation and Storyboarding, e.g. Scratch, Storyteller
-# 2	AudioTools, e.g. Music Algorithms, Paperphone
-# 3	Authoring and publishing tools, e.g. Twine, Oppia
-# 4	Code versioning, e.g. GitHub
-# 5	Content Management Systems (CMS), e.g. WordPress, Mura
-# 6	CrowdSourcing, e.g. AllOurIdeas
-# 7	Exhibition/Collection Tools, e.g. Omeka, Neatline
-# 8	Internet Research Tools, e.g. Google tools or Wikipedia tools
-# 9	Machine Learning and Artificial Intelligence, e.g. leximancer
+#  1	Animation and Storyboarding, e.g. Scratch, Storyteller
+#  2	AudioTools, e.g. Music Algorithms, Paperphone
+#  3	Authoring and publishing tools, e.g. Twine, Oppia
+#  4	Code versioning, e.g. GitHub
+#  5	Content Management Systems (CMS), e.g. WordPress, Mura
+#  6	CrowdSourcing, e.g. AllOurIdeas
+#  7	Exhibition/Collection Tools, e.g. Omeka, Neatline
+#  8	Internet Research Tools, e.g. Google tools or Wikipedia tools
+#  9	Machine Learning and Artificial Intelligence, e.g. leximancer
 # 10	Mapping Tools and Platforms, Geographic Information Systems, e.g. QGIS, CartoDB, ArcGIS
 # 11	MindMapping Tools, e.g. DebateGraph
 # 12	Network Analysis, e.g. GEPHI
@@ -189,6 +188,31 @@ data %>% select(create=Q2_1, reuse=Q2_2, career=Q20)                         %>%
          labs(fill = "Career stage") +
          scale_fill_brewer(palette = "Set1", name = "Career stage", breaks = career_order) +
          scale_y_continuous(labels = scales::percent)
+
+
+## Q3 Do you share data -------------------------------------------------------
+
+### Data sharing ----------
+data %>% select(num_range("Q3_", 1:7))                               %>%
+        pivot_longer(cols = everything(), values_to = "DataSharing") %>%
+        filter(DataSharing != 0)                                     %>%
+        ggplot(aes(x = DataSharing, fill = DataSharing)) +
+        geom_bar(colour = "black") + theme_bw() +
+        theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+        xlab("Data sharing policy") + ylab("Number") +
+        geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5)) +
+        theme(legend.position = "none")
+
+### Data sharing and career stage ----------
+data %>% select(career = Q20, num_range("Q3_", 1:7))                                    %>%
+  pivot_longer(cols = starts_with("Q3_"), names_to = "orig", values_to = "DataSharing") %>%
+  filter(DataSharing != 0)                                                              %>%
+  ggplot(aes(x = DataSharing, fill = career)) +
+  geom_bar(colour = "black") + theme_bw() +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+  xlab("Data sharing policy") + ylab("Number") +
+  geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5)) +
+  labs(fill = "Career stage")
 
 ## Q4 use of software ------------------------------------------------------
 data %>% select(num_range("Q4_",1:26))                              %>%
