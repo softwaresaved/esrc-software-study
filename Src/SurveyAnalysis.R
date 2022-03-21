@@ -7,10 +7,12 @@
 # Load packages ----------------------------------------------------------
 
 library(readxl)
+library(readr)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(RColorBrewer)
+library(leaflet)
 
 
 # Read then data ----------------------------------------------------------
@@ -20,6 +22,21 @@ data <- read_xlsx("../Data/survey-results.xlsx")
 
 # Read in a question key
 key <- read_xlsx("../Data/survey-results-key.xlsx")
+
+# Upload location information - long and lat for institutions
+colTypes <- cols(
+                  Location = col_character(),
+                  Latitude = col_double(),
+                  Longitude = col_double(),
+                 )
+
+locations <- read_csv("../Data/locations.csv", col_types = colTypes)
+
+# Cleaned up locations (used OpenRefine to cluster some of the data)
+cleanlocs <- read_csv("../Data/CleanedLocations.csv", col_types = cols(Q17 = col_character()))
+
+# Attach the cleaned locations to the data set
+data$CleanLocs <- cleanlocs[[1]]
 
 # Remap data ------------------------------------------------------------
 
@@ -120,6 +137,11 @@ for(i in seq_len(8)){
   q <- paste0("Q6_a_", i)
   data[q] <- gsub("1", os_reasons[i], data[[q]])
 }
+
+## Q17 Institutional affiliation -------------------------------------------
+
+# Add longitude and Latitude coordinates for the institutions
+data <- data %>% left_join(locations, by = c("CleanLocs" = "Location"))
 
 ## Q20 Career stage ------------------------------------------------------
 # 1	Phase 1 - Junior (e.g. PhD candidate, Junior Research Software Engineer)
@@ -242,6 +264,37 @@ data %>% select(Q6, career = Q20) %>%
          theme_bw() +
          xlab("Use of Open Source") + ylab("Number") +
          geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5))
+
+
+## Q17 Institutional affiliation -------------------------------------------
+
+### Top 12 institutions ----
+data %>% select(Institution = CleanLocs) %>%
+         filter(!is.na(Institution))     %>%
+         group_by(Institution)           %>%
+         tally()                         %>%
+         arrange(desc(n))                %>%
+         head(n = 12)
+
+## Map institutions - World ----
+data %>%  select(Institutions = CleanLocs, Latitude, Longitude) %>%
+          filter(!is.na(Institutions) & !is.na(Latitude))       %>%
+          group_by(Institutions)                                %>%
+          mutate(N = n())                                       %>%
+          leaflet()                                             %>%
+          addTiles()                                            %>%
+          addCircleMarkers(lng = ~Longitude, lat = ~Latitude, radius = ~N*0.1)
+
+## Map institutions - UK ----
+data %>%  select(Institutions = CleanLocs, Latitude, Longitude) %>%
+          filter(!is.na(Institutions) & !is.na(Latitude))       %>%
+          filter(-7 <= Longitude & Longitude <= 1.6)            %>%
+          filter(49 <= Latitude & Latitude <= 59)               %>%
+          group_by(Institutions)                                %>%
+          mutate(N = n())                                       %>%
+          leaflet()                                             %>%
+          addTiles()                                            %>%
+          addCircleMarkers(lng = ~Longitude, lat = ~Latitude, radius = ~N)
 
 ## Q20 Career stage --------------------------------------------------------
 
