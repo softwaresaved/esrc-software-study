@@ -35,7 +35,6 @@ data$Q2_1 <- gsub("1","create",data$Q2_1)
 data$Q2_2 <- gsub("0","noreuse",data$Q2_2)
 data$Q2_1 <- gsub("1","create",data$Q2_1)
 
-
 ## Q3 Sharing data ------------------------------------------------------------
 # 1	I have not yet shared my data
 # 2	I have licensed my data to allow it to be shared
@@ -54,7 +53,7 @@ data$Q3_6 <- gsub("1", "In Repo", data$Q3_6)
 data$Q3_7 <- gsub("1", "Other", data$Q3_7)
 
 
-## Q4 use of software ------------------------------------------------------
+## Q4 Use of software ------------------------------------------------------
 # 1	Animation and Storyboarding, e.g. Scratch, Storyteller
 # 2	AudioTools, e.g. Music Algorithms, Paperphone
 # 3	Authoring and publishing tools, e.g. Twine, Oppia
@@ -96,7 +95,7 @@ for(i in seq_len(26)){
 }
 
 
-## Q6 open source ----------------------------------------------------------
+## Q6 Open source ----------------------------------------------------------
 # 1	Yes
 # 2	No
 
@@ -123,7 +122,7 @@ for(i in seq_len(8)){
   data[q] <- gsub("1", os_reasons[i], data[[q]])
 }
 
-## Q20 career stage ------------------------------------------------------
+## Q20 Career stage ------------------------------------------------------
 # 1	Phase 1 - Junior (e.g. PhD candidate, Junior Research Software Engineer)
 # 2	Phase 2 - Early (e.g Research Assistant/Associate, first grant holder,
 #             Lecturer, Research Software Engineer)
@@ -161,7 +160,7 @@ data$Q21[is.na(data$Q21)] <- "-"
 
 gender_order <-  c("Woman", "Man", "Other", "Prefer not to disclose", "Non-binary person", "-")
 
-# Look at the question data ---------------------------------------------------
+# Question data ---------------------------------------------------
 
 ## Q2 Do you create or re-use data to undertake your research? --------
 # 1	Create new data (including primary data collection and data generation)
@@ -206,12 +205,19 @@ data %>% select(num_range("Q4_",1:26))                              %>%
 
 ## Q6 use of open source ---------------------------------------------------
 
-
 ### Use of software ---------------------------------------------------------
 data %>% select(Q6) %>%
          ggplot(aes(x = Q6)) + geom_bar() + theme_bw() +
          xlab("Use of Open Source") + ylab("Number") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5)
+
+### Use of software by career stage ------------------------------------------
+data %>% select(Q6, career = Q20) %>%
+         ggplot(aes(x = Q6, fill = career)) +
+         geom_bar(color = "black") +
+         theme_bw() +
+         xlab("Use of Open Source") + ylab("Number") +
+         geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5))
 
 ## Q20 Career stage --------------------------------------------------------
 
