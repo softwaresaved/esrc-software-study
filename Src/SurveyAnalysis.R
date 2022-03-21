@@ -104,6 +104,25 @@ data$Q6 <- gsub("1", "Yes", data$Q6)
 data$Q6 <- gsub("2", "No", data$Q6)
 data$Q6[is.na(data$Q6)] <-  "-"
 
+
+## Q6a Reasons for using open source ---------------------------------------
+# 1	Institutional/Funder policy
+# 2	Quality of support
+# 3	Open standards/interoperability
+# 4	Cost
+# 5	Sustainability
+# 6	Licensing
+# 7	Meets user needs/usability
+# 8	Staff previous experience, no need for training
+
+os_reasons <- c("Policy","Suppoprt", "Interoperability","Cost","Sustainability",
+                "Licensing","Usability", "Experience")
+
+for(i in seq_len(8)){
+  q <- paste0("Q6_a_", i)
+  data[q] <- gsub("1", os_reasons[i], data[[q]])
+}
+
 ## Q20 career stage ------------------------------------------------------
 # 1	Phase 1 - Junior (e.g. PhD candidate, Junior Research Software Engineer)
 # 2	Phase 2 - Early (e.g Research Assistant/Associate, first grant holder,
@@ -148,7 +167,7 @@ gender_order <-  c("Woman", "Man", "Other", "Prefer not to disclose", "Non-binar
 # 1	Create new data (including primary data collection and data generation)
 # 2	Re-use existing data
 
-# Bar chart of the use of data ßsegmented by career stage
+### Use of data segmented by career stage ---------------------------
 data %>% select(create = Q2_1, reuse = Q2_2, career = Q20) %>%
          pivot_longer(cols = c("create", "reuse"), values_to = "datause")     %>%
          select(!name)                                                        %>%
@@ -160,17 +179,17 @@ data %>% select(create = Q2_1, reuse = Q2_2, career = Q20) %>%
                   position = position_stack(vjust = 0.5), stat = "count", colour = "black") +
          scale_fill_brewer(palette = "Set1", name = "Career stage", breaks = career_order)
 
-# Percentage segments
-data %>% select(create=Q2_1, reuse=Q2_2, career=Q20)                   %>%
-  pivot_longer(cols = c("create", "reuse"), values_to = "datause")     %>%
-  select(!name)                                                        %>%
-  ggplot(aes(x = datause, fill = factor(career, levels = career_order))) +
-  geom_bar(position = "fill", colour = "black") +
-  theme_bw() +
-  xlab("Use of data") + ylab("Number of responses") +
-  labs(fill = "Career stage") +
-  scale_fill_brewer(palette = "Set1", name = "Career stage", breaks = career_order) +
-  scale_y_continuous(labels = scales::percent)
+### Use of data percentage segments ------------
+data %>% select(create=Q2_1, reuse=Q2_2, career=Q20)                         %>%
+         pivot_longer(cols = c("create", "reuse"), values_to = "datause")     %>%
+         select(!name)                                                        %>%
+         ggplot(aes(x = datause, fill = factor(career, levels = career_order))) +
+         geom_bar(position = "fill", colour = "black") +
+         theme_bw() +
+         xlab("Use of data") + ylab("Percentage of responses") +
+         labs(fill = "Career stage") +
+         scale_fill_brewer(palette = "Set1", name = "Career stage", breaks = career_order) +
+         scale_y_continuous(labels = scales::percent)
 
 ## Q4 use of software ------------------------------------------------------
 data %>% select(num_range("Q4_",1:26))                              %>%
@@ -182,14 +201,17 @@ data %>% select(num_range("Q4_",1:26))                              %>%
          theme_bw() +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          ylab("Number") + xlab("Software used") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3)
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
+        theme(legend.position = "none")
 
 ## Q6 use of open source ---------------------------------------------------
 
+
+### Use of software ---------------------------------------------------------
 data %>% select(Q6) %>%
-        ggplot(aes(x = Q6)) + geom_bar() + theme_bw() +
-        xlab("Use of Open Source") + ylab("Number") +
-        geom_text(aes(label = ..count..), stat = "count", vjust = -0.5)
+         ggplot(aes(x = Q6)) + geom_bar() + theme_bw() +
+         xlab("Use of Open Source") + ylab("Number") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5)
 
 ## Q20 Career stage --------------------------------------------------------
 
