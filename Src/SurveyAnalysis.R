@@ -110,6 +110,9 @@ for(i in seq_len(26)){
   data[q] <- gsub("1", software[i], data[[q]])
 }
 
+## Q5 Most important software in research ----------------------------------
+
+data$Q5
 
 ## Q6 Open source ----------------------------------------------------------
 # 1	Yes
@@ -221,7 +224,7 @@ data %>% select(num_range("Q3_", 1:7))                               %>%
         ggplot(aes(x = DataSharing, fill = DataSharing)) +
         geom_bar(colour = "black") + theme_bw() +
         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-        xlab("Data sharing policy") + ylab("Number") +
+        xlab("Data sharing habits") + ylab("Number") +
         geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5)) +
         theme(legend.position = "none")
 
@@ -232,7 +235,7 @@ data %>% select(career = Q20, num_range("Q3_", 1:7))                            
   ggplot(aes(x = DataSharing, fill = career)) +
   geom_bar(colour = "black") + theme_bw() +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-  xlab("Data sharing policy") + ylab("Number") +
+  xlab("Data sharing habits") + ylab("Number") +
   geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5)) +
   labs(fill = "Career stage")
 
@@ -244,7 +247,7 @@ data %>% select(num_range("Q4_",1:26))                              %>%
          ggplot(aes(x = software, fill = software)) +
          geom_bar(colour = "black") +
          theme_bw() +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
          ylab("Number") + xlab("Software used") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
         theme(legend.position = "none")
@@ -276,7 +279,7 @@ data %>% select(Institution = CleanLocs) %>%
          arrange(desc(n))                %>%
          head(n = 12)
 
-## Map institutions - World ----
+### Map institutions - World ----
 data %>%  select(Institutions = CleanLocs, Latitude, Longitude) %>%
           filter(!is.na(Institutions) & !is.na(Latitude))       %>%
           group_by(Institutions)                                %>%
@@ -285,7 +288,7 @@ data %>%  select(Institutions = CleanLocs, Latitude, Longitude) %>%
           addTiles()                                            %>%
           addCircleMarkers(lng = ~Longitude, lat = ~Latitude, radius = ~N*0.1)
 
-## Map institutions - UK ----
+### Map institutions - UK ----
 data %>%  select(Institutions = CleanLocs, Latitude, Longitude) %>%
           filter(!is.na(Institutions) & !is.na(Latitude))       %>%
           filter(-7 <= Longitude & Longitude <= 1.6)            %>%
@@ -298,7 +301,7 @@ data %>%  select(Institutions = CleanLocs, Latitude, Longitude) %>%
 
 ## Q20 Career stage --------------------------------------------------------
 
-# Bar chart of the career stages
+### Bar chart of the career stages ----
 data %>%  select(career = Q20) %>%
           ggplot(aes(x = factor(career, levels = career_order))) +
           geom_bar() +
@@ -309,8 +312,8 @@ data %>%  select(career = Q20) %>%
 
 ## Q21 Gender --------------------------------------------------------------
 
-# Bar chart of gender population
-data %>% select(gender = Q21) %>%
+### Bar chart of gender population ----
+data %>% select(gender = Q21)                                   %>%
          mutate(gender = factor(gender, levels = gender_order)) %>%
          ggplot(aes(x = gender)) +
          geom_bar() +
@@ -318,12 +321,25 @@ data %>% select(gender = Q21) %>%
          geom_text(aes(label = ..count..), position = position_stack(vjust = 0.5), stat = "count", colour = "white") +
          xlab("Gender") + ylab("Number")
 
-# Gender vs Career stage
+### Gender segmented by career stage ----
+data %>% select(gender = Q21, career = Q20) %>%
+         group_by(gender, career)           %>%
+         ggplot(aes(x = factor(gender, levels = gender_order),
+                   fill = factor(career, levels = career_order))) +
+         geom_bar(colour = "black") + theme_bw() +
+         geom_text(aes(label = ..count..), position = position_stack(vjust = 0.5),
+                   stat = "count", colour = "black", size = 2.5) +
+         xlab("Gender") + ylab("Number") + labs(fill = "Career stage") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+### Gender vs Career stage ----
 data %>% select(gender = Q21, career = Q20) %>%
          group_by(gender, career)           %>%
          mutate(size = n())                 %>%
-         ggplot(aes(x = factor(gender, levels = gender_order), y = factor(career, levels = career_order), colour = size)) +
+         ggplot(aes(x = factor(gender, levels = gender_order),
+                    y = factor(career, levels = career_order), colour = size)) +
          geom_point(aes(size = size)) + theme_bw() +
-         geom_text(aes(x = factor(gender, levels = gender_order), y = factor(career, levels = career_order), label = size), vjust = 2) +
+         geom_text(aes(x = factor(gender, levels = gender_order),
+                       y = factor(career, levels = career_order), label = size), vjust = 2) +
          xlab("Gender") + ylab("Career stage") + theme(legend.position = "none") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
