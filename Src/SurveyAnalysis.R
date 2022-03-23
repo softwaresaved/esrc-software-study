@@ -170,6 +170,23 @@ for(i in seq_len(8)){
   data[q] <- gsub("1", no_os[i], data[[q]])
 }
 
+## Q7	How is the software you use currently being supported and maintained? ----
+# 1	Provided by my institution
+# 2	Commercial or paid for external support
+# 3	Open source community initiative
+# 4	By a software specialist / research software engineer in my institution
+# 5	By me or my team
+# 6	No longer supported/maintained
+# 7	Other
+
+swmaintained <- c("Institution", "Commercial", "OpenSource","RSE", "MyTeam",
+                  "NotMaintained", "Other")
+
+for(i in seq_len(7)){
+  q <- paste0("Q7_", i)
+  data[q] <- gsub("1", swmaintained[i], data[[q]])
+}
+
 ## Q17 Institutional affiliation -------------------------------------------
 
 # Add longitude and Latitude coordinates for the institutions
@@ -396,6 +413,20 @@ data %>% select(career = Q20, starts_with("Q6_b"))        %>%
          xlab("Reasons for not using Open Source") + ylab("Number") +
          geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5))
 
+
+## Q7 How software is maintained -------------------------------------------
+
+### Bar chart of software maintenance ----
+data %>% select(num_range("Q7_", 1:7))              %>%
+         pivot_longer(cols = num_range("Q7_", 1:7),
+                      names_to = "questions",
+                      values_to = "swmaint")        %>%
+         filter(swmaint != 0)                       %>%
+         ggplot(aes(x = swmaint)) + geom_bar() +
+         theme_bw() +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("How Software is being maintained") + ylab("Number") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5)
 
 ## Q17 Institutional affiliation -------------------------------------------
 
