@@ -161,6 +161,7 @@ for(i in seq_len(8)){
 # 6	Does not meet user needs/useability
 # 7	Lack of expertise/requirement for training
 # 8	Requirement from collaborators
+
 no_os <- c("Policy", "PoorSupport", "NotPerformant", "Legal",
            "Continuity", "NotMeetNeeds", "NoExpertise","CollabReqs")
 
@@ -341,6 +342,58 @@ data %>% select(Q6, career = Q20) %>%
          geom_bar(color = "black") +
          theme_bw() +
          xlab("Use of Open Source") + ylab("Number") +
+         geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5))
+
+## Q6a Reasons for using OS ----
+
+### Plot bar chart ----
+data %>% select(starts_with("Q6_a"))        %>%
+         pivot_longer(cols = everything(),
+                      names_to = "names",
+                      values_to = "UseOS")  %>%
+         filter(UseOS != 0)                 %>%
+         ggplot(aes(x = UseOS)) + geom_bar() + theme_bw() +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+        xlab("Reasons for using Open Source") + ylab("Number")
+
+### Plot bar chart with career stage ----
+data %>% select(career = Q20, starts_with("Q6_a"))        %>%
+         pivot_longer(cols = starts_with("Q6_a"),
+                      names_to = "names",
+                      values_to = "UseOS")                %>%
+         filter(UseOS != 0)                               %>%
+         ggplot(aes(x = UseOS, fill = career)) +
+         geom_bar(colour = "black") +
+         theme_bw() +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("Reasons for using Open Source") + ylab("Number") +
+         geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5))
+
+## Q6b Reasons for not using OS ----
+
+### Plot bar chart ----
+data %>% select(starts_with("Q6_b"))        %>%
+         pivot_longer(cols = everything(),
+                      names_to = "names",
+                      values_to = "UseOS")  %>%
+         filter(UseOS != 0)                 %>%
+         ggplot(aes(x = UseOS)) + geom_bar() + theme_bw() +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("Reasons for not using Open Source") + ylab("Number")
+
+### Plot bar chart with career stage ----
+data %>% select(career = Q20, starts_with("Q6_b"))        %>%
+         pivot_longer(cols = starts_with("Q6_b"),
+                      names_to = "names",
+                      values_to = "UseOS")                %>%
+         filter(UseOS != 0)                               %>%
+         ggplot(aes(x = UseOS, fill = career)) +
+         geom_bar(colour = "black") +
+         theme_bw() +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("Reasons for not using Open Source") + ylab("Number") +
          geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5))
 
 
