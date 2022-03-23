@@ -143,12 +143,30 @@ data$Q6[is.na(data$Q6)] <-  "-"
 # 7	Meets user needs/usability
 # 8	Staff previous experience, no need for training
 
-os_reasons <- c("Policy","Suppoprt", "Interoperability","Cost","Sustainability",
+os_reasons <- c("Policy","Support", "Interoperability","Cost","Sustainability",
                 "Licensing","Usability", "Experience")
 
 for(i in seq_len(8)){
   q <- paste0("Q6_a_", i)
   data[q] <- gsub("1", os_reasons[i], data[[q]])
+}
+
+
+### Q6b Reasons for not using open-source -----------------------------------
+# 1	Institutional/Funder Policy
+# 2	Speed of access to support
+# 3	Lack of performance
+# 4	Legal reasons
+# 5	Continuity
+# 6	Does not meet user needs/useability
+# 7	Lack of expertise/requirement for training
+# 8	Requirement from collaborators
+no_os <- c("Policy", "PoorSupport", "NotPerformant", "Legal",
+           "Continuity", "NotMeetNeeds", "NoExpertise","CollabReqs")
+
+for(i in seq_len(8)){
+  q <- paste0("Q6_b_", i)
+  data[q] <- gsub("1", no_os[i], data[[q]])
 }
 
 ## Q17 Institutional affiliation -------------------------------------------
