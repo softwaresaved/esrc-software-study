@@ -32,7 +32,17 @@ colTypes <- cols(
 
 locations <- read_csv("../Data/locations.csv", col_types = colTypes)
 
-# Cleaned up locations (used OpenRefine to cluster some of the data)
+# Cleaned up software - Q5 most important software - a free text box. Cleaned up
+# in OpenRefine
+important_software <- read_csv("../Data/Q5-software-split.csv", show_col_types = FALSE)
+
+# Replace " "s in column names by "_"
+names(important_software) <- gsub(" ", "_", names(important_software))
+
+# Count non-NA entries per row
+important_software$count <- rowSums(!is.na(important_software))
+
+# Cleaned up locations (Q17) (used OpenRefine to cluster some of the data)
 cleanlocs <- read_csv("../Data/CleanedLocations.csv", col_types = cols(Q17 = col_character()))
 
 # Attach the cleaned locations to the data set
@@ -239,6 +249,7 @@ data %>% select(career = Q20, num_range("Q3_", 1:7))                            
   geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5)) +
   labs(fill = "Career stage")
 
+
 ## Q4 use of software ------------------------------------------------------
 data %>% select(num_range("Q4_",1:26))                              %>%
          pivot_longer(cols = everything(), values_to = "software")  %>%
@@ -250,7 +261,53 @@ data %>% select(num_range("Q4_",1:26))                              %>%
          theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
          ylab("Number") + xlab("Software used") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-        theme(legend.position = "none")
+         theme(legend.position = "none")
+
+## Q5 Most important software in research ----------------------------------
+
+### Tabulate software ----
+important_software %>% select(starts_with("Q5"))             %>%
+                       pivot_longer(cols =  everything(),
+                                    names_to = "name",
+                                    values_to = "software")  %>%
+                       filter(!is.na(software))              %>%
+                       group_by(software)                    %>%
+                       tally()                               %>%
+                       arrange(desc(n))
+
+### Plot software ----
+important_software %>% select(starts_with("Q5"))             %>%
+                       pivot_longer(cols =  everything(),
+                                    names_to = "name",
+                                    values_to = "software")  %>%
+                       filter(!is.na(software))              %>%
+                       group_by(software)                    %>%
+                       tally()                               %>%
+                       filter(n > 2)                         %>%
+                       ggplot(aes(x = software, y = n)) +
+                       geom_col() + theme_bw() +
+                       theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
+                       geom_text(aes(x = software, label = n), vjust = -0.5) +
+                       ylab("Number") + xlab("Most important software")
+
+### Most important software by career stage ----
+is <- important_software
+is$career <- data[["Q20"]]
+
+is %>% select(career, starts_with(("Q5")))      %>%
+       pivot_longer(cols =  starts_with("Q5"),
+                    names_to = "name",
+                    values_to = "software")    %>%
+       filter(!is.na(software))                %>%
+       group_by(software)                      %>%
+       mutate(n = n())                         %>%
+       filter(n > 2)                           %>%
+       select(-n)                              %>%
+       ggplot(aes(x = software, fill = career)) +
+       geom_bar(colour = "black") + theme_bw() +
+       theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
+       geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5), size = 3) +
+       ylab("Number") + xlab("Most important software") + labs(fill = "Career stage")
 
 ## Q6 use of open source ---------------------------------------------------
 
