@@ -454,12 +454,29 @@ data %>% select("Q9") %>%
          xlab("Do you develop software?") + ylab("Number") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5)
 
-### Bar chart segmented by career stage -----
-data %>% select("Q9", career = "Q20") %>%
+### Bar chart segmented by career stage ----
+
+data %>% select("Q9", career = "Q20")         %>%
+         group_by(Q9, career)                 %>%
+         mutate(n = n())                     %>%
          ggplot(aes(x = Q9, fill = career)) + geom_bar(colour = "black") +
          theme_bw() +
          xlab("Do you develop software?") + ylab("Number") + labs(fill = "Career stage") +
-         geom_text(aes(label = ..count..), position = position_stack(vjust = 0.5), stat = "count", colour = "black")
+         geom_text(aes(label = n), position = position_stack(vjust = 0.5),
+                  stat = "count", colour = "black", size = 3)
+
+### Bar chart segmented by career stage with percentage  -----
+N <- nrow(data)
+
+data %>% select("Q9", career = "Q20")         %>%
+         group_by(Q9, career)                 %>%
+         mutate(per = scales::percent(n()/N, accuracy = 0.1)) %>%
+         mutate(lab = paste(n(),"(",per,")")) %>%
+         ggplot(aes(x = Q9, fill = career)) + geom_bar(colour = "black") +
+         theme_bw() +
+         xlab("Do you develop software?") + ylab("Number") + labs(fill = "Career stage") +
+         geom_text(aes(label = lab), position = position_stack(vjust = 0.5),
+                   stat = "count", colour = "black", size = 3)
 
 
 ## Q17 Institutional affiliation -------------------------------------------
