@@ -13,6 +13,7 @@ library(tidyr)
 library(ggplot2)
 library(RColorBrewer)
 library(leaflet)
+library(stringr)
 
 
 # Read then data ----------------------------------------------------------
@@ -186,6 +187,22 @@ for(i in seq_len(7)){
   q <- paste0("Q7_", i)
   data[q] <- gsub("1", swmaintained[i], data[[q]])
 }
+
+## Q8 use combinations of software -----
+
+data %>%  select("Q8")                            %>%
+          filter(!is.na(Q8))                      %>%
+          mutate(s = str_wrap(Q8, width = 20))    %>%
+          select(-Q8)                             %>%
+          #print(n = nrow(.))                      %>%
+          write_csv("../Data/wfcases.csv")
+
+
+## Q9 Develop or extend software? ------------------------------------------
+# 1	Yes
+# 2	No
+data$Q9[data$Q9 == 1] <- "Yes"
+data$Q9[data$Q9 == 2] <- "No"
 
 ## Q17 Institutional affiliation -------------------------------------------
 
@@ -427,6 +444,23 @@ data %>% select(num_range("Q7_", 1:7))              %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("How Software is being maintained") + ylab("Number") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5)
+
+## Q9 Develop or extend software -------
+
+### Bar chart -----
+data %>% select("Q9") %>%
+         ggplot(aes(x = Q9)) + geom_bar() +
+         theme_bw() +
+         xlab("Do you develop software?") + ylab("Number") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5)
+
+### Bar chart segmented by career stage -----
+data %>% select("Q9", career = "Q20") %>%
+         ggplot(aes(x = Q9, fill = career)) + geom_bar(colour = "black") +
+         theme_bw() +
+         xlab("Do you develop software?") + ylab("Number") + labs(fill = "Career stage") +
+         geom_text(aes(label = ..count..), position = position_stack(vjust = 0.5), stat = "count", colour = "black")
+
 
 ## Q17 Institutional affiliation -------------------------------------------
 
