@@ -197,12 +197,26 @@ data %>%  select("Q8")                            %>%
           #print(n = nrow(.))                      %>%
           write_csv("../Data/wfcases.csv")
 
-
 ## Q9 Develop or extend software? ------------------------------------------
 # 1	Yes
 # 2	No
 data$Q9[data$Q9 == 1] <- "Yes"
 data$Q9[data$Q9 == 2] <- "No"
+
+## Q10 if you write your own software do you: ------------------------------
+# 1	Only make available for your own use
+# 2	Only share within your research group
+# 3	Only share with your collaborators (including at other institutions)
+# 4	Share with others on request
+# 5	Make widely available for use in your field / community
+# 6	Other
+swuse <- c("OwnUseOnly", "RGUseOnly", "CollaboratorsOnly",
+           "ShareOnRequest", "ShareWidely","Other")
+
+for(i in seq_len(6)){
+  q <- paste0("Q10_", i)
+  data[q] <- gsub("1", swuse[i], data[[q]])
+}
 
 ## Q17 Institutional affiliation -------------------------------------------
 
@@ -231,7 +245,7 @@ data$Q20[is.na(data$Q20)] <- "-"
 # Establish a career stage order
 career_order <-  c("Junior","Early","Mid","Senior","Other","-")
 
-## Gender ------------------------------------------------------------------
+## Q21 Gender --------------------------------------------------------------
 # 1	Woman
 # 2	Man
 # 3	Non-binary person
@@ -247,7 +261,7 @@ data$Q21[is.na(data$Q21)] <- "-"
 
 gender_order <-  c("Woman", "Man", "Other", "Prefer not to disclose", "Non-binary person", "-")
 
-# Question data ---------------------------------------------------
+# Process question data ---------------------------------------------------
 
 ## Q2 Do you create or re-use data to undertake your research? --------
 # 1	Create new data (including primary data collection and data generation)
@@ -389,7 +403,7 @@ data %>% select(starts_with("Q6_a"))        %>%
          ggplot(aes(x = UseOS)) + geom_bar() + theme_bw() +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-        xlab("Reasons for using Open Source") + ylab("Number")
+         xlab("Reasons for using Open Source") + ylab("Number")
 
 ### Plot bar chart with career stage ----
 data %>% select(career = Q20, starts_with("Q6_a"))        %>%
@@ -478,6 +492,36 @@ data %>% select("Q9", career = "Q20")         %>%
          geom_text(aes(label = lab), position = position_stack(vjust = 0.5),
                    stat = "count", colour = "black", size = 3)
 
+# Q9a what software do you extend? ----------------------------------------
+
+data %>% select(other = "Q9_a") %>%
+  filter(!is.na(other))   -> a
+
+# Print out the output
+cat(str_wrap(a$other, width = 80), sep = "\n\n")
+
+## Q10 if you write your own software do you: ------------------------------
+
+### Bar chart ----
+data %>% select(num_range("Q10_", 1:7))                 %>%
+         select(num_range("Q10_", 1:7))                 %>%
+         pivot_longer(cols = num_range("Q10_", 1:7),
+                      names_to = "questions",
+                      values_to = "swuse")              %>%
+         filter(swuse != 0)                             %>%
+         ggplot(aes(x = swuse)) + geom_bar() +
+         theme_bw() +
+         xlab("Who do you share your software with?") + ylab("Number") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+## Q10a Other ways of sharing data ----
+
+data %>% select(other = "Q10_a") %>%
+         filter(!is.na(other))   -> a
+
+# Print out the output
+cat(str_wrap(a$other, width = 80), sep = "\n\n")
 
 ## Q17 Institutional affiliation -------------------------------------------
 
