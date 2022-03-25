@@ -218,6 +218,29 @@ for(i in seq_len(6)){
   data[q] <- gsub("1", swuse[i], data[[q]])
 }
 
+
+## Q11 How did you acquire the skills necessary to utilise software --------
+# 1	I am still trying to acquire the skills
+# 2	Self-led online material
+# 3	From examples and posts found online
+# 4	Free community-led online workshops (e.g. Riot Science Club, ReproducibiliTea)
+# 5	Conference workshops and tutorials
+# 6	Peers and colleagues
+# 7	Undergraduate/masters course
+# 8	Postgraduate training as part of my PhD/CDT/DTC
+# 9	Institutional training course
+# 10	National Centre for Research Methods (NCRM) training
+# 11	Third-party training course (not NCRM)
+# 12	Other
+skills <- c("StillTrying","OnlineCourses", "OnlineExamples", "OnlineWorkshops",
+            "ConferenceWorkshops", "PeersColleagues", "UG/MasterCourse",
+            "PGTraining","InstituionalCourse","NCRM", "ThirdPartyCourse", "Other")
+
+for(i in seq_len(12)){
+  q <- paste0("Q11_", i)
+  data[q] <- gsub("1", swuse[i], data[[q]])
+}
+
 ## Q17 Institutional affiliation -------------------------------------------
 
 # Add longitude and Latitude coordinates for the institutions
@@ -492,7 +515,7 @@ data %>% select("Q9", career = "Q20")         %>%
          geom_text(aes(label = lab), position = position_stack(vjust = 0.5),
                    stat = "count", colour = "black", size = 3)
 
-# Q9a what software do you extend? ----------------------------------------
+## Q9a what software do you extend? ----------------------------------------
 
 data %>% select(other = "Q9_a") %>%
   filter(!is.na(other))   -> a
@@ -519,6 +542,45 @@ data %>% select(num_range("Q10_", 1:7))                 %>%
 
 data %>% select(other = "Q10_a") %>%
          filter(!is.na(other))   -> a
+
+# Print out the output
+cat(str_wrap(a$other, width = 80), sep = "\n\n")
+
+## Q11 How did you acquire the skills necessary to utilise software --------
+
+### Bar chart ----
+data %>% select(num_range("Q11_", 1:12))                 %>%
+         pivot_longer(cols = num_range("Q11_", 1:12),
+                      names_to = "questions",
+                      values_to = "skills")              %>%
+         filter(skills != 0)                             %>%
+         ggplot(aes(x = skills)) + geom_bar() +
+         theme_bw() +
+         xlab("Where skills are acquired") + ylab("Number") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+### Bar chart ----
+data %>%  select(num_range("Q11_", 1:12), career = "Q20") %>%
+          pivot_longer(cols = num_range("Q11_", 1:12),
+                       names_to = "questions",
+                       values_to = "skills")              %>%
+          filter(skills != 0)                             %>%
+          ggplot(aes(x = skills, fill = career)) +
+          geom_bar(colour = "black") +
+          theme_bw() +
+          xlab("Where skills are acquired") + ylab("Number") + labs(fill = "Career stage") +
+          geom_text(aes(x = skills, label = ..count..),
+                    position = position_stack(vjust = 0.5), stat = "count", colour = "black") +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+## Q11a Other ways of acquiring skills ----
+
+data %>% select(other = "Q11_a") %>%
+  filter(!is.na(other))   -> a
+
+# Number of responses
+nrow(a)
 
 # Print out the output
 cat(str_wrap(a$other, width = 80), sep = "\n\n")
