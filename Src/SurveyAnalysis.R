@@ -253,6 +253,27 @@ for(i in seq_len(3)){
 
 data["Q12"][is.na(data["Q12"])] <- "-"
 
+# Q13 ToDo -----
+
+## Q14 Where do you normally run your digital tools/software? --------
+# 1	My own laptop/desktop
+# 2	Institutionally provided laptop/desktop
+# 3	Server operated by research group / department
+# 4	An institutional central service
+# 5	Run by an individual data centre or at a data safe haven
+# 6	A UK Tier 2 high performance computing service
+# 7	A UK Tier 1 high performance computing service
+# 8	The Cloud, e.g. Microsoft Azure or Amazon Web Services
+# 9	Other
+
+hw <- c("Own", "InstitutionallyProvided", "RG/DepServer","InstitutionalCentralService",
+        "DataCentre/SafeHaven","Tier2", "Tier1", "Cloud", "Other")
+
+for(i in seq_len(9)){
+  q <- paste0("Q14_", i)
+  data[q] <- gsub("1", swuse[i], data[[q]])
+}
+
 ## Q17 Institutional affiliation -------------------------------------------
 
 # Add longitude and Latitude coordinates for the institutions
@@ -625,6 +646,46 @@ data %>%  select(rew = "Q12", career = "Q20") %>%
 ### Q12a Other ----
 
 data %>% select(other = "Q12_a") %>%
+  filter(!is.na(other))   -> a
+
+# Number of responses
+nrow(a)
+
+# Print out the output
+cat(str_wrap(a$other, width = 80), sep = "\n\n")
+
+## Q14 Where do you normally run your digital tools/software? --------
+
+### Bar chart ----
+data %>%  select(num_range("Q14_", 1:9))         %>%
+  pivot_longer(cols = num_range("Q14_", 1:9),
+               names_to = "questions",
+               values_to = "runon")              %>%
+  filter(runon != 0)                             %>%
+  ggplot(aes(x = runon)) +
+  geom_bar(colour = "black") +
+  theme_bw() +
+  xlab("Where software is run") + ylab("Number") +
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+### Bar chart with career segmentation ----
+data %>%  select(num_range("Q14_", 1:9), career = "Q20") %>%
+          pivot_longer(cols = num_range("Q14_", 1:9),
+                       names_to = "questions",
+                       values_to = "runon")              %>%
+          filter(runon != 0)                             %>%
+          ggplot(aes(x = runon, fill = career)) +
+          geom_bar(colour = "black") +
+          theme_bw() +
+          xlab("Where software is run") + ylab("Number") + labs(fill = "Career stage") +
+          geom_text(aes(x = runon, label = ..count..),
+                       position = position_stack(vjust = 0.5), stat = "count", colour = "black") +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+## 14a Other places where software is run -----
+
+data %>% select(other = "Q14_a") %>%
   filter(!is.na(other))   -> a
 
 # Number of responses
