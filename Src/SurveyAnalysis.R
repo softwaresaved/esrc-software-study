@@ -241,6 +241,18 @@ for(i in seq_len(12)){
   data[q] <- gsub("1", swuse[i], data[[q]])
 }
 
+## Q12 Development and maintenance of research software rewarded/recognised --------
+# 1	Yes
+# 2	No
+# 3	Don't know
+rew <- c("Yes", "No", "Don't know")
+
+for(i in seq_len(3)){
+  data["Q12"] <- gsub(i, rew[i], data[["Q12"]])
+}
+
+data["Q12"][is.na(data["Q12"])] <- "-"
+
 ## Q17 Institutional affiliation -------------------------------------------
 
 # Add longitude and Latitude coordinates for the institutions
@@ -577,6 +589,42 @@ data %>%  select(num_range("Q11_", 1:12), career = "Q20") %>%
 ## Q11a Other ways of acquiring skills ----
 
 data %>% select(other = "Q11_a") %>%
+  filter(!is.na(other))   -> a
+
+# Number of responses
+nrow(a)
+
+# Print out the output
+cat(str_wrap(a$other, width = 80), sep = "\n\n")
+
+# ToDo Q11b NCRM courses ----
+
+
+## Q12 Development and maintenance of research software rewarded/recognised --------
+
+### Plot a Bar chart ----
+data %>%  select(rew = "Q12") %>%
+          ggplot(aes(x = rew)) + geom_bar() +
+          theme_bw() +
+          xlab("Development/Maintenance of rsearch software rewarded/recognised") +
+          ylab("Number") +
+          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+### Plot a Bar chart segmented by career ----
+data %>%  select(rew = "Q12", career = "Q20") %>%
+          ggplot(aes(x = rew, fill = career)) +
+          geom_bar(colour = "black") +
+          theme_bw() +
+          xlab("Development/Maintenance of rsearch software rewarded/recognised") +
+          ylab("Number") + labs(fill = "Career stage") +
+          geom_text(aes(x = rew, label = ..count..),
+                    position = position_stack(vjust = 0.5), stat = "count", colour = "black") +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+### Q12a Other ----
+
+data %>% select(other = "Q12_a") %>%
   filter(!is.na(other))   -> a
 
 # Number of responses
