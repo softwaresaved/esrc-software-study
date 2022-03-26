@@ -274,6 +274,30 @@ for(i in seq_len(9)){
   data[q] <- gsub("1", swuse[i], data[[q]])
 }
 
+## Q16 barriers to the use of software -------------------------------------
+# 1	Lack of expertise within your team
+# 2	Unsure how to best engage with research technical specialists such as software engineers, digital archivists, etc.
+# 3	Training is not available
+# 4	Training is available but you have no capacity to engage
+# 5	Infrastructure is not available (Infrastructure could include: digital archives; computers with access to specialist software; data sets not digitised; etc)
+# 6	No disciplinary tradition for digital methodology and tools
+# 7	Concern that less value is attached to digital publications and other outputs of research, etc.
+# 8	Format of data and assets you work with make them less amenable to technology
+# 9	Lack of funding to support research projects/components of projects focusing on digital data and digital assets
+# 10	Previous bad experience
+# 11	I have not found software that is fit for my purpose
+# 12	Lack of time to learn how to best use research software
+# 13	Other
+
+barriers <-  c("LackOfExpertise", "UnsureHowToEngageSpecialists", "NoTraining", "NoCapacity",
+               "NoInfrastructure", "NoTradition", "ConcernAboutValue", "AssetsNotAmenable",
+               "LackOfFunding", "BadExperiences", "NoPertinentSoftware", "LackOfTime", "Other")
+
+for(i in seq_len(13)){
+  q <- paste0("Q16_", i)
+  data[q] <- gsub("1", barriers[i], data[[q]])
+}
+
 ## Q17 Institutional affiliation -------------------------------------------
 
 # Add longitude and Latitude coordinates for the institutions
@@ -686,6 +710,50 @@ data %>%  select(num_range("Q14_", 1:9), career = "Q20") %>%
 ## 14a Other places where software is run -----
 
 data %>% select(other = "Q14_a") %>%
+  filter(!is.na(other))   -> a
+
+# Number of responses
+nrow(a)
+
+# Print out the output
+cat(str_wrap(a$other, width = 80), sep = "\n\n")
+
+# Q15 ToDo Licensing -----
+
+data$Q15_1_1
+
+## Q16 barriers to the use of software -------------------------------------
+
+### Bar chart ----
+data %>%  select(num_range("Q16_", 1:13), career = "Q20") %>%
+          pivot_longer(cols = num_range("Q16_", 1:13),
+                       names_to = "questions",
+                       values_to = "barriers")             %>%
+          filter(barriers != 0)                            %>%
+          ggplot(aes(x = barriers, fill = career)) +
+          geom_bar(colour = "black") +
+          theme_bw() +
+          xlab("Barriers to software use") + ylab("Number") + labs(fill = "Career stage") +
+          geom_text(aes(x = barriers, label = ..count..),
+                    position = position_stack(vjust = 0.5), stat = "count", colour = "black") +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+### Bar chart with career segmentation ----
+data %>%  select(num_range("Q16_", 1:13))                 %>%
+  pivot_longer(cols = num_range("Q16_", 1:13),
+               names_to = "questions",
+               values_to = "barriers")            %>%
+  filter(barriers != 0)                           %>%
+  ggplot(aes(x = barriers)) +
+  geom_bar(colour = "black") +
+  theme_bw() +
+  xlab("Barriers to software use") + ylab("Number") +
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+## Q16a Other barriers ------------------
+
+data %>% select(other = "Q16_a") %>%
   filter(!is.na(other))   -> a
 
 # Number of responses
