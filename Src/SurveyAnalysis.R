@@ -303,6 +303,42 @@ for(i in seq_len(13)){
 # Add longitude and Latitude coordinates for the institutions
 data <- data %>% left_join(locations, by = c("CleanLocs" = "Location"))
 
+## Q19 Research discipline -------------------------------------------------
+# 1	Area Studies
+# 2	Data science and artificial intelligence
+# 3	Demography
+# 4	Development studies
+# 5	Economics
+# 6	Education
+# 7	Environmental planning
+# 8	History
+# 9	Human Geography
+# 10	Information science
+# 11	Law & legal studies
+# 12	Linguistics
+# 13	Management & business studies
+# 14	Political science. & international studies
+# 15	Psychology
+# 16	Science and Technology Studies
+# 17	Social anthropology
+# 18	Social policy
+# 19	Social work
+# 20	Sociology
+# 21	Tools, technologies & methods
+# 22	Other
+
+discipline <- c("AreaStudies", "DS_AI", "Demography","DvelopmentStudies",
+                "Economics", "Education", "EnvPlanning","History","HumanGeography",
+                "InfoSci","Law","Linguistics","ManBusStud","PolSci_IntStud",
+                "Pyschology", "SciTechStud",
+                "SocAnth", "SocPol", "SocWork","Sociology","ToolsTechMeth",
+                "Other")
+
+for(i in seq_len(22)){
+  q <- paste0("Q19_", i)
+  data[q] <- gsub("1", discipline[i], data[[q]])
+}
+
 ## Q20 Career stage ------------------------------------------------------
 # 1	Phase 1 - Junior (e.g. PhD candidate, Junior Research Software Engineer)
 # 2	Phase 2 - Early (e.g Research Assistant/Associate, first grant holder,
@@ -324,6 +360,7 @@ data$Q20[is.na(data$Q20)] <- "-"
 
 # Establish a career stage order
 career_order <-  c("Junior","Early","Mid","Senior","Other","-")
+
 
 ## Q21 Gender --------------------------------------------------------------
 # 1	Woman
@@ -791,6 +828,54 @@ data %>%  select(Institutions = CleanLocs, Latitude, Longitude) %>%
           leaflet()                                             %>%
           addTiles()                                            %>%
           addCircleMarkers(lng = ~Longitude, lat = ~Latitude, radius = ~N)
+
+## Q19 Research discipline -------------------------------------------------
+
+### Bar chart-----------
+data %>%  select(num_range("Q19_", 1:22))             %>%
+  pivot_longer(cols = num_range("Q19_", 1:22),
+               names_to = "questions",
+               values_to = "disciplines")             %>%
+  filter(disciplines != 0)                            %>%
+  ggplot(aes(x = disciplines)) +
+  geom_bar(colour = "black") +
+  theme_bw() +
+  xlab("Discipline") + ylab("Number") +
+  geom_text(aes(x = disciplines, label = ..count..),
+            position = position_stack(vjust = 0.5), stat = "count", colour = "white") +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+### Bar chart with careers -----------
+data %>%  select(num_range("Q19_", 1:22), career = "Q20") %>%
+  pivot_longer(cols = num_range("Q19_", 1:22),
+               names_to = "questions",
+               values_to = "disciplines")                 %>%
+  filter(disciplines != 0)                                %>%
+  ggplot(aes(x = disciplines, fill = career)) +
+  geom_bar(colour = "black") +
+  theme_bw() +
+  xlab("Discipline") + ylab("Number") + labs(fill = "Career stage") +
+  geom_text(aes(x = disciplines, label = ..count..),
+            position = position_stack(vjust = 0.5), stat = "count", colour = "black") +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+### Bar chart with careers -----------
+N <-  nrow(data)
+data %>%  select(num_range("Q19_", 1:22), career = "Q20") %>%
+  pivot_longer(cols = num_range("Q19_", 1:22),
+               names_to = "questions",
+               values_to = "disciplines")                 %>%
+  filter(disciplines != 0)                                %>%
+  group_by(disciplines, career)                           %>%
+  mutate(n = n())                                         %>%
+  mutate(per = scales::percent(n/N, accuracy = 0.1))      %>%
+  ggplot(aes(x = disciplines, fill = career)) +
+  geom_bar(position = "fill", colour = "black") +
+  theme_bw() + scale_y_continuous(labels = scales::percent) +
+  xlab("Discipline") + ylab("Percentage") + labs(fill = "Career stage") +
+  # geom_text(aes(x = disciplines, y = n/N, label = per),
+  #            position = position_stack(vjust = 0.5), colour = "black") +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
 ## Q20 Career stage --------------------------------------------------------
 
