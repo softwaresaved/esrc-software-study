@@ -877,6 +877,36 @@ data %>%  select(num_range("Q19_", 1:22), career = "Q20") %>%
   #            position = position_stack(vjust = 0.5), colour = "black") +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
+### Percentage graph ------------
+data %>%  select(num_range("Q19_", 1:22), career = "Q20") %>%
+  pivot_longer(cols = num_range("Q19_", 1:22),
+               names_to = "questions",
+               values_to = "disciplines")                 %>%
+  filter(disciplines != 0)                                %>%
+  group_by(disciplines, career)                           %>%
+  mutate(n = n())                                         %>%
+  mutate(y = n/N)                                         %>%
+  mutate(per = scales::percent(n/N, accuracy = 0.1))      %>%
+  distinct(disciplines, career, per, y)                   %>%
+  ggplot(aes(x = disciplines, y = y, fill = career)) +
+  geom_col(position = "fill", colour = "black") +
+  # geom_text(aes(x = disciplines, y = y, label = per), size = 1.5,
+  #             position = position_stack(vjust = 0.5), colour = "black") +
+  theme_bw() + scale_y_continuous(labels = scales::percent) +
+  xlab("Discipline") + ylab("Percentage") + labs(fill = "Career stage") +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+## Q19a Other disciplines -------------
+
+data %>% select(other = "Q19_a") %>%
+  filter(!is.na(other))   -> a
+
+# Number of responses
+nrow(a)
+
+# Print out the output
+cat(str_wrap(a$other, width = 80), sep = "\n")
+
 ## Q20 Career stage --------------------------------------------------------
 
 ### Bar chart of the career stages ----
