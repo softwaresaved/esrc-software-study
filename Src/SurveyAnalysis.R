@@ -153,7 +153,7 @@ for(i in seq_len(8)){
 }
 
 
-### Q6b Reasons for not using open-source -----------------------------------
+## Q6b Reasons for not using open-source -----------------------------------
 # 1	Institutional/Funder Policy
 # 2	Speed of access to support
 # 3	Lack of performance
@@ -240,6 +240,58 @@ for(i in seq_len(12)){
   q <- paste0("Q11_", i)
   data[q] <- gsub("1", swuse[i], data[[q]])
 }
+
+## Q11b NCRM courses ----
+# 1	Data in the spotlight: International time series databanks
+# 2	(Non-)Probability Survey Samples in Scientific Practice
+# 3	Classification Models with Python
+# 4	Principles and Practices of Quantitative Data Analysis
+# 5	Scoping Reviews Short Course
+# 6	UK Census Longitudinal Studies (UKcenLS) Webinar
+# 7	Advanced Programming in R
+# 8	Introduction to QGIS: Spatial Data
+# 9	Spatial Analysis, Introduction to Spatial Data & Using R as a GIS
+# 10	Structural Equation Modelling using Mplus
+# 11	Testing for Mediation and Moderation using Mplus
+# 12	Testing for Mediation and Moderation using SPSS (PROCESS macro)
+# 13	Video Production for Anthropology and Social Research
+# 14	Item Response Theory and Computer Adaptive Testing
+# 15	Multilevel Modelling using Mplus
+# 16	Multilevel Modelling using SPSS
+# 17	Analysing interview and focus group data with NVivo
+# 18	Latent Growth Curve Modelling using Mplus
+# 19	Applied Data Science with R
+# 20	Introduction to Sequence Analysis for Social Sciences
+# 21	Video Editing
+# 22	Other
+ncrm_courses <- c("Data in the spotlight: International time series databanks",
+                  "(Non-)Probability Survey Samples in Scientific Practice",
+                  "Classification Models with Python",
+                  "Principles and Practices of Quantitative Data Analysis",
+                  "Scoping Reviews Short Course",
+                  "UK Census Longitudinal Studies (UKcenLS) Webinar",
+                  "Advanced Programming in R",
+                  "Introduction to QGIS: Spatial Data",
+                  "Spatial Analysis, Introduction to Spatial Data & Using R as a GIS",
+                  "Structural Equation Modelling using Mplus",
+                  "Testing for Mediation and Moderation using Mplus",
+                  "Testing for Mediation and Moderation using SPSS (PROCESS macro)",
+                  "Video Production for Anthropology and Social Research",
+                  "Item Response Theory and Computer Adaptive Testing",
+                  "Multilevel Modelling using Mplus",
+                  "Multilevel Modelling using SPSS",
+                  "Analysing interview and focus group data with NVivo",
+                  "Latent Growth Curve Modelling using Mplus",
+                  "Applied Data Science with R",
+                  "Introduction to Sequence Analysis for Social Sciences",
+                  "Video Editing",
+                  "Other")
+
+for(i in seq_len(22)){
+  q <- paste0("Q11_b_", i)
+  data[q] <- gsub("1", ncrm_courses[i], data[[q]])
+}
+
 
 ## Q12 Development and maintenance of research software rewarded/recognised --------
 # 1	Yes
@@ -679,8 +731,27 @@ nrow(a)
 # Print out the output
 cat(str_wrap(a$other, width = 80), sep = "\n\n")
 
-# ToDo Q11b NCRM courses ----
+## Q11b NCRM courses ----
 
+### Tabulate courses attended ----------
+data %>% select(num_range("Q11_b_", 1:22)) %>%
+         pivot_longer(cols = num_range("Q11_b_", 1:22),
+                      names_to = "questions",
+                      values_to = "ncrm")              %>%
+         filter(ncrm != 0)                             %>%
+         group_by(ncrm)                                %>%
+         tally()                                       %>%
+         arrange(desc(n))
+
+# Enumerate the "Other" comments
+data %>% select(other = "Q11_b_i") %>%
+  filter(!is.na(other))   -> a
+
+# Number of responses
+nrow(a)
+
+# Print out the output
+cat(str_wrap(a$other, width = 80), sep = "\n")
 
 ## Q12 Development and maintenance of research software rewarded/recognised --------
 
