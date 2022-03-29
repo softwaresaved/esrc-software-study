@@ -1022,3 +1022,14 @@ data %>% select(gender = Q21, career = Q20) %>%
                        y = factor(career, levels = career_order), label = size), vjust = 2) +
          xlab("Gender") + ylab("Career stage") + theme(legend.position = "none") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+## Q28 Comments about the survey ----
+
+data %>% select(comments = "Q28") %>%
+         filter(!is.na(comments)) -> a
+
+# Number of answers
+nrow(a)
+
+# Print out the output
+cat(str_wrap(a$other, width = 80), sep = "\n")
