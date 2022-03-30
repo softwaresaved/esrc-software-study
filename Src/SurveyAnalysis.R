@@ -912,7 +912,77 @@ data %>% select(starts_with("Q15_"), -"Q15_a") %>%
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
          ylab("Number") + xlab("Aware of the policy for")
 
-## Q15a Other policy awareness ----
+### Bar chart segmented by career stage----
+data %>% select(starts_with("Q15_"), -"Q15_a", career = "Q20") %>%
+         pivot_longer(cols = starts_with("Q15"),
+                      names_to = "columns",
+                      values_to ="aware") %>%
+        filter(aware != 0) %>%
+        ggplot(aes(x = aware, fill = career)) +
+        geom_bar(colour = "black") +
+        theme_bw() +
+        geom_text(aes(x = aware, label = ..count..),
+                 position = position_stack(vjust = 0.5), stat = "count", colour = "black") +
+        ylab("Number") + xlab("Aware of the policy for")
+
+### Percentage bar chart segmented by career stage----
+data %>% select(starts_with("Q15_"), -"Q15_a", career = "Q20") %>%
+         pivot_longer(cols = starts_with("Q15"),
+                      names_to = "columns",
+                      values_to ="aware") %>%
+         filter(aware != 0) %>%
+         ggplot(aes(x = aware, fill = career)) +
+         geom_bar(position = "fill", colour = "black") +
+         theme_bw() + scale_y_continuous(labels = scales::percent) +
+         ylab("Percentage") + xlab("Aware of the policy for") + labs(fill = "Career stage")
+
+## Percentage bar chart segmented by gender ----
+data %>% select(starts_with("Q15_"), -"Q15_a", gender = "Q21") %>%
+         pivot_longer(cols = starts_with("Q15"),
+                      names_to = "columns",
+                      values_to ="aware") %>%
+         filter(aware != 0) %>%
+         ggplot(aes(x = aware, fill = gender)) +
+         geom_bar(position = "fill", colour = "black") +
+         theme_bw() + scale_y_continuous(labels = scales::percent) +
+        ylab("Percentage") + xlab("Aware of the policy for") + labs(fill = "Gender")
+
+### Awareness vs institution -----
+data %>% select(Institutions = CleanLocs, starts_with("Q15_"), -"Q15_a") %>%
+         pivot_longer(cols = starts_with("Q15"),
+                      names_to = "columns",
+                      values_to ="aware")                                %>%
+         filter(aware != 0)                                              %>%
+         group_by(aware, Institutions)                                   %>%
+         tally()                                                         %>%
+         ggplot(aes(x = aware, y = Institutions, size = n)) +
+         geom_point() +
+         theme_bw() +
+         theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
+         theme(axis.text.y = element_text(size = 6)) +
+         ylab("Institutions") + xlab("Aware of the policy for") +
+         labs(size = "Number")
+
+### Awareness vs discipline
+data %>% select(num_range("Q19_", 1:22), starts_with("Q15_"), -"Q15_a")  %>%
+         pivot_longer(cols = starts_with("Q15"),
+                      names_to = "columns",
+                      values_to ="aware")                                %>%
+         pivot_longer(cols = num_range("Q19_", 1:22),
+                      names_to = "questions",
+                      values_to = "disciplines")                         %>%
+        filter(disciplines != 0 & aware != 0)                            %>%
+        group_by(aware, disciplines)                                     %>%
+        tally()                                                          %>%
+        ggplot(aes(x = aware, y = disciplines, size = n)) +
+        geom_point() +
+        theme_bw() +
+        theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
+        theme(axis.text.y = element_text(size = 6)) +
+        ylab("Disciplines") + xlab("Aware of the policy for") +
+        labs(size = "Number")
+
+  ## Q15a Other policy awareness ----
 
 data %>% select(other = "Q15_a") %>%
   filter(!is.na(other))   -> a
@@ -1007,10 +1077,10 @@ data %>% select(Institutions = CleanLocs, num_range("Q19_", 1:22)) %>%
 data %>% select(Institutions = CleanLocs, num_range("Q19_", 1:22)) %>%
   pivot_longer(cols = num_range("Q19_", 1:22),
                names_to = "questions",
-               values_to = "disciplines")                  %>%
-  filter(disciplines != 0)                                 %>%
-  group_by(disciplines, Institutions)                      %>%
-  tally()                                                  %>%
+               values_to = "disciplines")                          %>%
+  filter(disciplines != 0)                                         %>%
+  group_by(disciplines, Institutions)                              %>%
+  tally()                                                          %>%
   ggplot(aes(x = disciplines, y = Institutions, size = n)) +
   geom_point() +
   theme_bw() +
@@ -1021,32 +1091,32 @@ data %>% select(Institutions = CleanLocs, num_range("Q19_", 1:22)) %>%
 ## Q19 Research discipline -------------------------------------------------
 
 ### Bar chart for research disciplines -----------
-data %>%  select(num_range("Q19_", 1:22))             %>%
-  pivot_longer(cols = num_range("Q19_", 1:22),
-               names_to = "questions",
-               values_to = "disciplines")             %>%
-  filter(disciplines != 0)                            %>%
-  ggplot(aes(x = disciplines)) +
-  geom_bar(colour = "black") +
-  theme_bw() +
-  xlab("Discipline") + ylab("Number") +
-  geom_text(aes(x = disciplines, label = ..count..),
-            position = position_stack(vjust = 0.5), stat = "count", colour = "white") +
-  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+data %>%  select(num_range("Q19_", 1:22))               %>%
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = "questions",
+                      values_to = "disciplines")        %>%
+          filter(disciplines != 0)                      %>%
+          ggplot(aes(x = disciplines)) +
+          geom_bar(colour = "black") +
+          theme_bw() +
+          xlab("Discipline") + ylab("Number") +
+          geom_text(aes(x = disciplines, label = ..count..),
+                    position = position_stack(vjust = 0.5), stat = "count", colour = "white") +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
 ### Bar chart with careers -----------
-data %>%  select(num_range("Q19_", 1:22), career = "Q20") %>%
-  pivot_longer(cols = num_range("Q19_", 1:22),
-               names_to = "questions",
-               values_to = "disciplines")                 %>%
-  filter(disciplines != 0)                                %>%
-  ggplot(aes(x = disciplines, fill = career)) +
-  geom_bar(colour = "black") +
-  theme_bw() +
-  xlab("Discipline") + ylab("Number") + labs(fill = "Career stage") +
-  geom_text(aes(x = disciplines, label = ..count..),
-            position = position_stack(vjust = 0.5), stat = "count", colour = "black") +
-  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+data %>%  select(num_range("Q19_", 1:22), career = "Q20")  %>%
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = "questions",
+                       values_to = "disciplines")          %>%
+          filter(disciplines != 0)                         %>%
+          ggplot(aes(x = disciplines, fill = career)) +
+          geom_bar(colour = "black") +
+          theme_bw() +
+          xlab("Discipline") + ylab("Number") + labs(fill = "Career stage") +
+          geom_text(aes(x = disciplines, label = ..count..),
+                    position = position_stack(vjust = 0.5), stat = "count", colour = "black") +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
 ### Bar chart with careers -----------
 N <-  nrow(data)
