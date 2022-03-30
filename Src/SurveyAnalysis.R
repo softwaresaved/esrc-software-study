@@ -430,6 +430,54 @@ data$Q21[is.na(data$Q21)] <- "-"
 
 gender_order <-  c("Woman", "Man", "Other", "Prefer not to disclose", "Non-binary person", "-")
 
+## Q22 Ethnic group ----
+# 1	White: English, Welsh, Scottish, Northern Irish or British
+# 2	White: Irish
+# 3	White: Gypsy or Irish Traveller
+# 4	White: Roma
+# 5	White: Any other White background
+# 6	Mixed or Multiple ethnic groups: White and Black Caribbean
+# 7	Mixed or Multiple ethnic groups: White and Black African
+# 8	Mixed or Multiple ethnic groups: White and Asian
+# 9	Mixed or Multiple ethnic groups: Any other Mixed or Multiple background
+# 10	Asian or Asian British: Indian
+# 11	Asian or Asian British: Pakistani
+# 12	Asian or Asian British: Bangladeshi
+# 13	Asian or Asian British: Chinese
+# 14	Asian or Asian British: Any other Asian background
+# 15	Black, Black British, Caribbean or African: Caribbean
+# 16	Black, Black British, Caribbean or African: African background
+# 17	Black, Black British, Caribbean or African: Any other Black, Black British, Caribbean or African background
+# 18	Other ethnic group: Arab
+# 19	Prefer not to disclose
+# 20	Other
+
+ethinicity <- c("White: English, Welsh, Scottish, Northern Irish or British",
+                "White: Irish",
+                "White: Gypsy or Irish Traveller",
+                "White: Roma",
+                "White: Any other White background",
+                "Mixed or Multiple ethnic groups: White and Black Caribbean",
+                "Mixed or Multiple ethnic groups: White and Black African",
+                "Mixed or Multiple ethnic groups: White and Asian",
+                "Mixed or Multiple ethnic groups: Any other Mixed or Multiple background",
+                "Asian or Asian British: Indian",
+                "Asian or Asian British: Pakistani",
+                "Asian or Asian British: Bangladeshi",
+                "Asian or Asian British: Chinese",
+                "Asian or Asian British: Any other Asian background",
+                "Black, Black British, Caribbean or African: Caribbean",
+                "Black, Black British, Caribbean or African: African background",
+                "Black, Black British, Caribbean or African: Any other Black, Black British, Caribbean or African background",
+                "Other ethnic group: Arab",
+                "Prefer not to disclose",
+                "Other")
+
+# Work backwards otherwise partial numbers are substituted
+for(i in 20:1){
+  data["Q22"] <- gsub(i, ethinicity[i], data[["Q22"]])
+}
+
 # Process question data ---------------------------------------------------
 
 ## Q2 Do you create or re-use data to undertake your research? --------
@@ -1022,6 +1070,35 @@ data %>% select(gender = Q21, career = Q20) %>%
                        y = factor(career, levels = career_order), label = size), vjust = 2) +
          xlab("Gender") + ylab("Career stage") + theme(legend.position = "none") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+## Q22 Ethnic group ----
+
+### Tabulate ethnicity ----
+data %>% select(ethnicity = "Q22") %>%
+         group_by(ethnicity)       %>%
+         tally()                  %>%
+         arrange(desc(n))
+
+### Tabulate ethnicity with career stage ----
+data %>% select(ethnicity = "Q22", career = "Q20") %>%
+         group_by(ethnicity, career)               %>%
+         tally()                                   %>%
+         arrange(desc(n))
+
+### Tabulate ethnicity, career stage and gender ----
+data %>% select(ethnicity = "Q22", career = "Q20", gender = "Q21") %>%
+         group_by(gender, ethnicity, career)                       %>%
+         tally()                                                   %>%
+         arrange(desc(n))
+
+### Graphical representation of ethnicity, gender and career stage.
+data %>% select(ethnicity = "Q22", career = "Q20", gender = "Q21") %>%
+         group_by(gender, ethnicity, career)                       %>%
+         tally()                                                  %>%
+         ggplot(aes(x = career, y = ethnicity, size = n, colour = gender)) +
+         geom_point(alpha = 0.25) + geom_jitter() + theme_bw() +
+         xlab("Career stage") + ylab("Ethnicity") +
+  labs(colour = "Gender", size = "Number")
 
 ## Q28 Comments about the survey ----
 
