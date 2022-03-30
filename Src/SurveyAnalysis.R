@@ -326,7 +326,31 @@ for(i in seq_len(9)){
   data[q] <- gsub("1", swuse[i], data[[q]])
 }
 
-## Q16 barriers to the use of software -------------------------------------
+## Q15 Licensing awareness -----
+# A licensing policy provides instruction or guidance on what software licenses
+# are preferred for the release of software.
+# A publishing policy provides instruction or guidance on how software should be
+# made available to others.
+# Q15_1	My Institution's
+# 1	Licensing
+# 2	Publishing
+# Q15_2	My funder's
+# 1	Licensing
+# 2	Publishing
+# Q15_3	My Project's
+# 1	Licensing
+# 2	Publishing
+
+data$Q15_1_1 <- gsub("1", "InstituionLicensing", data$Q15_1_1)
+data$Q15_1_2 <- gsub("1", "InstituionPublishing", data$Q15_1_2)
+
+data$Q15_2_1 <- gsub("1", "FunderLicensing", data$Q15_2_1)
+data$Q15_2_2 <- gsub("1", "FunderPublishing", data$Q15_2_2)
+
+data$Q15_3_1 <- gsub("1", "ProjectLicensing", data$Q15_3_1)
+data$Q15_3_2 <- gsub("1", "ProjectPublishing", data$Q15_3_2)
+
+# ## Q16 barriers to the use of software -------------------------------------
 # 1	Lack of expertise within your team
 # 2	Unsure how to best engage with research technical specialists such as software engineers, digital archivists, etc.
 # 3	Training is not available
@@ -874,9 +898,30 @@ nrow(a)
 # Print out the output
 cat(str_wrap(a$other, width = 80), sep = "\n\n")
 
-# Q15 ToDo Licensing -----
+## Q15 Licensing Awareness -----
 
-data$Q15_1_1
+### Bar chart ----
+data %>% select(starts_with("Q15_"), -"Q15_a") %>%
+         pivot_longer(cols = everything(),
+                      names_to = "columns",
+                      values_to ="aware") %>%
+         filter(aware != 0) %>%
+         ggplot(aes(x = aware)) +
+         geom_bar(colour = "black") +
+         theme_bw() +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+         ylab("Number") + xlab("Aware of the policy for")
+
+## Q15a Other policy awareness ----
+
+data %>% select(other = "Q15_a") %>%
+  filter(!is.na(other))   -> a
+
+# Number of responses
+nrow(a)
+
+# Print out the output
+cat(str_wrap(a$other, width = 80), sep = "\n")
 
 ## Q16 barriers to the use of software -------------------------------------
 
@@ -1111,6 +1156,18 @@ data %>% select(gender = Q21, career = Q20) %>%
                    stat = "count", colour = "black", size = 2.5) +
          xlab("Gender") + ylab("Number") + labs(fill = "Career stage") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+### Percentage gender segmented by career stage ----
+data %>% select(gender = Q21, career = Q20) %>%
+         group_by(gender, career)           %>%
+         ggplot(aes(x = factor(gender, levels = gender_order),
+                fill = factor(career, levels = career_order))) +
+         geom_bar(position = "fill", colour = "black") + theme_bw() +
+         scale_y_continuous(labels = scales::percent) +
+         # geom_text(aes(label = ..count..), position = position_stack(vjust = 0.5),
+         #           stat = "count", colour = "black", size = 2.5) +
+        xlab("Gender") + ylab("Number") + labs(fill = "Career stage") +
+        theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
 ### Gender vs Career stage ----
 data %>% select(gender = Q21, career = Q20) %>%
