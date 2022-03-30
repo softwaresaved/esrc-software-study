@@ -948,9 +948,34 @@ data %>%  select(Institutions = CleanLocs, Latitude, Longitude) %>%
           addTiles()                                            %>%
           addCircleMarkers(lng = ~Longitude, lat = ~Latitude, radius = ~N)
 
+### Tabulate Institutions and disciplines -----
+data %>% select(Institutions = CleanLocs, num_range("Q19_", 1:22)) %>%
+         pivot_longer(cols = num_range("Q19_", 1:22),
+                      names_to = "questions",
+                      values_to = "disciplines")                  %>%
+         filter(disciplines != 0)                                 %>%
+         group_by(disciplines, Institutions)                      %>%
+         tally()                                                  %>%
+         arrange(desc(n))
+
+### Plot Institutions and disciplines -----
+data %>% select(Institutions = CleanLocs, num_range("Q19_", 1:22)) %>%
+  pivot_longer(cols = num_range("Q19_", 1:22),
+               names_to = "questions",
+               values_to = "disciplines")                  %>%
+  filter(disciplines != 0)                                 %>%
+  group_by(disciplines, Institutions)                      %>%
+  tally()                                                  %>%
+  ggplot(aes(x = disciplines, y = Institutions, size = n)) +
+  geom_point() +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
+  theme(axis.text.y = element_text(size = 6)) +
+  ylab("Institutions") + xlab("Discipline") + labs(size = "Number")
+
 ## Q19 Research discipline -------------------------------------------------
 
-### Bar chart-----------
+### Bar chart for research disciplines -----------
 data %>%  select(num_range("Q19_", 1:22))             %>%
   pivot_longer(cols = num_range("Q19_", 1:22),
                names_to = "questions",
@@ -1013,6 +1038,34 @@ data %>%  select(num_range("Q19_", 1:22), career = "Q20") %>%
   #             position = position_stack(vjust = 0.5), colour = "black") +
   theme_bw() + scale_y_continuous(labels = scales::percent) +
   xlab("Discipline") + ylab("Percentage") + labs(fill = "Career stage") +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+### Bar chart of Research discipline and Gender ----
+data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = "questions",
+                       values_to = "disciplines")                 %>%
+          filter(disciplines != 0)                                %>%
+  ggplot(aes(x = disciplines, fill = gender)) +
+  geom_bar(colour = "black") +
+  theme_bw() +
+  xlab("Discipline") + ylab("Number") + labs(fill = "Gender") +
+  geom_text(aes(x = disciplines, label = ..count..),
+            position = position_stack(vjust = 0.5), stat = "count", colour = "black") +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+### Percentage bar chart of Research discipline and Gender ----
+data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = "questions",
+                       values_to = "disciplines")                 %>%
+          filter(disciplines != 0)                                %>%
+  ggplot(aes(x = disciplines, fill = gender)) +
+  geom_bar(position = "fill", colour = "black") +
+  theme_bw() + scale_y_continuous(labels = scales::percent) +
+  xlab("Discipline") + ylab("Number") + labs(fill = "Gender") +
+  # geom_text(aes(x = disciplines, label = ..count..),
+  #           position = position_stack(vjust = 0.5), stat = "count", colour = "black") +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
 ## Q19a Other disciplines -------------
@@ -1094,7 +1147,7 @@ data %>% select(ethnicity = "Q22", career = "Q20", gender = "Q21") %>%
 ### Graphical representation of ethnicity, gender and career stage.
 data %>% select(ethnicity = "Q22", career = "Q20", gender = "Q21") %>%
          group_by(gender, ethnicity, career)                       %>%
-         tally()                                                  %>%
+         tally()                                                   %>%
          ggplot(aes(x = career, y = ethnicity, size = n, colour = gender)) +
          geom_point(alpha = 0.25) + geom_jitter() + theme_bw() +
          xlab("Career stage") + ylab("Ethnicity") +
