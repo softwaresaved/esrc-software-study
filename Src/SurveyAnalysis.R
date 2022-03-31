@@ -18,6 +18,7 @@ library(stringr)
 
 # Read then data ----------------------------------------------------------
 
+
 # Read in the survey results
 data <- read_xlsx("../Data/survey-results.xlsx")
 
@@ -35,7 +36,8 @@ locations <- read_csv("../Data/locations.csv", col_types = colTypes)
 
 # Cleaned up software - Q5 most important software - a free text box. Cleaned up
 # in OpenRefine
-important_software <- read_csv("../Data/Q5-software-split.csv", show_col_types = FALSE)
+important_software <- read_csv("../Data/Q5-software-split.csv",
+                               show_col_types = FALSE)
 
 # Replace " "s in column names by "_"
 names(important_software) <- gsub(" ", "_", names(important_software))
@@ -59,9 +61,29 @@ data$CleanLocs <- cleanlocs[[1]]
 data$Q2_1 <- gsub("0","nocreate",data$Q2_1)
 data$Q2_1 <- gsub("1","create",data$Q2_1)
 
-# Reuse data
+# Reusing data
 data$Q2_2 <- gsub("0","noreuse",data$Q2_2)
 data$Q2_1 <- gsub("1","create",data$Q2_1)
+
+## Q2b Data sources for reusing existing data ----
+# 1	UK Data Service
+# 2	University / Institutional Repository
+# 3	General data repository (e.g. Dryad, Figshare, Open Science Framework, Zenodo)
+# 4	Shared by collaborators using a shared drive / folder
+#       (e.g. DropBox, Google Drive, ...)
+# 5	Personal recommendation, eg from discussion with other researchers
+# 6	Other
+ds <- c("UK Data Service",
+        "University/Institutional Repository",
+        "General data repository",
+        "Shared by collaborators using a shared drive / folder",
+        "Personal recommendation",
+        "Other")
+
+for( i in seq_len(6)){
+  q <- paste0("Q2_b_",i)
+  data[q] <- gsub("1", ds[i], data[[q]])
+}
 
 ## Q3 Sharing data ------------------------------------------------------------
 # 1	I have not yet shared my data
@@ -573,6 +595,57 @@ data %>% select(create=Q2_1, reuse=Q2_2, career=Q20)                         %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage", breaks = career_order) +
          scale_y_continuous(labels = scales::percent)
 
+## Q2a Most important data sources ----
+
+data %>% select(other = "Q2_a") %>%
+  filter(!is.na(other))   -> a
+
+# Number of responses
+nrow(a)
+
+# Print out the output
+cat(str_wrap(a$other, width = 80), sep = "\n")
+
+# Write output to a data file
+data %>% select(other = "Q2_a")    %>%
+         filter(!is.na(other))     %>%
+         write_csv("../Data/Q2a_OtherDataSources.csv")
+
+## Q2b Data sources for reusing existing data ----
+
+### Bar chart ----
+data %>% select(num_range("Q2_b_",1:6))      %>%
+         pivot_longer(cols = everything(),
+                      names_to = "question",
+                      values_to = "ds")      %>%
+         filter(ds != 0)                     %>%
+         ggplot(aes(x = ds)) + geom_bar(colour = "black") +
+         theme_bw() + ylab("Number") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("Data sources")
+
+## Q2b Other data sources -----
+
+data %>% select(other = "Q2_b_i") %>%
+  filter(!is.na(other))   -> a
+
+# Number of responses
+nrow(a)
+
+# Print out the output
+cat(str_wrap(a$other, width = 80), sep = "\n")
+
+## Q2c Creating data ----
+
+data %>% select(other = "Q2_c") %>%
+  filter(!is.na(other))   -> a
+
+# Number of responses
+nrow(a)
+
+# Print out the output
+cat(str_wrap(a$other, width = 80), sep = "\n")
 
 ## Q3 Do you share data -------------------------------------------------------
 
