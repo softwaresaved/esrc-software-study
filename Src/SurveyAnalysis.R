@@ -902,6 +902,8 @@ cat(str_wrap(a$other, width = 80), sep = "\n\n")
 ## Q13 Questions about software ----
 
 ### Q13a I am aware of how the software I use is funded, managed and licensed ----
+
+#### Barplot ----
 data %>% select(num_range("Q13_1_",1:5))            %>%
          pivot_longer(cols = everything(),
                       names_to = "questions",
@@ -912,7 +914,17 @@ data %>% select(num_range("Q13_1_",1:5))            %>%
          theme_bw() + ylab("Number") +
          xlab("Aware of how s/w I use is funded, managed and licensed")
 
+#### Tabulation check
+data %>% select(num_range("Q13_1_",1:5))            %>%
+         pivot_longer(cols = everything(),
+                      names_to = "questions",
+                      values_to = "understanding")  %>%
+         group_by(understanding)                    %>%
+         tally()
+
 ### Q13b My institution/funder's policies on how software is funded, managed and licensed are clear to me ----
+
+#### Barplot ----
 data %>% select(num_range("Q13_2_",1:5))            %>%
          pivot_longer(cols = everything(),
                       names_to = "questions",
@@ -924,6 +936,8 @@ data %>% select(num_range("Q13_2_",1:5))            %>%
          xlab("Aware of how instituion/funder's policies on how s/w is funded, managed and licensed")
 
 ### Q13c There is insufficient attention paid to software funding, management and licensing by the economic and social sciences research community ----
+
+#### Barplot ----
 data %>% select(num_range("Q13_3_",1:5))            %>%
          pivot_longer(cols = everything(),
                       names_to = "questions",
@@ -935,6 +949,8 @@ data %>% select(num_range("Q13_3_",1:5))            %>%
          xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community")
 
 ### Q13d There is insufficient incentive for me to learn how my software is funded, managed and licensed  ----
+
+#### Barplot ----
 data %>% select(num_range("Q13_4_",1:5))            %>%
          pivot_longer(cols = everything(),
                       names_to = "questions",
