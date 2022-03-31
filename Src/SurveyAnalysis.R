@@ -305,7 +305,48 @@ for(i in seq_len(3)){
 
 data["Q12"][is.na(data["Q12"])] <- "-"
 
-# Q13 ToDo -----
+# Q13 Statements abut software
+# When answering this question, think about the most important piece of software
+# you use for research that you couldn't live without. To what level do you
+# agree/disagree with the following statements?
+# Q13_1	I am aware of how the software I use is funded, managed and licensed
+# 1	Strongly agree
+# 2	Agree
+# 3	Undecided
+# 4	Disagree
+# 5	Strongly Disagree
+# Q13_2	My institution or funder's policies on how software is funded, managed and licensed are clear to me
+# 1	Strongly agree
+# 2	Agree
+# 3	Undecided
+# 4	Disagree
+# 5	Strongly Disagree
+# Q13_3	There is insufficient attention paid to software funding, management and licensing by the economic
+#       and social sciences research community
+# 1	Strongly agree
+# 2	Agree
+# 3	Undecided
+# 4	Disagree
+# 5	Strongly Disagree
+# Q13_4	There is insufficient incentive for me to learn how my software is funded, managed and licensed
+# 1	Strongly agree
+# 2	Agree
+# 3	Undecided
+# 4	Disagree
+# 5	Strongly Disagree
+
+likert <- c("Strongly agree",
+            "Agree",
+            "Undecided",
+            "Disagree",
+            "Strongly Disagree")
+
+for(i in seq_len(4)){
+  for(j in seq_len(5)){
+     q <- paste0("Q13_", i,"_", j)
+     data[q] <- gsub("1", likert[i], data[[q]])
+  }
+}
 
 ## Q14 Where do you normally run your digital tools/software? --------
 # 1	My own laptop/desktop
@@ -858,6 +899,52 @@ nrow(a)
 # Print out the output
 cat(str_wrap(a$other, width = 80), sep = "\n\n")
 
+## Q13 Questions about software ----
+
+### Q13a I am aware of how the software I use is funded, managed and licensed ----
+data %>% select(num_range("Q13_1_",1:5))            %>%
+         pivot_longer(cols = everything(),
+                      names_to = "questions",
+                      values_to = "understanding")  %>%
+         filter(understanding != 0)                 %>%
+         ggplot(aes(x = understanding)) + geom_bar(colour = "black") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+         theme_bw() + ylab("Number") +
+         xlab("Aware of how s/w I use is funded, managed and licensed")
+
+### Q13b My institution/funder's policies on how software is funded, managed and licensed are clear to me ----
+data %>% select(num_range("Q13_2_",1:5))            %>%
+         pivot_longer(cols = everything(),
+                      names_to = "questions",
+                      values_to = "understanding")  %>%
+         filter(understanding != 0)                 %>%
+         ggplot(aes(x = understanding)) + geom_bar(colour = "black") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+         theme_bw() + ylab("Number") +
+         xlab("Aware of how instituion/funder's policies on how s/w is funded, managed and licensed")
+
+### Q13c There is insufficient attention paid to software funding, management and licensing by the economic and social sciences research community ----
+data %>% select(num_range("Q13_3_",1:5))            %>%
+         pivot_longer(cols = everything(),
+                      names_to = "questions",
+                      values_to = "understanding")  %>%
+         filter(understanding != 0)                 %>%
+         ggplot(aes(x = understanding)) + geom_bar(colour = "black") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+         theme_bw() + ylab("Number") +
+         xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community")
+
+### Q13d There is insufficient incentive for me to learn how my software is funded, managed and licensed  ----
+data %>% select(num_range("Q13_4_",1:5))            %>%
+         pivot_longer(cols = everything(),
+                      names_to = "questions",
+                      values_to = "understanding")  %>%
+         filter(understanding != 0)                 %>%
+         ggplot(aes(x = understanding)) + geom_bar(colour = "black") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+         theme_bw() + ylab("Number") +
+         xlab("Insufficient incentive for me to learn how my s/w is funded, managed and licensed")
+
 ## Q14 Where do you normally run your digital tools/software? --------
 
 ### Bar chart ----
@@ -982,7 +1069,7 @@ data %>% select(num_range("Q19_", 1:22), starts_with("Q15_"), -"Q15_a")  %>%
         ylab("Disciplines") + xlab("Aware of the policy for") +
         labs(size = "Number")
 
-  ## Q15a Other policy awareness ----
+## Q15a Other policy awareness ----
 
 data %>% select(other = "Q15_a") %>%
   filter(!is.na(other))   -> a
