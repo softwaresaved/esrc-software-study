@@ -18,12 +18,8 @@ library(stringr)
 
 # Read then data ----------------------------------------------------------
 
-
 # Read in the survey results
-data <- read_xlsx("../Data/survey-results.xlsx")
-
-# Read in a question key
-key <- read_xlsx("../Data/survey-results-key.xlsx")
+data0 <- read_xlsx("../Data/survey-results.xlsx")
 
 # Upload location information - long and lat for institutions
 colTypes <- cols(
@@ -49,7 +45,10 @@ important_software$count <- rowSums(!is.na(important_software))
 cleanlocs <- read_csv("../Data/CleanedLocations.csv", col_types = cols(Q17 = col_character()))
 
 # Attach the cleaned locations to the data set
-data$CleanLocs <- cleanlocs[[1]]
+data0$CleanLocs <- cleanlocs[[1]]
+
+# Data that will actually be used
+data <- data0
 
 # Remap data ------------------------------------------------------------
 
@@ -58,12 +57,10 @@ data$CleanLocs <- cleanlocs[[1]]
 # 2	Re-use existing data
 
 # Create new data
-data$Q2_1 <- gsub("0","nocreate",data$Q2_1)
 data$Q2_1 <- gsub("1","create",data$Q2_1)
 
 # Reusing data
-data$Q2_2 <- gsub("0","noreuse",data$Q2_2)
-data$Q2_1 <- gsub("1","create",data$Q2_2)
+data$Q2_2 <- gsub("1","reuse",data$Q2_2)
 
 ## Q2b Data sources for reusing existing data ----
 # 1	UK Data Service
@@ -488,18 +485,17 @@ for(i in seq_len(22)){
 #             Research Computing, Distinguished Engineer, Chief Data Scientist)
 # 5	Other
 
-data$Q20 <- gsub("1", "Junior", data$Q20)
-data$Q20 <- gsub("2", "Early", data$Q20)
-data$Q20 <- gsub("3", "Mid", data$Q20)
-data$Q20 <- gsub("4", "Senior", data$Q20)
-data$Q20 <- gsub("5", "Other", data$Q20)
+career <- c("Junior", "Early", "Mid", "Senior", "Other")
+
+for(i in seq_len(5)){
+  data["Q20"] <- gsub(i, career[i], data[["Q20"]])
+}
 
 # Remap NAs to "-"
 data$Q20[is.na(data$Q20)] <- "-"
 
 # Establish a career stage order
 career_order <-  c("Junior","Early","Mid","Senior","Other","-")
-
 
 ## Q21 Gender --------------------------------------------------------------
 # 1	Woman
@@ -574,28 +570,17 @@ for(i in 20:1){
 # 2	Re-use existing data
 
 ### Use of data segmented by career stage ---------------------------
-data %>% select(create = Q2_1, reuse = Q2_2, career = Q20) %>%
-         pivot_longer(cols = c("create", "reuse"), values_to = "datause")     %>%
+data %>% select(num_range("Q2_", 1:2), career = Q20) %>%
+         pivot_longer(cols = num_range("Q2_", 1:2), values_to = "datause")    %>%
+         filter(datause != 0)                                                 %>%
          select(!name)                                                        %>%
          ggplot(aes(x = datause, fill = factor(career, levels = career_order))) +
          geom_bar(colour = "black") +
          theme_bw() +
-         xlab("Use of data") + ylab("Number of responses") +
+         xlab("Use of data") + ylab("Number") +
          geom_text(aes(x = datause, label = ..count..),
                   position = position_stack(vjust = 0.5), stat = "count", colour = "black") +
          scale_fill_brewer(palette = "Set1", name = "Career stage", breaks = career_order)
-
-### Use of data percentage segments ------------
-data %>% select(create=Q2_1, reuse=Q2_2, career=Q20)                         %>%
-         pivot_longer(cols = c("create", "reuse"), values_to = "datause")     %>%
-         select(!name)                                                        %>%
-         ggplot(aes(x = datause, fill = factor(career, levels = career_order))) +
-         geom_bar(position = "fill", colour = "black") +
-         theme_bw() +
-         xlab("Use of data") + ylab("Percentage of responses") +
-         labs(fill = "Career stage") +
-         scale_fill_brewer(palette = "Set1", name = "Career stage", breaks = career_order) +
-         scale_y_continuous(labels = scales::percent)
 
 ## Q2a Most important data sources ----
 
