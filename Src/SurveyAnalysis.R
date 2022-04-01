@@ -76,7 +76,7 @@ data$Q2_1 <- gsub("1","create",data$Q2_1)
 ds <- c("UK Data Service",
         "University/Institutional Repository",
         "General data repository",
-        "Shared by collaborators using a shared drive / folder",
+        "Shared with collaborators using shared drive/folder",
         "Personal recommendation",
         "Other")
 
@@ -565,7 +565,9 @@ for(i in 20:1){
   data["Q22"] <- gsub(i, ethinicity[i], data[["Q22"]])
 }
 
+#
 # Process question data ---------------------------------------------------
+#
 
 ## Q2 Do you create or re-use data to undertake your research? --------
 # 1	Create new data (including primary data collection and data generation)
@@ -657,7 +659,7 @@ data %>% select(num_range("Q3_", 1:7))                               %>%
         geom_bar(colour = "black") + theme_bw() +
         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
         xlab("Data sharing habits") + ylab("Number") +
-        geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5)) +
+        geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
         theme(legend.position = "none")
 
 ### Data sharing and career stage ----------
@@ -671,8 +673,20 @@ data %>% select(career = Q20, num_range("Q3_", 1:7))                            
   geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5)) +
   labs(fill = "Career stage")
 
+### Data sharing and career stage percentages ----------
+data %>% select(career = Q20, num_range("Q3_", 1:7))                                    %>%
+  pivot_longer(cols = starts_with("Q3_"), names_to = "orig", values_to = "DataSharing") %>%
+  filter(DataSharing != 0)                                                              %>%
+  ggplot(aes(x = DataSharing, fill = career)) +
+  geom_bar(position = "fill", colour = "black") + theme_bw() +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+  xlab("Data sharing habits") + ylab("Percentage") + scale_y_continuous(labels = scales::percent) +
+  #geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5)) +
+  labs(fill = "Career stage")
 
 ## Q4 use of software ------------------------------------------------------
+
+### bar chart of the use of software ----
 data %>% select(num_range("Q4_",1:26))                              %>%
          pivot_longer(cols = everything(), values_to = "software")  %>%
          filter(software != 0)                                      %>%
@@ -684,6 +698,32 @@ data %>% select(num_range("Q4_",1:26))                              %>%
          ylab("Number") + xlab("Software used") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          theme(legend.position = "none")
+
+### bar chart of the use of software with career ----
+data %>% select(num_range("Q4_",1:26), career=Q20)                 %>%
+  pivot_longer(cols = starts_with("Q4_"), values_to = "software")  %>%
+  filter(software != 0)                                            %>%
+  select(-name)                                                    %>%
+  ggplot(aes(x = software, fill = career)) +
+  geom_bar(colour = "black") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
+  ylab("Number") + xlab("Software used") +
+  geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5), size = 3) +
+  labs(fill = "Career stage")
+
+### bar chart of the use of software with career percentages ----
+data %>% select(num_range("Q4_",1:26), career=Q20)                 %>%
+  pivot_longer(cols = starts_with("Q4_"), values_to = "software")  %>%
+  filter(software != 0)                                            %>%
+  select(-name)                                                    %>%
+  ggplot(aes(x = software, fill = career)) +
+  geom_bar(position = "fill", colour = "black") +
+  scale_y_continuous(labels = scales::percent) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
+  ylab("Number") + xlab("Software used") +
+  labs(fill = "Career stage")
 
 ## Q5 Most important software in research ----------------------------------
 
@@ -697,7 +737,7 @@ important_software %>% select(starts_with("Q5"))             %>%
                        tally()                               %>%
                        arrange(desc(n))
 
-### Plot software ----
+### Plot most important software ----
 important_software %>% select(starts_with("Q5"))             %>%
                        pivot_longer(cols =  everything(),
                                     names_to = "name",
@@ -712,24 +752,37 @@ important_software %>% select(starts_with("Q5"))             %>%
                        geom_text(aes(x = software, label = n), vjust = -0.5) +
                        ylab("Number") + xlab("Most important software")
 
-### Most important software by career stage ----
-is <- important_software
-is$career <- data[["Q20"]]
+### Plot most important software with career----
+bind_cols(data["Q20"], important_software) %>% select( career = Q20, starts_with("Q5")) %>%
+  pivot_longer(cols =  starts_with("Q5"),
+               names_to = "name",
+               values_to = "software")                         %>%
+  filter(!is.na(software))                                     %>%
+  group_by( career, software)                                  %>%
+  tally()                                                      %>%
+  filter(n > 2)                                                %>%
+  ggplot(aes(x = software, y = n, fill = career)) +
+  geom_col(colour = "black") + theme_bw() +
+  theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
+  geom_text(aes(x = software, label = n), position = position_stack(vjust = 0.5), size = 3) +
+  ylab("Number") + xlab("Most important software")
 
-is %>% select(career, starts_with(("Q5")))      %>%
-       pivot_longer(cols =  starts_with("Q5"),
-                    names_to = "name",
-                    values_to = "software")    %>%
-       filter(!is.na(software))                %>%
-       group_by(software)                      %>%
-       mutate(n = n())                         %>%
-       filter(n > 2)                           %>%
-       select(-n)                              %>%
-       ggplot(aes(x = software, fill = career)) +
-       geom_bar(colour = "black") + theme_bw() +
-       theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
-       geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5), size = 3) +
-       ylab("Number") + xlab("Most important software") + labs(fill = "Career stage")
+### Plot most important software with career percent ----
+bind_cols(data["Q20"], important_software) %>% select( career = Q20, starts_with("Q5")) %>%
+  pivot_longer(cols =  starts_with("Q5"),
+               names_to = "name",
+               values_to = "software")                         %>%
+  filter(!is.na(software))                                     %>%
+  group_by( career, software)                                  %>%
+  tally()                                                      %>%
+  filter(n > 2)                                                %>%
+  ggplot(aes(x = software, y = n, fill = career)) +
+  geom_col(position = "fill", colour = "black") + theme_bw() +
+  scale_y_continuous(labels = scales::percent) +
+  theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
+  ylab("Percent") + xlab("Most important software")
+
+### ToDo - normalise software ----
 
 ## Q6 use of open source ---------------------------------------------------
 
