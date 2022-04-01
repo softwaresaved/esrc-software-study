@@ -63,7 +63,7 @@ data$Q2_1 <- gsub("1","create",data$Q2_1)
 
 # Reusing data
 data$Q2_2 <- gsub("0","noreuse",data$Q2_2)
-data$Q2_1 <- gsub("1","create",data$Q2_1)
+data$Q2_1 <- gsub("1","create",data$Q2_2)
 
 ## Q2b Data sources for reusing existing data ----
 # 1	UK Data Service
@@ -260,7 +260,7 @@ skills <- c("StillTrying","OnlineCourses", "OnlineExamples", "OnlineWorkshops",
 
 for(i in seq_len(12)){
   q <- paste0("Q11_", i)
-  data[q] <- gsub("1", swuse[i], data[[q]])
+  data[q] <- gsub("1", skills[i], data[[q]])
 }
 
 ## Q11b NCRM courses ----
@@ -386,7 +386,7 @@ hw <- c("Own", "InstitutionallyProvided", "RG/DepServer","InstitutionalCentralSe
 
 for(i in seq_len(9)){
   q <- paste0("Q14_", i)
-  data[q] <- gsub("1", swuse[i], data[[q]])
+  data[q] <- gsub("1", hw[i], data[[q]])
 }
 
 ## Q15 Licensing awareness -----
@@ -638,7 +638,7 @@ nrow(a)
 # Print out the output
 cat(str_wrap(a$other, width = 80), sep = "\n")
 
-## Q2c Creating data ----
+## Q2c Creating data process ----
 
 data %>% select(other = "Q2_c") %>%
   filter(!is.na(other))   -> a
@@ -782,6 +782,11 @@ bind_cols(data["Q20"], important_software) %>% select( career = Q20, starts_with
   theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
   ylab("Percent") + xlab("Most important software")
 
+# Create an output file with the contents
+data %>% select(Q5)           %>%
+         filter(!is.na(Q5))   %>%
+         write_csv("../Data/Q5_MostImportantSoftware.csv")
+
 ### ToDo - normalise software ----
 
 ## Q6 use of open source ---------------------------------------------------
@@ -852,7 +857,6 @@ data %>% select(career = Q20, starts_with("Q6_b"))        %>%
          xlab("Reasons for not using Open Source") + ylab("Number") +
          geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5))
 
-
 ## Q7 How software is maintained -------------------------------------------
 
 ### Bar chart of software maintenance ----
@@ -866,6 +870,21 @@ data %>% select(num_range("Q7_", 1:7))              %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("How Software is being maintained") + ylab("Number") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5)
+
+## Q8 Using software in combination (workflow) -------
+
+data %>% select(other = "Q8") %>%
+  filter(!is.na(other))   -> a
+
+data %>% select(other = "Q8") %>%
+  filter(!is.na(other)) %>%
+  write_csv("../Data/Q8_worfklows.csv"
+            )
+# Number of responses
+nrow(a)
+
+# Print out the output
+cat(str_wrap(a$other, width = 80), sep = "\n")
 
 ## Q9 Develop or extend software -------
 
@@ -905,10 +924,12 @@ data %>% select("Q9", career = "Q20")         %>%
 data %>% select(other = "Q9_a") %>%
   filter(!is.na(other))   -> a
 
-# Print out the output
-cat(str_wrap(a$other, width = 80), sep = "\n\n")
+nrow(a)
 
-## Q10 if you write your own software do you: ------------------------------
+# Print out the output
+cat(str_wrap(a$other, width = 80), sep = "\n")
+
+## Q10 if you write your own software do yo: ------------------------------
 
 ### Bar chart ----
 data %>% select(num_range("Q10_", 1:7))                 %>%
@@ -929,7 +950,7 @@ data %>% select(other = "Q10_a") %>%
          filter(!is.na(other))   -> a
 
 # Print out the output
-cat(str_wrap(a$other, width = 80), sep = "\n\n")
+cat(str_wrap(a$other, width = 80), sep = "\n")
 
 ## Q11 How did you acquire the skills necessary to utilise software --------
 
@@ -1518,4 +1539,4 @@ data %>% select(comments = "Q28") %>%
 nrow(a)
 
 # Print out the output
-cat(str_wrap(a$other, width = 80), sep = "\n")
+cat(str_wrap(a$comments, width = 80), sep = "\n")
