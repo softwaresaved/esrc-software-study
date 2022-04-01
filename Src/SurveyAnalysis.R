@@ -1323,6 +1323,17 @@ data %>% select(Institutions = CleanLocs, num_range("Q19_", 1:22)) %>%
   theme(axis.text.y = element_text(size = 6)) +
   ylab("Institutions") + xlab("Discipline") + labs(size = "Number")
 
+## Q18 Who has funded you within the last 5 years -------------
+
+data %>% select(other = "Q18") %>%
+  filter(!is.na(other))   -> a
+
+# Number of responses
+nrow(a)
+
+# Print out the output
+cat(str_wrap(a$other, width = 80), sep = "\n")
+
 ## Q19 Research discipline -------------------------------------------------
 
 ### Bar chart for research disciplines -----------
