@@ -895,7 +895,7 @@ data %>% select("Q9")    %>%
 
 If you answered yes to the above, could you briefly describe what software(s) you write or extend?
 
-```{r extending_sw}
+```{r extending_sw, results='asis'}
 data %>% select(other = "Q9_a") %>%
   filter(!is.na(other))   -> a
 
@@ -1004,3 +1004,188 @@ cat(paste("1.",a$other), sep = "\n")
 
 ```
 
+
+## Q12 Recognition
+
+Do you feel in your field that the development and maintenance of research software are sufficiently recognised or rewarded?
+
+### Bar chart
+
+```{r recognition}
+
+data %>%  select(rew = "Q12") %>%
+          group_by(rew)       %>% 
+          mutate(n = n())     %>% 
+          ggplot(aes(x = reorder(rew, -n))) + 
+          geom_bar(fill = "light blue", colour = "black") +
+          theme_bw() +
+          xlab("Development/Maintenance of rsearch software rewarded/recognised") +
+          ylab("Number") +
+          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+```
+### Rationale
+
+If you answered yes or no can you briefly state your reasons for answering this way
+
+```{r recognition_rationale, results = 'asis'}
+
+data %>% select(other = "Q12_a") %>%
+  filter(!is.na(other))   -> a
+
+# Print out the output
+cat(paste("1.",a$other), sep = "\n")
+```
+
+
+## Q13 Licensing
+
+When answering this question, think about the most important piece of software you use for research that you couldn't live without. To what level do you agree/disagree with the following statements?
+
+## Q14 Where software is run
+
+Where do you normally run your digital tools/software? Please check all that apply. The UK Tier 1 provides a national supercomputing service, e.g. ARCHER2, and Tier 2 systems provide computational services somewhere between institutional and the national Tier 1 service.
+
+### Bar chart
+
+```{r where_sw_run}
+
+data %>%  select(num_range("Q14_", 1:9))         %>%
+  pivot_longer(cols = num_range("Q14_", 1:9),
+               names_to = "questions",
+               values_to = "runon")              %>%
+  filter(runon != 0)                             %>%
+  group_by(runon)                                %>% 
+  mutate(n = n())                                %>% 
+  ggplot(aes(x = reorder(runon, -n))) +
+  geom_bar(fill = "light blue", colour = "black") +
+  theme_bw() +
+  xlab("Where software is run") + ylab("Number") +
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+```
+
+### Other platforms used
+
+```{r other_run_on, results='asis'}
+
+data %>% select(other = "Q14_a") %>%
+  filter(!is.na(other))   -> a
+
+# Print out the output
+cat(paste("1.",a$other), sep = "\n")
+
+```
+
+## Q15 Licensing policy
+A licensing policy provides instruction or guidance on what software licenses are preferred for the release of software.
+
+A publishing policy provides instruction or guidance on how software should be made available to others. 
+
+Which relevant software policies are you aware of (please check all you are aware of)?
+
+### Bar chart
+
+```{r licensing}
+
+data %>% select(starts_with("Q15_"), -"Q15_a") %>%
+         pivot_longer(cols = everything(),
+                      names_to = "columns",
+                      values_to ="aware")      %>%
+         filter(aware != 0)                    %>%
+         group_by(aware)                       %>%
+         mutate(n = n())                       %>% 
+         ggplot(aes(x = reorder(aware, -n))) +
+         geom_bar(fill = "light blue", colour = "black") +
+         theme_bw() +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+         ylab("Number") + xlab("Aware of the policy for")
+
+```
+
+### Other policies
+
+```{r other_policies, results = 'asis'}
+
+data %>% select(other = "Q15_a") %>%
+  filter(!is.na(other))   -> a
+
+# Print out the output
+cat(paste("1.",a$other), sep = "\n")
+
+```
+
+
+
+## Q16 Barriers to use
+
+What barriers have you experienced to the use of software in your research? (Check all that apply.)
+
+### Bar graph
+```{r barriers}
+
+data %>%  select(num_range("Q16_", 1:13))         %>%
+  pivot_longer(cols = num_range("Q16_", 1:13),
+               names_to = "questions",
+               values_to = "barriers")            %>%
+  filter(barriers != 0)                           %>%
+  group_by(barriers)                              %>%
+  mutate(n = n())                                 %>% 
+  ggplot(aes(x = reorder(barriers, -n))) +
+  geom_bar(fill = "light blue", colour = "black") +
+  theme_bw() +
+  xlab("Barriers to software use") + ylab("Number") +
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+```
+
+
+### Other barriers
+
+```{r other_barriers, results='asis'}
+data %>% select(other = "Q16_a") %>%
+  filter(!is.na(other))   -> a
+
+# Print out the output
+cat(paste("1.",a$other), sep = "\n")
+```
+
+
+
+## Q17 Instituions
+
+## Q18 Funding
+
+Who has funded your research within the last 5 years?
+
+```{r funding, results='asis'}
+
+data %>% select(other = "Q18") %>%
+  filter(!is.na(other))   -> a
+
+# Print out the output
+cat(paste("1.",a$other), sep = "\n")
+
+```
+
+
+
+## Q19 Reserach discipline
+
+Research Discipline: Level one codes from the Primary Research Areas covered by ESRC discipline funding remit. Use the 'Other' option if your discipline is not listed. (Please check all that apply.)
+
+## Q20 Career stage
+
+Career stage: Please select the career stage that most accurately describes your role.
+
+## Q21 Gender
+
+Gender (we are asking this to ensure that we get a balance of the community). If you prefer to self-describe, please write in the "Other" option. We apologise in advance for "othering" you. Unfortunately, this is the only write-in option available for multiple-choice questions on this platform.
+
+## Q22 Ethnic group
+
+## Q23 Disability
+
+## Q24-Q27 Not relevant
+## Q28 Comments about the survey
