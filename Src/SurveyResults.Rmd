@@ -1,0 +1,1006 @@
+---
+title: "ESRC Software Study - Survey results"
+author: "Mario Antonioletti, Johanna Walker, Selina Aragon and Neil Chue Hong"
+date: "`r Sys.Date()`"
+output: 
+    word_document:
+      toc: true
+      number_sections: false
+      toc_depth: 4
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
+
+# Load packages ----------------------------------------------------------
+
+library(readxl)
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(RColorBrewer)
+library(leaflet)
+library(stringr)
+
+```
+
+```{r read_data}
+
+# Read in the survey results
+data0 <- read_xlsx("../Data/survey-results.xlsx")
+
+# Upload location information - long and lat for institutions
+colTypes <- cols(
+                  Location = col_character(),
+                  Latitude = col_double(),
+                  Longitude = col_double(),
+                 )
+
+locations <- read_csv("../Data/locations.csv", col_types = colTypes)
+
+# Cleaned up software - Q5 most important software - a free text box. Cleaned up
+# in OpenRefine
+important_software <- read_csv("../Data/Q5-software-split.csv",
+                               show_col_types = FALSE)
+
+# Replace " "s in column names by "_"
+names(important_software) <- gsub(" ", "_", names(important_software))
+
+# Count non-NA entries per row
+important_software$count <- rowSums(!is.na(important_software))
+
+# Cleaned up locations (Q17) (used OpenRefine to cluster some of the data)
+cleanlocs <- read_csv("../Data/CleanedLocations.csv", col_types = cols(Q17 = col_character()))
+
+# Attach the cleaned locations to the data set
+data0$CleanLocs <- cleanlocs[[1]]
+
+```
+
+```{r remap_data}
+
+# Data that will actually be used
+data <- data0
+
+## Q2 Do you create or re-use data to undertake your research? --------
+# 1	Create new data (including primary data collection and data generation)
+# 2	Re-use existing data
+
+# Create new data
+data$Q2_1 <- gsub("1","create",data$Q2_1)
+
+# Reusing data
+data$Q2_2 <- gsub("1","reuse",data$Q2_2)
+
+## Q2b Data sources for reusing existing data ----
+# 1	UK Data Service
+# 2	University / Institutional Repository
+# 3	General data repository (e.g. Dryad, Figshare, Open Science Framework, Zenodo)
+# 4	Shared by collaborators using a shared drive / folder
+#       (e.g. DropBox, Google Drive, ...)
+# 5	Personal recommendation, eg from discussion with other researchers
+# 6	Other
+ds <- c("UK Data Service",
+        "University/Institutional Repo",
+        "General data repository",
+        "Collaborator's shared drive/folder",
+        "Personal recommendation",
+        "Other")
+
+for( i in seq_len(6)){
+  q <- paste0("Q2_b_",i)
+  data[q] <- gsub("1", ds[i], data[[q]])
+}
+
+## Q3 Sharing data ------------------------------------------------------------
+# 1	I have not yet shared my data
+# 2	I have licensed my data to allow it to be shared
+# 3	I have shared my data with individuals/groups that have requested access
+# 4	I created a DOI (or other unique identifier) to make my data findable
+# 5	I have promoted my data as an accessible resource in my publications
+# 6	I have deposited my data in a repository
+# 7	Other
+
+sharing <- c("NotShared","Licensed","RestrictedSharing","CreatedDOI",
+             "Publications","Repository","Other")
+
+for( i in seq_len(7)){
+  q <- paste0("Q3_",i)
+  data[q] <- gsub("1", sharing[i], data[[q]])
+}
+
+## Q4 Use of software ------------------------------------------------------
+#  1	Animation and Storyboarding, e.g. Scratch, Storyteller
+#  2	AudioTools, e.g. Music Algorithms, Paperphone
+#  3	Authoring and publishing tools, e.g. Twine, Oppia
+#  4	Code versioning, e.g. GitHub
+#  5	Content Management Systems (CMS), e.g. WordPress, Mura
+#  6	CrowdSourcing, e.g. AllOurIdeas
+#  7	Exhibition/Collection Tools, e.g. Omeka, Neatline
+#  8	Internet Research Tools, e.g. Google tools or Wikipedia tools
+#  9	Machine Learning and Artificial Intelligence, e.g. leximancer
+# 10	Mapping Tools and Platforms, Geographic Information Systems, e.g. QGIS, CartoDB, ArcGIS
+# 11	MindMapping Tools, e.g. DebateGraph
+# 12	Network Analysis, e.g. GEPHI
+# 13	Programming Languages, e.g. Python, MATLAB
+# 14	Qualitative analyses, e.g. NVivo
+# 15	Simulation Tools, e.g. NetLogo
+# 16	Spreadsheets, e.g. Excel, Google Sheets
+# 17	Statistical analysis, e.g. R, SPSS, Stata, SAS
+# 18	Text Analysis Tools, e.g. Voyant, Linguistic Corpuses, Entity Recognizers
+# 19	Text Collation Tools, e.g. Juxta Commons
+# 20	Text Encoding, e.g. Oxygen XML
+# 21	Text and Data Wrangling, e.g. Overview, OpenRefine
+# 22	Topic Modelling, e.g. Leximancer
+# 23	Transcription services, e.g. otter.ai
+# 24	Video and Film Analysis, e.g. Cinemetrics
+# 25	Visualisation Tools, e.g. D3.js, Tableau
+# 26	Other
+software <-  c("AnimationStoryborarding", "Autdiotools", "AuthoringPublishing",
+               "CodeVersioning", "CMS", "CrowdSourcing", "ExhibionCollection",
+               "internetResearchTools", "ML_AI", "GIS", "MindMapping",
+               "NetworkAnalysis", "ProgLanguagues", "QualitativeAnalysis",
+               "SimulationTools","Spreadsheets","StatisticalAnalysis",
+               "TextAnalysis", "TextCollation", "TextEncoding", "DataWrangling",
+               "TopicModelling", "Transcription","VideoFilmAnal", "Visualisation",
+               "Other")
+
+for(i in seq_len(26)){
+  q <- paste0("Q4_",i)
+  data[q] <- gsub("1", software[i], data[[q]])
+}
+
+## Q5 Most important software in research ----------------------------------
+
+
+
+## Q6 Open source ----------------------------------------------------------
+# 1	Yes
+# 2	No
+
+data$Q6 <- gsub("1", "Yes", data$Q6)
+data$Q6 <- gsub("2", "No", data$Q6)
+data$Q6[is.na(data$Q6)] <-  "-"
+
+
+## Q6a Reasons for using open source ---------------------------------------
+# 1	Institutional/Funder policy
+# 2	Quality of support
+# 3	Open standards/interoperability
+# 4	Cost
+# 5	Sustainability
+# 6	Licensing
+# 7	Meets user needs/usability
+# 8	Staff previous experience, no need for training
+
+os_reasons <- c("Policy","Support", "Interoperability","Cost","Sustainability",
+                "Licensing","Usability", "Experience")
+
+for(i in seq_len(8)){
+  q <- paste0("Q6_a_", i)
+  data[q] <- gsub("1", os_reasons[i], data[[q]])
+}
+
+
+## Q6b Reasons for not using open-source -----------------------------------
+# 1	Institutional/Funder Policy
+# 2	Speed of access to support
+# 3	Lack of performance
+# 4	Legal reasons
+# 5	Continuity
+# 6	Does not meet user needs/useability
+# 7	Lack of expertise/requirement for training
+# 8	Requirement from collaborators
+
+no_os <- c("Policy", "PoorSupport", "NotPerformant", "Legal",
+           "Continuity", "NotMeetNeeds", "NoExpertise","CollabReqs")
+
+for(i in seq_len(8)){
+  q <- paste0("Q6_b_", i)
+  data[q] <- gsub("1", no_os[i], data[[q]])
+}
+
+## Q7	How is the software you use currently being supported and maintained? ----
+# 1	Provided by my institution
+# 2	Commercial or paid for external support
+# 3	Open source community initiative
+# 4	By a software specialist / research software engineer in my institution
+# 5	By me or my team
+# 6	No longer supported/maintained
+# 7	Other
+
+swmaintained <- c("Institution", "Commercial", "OpenSource","RSE", "MyTeam",
+                  "NotMaintained", "Other")
+
+for(i in seq_len(7)){
+  q <- paste0("Q7_", i)
+  data[q] <- gsub("1", swmaintained[i], data[[q]])
+}
+
+## Q8 use combinations of software -----
+
+data %>%  select("Q8")                            %>%
+          filter(!is.na(Q8))                      %>%
+          mutate(s = str_wrap(Q8, width = 20))    %>%
+          select(-Q8)                             %>%
+          #print(n = nrow(.))                      %>%
+          write_csv("../Data/wfcases.csv")
+
+## Q9 Develop or extend software? ------------------------------------------
+# 1	Yes
+# 2	No
+data$Q9[data$Q9 == 1] <- "Yes"
+data$Q9[data$Q9 == 2] <- "No"
+
+## Q10 if you write your own software do you: ------------------------------
+# 1	Only make available for your own use
+# 2	Only share within your research group
+# 3	Only share with your collaborators (including at other institutions)
+# 4	Share with others on request
+# 5	Make widely available for use in your field / community
+# 6	Other
+swuse <- c("OwnUseOnly", "RGUseOnly", "CollaboratorsOnly",
+           "ShareOnRequest", "ShareWidely","Other")
+
+for(i in seq_len(6)){
+  q <- paste0("Q10_", i)
+  data[q] <- gsub("1", swuse[i], data[[q]])
+}
+
+
+## Q11 How did you acquire the skills necessary to utilise software --------
+# 1	I am still trying to acquire the skills
+# 2	Self-led online material
+# 3	From examples and posts found online
+# 4	Free community-led online workshops (e.g. Riot Science Club, ReproducibiliTea)
+# 5	Conference workshops and tutorials
+# 6	Peers and colleagues
+# 7	Undergraduate/masters course
+# 8	Postgraduate training as part of my PhD/CDT/DTC
+# 9	Institutional training course
+# 10	National Centre for Research Methods (NCRM) training
+# 11	Third-party training course (not NCRM)
+# 12	Other
+skills <- c("StillTrying","OnlineCourses", "OnlineExamples", "OnlineWorkshops",
+            "ConferenceWorkshops", "PeersColleagues", "UG/MasterCourse",
+            "PGTraining","InstituionalCourse","NCRM", "ThirdPartyCourse", "Other")
+
+for(i in seq_len(12)){
+  q <- paste0("Q11_", i)
+  data[q] <- gsub("1", skills[i], data[[q]])
+}
+
+## Q11b NCRM courses ----
+# 1	Data in the spotlight: International time series databanks
+# 2	(Non-)Probability Survey Samples in Scientific Practice
+# 3	Classification Models with Python
+# 4	Principles and Practices of Quantitative Data Analysis
+# 5	Scoping Reviews Short Course
+# 6	UK Census Longitudinal Studies (UKcenLS) Webinar
+# 7	Advanced Programming in R
+# 8	Introduction to QGIS: Spatial Data
+# 9	Spatial Analysis, Introduction to Spatial Data & Using R as a GIS
+# 10	Structural Equation Modelling using Mplus
+# 11	Testing for Mediation and Moderation using Mplus
+# 12	Testing for Mediation and Moderation using SPSS (PROCESS macro)
+# 13	Video Production for Anthropology and Social Research
+# 14	Item Response Theory and Computer Adaptive Testing
+# 15	Multilevel Modelling using Mplus
+# 16	Multilevel Modelling using SPSS
+# 17	Analysing interview and focus group data with NVivo
+# 18	Latent Growth Curve Modelling using Mplus
+# 19	Applied Data Science with R
+# 20	Introduction to Sequence Analysis for Social Sciences
+# 21	Video Editing
+# 22	Other
+ncrm_courses <- c("Data in the spotlight: International time series databanks",
+                  "(Non-)Probability Survey Samples in Scientific Practice",
+                  "Classification Models with Python",
+                  "Principles and Practices of Quantitative Data Analysis",
+                  "Scoping Reviews Short Course",
+                  "UK Census Longitudinal Studies (UKcenLS) Webinar",
+                  "Advanced Programming in R",
+                  "Introduction to QGIS: Spatial Data",
+                  "Spatial Analysis, Introduction to Spatial Data & Using R as a GIS",
+                  "Structural Equation Modelling using Mplus",
+                  "Testing for Mediation and Moderation using Mplus",
+                  "Testing for Mediation and Moderation using SPSS (PROCESS macro)",
+                  "Video Production for Anthropology and Social Research",
+                  "Item Response Theory and Computer Adaptive Testing",
+                  "Multilevel Modelling using Mplus",
+                  "Multilevel Modelling using SPSS",
+                  "Analysing interview and focus group data with NVivo",
+                  "Latent Growth Curve Modelling using Mplus",
+                  "Applied Data Science with R",
+                  "Introduction to Sequence Analysis for Social Sciences",
+                  "Video Editing",
+                  "Other")
+
+for(i in seq_len(22)){
+  q <- paste0("Q11_b_", i)
+  data[q] <- gsub("1", ncrm_courses[i], data[[q]])
+}
+
+
+## Q12 Development and maintenance of research software rewarded/recognised --------
+# 1	Yes
+# 2	No
+# 3	Don't know
+rew <- c("Yes", "No", "Don't know")
+
+for(i in seq_len(3)){
+  data["Q12"] <- gsub(i, rew[i], data[["Q12"]])
+}
+
+data["Q12"][is.na(data["Q12"])] <- "-"
+
+# Q13 Statements abut software
+# When answering this question, think about the most important piece of software
+# you use for research that you couldn't live without. To what level do you
+# agree/disagree with the following statements?
+# Q13_1	I am aware of how the software I use is funded, managed and licensed
+# 1	Strongly agree
+# 2	Agree
+# 3	Undecided
+# 4	Disagree
+# 5	Strongly Disagree
+# Q13_2	My institution or funder's policies on how software is funded, managed and licensed are clear to me
+# 1	Strongly agree
+# 2	Agree
+# 3	Undecided
+# 4	Disagree
+# 5	Strongly Disagree
+# Q13_3	There is insufficient attention paid to software funding, management and licensing by the economic
+#       and social sciences research community
+# 1	Strongly agree
+# 2	Agree
+# 3	Undecided
+# 4	Disagree
+# 5	Strongly Disagree
+# Q13_4	There is insufficient incentive for me to learn how my software is funded, managed and licensed
+# 1	Strongly agree
+# 2	Agree
+# 3	Undecided
+# 4	Disagree
+# 5	Strongly Disagree
+
+likert <- c("Strongly agree",
+            "Agree",
+            "Undecided",
+            "Disagree",
+            "Strongly Disagree")
+
+for(i in seq_len(4)){
+  for(j in seq_len(5)){
+     q <- paste0("Q13_", i,"_", j)
+     data[q] <- gsub("1", likert[i], data[[q]])
+  }
+}
+
+## Q14 Where do you normally run your digital tools/software? --------
+# 1	My own laptop/desktop
+# 2	Institutionally provided laptop/desktop
+# 3	Server operated by research group / department
+# 4	An institutional central service
+# 5	Run by an individual data centre or at a data safe haven
+# 6	A UK Tier 2 high performance computing service
+# 7	A UK Tier 1 high performance computing service
+# 8	The Cloud, e.g. Microsoft Azure or Amazon Web Services
+# 9	Other
+
+hw <- c("Own", "InstitutionallyProvided", "RG/DepServer","InstitutionalCentralService",
+        "DataCentre/SafeHaven","Tier2", "Tier1", "Cloud", "Other")
+
+for(i in seq_len(9)){
+  q <- paste0("Q14_", i)
+  data[q] <- gsub("1", hw[i], data[[q]])
+}
+
+## Q15 Licensing awareness -----
+# A licensing policy provides instruction or guidance on what software licenses
+# are preferred for the release of software.
+# A publishing policy provides instruction or guidance on how software should be
+# made available to others.
+# Q15_1	My Institution's
+# 1	Licensing
+# 2	Publishing
+# Q15_2	My funder's
+# 1	Licensing
+# 2	Publishing
+# Q15_3	My Project's
+# 1	Licensing
+# 2	Publishing
+
+data$Q15_1_1 <- gsub("1", "InstituionLicensing", data$Q15_1_1)
+data$Q15_1_2 <- gsub("1", "InstituionPublishing", data$Q15_1_2)
+
+data$Q15_2_1 <- gsub("1", "FunderLicensing", data$Q15_2_1)
+data$Q15_2_2 <- gsub("1", "FunderPublishing", data$Q15_2_2)
+
+data$Q15_3_1 <- gsub("1", "ProjectLicensing", data$Q15_3_1)
+data$Q15_3_2 <- gsub("1", "ProjectPublishing", data$Q15_3_2)
+
+# ## Q16 barriers to the use of software -------------------------------------
+# 1	Lack of expertise within your team
+# 2	Unsure how to best engage with research technical specialists such as software engineers, digital archivists, etc.
+# 3	Training is not available
+# 4	Training is available but you have no capacity to engage
+# 5	Infrastructure is not available (Infrastructure could include: digital archives; computers with access to specialist software; data sets not digitised; etc)
+# 6	No disciplinary tradition for digital methodology and tools
+# 7	Concern that less value is attached to digital publications and other outputs of research, etc.
+# 8	Format of data and assets you work with make them less amenable to technology
+# 9	Lack of funding to support research projects/components of projects focusing on digital data and digital assets
+# 10	Previous bad experience
+# 11	I have not found software that is fit for my purpose
+# 12	Lack of time to learn how to best use research software
+# 13	Other
+
+barriers <-  c("LackOfExpertise", "UnsureHowToEngageSpecialists", "NoTraining", "NoCapacity",
+               "NoInfrastructure", "NoTradition", "ConcernAboutValue", "AssetsNotAmenable",
+               "LackOfFunding", "BadExperiences", "NoPertinentSoftware", "LackOfTime", "Other")
+
+for(i in seq_len(13)){
+  q <- paste0("Q16_", i)
+  data[q] <- gsub("1", barriers[i], data[[q]])
+}
+
+## Q17 Institutional affiliation -------------------------------------------
+
+# Add longitude and Latitude coordinates for the institutions
+data <- data %>% left_join(locations, by = c("CleanLocs" = "Location"))
+
+## Q19 Research discipline -------------------------------------------------
+# 1	Area Studies
+# 2	Data science and artificial intelligence
+# 3	Demography
+# 4	Development studies
+# 5	Economics
+# 6	Education
+# 7	Environmental planning
+# 8	History
+# 9	Human Geography
+# 10	Information science
+# 11	Law & legal studies
+# 12	Linguistics
+# 13	Management & business studies
+# 14	Political science. & international studies
+# 15	Psychology
+# 16	Science and Technology Studies
+# 17	Social anthropology
+# 18	Social policy
+# 19	Social work
+# 20	Sociology
+# 21	Tools, technologies & methods
+# 22	Other
+
+discipline <- c("AreaStudies", "DS_AI", "Demography","DvelopmentStudies",
+                "Economics", "Education", "EnvPlanning","History","HumanGeography",
+                "InfoSci","Law","Linguistics","ManBusStud","PolSci_IntStud",
+                "Pyschology", "SciTechStud",
+                "SocAnth", "SocPol", "SocWork","Sociology","ToolsTechMeth",
+                "Other")
+
+for(i in seq_len(22)){
+  q <- paste0("Q19_", i)
+  data[q] <- gsub("1", discipline[i], data[[q]])
+}
+
+## Q20 Career stage ------------------------------------------------------
+# 1	Phase 1 - Junior (e.g. PhD candidate, Junior Research Software Engineer)
+# 2	Phase 2 - Early (e.g Research Assistant/Associate, first grant holder,
+#             Lecturer, Research Software Engineer)
+# 3	Phase 3 - Mid / Recognised (e.g. Senior Lecturer, Reader, Senior Researcher,
+#             Senior Research Software Engineer, Research Software Group Leader)
+# 4	Phase 4 - Established / Experienced / Senior (e.g. Professor, Director of
+#             Research Computing, Distinguished Engineer, Chief Data Scientist)
+# 5	Other
+
+career <- c("Junior", "Early", "Mid", "Senior", "Other")
+
+for(i in seq_len(5)){
+  data["Q20"] <- gsub(i, career[i], data[["Q20"]])
+}
+
+# Remap NAs to "-"
+data$Q20[is.na(data$Q20)] <- "-"
+
+# Establish a career stage order
+career_order <-  c("Junior","Early","Mid","Senior","Other","-")
+
+## Q21 Gender --------------------------------------------------------------
+# 1	Woman
+# 2	Man
+# 3	Non-binary person
+# 4	Prefer not to disclose
+# 5	Other
+data$Q21 <- gsub( "1", "Woman", data$Q21)
+data$Q21 <- gsub( "2", "Man", data$Q21)
+data$Q21 <- gsub( "3", "Non-binary person", data$Q21)
+data$Q21 <- gsub( "4", "Prefer not to disclose", data$Q21)
+data$Q21 <- gsub( "5", "Other", data$Q21)
+
+data$Q21[is.na(data$Q21)] <- "-"
+
+gender_order <-  c("Woman", "Man", "Other", "Prefer not to disclose", "Non-binary person", "-")
+
+## Q22 Ethnic group ----
+# 1	White: English, Welsh, Scottish, Northern Irish or British
+# 2	White: Irish
+# 3	White: Gypsy or Irish Traveller
+# 4	White: Roma
+# 5	White: Any other White background
+# 6	Mixed or Multiple ethnic groups: White and Black Caribbean
+# 7	Mixed or Multiple ethnic groups: White and Black African
+# 8	Mixed or Multiple ethnic groups: White and Asian
+# 9	Mixed or Multiple ethnic groups: Any other Mixed or Multiple background
+# 10	Asian or Asian British: Indian
+# 11	Asian or Asian British: Pakistani
+# 12	Asian or Asian British: Bangladeshi
+# 13	Asian or Asian British: Chinese
+# 14	Asian or Asian British: Any other Asian background
+# 15	Black, Black British, Caribbean or African: Caribbean
+# 16	Black, Black British, Caribbean or African: African background
+# 17	Black, Black British, Caribbean or African: Any other Black, Black British, Caribbean or African background
+# 18	Other ethnic group: Arab
+# 19	Prefer not to disclose
+# 20	Other
+
+ethinicity <- c("White: English, Welsh, Scottish, Northern Irish or British",
+                "White: Irish",
+                "White: Gypsy or Irish Traveller",
+                "White: Roma",
+                "White: Any other White background",
+                "Mixed or Multiple ethnic groups: White and Black Caribbean",
+                "Mixed or Multiple ethnic groups: White and Black African",
+                "Mixed or Multiple ethnic groups: White and Asian",
+                "Mixed or Multiple ethnic groups: Any other Mixed or Multiple background",
+                "Asian or Asian British: Indian",
+                "Asian or Asian British: Pakistani",
+                "Asian or Asian British: Bangladeshi",
+                "Asian or Asian British: Chinese",
+                "Asian or Asian British: Any other Asian background",
+                "Black, Black British, Caribbean or African: Caribbean",
+                "Black, Black British, Caribbean or African: African background",
+                "Black, Black British, Caribbean or African: Any other Black, Black British, Caribbean or African background",
+                "Other ethnic group: Arab",
+                "Prefer not to disclose",
+                "Other")
+
+# Work backwards otherwise partial numbers are substituted
+for(i in 20:1){
+  data["Q22"] <- gsub(i, ethinicity[i], data[["Q22"]])
+}
+
+```
+
+# Overview
+
+## Demographics
+
+# Survey results
+
+## Q2 Use of data
+Do you create or re-use data to undertake your research (Please check all that apply)
+
+```{r use_of_data}
+data %>% select(num_range("Q2_", 1:2), career = Q20) %>%
+         pivot_longer(cols = num_range("Q2_", 1:2), values_to = "datause")    %>%
+         filter(datause != 0)                                                 %>%
+         select(!name)                                                        %>%
+         ggplot(aes(x = datause, fill = factor(career, levels = career_order))) +
+         geom_bar(colour = "black") +
+         theme_bw() +
+         xlab("Use of data") + ylab("Number") +
+         geom_text(aes(x = datause, label = ..count..),
+                  position = position_stack(vjust = 0.5), stat = "count", colour = "black") +
+         scale_fill_brewer(palette = "Set1", name = "Career stage", breaks = career_order)
+```
+
+## Q2a most important sources of data
+
+What are your most important data source(s)?
+
+```{r important_data, results='asis'}
+
+data %>% select(other = "Q2_a") %>%
+  filter(!is.na(other))   -> a
+
+# Print out the output
+cat(paste("1.",a$other), sep = "\n")
+
+```
+
+## Q2b Reusing existing data
+
+If you re-use existing data, where do you find these?
+
+```{r data_sources}
+
+data %>% select(num_range("Q2_b_",1:6))      %>%
+         pivot_longer(cols = everything(),
+                      names_to = "question",
+                      values_to = "ds")      %>%
+         filter(ds != 0)                     %>%
+         group_by(ds)                        %>% 
+         mutate(n = n())                     %>% 
+         ggplot(aes(x = reorder(ds, -n), fill = ds)) + geom_bar(colour = "black") +
+         theme_bw() + ylab("Number") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = 2.0, size = 3, colour ="white") +
+         theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0)) +
+         xlab("Data sources") + scale_fill_manual(values = brewer.pal(7, "Blues")) +
+         theme(legend.position = "none")
+```
+Values given for other data sources:
+
+```{r other_data_sources, results='asis'}
+data %>% select(other = "Q2_b_i") %>%
+  filter(!is.na(other))   -> a
+
+# Print out the output
+cat(paste("1.",a$other), sep = "\n")
+```
+
+## Q2c Data processes
+
+If you create, collect or generate your own data, could you briefly describe how this is done?
+
+```{r data_processes, results='asis'}
+
+data %>% select(other = "Q2_c") %>%
+  filter(!is.na(other))   -> a
+
+# Print out the output
+cat(paste("1.",a$other), sep = "\n")
+```
+
+## Q3 Sharing data
+
+### Bar chart
+
+How do you share your data?
+
+```{r sharing_data}
+
+data %>% select(num_range("Q3_", 1:7))                               %>%
+        pivot_longer(cols = everything(), values_to = "DataSharing") %>%
+        filter(DataSharing != 0)                                     %>%
+        group_by(DataSharing)                                        %>% 
+        mutate(n = n())                                              %>% 
+        ggplot(aes(x = reorder(DataSharing, -n), fill = DataSharing)) +
+        geom_bar(colour = "black") + theme_bw() +
+        theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+        xlab("Data sharing habits") + ylab("Number") +
+        geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
+        theme(legend.position = "none") + 
+        #scale_colour_brewer(palette="Blues")
+        scale_fill_manual(values = brewer.pal(7, "Blues"))
+```
+
+### Other ways of sharing data
+
+```{r other_sharing_data, results = 'asis'}
+
+data %>% select(other = "Q3_a") %>%
+  filter(!is.na(other))   -> a
+
+# Print out the output
+cat(paste("1.",a$other), sep = "\n")
+
+```
+
+## Q4 Software used in research
+
+What software do you use in your research? 
+
+### Bar chart
+
+```{r sw_used}
+
+data %>% select(num_range("Q4_",1:26))                              %>%
+         pivot_longer(cols = everything(), values_to = "software")  %>%
+         filter(software != 0)                                      %>%
+         select(-name)                                              %>%
+         group_by(software)                                         %>% 
+         mutate(n = n())                                            %>%   
+         ggplot(aes(x = reorder(software,-n))) +
+         geom_bar(colour = "black", fill = "light blue") +
+         theme_bw() +
+         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
+         ylab("Number") + xlab("Software used") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
+         theme(legend.position = "none")
+```
+
+### Other software used
+
+```{r other_software_used, results = 'asis'}
+
+data %>% select(other = "Q4_a") %>%
+  filter(!is.na(other))   -> a
+
+# Print out the output
+cat(paste("1.",a$other), sep = "\n")
+
+```
+
+## Q5 Most important software
+
+What software(s) is/are most important to your work?
+
+### Bar chart
+
+This chart is derived from the processed data input by the interviewees - an
+interviewee may have input more than one choice - each of these is counted as
+an integral choice (could normalise so that if an interviewee put in N choices
+each would contribute 1/N to the count). Only values with more than 2 entries
+are shown
+
+```{r important_sw_bar}
+
+important_software %>% select(starts_with("Q5"))             %>%
+                       pivot_longer(cols =  everything(),
+                                    names_to = "name",
+                                    values_to = "software")  %>%
+                       filter(!is.na(software))              %>%
+                       group_by(software)                    %>%
+                       tally()                               %>%
+                       filter(n > 2)                         %>%
+                       ggplot(aes(x = reorder(software, -n), y = n)) +
+                       geom_col(fill = "light blue", colour = "black") + 
+                       theme_bw() +
+                       theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
+                       geom_text(aes(x = software, label = n), vjust = -0.5, size = 3) +
+                       ylab("Number") + xlab("Most important software")
+
+```
+
+### List of choices
+
+```{r important_software, results = 'asis'}
+
+data %>% select(other = "Q5") %>%
+  filter(!is.na(other))   -> a
+
+# Print out the output
+cat(paste("1.",a$other), sep = "\n")
+
+```
+
+## Q6 Use of open source software
+
+### Bar chart
+Do you use open source software?
+
+```{r use_os}
+
+data %>% select(Q6)       %>%
+         group_by(Q6)     %>% 
+         mutate(n = n())  %>% 
+         ggplot(aes(x = reorder(Q6, -n))) + 
+         geom_bar(fill = "light blue", colour = "black") + 
+         theme_bw() +
+         xlab("Use of Open Source") + 
+         ylab("Number") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5)
+
+```
+
+## Q6a Reason for using open source
+
+If you answered yes to the previous question, what are your main reasons for using open source software?
+
+```{r reason4os}
+
+data %>% select(starts_with("Q6_a"))        %>%
+         pivot_longer(cols = everything(),
+                      names_to = "names",
+                      values_to = "UseOS")  %>%
+         filter(UseOS != 0)                 %>%
+         group_by(UseOS)                    %>% 
+         mutate(n = n())                    %>% 
+         ggplot(aes(x = reorder(UseOS, -n))) + 
+         geom_bar(fill = "light blue", colour = "black") + 
+         theme_bw() +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("Reasons for using Open Source") + ylab("Number")
+```
+
+## Q6b Reasons for not using OS
+
+If you answered no to the previous question, what are your main reasons for not using open source software? 
+
+```{r reasons4NotOS}
+
+data %>% select(starts_with("Q6_b"))        %>%
+         pivot_longer(cols = everything(),
+                      names_to = "names",
+                      values_to = "UseOS")  %>%
+         filter(UseOS != 0)                 %>%
+         group_by(UseOS)                    %>% 
+         mutate(n = n())                    %>% 
+         ggplot(aes(x = reorder(UseOS, -n))) + 
+         geom_bar(fill = "light blue", colour = "black") + 
+         theme_bw() +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("Reasons for not using Open Source") + ylab("Number")
+```
+
+## Q7 How software is being maintained
+
+How is the software you use currently being supported and maintained? 
+
+### Bar chart
+```{r sw_maintenace}
+
+data %>% select(num_range("Q7_", 1:7))              %>%
+         pivot_longer(cols = num_range("Q7_", 1:7),
+                      names_to = "questions",
+                      values_to = "swmaint")        %>%
+         filter(swmaint != 0)                       %>%
+         group_by(swmaint)                          %>% 
+         mutate(n = n())                            %>% 
+         ggplot(aes(x = reorder(swmaint,-n))) + 
+         geom_bar(fill = "light blue", colour = "black") +
+         theme_bw() +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("How Software is being maintained") + ylab("Number") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5)
+```
+
+### Other maintenance mechanisms
+
+```{r other_maintenace, results = 'asis'}
+
+data %>% select(other = "Q7_a") %>%
+  filter(!is.na(other))   -> a
+
+# Print out the output
+cat(paste("1.",a$other), sep = "\n")
+
+```
+
+
+## Q8 Software workflows
+
+Do you use different pieces of software in combination to achieve a specific goal or purpose? For instance, you could use audio software to record interviews, transcription software to transcribe the interviews, and qualitative coding software to bring documents, transcripts and photographs together for further analysis. If yes, please specify.
+
+```{r sw_wf, results = 'asis'}
+data %>% select(other = "Q8") %>%
+  filter(!is.na(other))   -> a
+
+# Print out the output
+cat(paste("1.",a$other), sep = "\n")
+```
+
+
+## Q9 Do you develop software
+
+Do you develop or extend software yourself? (As described above, software includes scripts, applications, tools, codes and formulae in spreadsheets)
+
+```{r develop_sw}
+data %>% select("Q9")    %>%
+         group_by(Q9)    %>% 
+         mutate(n = n()) %>% 
+         ggplot(aes(x = reorder(Q9, -n))) + 
+         geom_bar(fill = "light blue", colour = "black") +
+         theme_bw() +
+         xlab("Do you develop software?") + ylab("Number") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5)
+```
+
+### How you extend software
+
+If you answered yes to the above, could you briefly describe what software(s) you write or extend?
+
+```{r extending_sw}
+data %>% select(other = "Q9_a") %>%
+  filter(!is.na(other))   -> a
+
+# Print out the output
+cat(paste("1.",a$other), sep = "\n")
+```
+
+
+## Q10 Extending software
+
+If you write or extend software (including scripts, applications, tools, codes and formulae in spreadsheets), do you (check all that apply)
+
+### Bar chart
+
+```{r extending}
+
+data %>% select(num_range("Q10_", 1:7))                 %>%
+         select(num_range("Q10_", 1:7))                 %>%
+         pivot_longer(cols = num_range("Q10_", 1:7),
+                      names_to = "questions",
+                      values_to = "swuse")              %>%
+         filter(swuse != 0)                             %>%
+         group_by(swuse)                                %>%
+         mutate(n = n())                                %>% 
+         ggplot(aes(x = reorder(swuse, -n))) + 
+         geom_bar(fill = "light blue", colour = "black") +
+         theme_bw() +
+         xlab("Who do you share your software with?") + ylab("Number") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+```
+
+### Other extending mechanisms
+
+```{r other_extending, results = 'asis'}
+
+data %>% select(other = "Q10_a") %>%
+  filter(!is.na(other))   -> a
+
+# Print out the output
+cat(paste("1.",a$other), sep = "\n")
+```
+
+
+## Q11 Acquiring skills
+
+How did you acquire the skills necessary to utilise software in your research? (Please check all that apply.)
+
+### Bar chart
+
+```{r acquiring_skills}
+data %>% select(num_range("Q11_", 1:12))                 %>%
+         pivot_longer(cols = num_range("Q11_", 1:12),
+                      names_to = "questions",
+                      values_to = "skills")              %>%
+         filter(skills != 0)                             %>%
+         group_by(skills)                                %>% 
+         mutate(n = n())                                 %>% 
+         ggplot(aes(x = reorder(skills, -n))) + 
+         geom_bar(fill = "light blue", colour = "black") +
+         theme_bw() +
+         xlab("Where skills are acquired") + ylab("Number") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+```
+
+### Other ways of acquiring skills
+
+```{r other_mechanisms, results = 'asis'}
+
+data %>% select(other = "Q11_a") %>%
+  filter(!is.na(other))   -> a
+
+# Print out the output
+cat(paste("1.",a$other), sep = "\n")
+
+```
+
+
+
+### Q11b NCRM courses
+
+If you have participated in National Centre for Research Methods training at any point please indicate which training course(s) you have taken here: (Check all that apply)
+
+```{r ncrm_courses}
+
+data %>% select(num_range("Q11_b_", 1:22)) %>%
+         pivot_longer(cols = num_range("Q11_b_", 1:22),
+                      names_to = "questions",
+                      values_to = "ncrm")              %>%
+         filter(ncrm != 0)                             %>%
+         group_by(ncrm)                                %>%
+         tally()                                       %>%
+         arrange(desc(n))
+```
+
+### Other NCRM courses
+
+```{r other_ncrm_courses, results='asis'}
+
+data %>% select(other = "Q11_b_i") %>%
+  filter(!is.na(other))   -> a
+
+# Print out the output
+cat(paste("1.",a$other), sep = "\n")
+
+```
+
