@@ -505,17 +505,21 @@ for(i in seq_len(22)){
 #             Research Computing, Distinguished Engineer, Chief Data Scientist)
 # 5	Other
 
-career <- c("Junior", "Early", "Mid", "Senior", "Other")
+# Career stages order
+career <- c("Junior", "Early", "Mid", "Senior", "Other","-")
+
+# Remap NAs to "-"
+data$Q20[is.na(data$Q20)] <- "-"
 
 for(i in seq_len(5)){
   data["Q20"] <- gsub(i, career[i], data[["Q20"]])
 }
 
-# Remap NAs to "-"
-data$Q20[is.na(data$Q20)] <- "-"
+# Convert to a factor
+data$Q20 <-  factor(data$Q20, ordered = TRUE, levels = career)
 
 # Establish a career stage order
-career_order <-  c("Junior","Early","Mid","Senior","Other","-")
+#career_order <-  c("Junior","Early","Mid","Senior","Other","-")
 
 ## Q21 Gender --------------------------------------------------------------
 # 1	Woman
@@ -1081,7 +1085,7 @@ listOther("Q15_a")
 
 What barriers have you experienced to the use of software in your research? (Check all that apply.)
 
-### Bar graph
+### Bar chart
 ```{r barriers}
 
 data %>%  select(num_range("Q16_", 1:13))         %>%
@@ -1097,6 +1101,7 @@ data %>%  select(num_range("Q16_", 1:13))         %>%
   xlab("Barriers to software use") + ylab("Number") +
   geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
 ```
 
 
@@ -1132,9 +1137,27 @@ Research Discipline: Level one codes from the Primary Research Areas covered by 
 
 Career stage: Please select the career stage that most accurately describes your role.
 
+### Bar chart
+
+```{r career}
+
+data %>%  select(career = Q20) %>%
+          group_by(career)     %>% 
+          mutate(n =  n())     %>% 
+          ggplot(aes(x = reorder(career, -n))) +
+          geom_bar(fill = "light blue", colour = "black") +
+          theme_bw() +
+          xlab("Career stage") + ylab("Number")  +
+           geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3)
+```
+
 ## Q21 Gender
 
 Gender (we are asking this to ensure that we get a balance of the community). If you prefer to self-describe, please write in the "Other" option. We apologise in advance for "othering" you. Unfortunately, this is the only write-in option available for multiple-choice questions on this platform.
+
+```{r gender}
+
+```
 
 ## Q22 Ethnic group
 
