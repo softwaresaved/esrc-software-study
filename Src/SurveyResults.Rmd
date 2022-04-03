@@ -23,6 +23,15 @@ library(RColorBrewer)
 library(leaflet)
 library(stringr)
 
+# Function to list other variations
+listOther <- function(Quest){
+  data %>% select(other = all_of(Quest))        %>%
+           filter(!is.na(other))                %>% 
+           mutate(line =paste("1.",other,"\n")) %>% 
+           select(-other) -> a
+  
+           cat(a$line)
+}
 ```
 
 ```{r read_data}
@@ -601,13 +610,9 @@ data %>% select(num_range("Q2_", 1:2), career = Q20) %>%
 
 What are your most important data source(s)?
 
-```{r important_data, results='asis'}
+```{r important_data, results = 'asis'}
 
-data %>% select(other = "Q2_a") %>%
-  filter(!is.na(other))   -> a
-
-# Print out the output
-cat(paste("1.",a$other), sep = "\n")
+listOther("Q2_a")
 
 ```
 
@@ -634,11 +639,9 @@ data %>% select(num_range("Q2_b_",1:6))      %>%
 Values given for other data sources:
 
 ```{r other_data_sources, results='asis'}
-data %>% select(other = "Q2_b_i") %>%
-  filter(!is.na(other))   -> a
 
-# Print out the output
-cat(paste("1.",a$other), sep = "\n")
+listOther("Q2_b_i")
+
 ```
 
 ## Q2c Data processes
@@ -647,11 +650,8 @@ If you create, collect or generate your own data, could you briefly describe how
 
 ```{r data_processes, results='asis'}
 
-data %>% select(other = "Q2_c") %>%
-  filter(!is.na(other))   -> a
+listOther("Q2_c")
 
-# Print out the output
-cat(paste("1.",a$other), sep = "\n")
 ```
 
 ## Q3 Sharing data
@@ -681,11 +681,7 @@ data %>% select(num_range("Q3_", 1:7))                               %>%
 
 ```{r other_sharing_data, results = 'asis'}
 
-data %>% select(other = "Q3_a") %>%
-  filter(!is.na(other))   -> a
-
-# Print out the output
-cat(paste("1.",a$other), sep = "\n")
+listOther("Q3_a")
 
 ```
 
@@ -716,11 +712,7 @@ data %>% select(num_range("Q4_",1:26))                              %>%
 
 ```{r other_software_used, results = 'asis'}
 
-data %>% select(other = "Q4_a") %>%
-  filter(!is.na(other))   -> a
-
-# Print out the output
-cat(paste("1.",a$other), sep = "\n")
+listOther("Q4_a")
 
 ```
 
@@ -759,11 +751,7 @@ important_software %>% select(starts_with("Q5"))             %>%
 
 ```{r important_software, results = 'asis'}
 
-data %>% select(other = "Q5") %>%
-  filter(!is.na(other))   -> a
-
-# Print out the output
-cat(paste("1.",a$other), sep = "\n")
+listOther("Q5")
 
 ```
 
@@ -854,11 +842,7 @@ data %>% select(num_range("Q7_", 1:7))              %>%
 
 ```{r other_maintenace, results = 'asis'}
 
-data %>% select(other = "Q7_a") %>%
-  filter(!is.na(other))   -> a
-
-# Print out the output
-cat(paste("1.",a$other), sep = "\n")
+listOther("Q7_a")
 
 ```
 
@@ -868,11 +852,9 @@ cat(paste("1.",a$other), sep = "\n")
 Do you use different pieces of software in combination to achieve a specific goal or purpose? For instance, you could use audio software to record interviews, transcription software to transcribe the interviews, and qualitative coding software to bring documents, transcripts and photographs together for further analysis. If yes, please specify.
 
 ```{r sw_wf, results = 'asis'}
-data %>% select(other = "Q8") %>%
-  filter(!is.na(other))   -> a
 
-# Print out the output
-cat(paste("1.",a$other), sep = "\n")
+listOther("Q8")
+
 ```
 
 
@@ -895,12 +877,11 @@ data %>% select("Q9")    %>%
 
 If you answered yes to the above, could you briefly describe what software(s) you write or extend?
 
-```{r extending_sw, results='asis'}
-data %>% select(other = "Q9_a") %>%
-  filter(!is.na(other))   -> a
 
-# Print out the output
-cat(paste("1.",a$other), sep = "\n")
+```{r extending_sw, results='asis'}
+
+listOther("Q9_a")
+
 ```
 
 
@@ -932,11 +913,8 @@ data %>% select(num_range("Q10_", 1:7))                 %>%
 
 ```{r other_extending, results = 'asis'}
 
-data %>% select(other = "Q10_a") %>%
-  filter(!is.na(other))   -> a
+listOther("Q10_a")
 
-# Print out the output
-cat(paste("1.",a$other), sep = "\n")
 ```
 
 
@@ -966,11 +944,7 @@ data %>% select(num_range("Q11_", 1:12))                 %>%
 
 ```{r other_mechanisms, results = 'asis'}
 
-data %>% select(other = "Q11_a") %>%
-  filter(!is.na(other))   -> a
-
-# Print out the output
-cat(paste("1.",a$other), sep = "\n")
+listOther("Q11_a")
 
 ```
 
@@ -996,11 +970,7 @@ data %>% select(num_range("Q11_b_", 1:22)) %>%
 
 ```{r other_ncrm_courses, results='asis'}
 
-data %>% select(other = "Q11_b_i") %>%
-  filter(!is.na(other))   -> a
-
-# Print out the output
-cat(paste("1.",a$other), sep = "\n")
+listOther("Q11_b_i")
 
 ```
 
@@ -1031,11 +1001,8 @@ If you answered yes or no can you briefly state your reasons for answering this 
 
 ```{r recognition_rationale, results = 'asis'}
 
-data %>% select(other = "Q12_a") %>%
-  filter(!is.na(other))   -> a
+listOther("Q12_a")
 
-# Print out the output
-cat(paste("1.",a$other), sep = "\n")
 ```
 
 
@@ -1070,11 +1037,7 @@ data %>%  select(num_range("Q14_", 1:9))         %>%
 
 ```{r other_run_on, results='asis'}
 
-data %>% select(other = "Q14_a") %>%
-  filter(!is.na(other))   -> a
-
-# Print out the output
-cat(paste("1.",a$other), sep = "\n")
+listOther("Q14_a")
 
 ```
 
@@ -1108,11 +1071,7 @@ data %>% select(starts_with("Q15_"), -"Q15_a") %>%
 
 ```{r other_policies, results = 'asis'}
 
-data %>% select(other = "Q15_a") %>%
-  filter(!is.na(other))   -> a
-
-# Print out the output
-cat(paste("1.",a$other), sep = "\n")
+listOther("Q15_a")
 
 ```
 
@@ -1144,11 +1103,9 @@ data %>%  select(num_range("Q16_", 1:13))         %>%
 ### Other barriers
 
 ```{r other_barriers, results='asis'}
-data %>% select(other = "Q16_a") %>%
-  filter(!is.na(other))   -> a
 
-# Print out the output
-cat(paste("1.",a$other), sep = "\n")
+listOther("Q16_a")
+
 ```
 
 
@@ -1161,11 +1118,7 @@ Who has funded your research within the last 5 years?
 
 ```{r funding, results='asis'}
 
-data %>% select(other = "Q18") %>%
-  filter(!is.na(other))   -> a
-
-# Print out the output
-cat(paste("1.",a$other), sep = "\n")
+listOther("Q18")
 
 ```
 
