@@ -527,15 +527,16 @@ data$Q20 <-  factor(data$Q20, ordered = TRUE, levels = career)
 # 3	Non-binary person
 # 4	Prefer not to disclose
 # 5	Other
-data$Q21 <- gsub( "1", "Woman", data$Q21)
-data$Q21 <- gsub( "2", "Man", data$Q21)
-data$Q21 <- gsub( "3", "Non-binary person", data$Q21)
-data$Q21 <- gsub( "4", "Prefer not to disclose", data$Q21)
-data$Q21 <- gsub( "5", "Other", data$Q21)
 
 data$Q21[is.na(data$Q21)] <- "-"
 
-gender_order <-  c("Woman", "Man", "Other", "Prefer not to disclose", "Non-binary person", "-")
+gen <-  c("Woman", "Man", "Non-binary",  "Not disclosed", "Other")
+
+for(i in seq_len(5)){
+  data["Q21"] <- gsub(i, gen[i], data[["Q21"]])
+}
+
+data$Q21 <-  factor(data$Q21, levels = c(gen, "-"), ordered = TRUE)
 
 ## Q22 Ethnic group ----
 # 1	White: English, Welsh, Scottish, Northern Irish or British
@@ -1148,15 +1149,24 @@ data %>%  select(career = Q20) %>%
           geom_bar(fill = "light blue", colour = "black") +
           theme_bw() +
           xlab("Career stage") + ylab("Number")  +
-           geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3)
+          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3)
 ```
 
 ## Q21 Gender
 
 Gender (we are asking this to ensure that we get a balance of the community). If you prefer to self-describe, please write in the "Other" option. We apologise in advance for "othering" you. Unfortunately, this is the only write-in option available for multiple-choice questions on this platform.
 
-```{r gender}
+### Bar chart
 
+```{r gender}
+data %>% select(gender = Q21)                                   %>%
+         group_by(gender)                                       %>% 
+         mutate(n = n())                                        %>% 
+         ggplot(aes(x = gender)) +
+         geom_bar(fill = "light blue", colour = "black") +
+         theme_bw() +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
+         xlab("Gender") + ylab("Number")
 ```
 
 ## Q22 Ethnic group
