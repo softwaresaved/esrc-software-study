@@ -586,6 +586,8 @@ for(i in 20:1){
   data["Q22"] <- gsub(i, ethinicity[i], data[["Q22"]])
 }
 
+data$Q22[is.na(data$Q22)] <-  "-"
+
 ## Disability ----
 # 1	Yes
 # 2	No
@@ -1179,6 +1181,27 @@ data %>% select(gender = Q21)                                   %>%
 ```
 
 ## Q22 Ethnic group
+
+### Bar chart
+
+```{r ethnicity}
+
+data %>% select(ethnicity = "Q22")    %>%
+         group_by(ethnicity)          %>%
+         tally()                      %>%
+         ggplot(aes(x = n, y = reorder(ethnicity, -n))) +
+         geom_col(colour = "black", fill = "light blue") +
+         theme_bw() +
+         xlab("Number") + ylab("Ethnicity") 
+  
+```
+### Other ethnicity
+
+```{r OtherEthnicity, results='asis'}
+
+listOther("Q22_a")
+
+```
 
 ## Q23 Disability
 
