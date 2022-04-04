@@ -14,14 +14,14 @@ knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
 
 # Load packages ----------------------------------------------------------
 
-library(readxl)
-library(readr)
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-library(RColorBrewer)
-library(leaflet)
-library(stringr)
+library(readxl, quietly = TRUE)
+library(readr, quietly = TRUE)
+library(dplyr, warn.conflicts = FALSE)
+library(tidyr, quietly = TRUE)
+library(ggplot2, quietly = TRUE)
+library(RColorBrewer, quietly = TRUE)
+library(leaflet, quietly = TRUE)
+library(stringr, quietly = TRUE)
 
 # Function to list other variations
 listOther <- function(Quest){
@@ -585,6 +585,15 @@ ethinicity <- c("White: English, Welsh, Scottish, Northern Irish or British",
 for(i in 20:1){
   data["Q22"] <- gsub(i, ethinicity[i], data[["Q22"]])
 }
+
+## Disability ----
+# 1	Yes
+# 2	No
+
+data$Q23[is.na(data$Q23)] <-  "-"
+
+data["Q23"] <- gsub(1, "Yes", data[["Q23"]])
+data["Q23"] <- gsub(2, "No", data[["Q23"]])
 
 ```
 
@@ -1173,5 +1182,26 @@ data %>% select(gender = Q21)                                   %>%
 
 ## Q23 Disability
 
+Do you consider yourself to have a disability
+
+### Bar chart
+
+```{r dissability}
+
+data %>% select(dis = "Q23") %>% 
+         group_by(dis)       %>% 
+         mutate(n = n())     %>% 
+         ggplot(aes(x = reorder(dis, -n))) +
+         geom_bar(fill = "light blue", colour = "black") +
+         theme_bw() +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
+         xlab("Disability") + ylab("Number")  
+```
+
 ## Q24-Q27 Not relevant
+
+These questions asked about inclusion in prize draw and volunteering for interviews.
+
 ## Q28 Comments about the survey
+
+Do you have any other comments about this survey?
