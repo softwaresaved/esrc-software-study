@@ -324,7 +324,7 @@ for(i in seq_len(3)){
 
 data["Q12"][is.na(data["Q12"])] <- "-"
 
-# Q13 Statements abut software
+## Q13 Statements abut software ----
 # When answering this question, think about the most important piece of software
 # you use for research that you couldn't live without. To what level do you
 # agree/disagree with the following statements?
@@ -358,12 +358,18 @@ likert <- c("Strongly agree",
             "Agree",
             "Undecided",
             "Disagree",
-            "Strongly Disagree")
+            "Strongly disagree")
+
+likert <- c("Strongly agree",
+            "Agree",
+            "Undecided",
+            "Disagree",
+            "Strongly disagree")
 
 for(i in seq_len(4)){
   for(j in seq_len(5)){
-     q <- paste0("Q13_", i,"_", j)
-     data[q] <- gsub("1", likert[i], data[[q]])
+    q <- paste0("Q13_", i,"_", j)
+    data[q] <- gsub(1, likert[j], data[[q]])
   }
 }
 
