@@ -1032,7 +1032,9 @@ listOther("Q12_a")
 
 When answering this question, think about the most important piece of software you use for research that you couldn't live without. To what level do you agree/disagree with the following statements?
 
-### Q13a I am aware of how the software I use is funded, managed and licensed 
+### Q13a Awareness of software funding, managent and licensing 
+
+I am aware of how the software I use is funded, managed and licensed
 
 ```{r aware_sw}
 
@@ -1050,7 +1052,9 @@ data %>% select(num_range("Q13_1_",1:5))            %>%
 ```
 
 
-### Q13b My institution/funder's policies on how software is funded, managed and licensed are clear to me
+### Q13b Clarity of institution/funder's software funding, managent and licensing
+
+My institution/funder's policies on how software is funded, managed and licensed are clear to me
 
 ```{r aware_policies}
 
@@ -1066,7 +1070,9 @@ data %>% select(num_range("Q13_2_",1:5))            %>%
          theme_bw() + ylab("Number") +
          xlab("Aware of how instituion/funder's policies on how s/w is funded, managed and licensed")
 ```
-### Q13c There is insufficient attention paid to software funding, management and licensing by the economic and social sciences research community 
+### Q13c Insufficient attention paid to software funding, management and licensing 
+
+There is insufficient attention paid to software funding, management and licensing by the economic and social sciences research community
 
 ```{r insufficient_attention}
 
@@ -1083,8 +1089,9 @@ data %>% select(num_range("Q13_3_",1:5))            %>%
          xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community")
 ```
 
-### Q13d There is insufficient incentive for me to learn how my software is funded, managed and licensed
+### Q13d Insufficient incentive to learn how software is funded, managed and licensed
 
+There is insufficient incentive for me to learn how my software is funded, managed and licensed
 
 ```{r insufficient_attention}
 
