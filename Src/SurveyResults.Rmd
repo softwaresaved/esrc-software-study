@@ -68,7 +68,6 @@ data0$CleanLocs <- cleanlocs[[1]]
 
 ```
 
-## Remap data
 
 ```{r remap_data}
 
@@ -608,14 +607,31 @@ data["Q23"] <- gsub(2, "No", data[["Q23"]])
 
 ## ToDo
 
-- [ ] Look at non-UK contributions
+- Look at non-UK contributions
 
 # Survey results
 
 ## Q2 Use of data
 Do you create or re-use data to undertake your research (Please check all that apply)
 
+### Frequency of results
+
 ```{r use_of_data}
+data %>% select(num_range("Q2_", 1:2)) %>%
+         pivot_longer(cols = num_range("Q2_", 1:2), values_to = "datause")    %>%
+         filter(datause != 0)                                                 %>%
+         select(!name)                                                        %>%
+         ggplot(aes(x = datause)) +
+         geom_bar(fill = "light blue", colour = "black") +
+         theme_bw() +
+         xlab("Use of data") + ylab("Number") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.25, size = 3) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
+### Segemented by career stage
+
+```{r use_of_data_career}
 data %>% select(num_range("Q2_", 1:2), career = Q20) %>%
          pivot_longer(cols = num_range("Q2_", 1:2), values_to = "datause")    %>%
          filter(datause != 0)                                                 %>%
@@ -628,6 +644,30 @@ data %>% select(num_range("Q2_", 1:2), career = Q20) %>%
                 position = position_stack(vjust = 0.5), stat = "count", colour = "black") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
+
+### As percentage of career stage population
+
+Each segment represents a percentage of the total from a particular career stage.
+
+```{r use_of_data_career_per}
+data %>% select(num_range("Q2_", 1:2), career = Q20) %>%
+         pivot_longer(cols = num_range("Q2_", 1:2), values_to = "datause")    %>%
+         filter(datause != 0)                                                 %>%
+         group_by(career)                                                     %>% 
+         mutate(N = n())                                                      %>% 
+         group_by(datause, career)                                            %>% 
+         mutate(per = n()/N)                                                  %>%
+         distinct(datause, career, per)                                       %>% 
+         ggplot(aes(x = datause, y = per, fill = career)) +
+         geom_col(colour = "black", position = "dodge") +
+         theme_bw() +
+         scale_y_continuous(labels = scales::percent) +
+         xlab("Use of data") + ylab("Percent") +
+         geom_text(aes(x = datause, label = scales::percent(per, accuracy = 0.1)), 
+                   position = position_dodge(width = 0.9), vjust = -0.25, size = 3) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
 
 ## Q2a most important sources of data
 
@@ -652,13 +692,15 @@ data %>% select(num_range("Q2_b_",1:6))      %>%
          filter(ds != 0)                     %>%
          group_by(ds)                        %>% 
          mutate(n = n())                     %>% 
-         ggplot(aes(x = reorder(ds, -n), fill = ds)) + geom_bar(colour = "black") +
+         ggplot(aes(x = reorder(ds, -n), fill = ds)) + 
+         geom_bar(fill = "light blue", colour = "black") +
          theme_bw() + ylab("Number") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = 2.0, size = 3, colour ="white") +
-         theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0)) +
-         xlab("Data sources") + scale_fill_manual(values = brewer.pal(7, "Blues")) +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.25, size = 3)  +
+         xlab("Data sources") + 
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          theme(legend.position = "none")
 ```
+
 Values given for other data sources:
 
 ```{r other_data_sources, results='asis'}
@@ -691,13 +733,12 @@ data %>% select(num_range("Q3_", 1:7))                               %>%
         group_by(DataSharing)                                        %>% 
         mutate(n = n())                                              %>% 
         ggplot(aes(x = reorder(DataSharing, -n), fill = DataSharing)) +
-        geom_bar(colour = "black") + theme_bw() +
+        geom_bar(fill = "light blue", colour = "black") + 
+        theme_bw() +
         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
         xlab("Data sharing habits") + ylab("Number") +
         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-        theme(legend.position = "none") + 
-        #scale_colour_brewer(palette="Blues")
-        scale_fill_manual(values = brewer.pal(7, "Blues"))
+        theme(legend.position = "none") 
 ```
 
 ### Other ways of sharing data
@@ -793,7 +834,7 @@ data %>% select(Q6)       %>%
          theme_bw() +
          xlab("Use of Open Source") + 
          ylab("Number") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5)
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3)
 
 ```
 
@@ -813,7 +854,7 @@ data %>% select(starts_with("Q6_a"))        %>%
          ggplot(aes(x = reorder(UseOS, -n))) + 
          geom_bar(fill = "light blue", colour = "black") + 
          theme_bw() +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("Reasons for using Open Source") + ylab("Number")
 ```
@@ -834,7 +875,7 @@ data %>% select(starts_with("Q6_b"))        %>%
          ggplot(aes(x = reorder(UseOS, -n))) + 
          geom_bar(fill = "light blue", colour = "black") + 
          theme_bw() +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("Reasons for not using Open Source") + ylab("Number")
 ```
@@ -858,7 +899,7 @@ data %>% select(num_range("Q7_", 1:7))              %>%
          theme_bw() +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("How Software is being maintained") + ylab("Number") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5)
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3)
 ```
 
 ### Other maintenance mechanisms
@@ -1227,17 +1268,20 @@ data %>% select(Institution = CleanLocs) %>%
 ```
 ### Map institutions
 
+Commented out the map as it does not generate output for docx format.
+
+
 ```{r mapInstitutions}
 
-data %>%  select(Institutions = CleanLocs, Latitude, Longitude) %>%
-          filter(!is.na(Institutions) & !is.na(Latitude))       %>%
-          filter(-7 <= Longitude & Longitude <= 1.6)            %>%
-          filter(49 <= Latitude & Latitude <= 59)               %>%
-          group_by(Institutions)                                %>%
-          mutate(n = n())                                       %>%  
-          leaflet()                                             %>%
-          addTiles()                                            %>%
-          addCircleMarkers(lng = ~Longitude, lat = ~Latitude, radius = ~n)
+# data %>%  select(Institutions = CleanLocs, Latitude, Longitude) %>%
+#           filter(!is.na(Institutions) & !is.na(Latitude))       %>%
+#           filter(-7 <= Longitude & Longitude <= 1.6)            %>%
+#           filter(49 <= Latitude & Latitude <= 59)               %>%
+#           group_by(Institutions)                                %>%
+#           mutate(n = n())                                       %>%  
+#           leaflet()                                             %>%
+#           addTiles()                                            %>%
+#           addCircleMarkers(lng = ~Longitude, lat = ~Latitude, radius = ~n)
 ```
 
 
