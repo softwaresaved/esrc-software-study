@@ -23,6 +23,7 @@ library(RColorBrewer, quietly = TRUE)
 library(leaflet, quietly = TRUE)
 library(stringr, quietly = TRUE)
 library(kableExtra, quietly = TRUE)
+library(mapview, quietly = TRUE)
 
 # Function to list other variations
 listOther <- function(Quest){
@@ -650,7 +651,7 @@ data %>% select(num_range("Q2_", 1:2), career = Q20) %>%
 Each segment represents a percentage of the total from a particular career stage.
 
 ```{r use_of_data_career_per}
-data %>% select(num_range("Q2_", 1:2), career = Q20) %>%
+data %>% select(num_range("Q2_", 1:2), career = Q20)                          %>%
          pivot_longer(cols = num_range("Q2_", 1:2), values_to = "datause")    %>%
          filter(datause != 0)                                                 %>%
          group_by(career)                                                     %>% 
@@ -664,7 +665,7 @@ data %>% select(num_range("Q2_", 1:2), career = Q20) %>%
          scale_y_continuous(labels = scales::percent) +
          xlab("Use of data") + ylab("Percent") +
          geom_text(aes(x = datause, label = scales::percent(per, accuracy = 0.1)), 
-                   position = position_dodge(width = 0.9), vjust = -0.25, size = 3) +
+                   position = position_dodge(width = 0.9), vjust = -0.235, size = 2) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
@@ -1018,7 +1019,7 @@ listOther("Q11_a")
 
 If you have participated in National Centre for Research Methods training at any point please indicate which training course(s) you have taken here: (Check all that apply)
 
-```{r ncrm_courses}
+```{r ncrm_courses, results='asis'}
 
 data %>% select(num_range("Q11_b_", 1:22)) %>%
          pivot_longer(cols = num_range("Q11_b_", 1:22),
@@ -1027,7 +1028,9 @@ data %>% select(num_range("Q11_b_", 1:22)) %>%
          filter(ncrm != 0)                             %>%
          group_by(ncrm)                                %>%
          tally()                                       %>%
-         arrange(desc(n))
+         arrange(desc(n))                              %>%
+         kbl(format="pipe", align = c("l","r"),
+                col.names = c("NCRM course", "Number"))
 ```
 
 ### Other NCRM courses
@@ -1273,15 +1276,24 @@ Commented out the map as it does not generate output for docx format.
 
 ```{r mapInstitutions}
 
-# data %>%  select(Institutions = CleanLocs, Latitude, Longitude) %>%
-#           filter(!is.na(Institutions) & !is.na(Latitude))       %>%
-#           filter(-7 <= Longitude & Longitude <= 1.6)            %>%
-#           filter(49 <= Latitude & Latitude <= 59)               %>%
-#           group_by(Institutions)                                %>%
-#           mutate(n = n())                                       %>%  
-#           leaflet()                                             %>%
-#           addTiles()                                            %>%
-#           addCircleMarkers(lng = ~Longitude, lat = ~Latitude, radius = ~n)
+l <-      data %>%  
+          select(Institutions = CleanLocs, Latitude, Longitude) %>%
+          filter(!is.na(Institutions) & !is.na(Latitude))       %>%
+          filter(-7 <= Longitude & Longitude <= 1.6)            %>%
+          filter(49 <= Latitude & Latitude <= 59)               %>%
+          group_by(Institutions)                                %>%
+          mutate(n = n())                                       %>%
+          leaflet()                                             %>%
+          addTiles()                                            %>%
+          addCircleMarkers(lng = ~Longitude, lat = ~Latitude, radius = ~n)
+
+if(interactive()){
+  l
+}else{
+ cat("Cannot generate an html widget for word.")
+}
+
+
 ```
 
 
