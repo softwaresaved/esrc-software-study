@@ -896,7 +896,7 @@ listOther("Q4_a")
 
 What software(s) is/are most important to your work?
 
-### Bar chart
+### Frequency of most important software
 
 This chart is derived from the processed data input by the interviewees - an
 interviewee may have input more than one choice - each of these is counted as
@@ -920,6 +920,79 @@ important_software %>% select(starts_with("Q5"))             %>%
                        theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
                        geom_text(aes(x = software, label = n), vjust = -0.5, size = 3) +
                        ylab("Number") + xlab("Most important software")
+
+```
+
+### Frequency of software used by career stage
+
+```{r important_sw_bar_career}
+
+bind_cols(data["Q20"], important_software)                        %>% 
+                       select(starts_with("Q5"), career = "Q20")  %>%
+                       pivot_longer(cols =  starts_with("Q5"),
+                                    names_to = "name",
+                                    values_to = "software")       %>%
+                       filter(!is.na(software))                   %>%
+                       group_by(career, software)                 %>%
+                       mutate(n = n())                            %>%
+                       filter(n > 2)                              %>%
+                       ggplot(aes(x = reorder(software, -n), fill = career)) +
+                       geom_bar(colour = "black") + 
+                       theme_bw() +
+                       theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
+                       geom_text(aes(x = software, label = n), position = position_stack(vjust = 0.5), 
+                                 stat = "count", size = 3) +
+                       ylab("Number") + xlab("Most important software") +
+                       scale_fill_brewer(palette = "Set1", name = "Career stage")
+
+```
+
+### Most important software as a percentage by career stage
+
+```{r important_sw_bar_career}
+
+bind_cols(data["Q20"], important_software)                        %>% 
+                       select(starts_with("Q5"), career = "Q20")  %>%
+                       pivot_longer(cols =  starts_with("Q5"),
+                                    names_to = "name",
+                                    values_to = "software")       %>%
+                       filter(!is.na(software))                   %>%
+                       group_by(career, software)                 %>%
+                       mutate(n = n())                            %>%
+                       filter(n > 2)                              %>%
+                       ggplot(aes(x = reorder(software, -n), fill = career)) +
+                       geom_bar(colour = "black") + 
+                       theme_bw() +
+                       theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
+                       geom_text(aes(x = software, label = n), position = position_stack(vjust = 0.5), 
+                                 stat = "count", size = 3) +
+                       ylab("Number") + xlab("Most important software") +
+                       scale_fill_brewer(palette = "Set1", name = "Career stage")
+
+```
+
+### Frequency of software used by career stage
+
+```{r important_sw_bar_career}
+
+bind_cols(data["Q20"], important_software)                        %>% 
+                       select(starts_with("Q5"), career = "Q20")  %>%
+                       pivot_longer(cols =  starts_with("Q5"),
+                                    names_to = "name",
+                                    values_to = "software")       %>%
+                       filter(!is.na(software))                   %>%
+                       group_by(career, software)                 %>%
+                       mutate(n = n())                            %>%
+                       filter(n > 2)                              %>%
+                       ggplot(aes(x = reorder(software, -n), fill = career)) +
+                       geom_bar(position = "fill", colour = "black") + 
+                       scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+                       theme_bw() +
+                       theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
+                       # geom_text(aes(x = software, label = n), position = position_stack(vjust = 0.5), 
+                       #           stat = "count", size = 3) +
+                       ylab("Percentage") + xlab("Most important software") +
+                       scale_fill_brewer(palette = "Set1", name = "Career stage")
 
 ```
 
