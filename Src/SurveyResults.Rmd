@@ -23,13 +23,14 @@ library(RColorBrewer, quietly = TRUE)
 library(leaflet, quietly = TRUE)
 library(stringr, quietly = TRUE)
 library(kableExtra, quietly = TRUE)
+library(ggrepel)
 library(mapview, quietly = TRUE)
 
 # Function to list other variations
 listOther <- function(Quest){
   data %>% select(other = all_of(Quest))          %>%
            filter(!is.na(other))                  %>% 
-           mutate(line =paste0("1. ",other,"\n")) %>% 
+           mutate(line = paste0("1. ",other,"\n")) %>% 
            select(-other) -> a
   
            cat(a$line)
@@ -648,7 +649,7 @@ data %>% select(num_range("Q2_", 1:2), career = Q20) %>%
 
 ### As percentage of career stage population
 
-Each segment represents a percentage of the total from a particular career stage.
+Percentages are given as the fraction from the total for that particular career stage.
 
 ```{r use_of_data_career_per}
 data %>% select(num_range("Q2_", 1:2), career = Q20)                          %>%
@@ -664,8 +665,8 @@ data %>% select(num_range("Q2_", 1:2), career = Q20)                          %>
          theme_bw() +
          scale_y_continuous(labels = scales::percent) +
          xlab("Use of data") + ylab("Percent") +
-         geom_text(aes(x = datause, label = scales::percent(per, accuracy = 0.1)), 
-                   position = position_dodge(width = 0.9), vjust = -0.235, size = 2) +
+         geom_text(aes(x = datause, label = scales::percent(per, accuracy = 1)), 
+                   position = position_dodge(width = 0.9), vjust = -0.5, size = 2) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
@@ -722,9 +723,9 @@ listOther("Q2_c")
 
 ## Q3 Sharing data
 
-### Bar chart
-
 How do you share your data?
+
+### Response distribution
 
 ```{r sharing_data}
 
@@ -742,6 +743,51 @@ data %>% select(num_range("Q3_", 1:7))                               %>%
         theme(legend.position = "none") 
 ```
 
+### Data sharing segmented by career stage
+
+```{r sharing_data_career}
+
+data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
+        pivot_longer(cols = starts_with("Q3_"), values_to = "DataSharing") %>%
+        filter(DataSharing != 0)                                           %>%
+        group_by(DataSharing)                                              %>% 
+        mutate(n = n())                                                    %>% 
+        ggplot(aes(x = reorder(DataSharing, -n), fill = career)) +
+        geom_bar(colour = "black") + 
+        theme_bw() +
+        theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+        xlab("Data sharing habits") + ylab("Number") +
+        geom_text(aes(x = DataSharing, label = ..count..),
+                    position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
+        scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+### Data sharing segmented by percentage responses at a career stage
+
+```{r sharing_data_career_per}
+
+data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
+        pivot_longer(cols = starts_with("Q3_"), values_to = "DataSharing") %>%
+        filter(DataSharing != 0)                                           %>%
+        group_by(career)                                                   %>% 
+        mutate(N = n())                                                    %>% 
+        group_by(DataSharing, career)                                      %>% 
+        mutate(per = n()/N)                                                %>% 
+        distinct(career, DataSharing, per)                                 %>% 
+        ggplot(aes(x = DataSharing, y= per,fill = career)) +
+        geom_col(position = "dodge", colour = "black") + 
+        theme_bw() +
+        theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+        xlab("Data sharing habits") + ylab("Number") +
+        # geom_text_repel(aes(x = DataSharing, label = scales::percent(per, accuracy = 1)),
+        #                 position = position_jitterdodge(dodge.width = 0.8, 
+        #                                                 jitter.width = 0, jitter.height = 0.25), 
+        #                 colour = "black", size = 2) +
+        geom_text_repel(aes(x = DataSharing, label = scales::percent(per, accuracy = 1)),
+                        direction = "y", box.padding = 0.25,
+                        position = position_dodge(width = 0.9), colour = "black", size = 2) +
+        scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
 ### Other ways of sharing data
 
 ```{r other_sharing_data, results = 'asis'}
@@ -754,7 +800,7 @@ listOther("Q3_a")
 
 What software do you use in your research? 
 
-### Bar chart
+### Software used in research chart
 
 ```{r sw_used}
 
@@ -769,8 +815,73 @@ data %>% select(num_range("Q4_",1:26))                              %>%
          theme_bw() +
          theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
          ylab("Number") + xlab("Software used") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 2) +
          theme(legend.position = "none")
+```
+
+### Software used segmented by career
+
+```{r sw_used_career}
+
+data %>% select(num_range("Q4_",1:26), career = "Q20")                       %>%
+         pivot_longer(cols = starts_with("Q4"), values_to = "software")      %>%
+         filter(software != 0)                                               %>%
+         select(-name)                                                       %>%
+         group_by(software)                                                  %>% 
+         mutate(n = n())                                                     %>%   
+         ggplot(aes(x = reorder(software,-n), fill = career)) +
+         geom_bar(colour = "black") +
+         theme_bw() +
+         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
+         ylab("Number") + xlab("Software used") +
+         geom_text(aes(x = software, label = ..count..),
+                position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 2) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+### Software used segemented by career percent of software use
+
+
+```{r sw_used_career_per1}
+
+data %>% select(num_range("Q4_",1:26), career = "Q20")                       %>%
+         pivot_longer(cols = starts_with("Q4"), values_to = "software")      %>%
+         filter(software != 0)                                               %>%
+         select(-name)                                                       %>%
+         group_by(software)                                                  %>% 
+         mutate(n = n())                                                     %>%   
+         ggplot(aes(x = reorder(software,-n), fill = career)) +
+         geom_bar(position = "fill", colour = "black") +
+         theme_bw() +
+         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
+         ylab("Percent") + xlab("Software used") +
+         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+         # geom_text(aes(x = software, label = ..count..),
+         #        position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 2) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
+### Software used segmented by career as percentage of career segment population
+
+```{r sw_used_career_per2}
+
+data %>% select(num_range("Q4_",1:26), career = "Q20")                       %>%
+         pivot_longer(cols = starts_with("Q4"), values_to = "software")      %>%
+         filter(software != 0)                                               %>%
+         select(-name)                                                       %>%
+         group_by(career)                                                  %>% 
+         mutate(N = n())                                                     %>% 
+         group_by(software,career)                                           %>%
+         mutate(per = n()/N)                                                 %>% 
+         distinct(software, career, per)                                     %>% 
+         ggplot(aes(x = software, y = per, fill = career)) +
+         geom_col(position = "dodge", colour = "black") +
+         theme_bw() +
+         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
+         ylab("Percentage") + xlab("Software used") +
+         # geom_text(aes(x = software, label = scales::percent(per, accuracy = 1)),
+         #        position = position_dodge(width = 0.9), colour = "black", size = 2) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
 ### Other software used
@@ -1062,6 +1173,7 @@ data %>%  select(rew = "Q12") %>%
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
 ```
+
 ### Rationale
 
 If you answered yes or no can you briefly state your reasons for answering this way
