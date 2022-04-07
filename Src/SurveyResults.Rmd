@@ -954,10 +954,40 @@ bind_cols(data["Q20"], important_software)                        %>%
                        scale_fill_brewer(palette = "Set1", name = "Career stage")
 
 ```
+### Frequency of software used by career stage
+
+```{r important_sw_bar_career}
+
+bind_cols(data["Q20"], important_software)                        %>% 
+                       select(starts_with("Q5"), career = "Q20")  %>%
+                       pivot_longer(cols =  starts_with("Q5"),
+                                    names_to = "name",
+                                    values_to = "software")       %>%
+                       filter(!is.na(software))                   %>%
+                       group_by(software)                         %>% 
+                       mutate(N = n())                            %>%
+                      filter(N > 2)                               %>% 
+                       group_by(career, software)                 %>%
+                       mutate(n = n())                            %>%
+                       mutate(per = n/N)                          %>% 
+                       distinct(career, software, n, N, per)      %>% 
+                       ggplot(aes(x = reorder(software, -n), y = per, fill = career)) +
+                       geom_col(position = "fill", colour = "black") + 
+                       scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+                       theme_bw() +
+                       theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
+                       geom_text(aes(x = software, y = per, label = scales::percent(per, accuracy = 1)), 
+                                 position = position_fill(vjust = 0.5),
+                                 size = 2) +
+                       ylab("Percentage") + xlab("Most important software") +
+                       scale_fill_brewer(palette = "Set1", name = "Career stage")
+
+```
 
 ### Most important software as a percentage at a given career stage
 
-The percentages here
+The percentages here are taken as a percentage of the responses from each career stage. Only values
+that have been nominated more than twice are shown.
 
 ```{r important_sw_bar_career}
 
@@ -989,35 +1019,6 @@ bind_cols(data["Q20"], important_software)                        %>%
 
 ```
 
-### Frequency of software used by career stage
-
-```{r important_sw_bar_career}
-
-bind_cols(data["Q20"], important_software)                        %>% 
-                       select(starts_with("Q5"), career = "Q20")  %>%
-                       pivot_longer(cols =  starts_with("Q5"),
-                                    names_to = "name",
-                                    values_to = "software")       %>%
-                       filter(!is.na(software))                   %>%
-                       group_by(software)                         %>% 
-                       mutate(N = n())                            %>%
-                      filter(N > 2)                               %>% 
-                       group_by(career, software)                 %>%
-                       mutate(n = n())                            %>%
-                       mutate(per = n/N)                          %>% 
-                       distinct(career, software, n, N, per)      %>% 
-                       ggplot(aes(x = reorder(software, -n), y = per, fill = career)) +
-                       geom_col(position = "fill", colour = "black") + 
-                       scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-                       theme_bw() +
-                       theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
-                       geom_text(aes(x = software, y = per, label = scales::percent(per, accuracy = 1)), 
-                                 position = position_fill(vjust = 0.5),
-                                 size = 2) +
-                       ylab("Percentage") + xlab("Most important software") +
-                       scale_fill_brewer(palette = "Set1", name = "Career stage")
-
-```
 
 ### List of choices
 
