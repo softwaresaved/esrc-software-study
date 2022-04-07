@@ -925,7 +925,8 @@ important_software %>% select(starts_with("Q5"))             %>%
                        theme_bw() +
                        theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
                        geom_text(aes(x = software, label = n), vjust = -0.5, size = 2) +
-                       ylab("Number") + xlab("Most important software")
+                       ylab("Number") + xlab("Most important software") +
+                      theme(axis.text.x = element_text(size = 8))  
 
 ```
 
@@ -951,7 +952,8 @@ bind_cols(data["Q20"], important_software)                        %>%
                        geom_text(aes(x = software, label = n), position = position_stack(vjust = 0.5), 
                                  stat = "count", size = 2) +
                        ylab("Number") + xlab("Most important software") +
-                       scale_fill_brewer(palette = "Set1", name = "Career stage")
+                       scale_fill_brewer(palette = "Set1", name = "Career stage") +
+                       theme(axis.text.x = element_text(size = 8))  
 
 ```
 ### Frequency of software used by career stage
@@ -980,7 +982,8 @@ bind_cols(data["Q20"], important_software)                        %>%
                                  position = position_fill(vjust = 0.5),
                                  size = 2) +
                        ylab("Percentage") + xlab("Most important software") +
-                       scale_fill_brewer(palette = "Set1", name = "Career stage")
+                       scale_fill_brewer(palette = "Set1", name = "Career stage") +
+                       theme(axis.text.x = element_text(size = 8))  
 
 ```
 
@@ -1015,7 +1018,9 @@ bind_cols(data["Q20"], important_software)                        %>%
                                  position = position_dodge(width = 0.9), vjust = -0.5,
                                  size = 2) +
                        ylab("percentage") + xlab("Most important software") +
-                       scale_fill_brewer(palette = "Set1", name = "Career stage")
+                       scale_fill_brewer(palette = "Set1", name = "Career stage") +
+                       theme(axis.text.x = element_text(size = 8))  
+
 
 ```
 
@@ -1030,8 +1035,9 @@ listOther("Q5")
 
 ## Q6 Use of open source software
 
-### Bar chart
 Do you use open source software?
+
+### Use of open source frequency
 
 ```{r use_os}
 
@@ -1043,7 +1049,27 @@ data %>% select(Q6)       %>%
          theme_bw() +
          xlab("Use of Open Source") + 
          ylab("Number") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3)
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) 
+
+```
+
+### Use of open source frequency segmented by career
+
+```{r use_os_career}
+
+data %>% select(Q6, career = "Q20")       %>%
+         group_by(Q6)                     %>% 
+         mutate(N = n())                  %>% 
+         group_by(Q6, career)             %>% 
+         mutate(n = n())                  %>% 
+         ggplot(aes(x = reorder(Q6, -N), fill = career)) + 
+         geom_bar(colour = "black") + 
+         theme_bw() +
+         xlab("Use of Open Source") + 
+         ylab("Number") +
+         geom_text(aes(x = Q6, label = n), position = position_stack(vjust = 0.5), 
+                                 stat = "count", size = 3) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage") 
 
 ```
 
@@ -1093,7 +1119,7 @@ data %>% select(starts_with("Q6_b"))        %>%
 
 How is the software you use currently being supported and maintained? 
 
-### Bar chart
+### How software is maintained - frequency
 ```{r sw_maintenace}
 
 data %>% select(num_range("Q7_", 1:7))              %>%
@@ -1108,7 +1134,7 @@ data %>% select(num_range("Q7_", 1:7))              %>%
          theme_bw() +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("How Software is being maintained") + ylab("Number") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3)
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 2)
 ```
 
 ### Other maintenance mechanisms
@@ -1209,7 +1235,7 @@ data %>% select(num_range("Q11_", 1:12))                 %>%
          geom_bar(fill = "light blue", colour = "black") +
          theme_bw() +
          xlab("Where skills are acquired") + ylab("Number") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
 
@@ -1266,7 +1292,7 @@ data %>%  select(rew = "Q12") %>%
           theme_bw() +
           xlab("Development/Maintenance of rsearch software rewarded/recognised") +
           ylab("Number") +
-          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 2) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
 ```
