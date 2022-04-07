@@ -848,16 +848,21 @@ data %>% select(num_range("Q4_",1:26), career = "Q20")                       %>%
          filter(software != 0)                                               %>%
          select(-name)                                                       %>%
          group_by(software)                                                  %>% 
-         mutate(n = n())                                                     %>%   
-         ggplot(aes(x = reorder(software,-n), fill = career)) +
-         geom_bar(position = "fill", colour = "black") +
+         mutate(N = n())                                                     %>% 
+         group_by(software, career)                                          %>% 
+         mutate(per = n()/N)                                                 %>% 
+         distinct(software, career, per, N)                                  %>% 
+         ggplot(aes(x = reorder(software,-N), y = per, fill = career)) +
+         geom_col(colour = "black") +
          theme_bw() +
          theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
          ylab("Percent") + xlab("Software used") +
          scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-         # geom_text(aes(x = software, label = ..count..),
-         #        position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 2) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
+         geom_text(aes(x = software, y = per, label = scales::percent(per, accuracy = 1)), 
+                 position = position_fill(vjust = 0.5),
+                 size = 2) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage") +
+        theme(axis.text.x = element_text(size = 8))  
 ```
 
 ### Software used segmented by career as percentage of career segment population
@@ -933,10 +938,12 @@ bind_cols(data["Q20"], important_software)                        %>%
                                     names_to = "name",
                                     values_to = "software")       %>%
                        filter(!is.na(software))                   %>%
+                       group_by(software)                         %>%
+                       mutate(N = n())                            %>%
+                       filter(N > 2)                              %>%
                        group_by(career, software)                 %>%
                        mutate(n = n())                            %>%
-                       filter(n > 2)                              %>%
-                       ggplot(aes(x = reorder(software, -n), fill = career)) +
+                       ggplot(aes(x = reorder(software, -N), fill = career)) +
                        geom_bar(colour = "black") + 
                        theme_bw() +
                        theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
@@ -957,10 +964,12 @@ bind_cols(data["Q20"], important_software)                        %>%
                                     names_to = "name",
                                     values_to = "software")       %>%
                        filter(!is.na(software))                   %>%
+                       group_by(software)                         %>% 
+                       mutate(N = n())                            %>%
+                       filter(N > 2)                              %>%
                        group_by(career, software)                 %>%
                        mutate(n = n())                            %>%
-                       filter(n > 2)                              %>%
-                       ggplot(aes(x = reorder(software, -n), fill = career)) +
+                       ggplot(aes(x = reorder(software, -N), fill = career)) +
                        geom_bar(colour = "black") + 
                        theme_bw() +
                        theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
@@ -981,16 +990,21 @@ bind_cols(data["Q20"], important_software)                        %>%
                                     names_to = "name",
                                     values_to = "software")       %>%
                        filter(!is.na(software))                   %>%
+                       group_by(software)                         %>% 
+                       mutate(N = n())                            %>%
+                      filter(N > 2)                               %>% 
                        group_by(career, software)                 %>%
                        mutate(n = n())                            %>%
-                       filter(n > 2)                              %>%
-                       ggplot(aes(x = reorder(software, -n), fill = career)) +
-                       geom_bar(position = "fill", colour = "black") + 
+                       mutate(per = n/N)                          %>% 
+                       distinct(career, software, n, N, per)      %>% 
+                       ggplot(aes(x = reorder(software, -n), y = per, fill = career)) +
+                       geom_col(position = "fill", colour = "black") + 
                        scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
                        theme_bw() +
                        theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
-                       # geom_text(aes(x = software, label = n), position = position_stack(vjust = 0.5), 
-                       #           stat = "count", size = 3) +
+                       geom_text(aes(x = software, y = per, label = scales::percent(per, accuracy = 1)), 
+                                 position = position_fill(vjust = 0.5),
+                                 size = 2) +
                        ylab("Percentage") + xlab("Most important software") +
                        scale_fill_brewer(palette = "Set1", name = "Career stage")
 
