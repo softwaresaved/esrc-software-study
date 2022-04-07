@@ -643,7 +643,7 @@ data %>% select(num_range("Q2_", 1:2), career = Q20) %>%
          theme_bw() +
          xlab("Use of data") + ylab("Number") +
          geom_text(aes(x = datause, label = ..count..),
-                position = position_stack(vjust = 0.5), stat = "count", colour = "black") +
+                position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
@@ -652,6 +652,7 @@ data %>% select(num_range("Q2_", 1:2), career = Q20) %>%
 Percentages are given as the fraction from the total for that particular career stage.
 
 ```{r use_of_data_career_per}
+
 data %>% select(num_range("Q2_", 1:2), career = Q20)                          %>%
          pivot_longer(cols = num_range("Q2_", 1:2), values_to = "datause")    %>%
          filter(datause != 0)                                                 %>%
@@ -697,7 +698,7 @@ data %>% select(num_range("Q2_b_",1:6))      %>%
          ggplot(aes(x = reorder(ds, -n), fill = ds)) + 
          geom_bar(fill = "light blue", colour = "black") +
          theme_bw() + ylab("Number") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.25, size = 3)  +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.35, size = 3)  +
          xlab("Data sources") + 
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          theme(legend.position = "none")
@@ -761,7 +762,7 @@ data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
                     position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
         scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
-### Data sharing segmented by percentage responses at a career stage
+### Data sharing segmented by percentage responses at a given career stage
 
 ```{r sharing_data_career_per}
 
@@ -819,7 +820,7 @@ data %>% select(num_range("Q4_",1:26))                              %>%
          theme(legend.position = "none")
 ```
 
-### Software used segmented by career
+### Software used with responses segmented by career
 
 ```{r sw_used_career}
 
@@ -907,7 +908,7 @@ This chart is derived from the processed data input by the interviewees - an
 interviewee may have input more than one choice - each of these is counted as
 an integral choice (could normalise so that if an interviewee put in N choices
 each would contribute 1/N to the count). Only values with more than 2 entries
-are shown
+are shown.
 
 ```{r important_sw_bar}
 
@@ -923,7 +924,7 @@ important_software %>% select(starts_with("Q5"))             %>%
                        geom_col(fill = "light blue", colour = "black") + 
                        theme_bw() +
                        theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
-                       geom_text(aes(x = software, label = n), vjust = -0.5, size = 3) +
+                       geom_text(aes(x = software, label = n), vjust = -0.5, size = 2) +
                        ylab("Number") + xlab("Most important software")
 
 ```
@@ -948,13 +949,15 @@ bind_cols(data["Q20"], important_software)                        %>%
                        theme_bw() +
                        theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
                        geom_text(aes(x = software, label = n), position = position_stack(vjust = 0.5), 
-                                 stat = "count", size = 3) +
+                                 stat = "count", size = 2) +
                        ylab("Number") + xlab("Most important software") +
                        scale_fill_brewer(palette = "Set1", name = "Career stage")
 
 ```
 
-### Most important software as a percentage by career stage
+### Most important software as a percentage at a given career stage
+
+The percentages here
 
 ```{r important_sw_bar_career}
 
@@ -964,18 +967,24 @@ bind_cols(data["Q20"], important_software)                        %>%
                                     names_to = "name",
                                     values_to = "software")       %>%
                        filter(!is.na(software))                   %>%
-                       group_by(software)                         %>% 
+                       group_by(career)                           %>% 
                        mutate(N = n())                            %>%
-                       filter(N > 2)                              %>%
+                       group_by(software)                         %>% 
+                       mutate(Ns = n())                           %>%  
+                       filter(Ns > 2)                             %>%
                        group_by(career, software)                 %>%
                        mutate(n = n())                            %>%
-                       ggplot(aes(x = reorder(software, -N), fill = career)) +
-                       geom_bar(colour = "black") + 
+                       mutate(per = n/N)                          %>% 
+                       distinct(career, software, per, N)         %>% 
+                       ggplot(aes(x = reorder(software, -N), y = per, fill = career)) +
+                       geom_col(position = "dodge", colour = "black") + 
                        theme_bw() +
+                       scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
                        theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
-                       geom_text(aes(x = software, label = n), position = position_stack(vjust = 0.5), 
-                                 stat = "count", size = 3) +
-                       ylab("Number") + xlab("Most important software") +
+                       geom_text(aes(x = software, label = scales::percent(per, accuracy = 1)), 
+                                 position = position_dodge(width = 0.9), vjust = -0.5,
+                                 size = 2) +
+                       ylab("percentage") + xlab("Most important software") +
                        scale_fill_brewer(palette = "Set1", name = "Career stage")
 
 ```
