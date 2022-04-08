@@ -610,6 +610,7 @@ data["Q23"] <- gsub(2, "No", data[["Q23"]])
 ## ToDo
 
 - Look at non-UK contributions
+- Q18 split funding values
 
 # Survey results
 
@@ -1550,7 +1551,7 @@ listOther("Q18")
 Research Discipline: Level one codes from the Primary Research Areas covered by ESRC discipline funding remit. Use the 'Other' option if your discipline is not listed. (Please check all that apply.)
 
 
-### Bar chart
+### Distribution of the discipline of respondents
 
 ```{r research_disc}
 data %>%  select(num_range("Q19_", 1:22))               %>%
@@ -1567,7 +1568,27 @@ data %>%  select(num_range("Q19_", 1:22))               %>%
           geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
+### Distribution of the discipline of respondents with career stage
 
+```{r research_disc_careers}
+data %>%  select(num_range("Q19_", 1:22), career = Q20) %>%
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = "questions",
+                      values_to = "disciplines")        %>%
+          filter(disciplines != 0)                      %>%
+          group_by(disciplines)                         %>% 
+          mutate(N = n())                               %>% 
+          group_by(disciplines, career)                 %>% 
+          mutate( n = n())                              %>% 
+          ggplot(aes(x = reorder(disciplines, -N), fill = career)) +
+          geom_bar(colour = "black") +
+          theme_bw() +
+          xlab("Discipline") + ylab("Number") +
+          geom_text(aes(x = disciplines, label = n), position = position_stack(vjust = 0.5), 
+                                 stat = "count", size = 3) +
+          scale_fill_brewer(palette = "Set1", name = "Career stage") +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+```
 ## Q20 Career stage
 
 Career stage: Please select the career stage that most accurately describes your role.
