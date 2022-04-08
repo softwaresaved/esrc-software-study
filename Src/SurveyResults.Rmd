@@ -1746,7 +1746,7 @@ data %>%  select(career = Q20) %>%
 
 Gender (we are asking this to ensure that we get a balance of the community). If you prefer to self-describe, please write in the "Other" option. We apologise in advance for "othering" you. Unfortunately, this is the only write-in option available for multiple-choice questions on this platform.
 
-### Bar chart
+### Gender distribution of respondents
 
 ```{r gender}
 data %>% select(gender = Q21)                                   %>%
@@ -1757,6 +1757,38 @@ data %>% select(gender = Q21)                                   %>%
          theme_bw() +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          xlab("Gender") + ylab("Number")
+```
+
+### Gender distribution of respondents segmented by career stage
+
+```{r gender_career}
+data %>% select(gender = Q21, career = Q20)                     %>%
+         group_by(gender)                                       %>% 
+         mutate(n = n())                                        %>% 
+         ggplot(aes(x = gender, fill = career)) +
+         geom_bar(colour = "black") +
+         theme_bw() +
+         geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5), size = 3) +
+         xlab("Gender") + ylab("Number") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+```
+
+### Gender distribution of respondents segmented by percentage at career stage
+
+```{r gender_career}
+data %>% select(gender = Q21, career = Q20)                     %>%
+         group_by(career)                                       %>% 
+         mutate(N = n())                                        %>%
+         group_by(gender, career)                               %>% 
+         mutate(per = n()/N)                                    %>% 
+         distinct(gender, career, per)                          %>% 
+         ggplot(aes(x = gender, y = per, fill = career)) +
+         geom_col(position = "dodge", colour = "black") +
+         theme_bw() + scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+         geom_text(aes(label = scales::percent(per, accuracy = 1)), 
+                   position = position_dodge(width = 0.9), size = 2, vjust = -0.5) +
+         xlab("Gender") + ylab("Number") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
 
 ## Q22 Ethnic group
