@@ -24,7 +24,7 @@ library(leaflet, quietly = TRUE)
 library(stringr, quietly = TRUE)
 library(kableExtra, quietly = TRUE)
 library(ggrepel)
-library(mapview, quietly = TRUE)
+library(webshot, quietly = TRUE) # Need to do (first time): webshot::install_phantomjs()
 
 # Function to list other variations
 listOther <- function(Quest){
@@ -1574,27 +1574,21 @@ data %>% select(Institution = CleanLocs) %>%
 ```
 ### Map institutions
 
-Commented out the map as it does not generate output for docx format.
 
 
 ```{r mapInstitutions}
-
-l <-      data %>%  
-          select(Institutions = CleanLocs, Latitude, Longitude) %>%
-          filter(!is.na(Institutions) & !is.na(Latitude))       %>%
-          filter(-7 <= Longitude & Longitude <= 1.6)            %>%
-          filter(49 <= Latitude & Latitude <= 59)               %>%
-          group_by(Institutions)                                %>%
-          mutate(n = n())                                       %>%
-          leaflet()                                             %>%
-          addTiles()                                            %>%
+     
+data %>%  
+          select(Institutions = CleanLocs, Latitude, Longitude)  %>%
+          filter(!is.na(Institutions) & !is.na(Latitude))        %>%
+          filter(-7 <= Longitude & Longitude <= 1.6)             %>%
+          filter(49 <= Latitude & Latitude <= 59)                %>%
+          group_by(Institutions)                                 %>%
+          mutate(n = n())                                        %>%
+          leaflet(options = leafletOptions(zoomControl = FALSE)) %>%
+          addTiles()                                             %>%
           addCircleMarkers(lng = ~Longitude, lat = ~Latitude, radius = ~n)
 
-if(interactive()){
-  l
-}else{
- cat("Cannot generate an html widget for word.")
-}
 
 
 ```
@@ -1652,7 +1646,7 @@ funding %>% mutate(nelements = rowSums(!is.na(.)))                             %
 ### Funding distribution normalised with career stage
 
 
-```{r funding_norm}
+```{r funding_norm_career}
 
 bind_cols(funding, data["Q20"]) %>% select(num_range("Q18_", 1:7), career = Q20) %>% 
             mutate(nelements = rowSums(!is.na(select(., -career))))                               %>% 
