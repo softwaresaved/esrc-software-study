@@ -959,7 +959,7 @@ bind_cols(data["Q20"], important_software)                        %>%
 ```
 ### Frequency of software used by career stage
 
-```{r important_sw_bar_career}
+```{r important_sw_bar_career_per}
 
 bind_cols(data["Q20"], important_software)                        %>% 
                        select(starts_with("Q5"), career = "Q20")  %>%
@@ -990,10 +990,11 @@ bind_cols(data["Q20"], important_software)                        %>%
 
 ### Most important software as a percentage at a given career stage
 
-The percentages here are taken as a percentage of the responses from each career stage. Only values
-that have been nominated more than twice are shown.
+The percentages here are taken as a percentage of the responses from each career stage. Only software that has been nominated more than twice are shown. Note that an 
+individual may have suggested more than one piece of software - this has not been
+normalised.
 
-```{r important_sw_bar_career}
+```{r important_sw_bar_career_per2}
 
 bind_cols(data["Q20"], important_software)                        %>% 
                        select(starts_with("Q5"), career = "Q20")  %>%
@@ -1222,7 +1223,7 @@ listOther("Q10_a")
 
 How did you acquire the skills necessary to utilise software in your research? (Please check all that apply.)
 
-### Bar chart
+### How skills are acquired
 
 ```{r acquiring_skills}
 data %>% select(num_range("Q11_", 1:12))                 %>%
@@ -1238,6 +1239,26 @@ data %>% select(num_range("Q11_", 1:12))                 %>%
          xlab("Where skills are acquired") + ylab("Number") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+```
+
+### How skills are acquired segmented by career stage
+
+```{r acquiring_skills_career}
+data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
+         pivot_longer(cols = num_range("Q11_", 1:12),
+                      names_to = "questions",
+                      values_to = "skills")              %>%
+         filter(skills != 0)                             %>%
+         group_by(skills)                                %>% 
+         mutate(n = n())                                 %>% 
+         ggplot(aes(x = reorder(skills, -n), fill = career)) + 
+         geom_bar(colour = "black") +
+         theme_bw() +
+         xlab("Where skills are acquired") + ylab("Number") +
+         geom_text(aes(label = ..count..), position = position_stack(vjust = 0.5), 
+                   stat = "count", size = 2) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
 ### Other ways of acquiring skills
@@ -1281,7 +1302,7 @@ listOther("Q11_b_i")
 
 Do you feel in your field that the development and maintenance of research software are sufficiently recognised or rewarded?
 
-### Bar chart
+### Frequency of recognition responses
 
 ```{r recognition}
 
@@ -1295,6 +1316,50 @@ data %>%  select(rew = "Q12") %>%
           ylab("Number") +
           geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 2) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+```
+
+### Frequency of recognition responses segmented by career stage
+
+```{r recognition_careerStage}
+
+data %>%  select(rew = Q12, career =Q20) %>%
+          group_by(rew)       %>% 
+          mutate(n = n())     %>% 
+          ggplot(aes(x = reorder(rew, -n), fill = career)) + 
+          geom_bar(colour = "black") +
+          theme_bw() +
+          xlab("Development/Maintenance of rsearch software rewarded/recognised") +
+          ylab("Number") +
+          geom_text(aes(label = ..count..), position = position_stack(vjust = 0.5), 
+                   stat = "count", size = 2) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+          scale_fill_brewer(palette = "Set1", name = "Career stage")
+
+```
+
+### Frequency of recognition responses segmented by percentage of career stage population
+
+The percentages are given as a proportion of the given career stage population.
+
+```{r recognition_careerStage_per}
+
+data %>%  select(rew = Q12, career =Q20) %>%
+          group_by(career)               %>% 
+          mutate(N = n())                %>% 
+          group_by(rew, career)          %>% 
+          mutate(per = n()/N)            %>% 
+          distinct(rew, career, per)     %>% 
+          ggplot(aes(x = rew, y = per, fill = career)) + 
+          geom_col(position = "dodge", colour = "black") +
+          theme_bw() +
+          xlab("Development/Maintenance of rsearch software rewarded/recognised") +
+          ylab("Percentage") +
+          scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+          geom_text(aes(label = scales::percent(per, accuracy = 1)), position = position_dodge(width = 0.9), vjust = -0.5,
+                   size = 2) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+          scale_fill_brewer(palette = "Set1", name = "Career stage")
 
 ```
 
@@ -1474,7 +1539,7 @@ data %>%  select(num_range("Q16_", 1:13))         %>%
   geom_bar(fill = "light blue", colour = "black") +
   theme_bw() +
   xlab("Barriers to software use") + ylab("Number") +
-  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 2) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
 ```
@@ -1593,7 +1658,7 @@ data %>%  select(num_range("Q19_", 1:22), career = Q20) %>%
 
 Career stage: Please select the career stage that most accurately describes your role.
 
-### Bar chart
+### Frequency of responses for career stage
 
 ```{r career}
 
@@ -1672,3 +1737,11 @@ These questions asked about inclusion in prize draw and volunteering for intervi
 ## Q28 Comments about the survey
 
 Do you have any other comments about this survey?
+
+### List comments
+
+```{r survey_comments, results = 'asis'}
+
+listOther("Q28")
+
+```
