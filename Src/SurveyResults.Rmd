@@ -65,6 +65,9 @@ important_software$count <- rowSums(!is.na(important_software))
 # Cleaned up locations (Q17) (used OpenRefine to cluster some of the data)
 cleanlocs <- read_csv("../Data/CleanedLocations.csv", col_types = cols(Q17 = col_character()))
 
+# Read funding "cleaned" funding bodies.
+funding <- read_csv("../Data/Q18-Other-funding.csv", show_col_types = FALSE)
+
 # Attach the cleaned locations to the data set
 data0$CleanLocs <- cleanlocs[[1]]
 
@@ -610,7 +613,6 @@ data["Q23"] <- gsub(2, "No", data[["Q23"]])
 ## ToDo
 
 - Look at non-UK contributions
-- Q18 split funding values
 
 # Survey results
 
@@ -1601,9 +1603,55 @@ if(interactive()){
          
 ## Q18 Funding
 
+### Funding distribution
+
+The list given in the listing below has been manipulated to provide some
+level of uniformity. Note that in this instance all contributions are counted
+equally, i.e. a respondent may have suggested more than one funding body - each
+of these is given a count of 1.
+
+```{r funding}
+
+funding %>% pivot_longer(cols = num_range("Q18_", 1:7),
+                         names_to = NULL,
+                         values_to =  "funding")         %>% 
+            filter(!is.na(funding))                      %>%
+            group_by(funding)                            %>% 
+            tally()                                      %>% 
+            filter(n > 2)                                %>%
+            ggplot(aes(x = reorder(funding, -n), y = n)) +
+            geom_col(colour = "black", fill = "light blue") +
+            theme_bw() + xlab("Funding body") + ylab("Number") +
+            geom_text(aes(x = funding, label = n), vjust = -0.5, size = 2) +
+            theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+```
+
+The graph below normalises the contributions suggested by the responder, i.e. if they mayd N suggestion then
+each suggestion contributes 1/N to the total.
+
+```{r funding_norm}
+
+funding %>% mutate(nelements = rowSums(!is.na(.)))                             %>% 
+            mutate(contrib = ifelse(nelements == 0, 0, round(1/nelements, 1))) %>% 
+            pivot_longer(cols = num_range("Q18_", 1:7),
+                         names_to = NULL,
+                         values_to =  "funding")                               %>% 
+            filter(!is.na(funding))                                            %>%
+            group_by(funding)                                                  %>% 
+            summarise(N = sum(contrib))                                        %>% 
+            filter(N > 1)                                                      %>%
+            ggplot(aes(x = reorder(funding, -N), y = N)) +
+            geom_col(colour = "black", fill = "light blue") +
+            theme_bw() + xlab("Funding body") + ylab("Number") +
+            geom_text(aes(x = funding, label = N), vjust = -0.5, size = 2) +
+            theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+```
+
+### Listing of funding over the last 5 years
+
 Who has funded your research within the last 5 years?
 
-```{r funding, results='asis'}
+```{r funding_list, results='asis'}
 
 listOther("Q18")
 
