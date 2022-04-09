@@ -1460,7 +1460,7 @@ data %>% select(num_range("Q13_4_",1:5))            %>%
 
 Where do you normally run your digital tools/software? Please check all that apply. The UK Tier 1 provides a national supercomputing service, e.g. ARCHER2, and Tier 2 systems provide computational services somewhere between institutional and the national Tier 1 service.
 
-### Bar chart
+### Distribution of where software is run
 
 ```{r where_sw_run}
 
@@ -1475,7 +1475,7 @@ data %>%  select(num_range("Q14_", 1:9))         %>%
   geom_bar(fill = "light blue", colour = "black") +
   theme_bw() +
   xlab("Where software is run") + ylab("Number") +
-  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
 
@@ -1508,7 +1508,7 @@ data %>% select(starts_with("Q15_"), -"Q15_a") %>%
          ggplot(aes(x = reorder(aware, -n))) +
          geom_bar(fill = "light blue", colour = "black") +
          theme_bw() +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          ylab("Number") + xlab("Aware of the policy for")
 
 ```
