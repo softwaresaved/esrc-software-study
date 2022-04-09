@@ -1494,7 +1494,7 @@ A publishing policy provides instruction or guidance on how software should be m
 
 Which relevant software policies are you aware of (please check all you are aware of)?
 
-### Bar chart
+### Licensing policies awareness distributions
 
 ```{r licensing}
 
@@ -1511,6 +1511,30 @@ data %>% select(starts_with("Q15_"), -"Q15_a") %>%
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          ylab("Number") + xlab("Aware of the policy for")
 
+```
+
+### Awareness vs institutions
+
+Percentages are given as a percentage from an institution.
+
+```{r awareness_inst}
+
+data %>% select(Institutions = CleanLocs, starts_with("Q15_"), -"Q15_a") %>%
+         pivot_longer(cols = starts_with("Q15"),
+                      names_to = "columns",
+                      values_to ="aware")                                %>%
+         filter(aware != 0)                                              %>%
+         group_by(Institutions)                                          %>% 
+         mutate(N = n())                                                 %>% 
+         group_by(aware, Institutions)                                   %>%
+         mutate(n = n())                                                 %>%
+         ggplot(aes(x = aware, y = Institutions, size = n/N)) +
+         geom_point(alpha = 0.25) +
+         theme_bw() +
+         theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
+         theme(axis.text.y = element_text(size = 6)) +
+         ylab("Institutions") + xlab("Aware of the policy for") +
+         labs(size = "Percent") + scale_size_continuous(labels = scales::percent)
 ```
 
 ### Other policies
