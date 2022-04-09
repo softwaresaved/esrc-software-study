@@ -1842,6 +1842,20 @@ data %>% select(gender = Q21, career = Q20) %>%
 
 ```
 
+### Gender, career stage and ethnicity
+
+```{r gender_career_ethnicity}
+
+data %>% select(ethnicity = "Q22", career = "Q20", gender = "Q21") %>%
+         group_by(gender, ethnicity, career)                       %>%
+         tally()                                                   %>%
+         ggplot(aes(x = career, y = ethnicity, size = n, colour = gender)) +
+         geom_point(alpha = 0.25) + geom_jitter() + theme_bw() +
+         xlab("Career stage") + ylab("Ethnicity") +
+         labs(colour = "Gender", size = "Number") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+```
 
 ### Gender distribution segmented by percentage by career stage
 
