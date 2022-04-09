@@ -1793,7 +1793,7 @@ data %>% select(gender = Q21, career = Q20)                     %>%
 
 ## Q22 Ethnic group
 
-### Bar chart
+### Ethnicity distribution
 
 ```{r ethnicity}
 
@@ -1805,6 +1805,22 @@ data %>% select(ethnicity = "Q22")    %>%
          theme_bw() +
          xlab("Number") + ylab("Ethnicity") 
   
+```
+
+### Ethnicity distribution by career stage
+
+```{r ethnicity_career}
+
+data %>% select(ethnicity = "Q22", career = Q20)    %>%
+         group_by(ethnicity)                        %>%
+         mutate(N = n())                            %>%
+         group_by(ethnicity, career)                %>% 
+         ggplot(aes(y = reorder(ethnicity, -N), fill = career)) +
+         geom_bar(colour = "black") +
+         theme_bw() +
+         xlab("Number") + ylab("Ethnicity") +
+         geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5), size = 2, colour = "white")
+
 ```
 ### Other ethnicity
 
