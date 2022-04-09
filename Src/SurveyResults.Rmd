@@ -1534,7 +1534,7 @@ data %>% select(Institutions = CleanLocs, starts_with("Q15_"), -"Q15_a") %>%
          theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
          theme(axis.text.y = element_text(size = 6)) +
          ylab("Institutions") + xlab("Aware of the policy for") +
-         labs(size = "Percent") + scale_size_continuous(labels = scales::percent)
+         labs(size = "Percent of Institution") + scale_size_continuous(labels = scales::percent)
 ```
 
 ### Other policies
@@ -1597,8 +1597,6 @@ data %>% select(Institution = CleanLocs) %>%
                 col.names = c("Institution", "Number"))
 ```
 ### Map institutions
-
-
 
 ```{r mapInstitutions}
      
@@ -1795,9 +1793,51 @@ data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
 
 ```
 
-### Research discipline by geograhic disttribution
+### Research discipline by institution
 
+```{r awareness_inst_per}
 
+data %>% select(Institutions = CleanLocs, num_range("Q19_", 1:22))       %>%
+         pivot_longer(cols = starts_with("Q19"),
+                      names_to = NULL,
+                      values_to ="discipline")                           %>%
+         filter(discipline != 0 & !is.na(Institutions))                  %>%
+         group_by(Institutions)                                          %>% 
+         mutate(N = n())                                                 %>% 
+         group_by(discipline, Institutions)                              %>%
+         mutate(n = n())                                                 %>%
+         ggplot(aes(x = discipline, y = Institutions, size = n/N,)) +
+         geom_point(alpha = 0.25) +
+         theme_bw() +
+         theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
+         theme(axis.text.y = element_text(size = 6)) +
+         ylab("Institutions") + xlab("Discipline") +
+         labs(size = "Institution %") + 
+         scale_size_continuous(labels = scales::percent)
+```
+
+The same graph but this time the percentage is by discipline (the % of the discipline at each institution):
+
+```{r awareness_dist_per}
+
+data %>% select(Institutions = CleanLocs, num_range("Q19_", 1:22))       %>%
+         pivot_longer(cols = starts_with("Q19"),
+                      names_to = NULL,
+                      values_to ="discipline")                           %>%
+         filter(discipline != 0 & !is.na(Institutions))                  %>%
+         group_by(discipline)                                            %>% 
+         mutate(N = n())                                                 %>% 
+         group_by(discipline, Institutions)                              %>%
+         mutate(n = n())                                                 %>%
+         ggplot(aes(x = discipline, y = Institutions, size = n/N,)) +
+         geom_point(alpha = 0.25) +
+         theme_bw() +
+         theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
+         theme(axis.text.y = element_text(size = 6)) +
+         ylab("Institutions") + xlab("Discipline") +
+         labs(size = "Discipline %") + 
+         scale_size_continuous(labels = scales::percent_format(accuracy = 1))
+```
 ## Q20 Career stage
 
 Career stage: Please select the career stage that most accurately describes your role.
