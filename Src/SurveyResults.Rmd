@@ -1657,6 +1657,27 @@ data %>%  select(num_range("Q14_", 1:9))         %>%
   geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
+### Distribution of where software is run with career stage
+
+```{r where_sw_run_career}
+
+data %>%  select(num_range("Q14_", 1:9), career = Q20)         %>%
+  pivot_longer(cols = num_range("Q14_", 1:9),
+               names_to = NULL,
+               values_to = "runon")              %>%
+  filter(runon != 0)                             %>%
+  group_by(runon)                                %>% 
+  mutate(n = n())                                %>% 
+  group_by(career, runon)                        %>% 
+  ggplot(aes(x = reorder(runon, -n), fill  = career)) +
+  geom_bar( colour = "black") +
+  theme_bw() +
+  xlab("Where software is run") + ylab("Number") +
+  geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 2) +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+  scale_fill_brewer(palette = "Set1", name = "Career stage")
+
+```
 
 ### Other platforms used
 
@@ -1688,7 +1709,30 @@ data %>% select(starts_with("Q15_"), -"Q15_a") %>%
          geom_bar(fill = "light blue", colour = "black") +
          theme_bw() +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         ylab("Number") + xlab("Aware of the policy for")
+         ylab("Number") + xlab("Aware of the policy for")  +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+```
+
+### Licensing policies awareness with career stage distributions
+
+```{r licensing_career}
+
+data %>% select(starts_with("Q15_"), -"Q15_a", career = Q20) %>%
+         pivot_longer(cols = starts_with("Q15_"),
+                      names_to = NULL,
+                      values_to ="aware")      %>%
+         filter(aware != 0)                    %>%
+         group_by(aware)                       %>%
+         mutate(n = n())                       %>% 
+         group_by(career, aware)               %>% 
+         ggplot(aes(x = reorder(aware, -n), fill = career)) +
+         geom_bar(colour = "black") +
+         theme_bw() +
+         geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 3) +
+         ylab("Number") + xlab("Aware of the policy for") +
+         scale_fill_brewer(palette = "Set1", name = "Career stage") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
 ```
 
@@ -1730,7 +1774,8 @@ listOther("Q15_a")
 
 What barriers have you experienced to the use of software in your research? (Check all that apply.)
 
-### Bar chart
+### Barriers frequencies
+
 ```{r barriers}
 
 data %>%  select(num_range("Q16_", 1:13))         %>%
@@ -1749,6 +1794,27 @@ data %>%  select(num_range("Q16_", 1:13))         %>%
 
 ```
 
+### Barriers frequencies with careers
+
+```{r barriers_carreer}
+
+data %>%  select(num_range("Q16_", 1:13), career = Q20) %>%
+  pivot_longer(cols = num_range("Q16_", 1:13),
+               names_to = NULL,
+               values_to = "barriers")                  %>%
+  filter(barriers != 0)                                 %>%
+  group_by(barriers)                                    %>%
+  mutate(n = n())                                       %>% 
+  ggplot(aes(x = reorder(barriers, -n), fill  = career)) +
+  geom_bar(colour = "black") +
+  theme_bw() +
+  xlab("Barriers to software use") + ylab("Number") +
+  geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 2) +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
+  scale_fill_brewer(palette = "Set1", name = "Career stage")
+
+```
+
 
 ### Other barriers
 
@@ -1757,6 +1823,7 @@ data %>%  select(num_range("Q16_", 1:13))         %>%
 listOther("Q16_a")
 
 ```
+
 
 
 ## Q17 Instituions
