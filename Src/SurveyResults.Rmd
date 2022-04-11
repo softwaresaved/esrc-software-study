@@ -606,17 +606,18 @@ data["Q23"] <- gsub(2, "No", data[["Q23"]])
 
 ```
 
-# Overview
 
-## Demographics
+```{r child = 'internal/contents.Rmd'}
 
-## ToDo
+# This file will not be included in the repo until after the report is completed
 
-- Look at non-UK contributions
+```
+
 
 # Survey results
 
 ## Q2 Use of data
+
 Do you create or re-use data to undertake your research (Please check all that apply)
 
 ### Frequency of results
