@@ -1847,7 +1847,7 @@ data %>% select(Institution = CleanLocs) %>%
          group_by(Institution)           %>%
          tally()                         %>%
          arrange(desc(n))                %>%
-        #head(n = 12)                     %>% 
+        head(n = 12)                     %>% 
         kbl(format="pipe", align = c("l","r"),
                 col.names = c("Institution", "Number"))
 ```
@@ -2002,7 +2002,7 @@ data %>%  select(num_range("Q19_", 1:22), career = Q20) %>%
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
 
-### Research dicipline by percentage career stage
+### Discipline by percentage career stage
 
 Percentages are in relation to a given career stage.
 
@@ -2029,7 +2029,7 @@ data %>%  select(num_range("Q19_", 1:22), career = "Q20") %>%
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
 
-### Research discipline by gender
+### Discipline by gender
 
 ```{r research_gender}
 
@@ -2044,11 +2044,13 @@ data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
           xlab("Discipline") + ylab("Number") + labs(fill = "Gender") +
           geom_text(aes(x = disciplines, label = ..count..),
                    position = position_stack(vjust = 0.5), stat = "count", colour = "white", size = 2) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+
 
 ```
 
-### Research discipline by institution
+### Discipline by institution
 
 ```{r awareness_inst_per}
 
@@ -2125,7 +2127,7 @@ data %>% select(gender = Q21)                                   %>%
          geom_bar(fill = "light blue", colour = "black") +
          theme_bw() +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         xlab("Gender") + ylab("Number")
+         xlab("Gender") + ylab("Number") 
 ```
 
 ### Gender distribution segmented by career stage
@@ -2137,8 +2139,9 @@ data %>% select(gender = Q21, career = Q20)                     %>%
          ggplot(aes(x = gender, fill = career)) +
          geom_bar(colour = "black") +
          theme_bw() +
-         geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5), size = 2, colour = "white") +
-         xlab("Gender") + ylab("Number") +
+         geom_text(aes(label = ..count..), stat = "count", 
+                   position = position_stack(vjust = 0.5), size = 2, colour = "white") +
+         xlab("Gender") + ylab("Number") + labs(fill = "Career stage") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
 
@@ -2172,6 +2175,9 @@ data %>% select(ethnicity = "Q22", career = "Q20", gender = "Q21") %>%
          geom_point(alpha = 0.25) + geom_jitter() + theme_bw() +
          xlab("Career stage") + ylab("Ethnicity") +
          labs(colour = "Gender", size = "Number") +
+         scale_y_discrete(expand = expansion(add = 0.75), 
+                          labels = function(x) stringr::str_wrap(x, width = 35)) + 
+         theme(axis.text.y = element_text(size = 8)) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
 ```
@@ -2191,7 +2197,8 @@ data %>% select(gender = Q21, career = Q20)                     %>%
          geom_text(aes(label = scales::percent(per, accuracy = 1)), 
                    position = position_dodge(width = 0.9), size = 2, vjust = -0.5) +
          xlab("Gender") + ylab("Number") +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
 ## Q22 Ethnic group
@@ -2230,7 +2237,8 @@ data %>% select(ethnicity = "Q22", career = Q20)    %>%
                           labels = function(x) stringr::str_wrap(x, width = 35)) + 
          theme(axis.text.y = element_text(size = 8)) +
          geom_text(aes(label = ..count..), stat = "count", 
-                   position = position_stack(vjust = 0.5), size = 2, colour = "white")
+                   position = position_stack(vjust = 0.5), size = 2, colour = "white") +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
 
 ```
 
@@ -2238,7 +2246,7 @@ data %>% select(ethnicity = "Q22", career = Q20)    %>%
 
 ```{r ethnicity_career}
 
-data %>% select(ethnicity = "Q22", gender = Q21)    %>%
+data %>% select(ethnicity = Q22, gender = Q21)    %>%
          group_by(gender)                           %>%
          mutate(N = n())                            %>%
          group_by(ethnicity, gender)                %>% 
@@ -2250,7 +2258,30 @@ data %>% select(ethnicity = "Q22", gender = Q21)    %>%
                           labels = function(x) stringr::str_wrap(x, width = 35)) + 
          theme(axis.text.y = element_text(size = 8)) +
          geom_text(aes(label = ..count..), stat = "count", 
-                   position = position_stack(vjust = 0.5), size = 2, colour = "white")
+                   position = position_stack(vjust = 0.5), size = 2, colour = "white") +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+
+```
+
+### Ethnicity by Institution
+
+```{r ethnicity_instituion}
+
+data %>% select(ethnicity = Q22, Institution = CleanLocs) %>%
+         group_by(ethnicity, Institution)                 %>%
+         filter(!is.na(ethnicity) & !is.na(Institution))  %>% 
+         mutate(N = n())                                  %>%
+         filter(N > 3)                                    %>% 
+         ggplot(aes(y = ethnicity, x = Institution, size = N)) +
+         geom_point(alpha = 0.25, na.rm = TRUE) +
+         theme_bw() +
+         xlab("Institution") + ylab("Ethnicity") +
+         scale_x_discrete(labels = abbreviate) + 
+         scale_y_discrete(labels = abbreviate) + 
+         theme(axis.text = element_text(size = 6)) +
+         geom_text(aes(x = ethnicity, y = Institution, label = ..count..), na.rm = TRUE,
+                   vjust = 1, size = 2, colour = "white") +
+                  theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) 
 
 ```
 
