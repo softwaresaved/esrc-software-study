@@ -2205,9 +2205,20 @@ data %>% select(ethnicity = "Q22")    %>%
          tally()                      %>%
          ggplot(aes(x = n, y = reorder(ethnicity, -n))) +
          geom_col(colour = "black", fill = "light blue") +
-         theme_bw() +
-         xlab("Number") + ylab("Ethnicity") 
+         theme_bw() + 
+         scale_y_discrete(expand = expansion(add = 0.75), 
+                          labels = function(x) stringr::str_wrap(x, width = 35)) + 
+         theme(axis.text.y = element_text(size = 8)) +
+         xlab("Number") + ylab("Ethnicity") +
+         geom_text(aes(y = ethnicity, label = n), hjust = -0.75, size = 2)
   
+```
+Key:
+
+```{r ethnicity_key, results='asis'}
+
+ethnames <- unique(data$Q22)
+
 ```
 
 ### Ethnicity distribution by career stage
@@ -2222,7 +2233,11 @@ data %>% select(ethnicity = "Q22", career = Q20)    %>%
          geom_bar(colour = "black") +
          theme_bw() +
          xlab("Number") + ylab("Ethnicity") +
-         geom_text(aes(label = ..count..), stat = "count", position = position_stack(vjust = 0.5), size = 2, colour = "white")
+         scale_y_discrete(expand = expansion(add = 0.75), 
+                          labels = function(x) stringr::str_wrap(x, width = 35)) + 
+         theme(axis.text.y = element_text(size = 8)) +
+         geom_text(aes(label = ..count..), stat = "count", 
+                   position = position_stack(vjust = 0.5), size = 2, colour = "white")
 
 ```
 ### Other ethnicity
