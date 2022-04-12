@@ -2237,7 +2237,7 @@ listOther("Q22_a")
 
 Do you consider yourself to have a disability
 
-### Bar chart
+### Disability frequency
 
 ```{r dissability}
 
@@ -2249,6 +2249,42 @@ data %>% select(dis = "Q23") %>%
          theme_bw() +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          xlab("Disability") + ylab("Number")  
+```
+
+### Disability and career stage
+
+```{r dissability_career}
+
+data %>% select(dis = Q23, career = Q20) %>% 
+         group_by(dis)                   %>% 
+         mutate(n = n())                 %>% 
+         group_by(dis, career)           %>% 
+         ggplot(aes(x = reorder(dis, -n), fill = career)) +
+         geom_bar(colour = "black") +
+         theme_bw() +
+         xlab("Disability") + ylab("Number") +
+         geom_text(aes(x = dis, label = ..count..),
+                   position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
+### Disability as % of career stage
+
+```{r dissability_career_per}
+
+data %>% select(dis = Q23, career = Q20)    %>% 
+         group_by(career)                   %>% 
+         mutate(N = n())                    %>% 
+         group_by(dis, career)              %>% 
+         mutate(per = n()/N)                %>% 
+         ggplot(aes(x = dis, y = per, fill = career)) +
+         geom_col(position = "dodge", colour = "black") +
+         theme_bw() +
+         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+         xlab("Disability") + ylab("Percent") +
+         geom_text(aes(x = dis, label = scales::percent(per, accuracy = 1)),
+                   position = position_dodge(width = 0.9), colour = "black", size = 2, vjust = -0.5) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
 ## Q24-Q27 Not relevant
