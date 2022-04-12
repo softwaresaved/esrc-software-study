@@ -2233,6 +2233,27 @@ data %>% select(ethnicity = "Q22", career = Q20)    %>%
                    position = position_stack(vjust = 0.5), size = 2, colour = "white")
 
 ```
+
+### Ethnicity and gender
+
+```{r ethnicity_career}
+
+data %>% select(ethnicity = "Q22", gender = Q21)    %>%
+         group_by(gender)                           %>%
+         mutate(N = n())                            %>%
+         group_by(ethnicity, gender)                %>% 
+         ggplot(aes(y = reorder(ethnicity, -N), fill = gender)) +
+         geom_bar(colour = "black") +
+         theme_bw() +
+         xlab("Number") + ylab("Ethnicity") +
+         scale_y_discrete(expand = expansion(add = 0.75), 
+                          labels = function(x) stringr::str_wrap(x, width = 35)) + 
+         theme(axis.text.y = element_text(size = 8)) +
+         geom_text(aes(label = ..count..), stat = "count", 
+                   position = position_stack(vjust = 0.5), size = 2, colour = "white")
+
+```
+
 ### Other ethnicity
 
 ```{r OtherEthnicity, results='asis'}
