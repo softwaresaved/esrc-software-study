@@ -2213,13 +2213,6 @@ data %>% select(ethnicity = "Q22")    %>%
          geom_text(aes(y = ethnicity, label = n), hjust = -0.75, size = 2)
   
 ```
-Key:
-
-```{r ethnicity_key, results='asis'}
-
-ethnames <- unique(data$Q22)
-
-```
 
 ### Ethnicity distribution by career stage
 
