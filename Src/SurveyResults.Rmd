@@ -26,15 +26,20 @@ library(kableExtra, quietly = TRUE)
 library(ggrepel)
 library(webshot, quietly = TRUE) # Need to do (first time): webshot::install_phantomjs()
 
-# Function to list other variations
+# Function to list "Other" inputs separated by career stage
 listOther <- function(Quest){
-  data %>% select(other = all_of(Quest))          %>%
-           filter(!is.na(other))                  %>% 
-           mutate(line = paste0("1. ",other,"\n")) %>% 
-           select(-other) -> a
+  
+  for(careertype in c("Junior", "Early", "Mid", "Senior", "Other","-")){
+    cat("\n\n*  **",careertype," career stage** \n\n", sep = "")
+    data %>% select(other = all_of(Quest), career = Q20)        %>%
+             filter(!is.na(other) & careertype == career)       %>% 
+             mutate(line = paste0("   1. ",other,"\n"))         %>% 
+             select(-other) -> a
   
            cat(a$line)
+  }
 }
+
 ```
 
 ```{r read_data}
@@ -1838,11 +1843,11 @@ The top 12 institutional affiliations of respondents to the survey.
 
 ```{r TabulateInstituions}
 data %>% select(Institution = CleanLocs) %>%
-         filter(!is.na(Institution))     %>%
+         #filter(!is.na(Institution))     %>%
          group_by(Institution)           %>%
          tally()                         %>%
          arrange(desc(n))                %>%
-        head(n = 12)                     %>% 
+        #head(n = 12)                     %>% 
         kbl(format="pipe", align = c("l","r"),
                 col.names = c("Institution", "Number"))
 ```
