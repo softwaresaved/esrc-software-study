@@ -738,7 +738,7 @@ data %>% select(num_range("Q2_", 1:2), institution = CleanLocs)              %>%
          theme_bw() +
          geom_point(alpha = 0.25) + xlab("Data use") + ylab("Institutions") + labs(size = "Percent") +
          scale_size_continuous(labels = scales::percent) +
-         theme(axis.text.y = element_text(size = 8)) 
+         theme(axis.text.y = element_text(size = 6)) 
 ```
 
 ```{r datause_institution_bar}
@@ -1345,6 +1345,8 @@ data %>% select(Q6, career = "Q20")       %>%
 
 If you answered yes to the previous question, what are your main reasons for using open source software?
 
+### Responses
+
 ```{r reason4os}
 
 data %>% select(starts_with("Q6_a"))        %>%
@@ -1370,7 +1372,7 @@ would only contribute an A, if an individual chose A, B and D then that would
 contribute an A_B_D then we count all the combined choices. Only counting values
 that have a count greater than 1.
 
-```{r ds_choices}
+```{r reason4os_choices}
 
 data %>% select(id = URN, starts_with("Q6_a"))                         %>%
          pivot_longer(cols = starts_with("Q6_a"),
@@ -1393,6 +1395,8 @@ data %>% select(id = URN, starts_with("Q6_a"))                         %>%
 ## Q6b Reasons for not using OS
 
 If you answered no to the previous question, what are your main reasons for not using open source software? 
+
+### Responses
 
 ```{r reasons4NotOS}
 
@@ -1418,7 +1422,7 @@ choices and join them with an "_". So, if an individual only chose A then that
 would only contribute an A, if an individual chose A, B and D then that would
 contribute an A_B_D then we count all the combined choices. 
 
-```{r ds_choices}
+```{r reasons4NotOS_choices}
 
 data %>% select(id = URN, starts_with("Q6_b"))                         %>%
          pivot_longer(cols = starts_with("Q6_b"),
