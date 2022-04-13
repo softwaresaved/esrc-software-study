@@ -10,7 +10,9 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
+
+# Defaults for chunk size outputs
+knitr::opts_chunk$set(echo = TRUE, echo = FALSE, dpi = 300)
 
 # Load packages ----------------------------------------------------------
 
@@ -699,7 +701,7 @@ data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
-### Use of data by % gender
+### Use of data by % of gender population
 
 ```{r use_of_data_gender_per}
 data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>%
@@ -719,7 +721,7 @@ data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
-### Datause by institution
+### Data use by institution
 
 ```{r datause_institution}
 
@@ -734,7 +736,7 @@ data %>% select(num_range("Q2_", 1:2), institution = CleanLocs)              %>%
          filter(per > 0)                                                     %>% 
          ggplot(aes(x = datause, y = institution, size = per)) + 
          theme_bw() +
-         geom_point(alpha = 0.25) + xlab("Data use") + ylab("Institutions") +
+         geom_point(alpha = 0.25) + xlab("Data use") + ylab("Institutions") + labs(size = "Percent") +
          scale_size_continuous(labels = scales::percent) +
          theme(axis.text.y = element_text(size = 8)) 
 ```
@@ -761,7 +763,7 @@ data %>% select(num_range("Q2_", 1:2), institution = CleanLocs)              %>%
 For each multiple choice replace spaces by "-"s and collapse all the non-empty
 choices and join them with an "_". So, if an individual only chose A then that
 would only contribute an A, if an individual chose A, B and D then that would
-contrbute an A_B_D then we count all the combined choices. 
+contribute an A_B_D then we count all the combined choices. 
 
 ```{r datause_choices}
 
@@ -948,7 +950,7 @@ data %>% select(num_range("Q2_b_",1:6), institutions = CleanLocs)     %>%
 For each multiple choice replace spaces by "-"s and collapse all the non-empty
 choices and join them with an "_". So, if an individual only chose A then that
 would only contribute an A, if an individual chose A, B and D then that would
-contrbute an A_B_D then we count all the combined choices. 
+contribute an A_B_D then we count all the combined choices. 
 
 ```{r ds_choices}
 
@@ -1011,7 +1013,7 @@ data %>% select(num_range("Q3_", 1:7))                               %>%
         theme(legend.position = "none") 
 ```
 
-### Data sharing segmented by career stage
+### Data sharing by career stage
 
 ```{r sharing_data_career}
 
@@ -1103,7 +1105,7 @@ data %>% select(num_range("Q4_",1:26), career = "Q20")                       %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-### Software used segemented by career percent of software use
+### Software used by career percent of software use
 
 
 ```{r sw_used_career_per1}
@@ -1189,12 +1191,12 @@ important_software %>% select(starts_with("Q5"))             %>%
                        theme_bw() +
                        theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
                        geom_text(aes(x = software, label = n), vjust = -0.5, size = 2) +
-                       ylab("Number") + xlab("Most important software") +
+                       ylab("Numbers") + xlab("Most important software") +
                       theme(axis.text.x = element_text(size = 8))  
 
 ```
 
-### Frequency of software used by career stage
+### Software used by career stage
 
 ```{r important_sw_bar_career}
 
@@ -1215,12 +1217,13 @@ bind_cols(data["Q20"], important_software)                        %>%
                        theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
                        geom_text(aes(x = software, label = n), position = position_stack(vjust = 0.5), 
                                  stat = "count", size = 2) +
-                       ylab("Number") + xlab("Most important software") +
+                       ylab("Numbers") + xlab("Most important software") +
                        scale_fill_brewer(palette = "Set1", name = "Career stage") +
                        theme(axis.text.x = element_text(size = 8))  
 
 ```
-### Frequency of software used by career stage
+
+### Software used by % career stage
 
 ```{r important_sw_bar_career_per}
 
@@ -1302,7 +1305,7 @@ listOther("Q5")
 
 Do you use open source software?
 
-### Use of open source frequency
+### OS responses
 
 ```{r use_os}
 
@@ -1318,7 +1321,7 @@ data %>% select(Q6)       %>%
 
 ```
 
-### Use of open source frequency segmented by career
+### OS segmented by career
 
 ```{r use_os_career}
 
@@ -1331,7 +1334,7 @@ data %>% select(Q6, career = "Q20")       %>%
          geom_bar(colour = "black") + 
          theme_bw() +
          xlab("Use of Open Source") + 
-         ylab("Number") +
+         ylab("Numbers") +
          geom_text(aes(x = Q6, label = n), position = position_stack(vjust = 0.5), 
                                  stat = "count", size = 3) +
          scale_fill_brewer(palette = "Set1", name = "Career stage") 
@@ -1356,8 +1359,36 @@ data %>% select(starts_with("Q6_a"))        %>%
          theme_bw() +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         xlab("Reasons for using Open Source") + ylab("Number")
+         xlab("Reasons for using Open Source") + ylab("Numbers")
 ```
+
+### Counting combined choices
+
+For each multiple choice replace spaces by "-"s and collapse all the non-empty
+choices and join them with an "_". So, if an individual only chose A then that
+would only contribute an A, if an individual chose A, B and D then that would
+contribute an A_B_D then we count all the combined choices. Only counting values
+that have a count greater than 1.
+
+```{r ds_choices}
+
+data %>% select(id = URN, starts_with("Q6_a"))                         %>%
+         pivot_longer(cols = starts_with("Q6_a"),
+                      names_to = NULL,
+                      values_to = "ds")                                %>%
+         filter(ds != 0)                                               %>%  
+         group_by(id)                                                  %>% 
+         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
+         distinct(id, choices)                                         %>% 
+         ungroup()                                                     %>% 
+         select(-id)                                                   %>% 
+         group_by(choices)                                             %>% 
+         tally()                                                       %>% 
+         filter(n > 1)                                                %>% 
+         arrange(desc(n))                                              %>% 
+         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Number"))
+```
+
 
 ## Q6b Reasons for not using OS
 
@@ -1377,7 +1408,33 @@ data %>% select(starts_with("Q6_b"))        %>%
          theme_bw() +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         xlab("Reasons for not using Open Source") + ylab("Number")
+         xlab("Reasons for not using Open Source") + ylab("Numbers")
+```
+
+### Counting combined choices
+
+For each multiple choice replace spaces by "-"s and collapse all the non-empty
+choices and join them with an "_". So, if an individual only chose A then that
+would only contribute an A, if an individual chose A, B and D then that would
+contribute an A_B_D then we count all the combined choices. 
+
+```{r ds_choices}
+
+data %>% select(id = URN, starts_with("Q6_b"))                         %>%
+         pivot_longer(cols = starts_with("Q6_b"),
+                      names_to = NULL,
+                      values_to = "ds")                                %>%
+         filter(ds != 0)                                               %>%  
+         group_by(id)                                                  %>% 
+         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
+         distinct(id, choices)                                         %>% 
+         ungroup()                                                     %>% 
+         select(-id)                                                   %>% 
+         group_by(choices)                                             %>% 
+         tally()                                                       %>% 
+         #filter(n > 1)                                                %>% 
+         arrange(desc(n))                                              %>% 
+         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Number"))
 ```
 
 ## Q7 How software is being maintained
