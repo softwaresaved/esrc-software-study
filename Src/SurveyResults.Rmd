@@ -23,7 +23,6 @@ library(RColorBrewer, quietly = TRUE)
 library(leaflet, quietly = TRUE)
 library(stringr, quietly = TRUE)
 library(kableExtra, quietly = TRUE)
-library(ggrepel)
 library(webshot, quietly = TRUE) # Need to do (first time): webshot::install_phantomjs()
 
 ```
@@ -1047,12 +1046,8 @@ data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
         theme_bw() +
         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
         xlab("Data sharing habits") + ylab("Number") +
-        # geom_text_repel(aes(x = DataSharing, label = scales::percent(per, accuracy = 1)),
-        #                 position = position_jitterdodge(dodge.width = 0.8, 
-        #                                                 jitter.width = 0, jitter.height = 0.25), 
-        #                 colour = "black", size = 2) +
-        geom_text_repel(aes(x = DataSharing, label = scales::percent(per, accuracy = 1)),
-                        direction = "y", box.padding = 0.25,
+        scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+        geom_text(aes(x = DataSharing, label = scales::percent(per, accuracy = 1)), vjust = -0.5,
                         position = position_dodge(width = 0.9), colour = "black", size = 2) +
         scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
