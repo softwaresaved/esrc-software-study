@@ -729,7 +729,7 @@ data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>
 data %>% select(num_range("Q2_", 1:2), institution = CleanLocs)              %>%
          pivot_longer(cols = num_range("Q2_", 1:2), 
                       names_to = NULL, values_to = "datause")                %>%
-         filter(datause != 0)                                                %>% 
+         filter(datause != 0 & !is.na(institution))                          %>% 
          group_by(institution)                                               %>% 
          mutate(N = n())                                                     %>% 
          group_by(datause, institution)                                      %>% 
@@ -851,7 +851,7 @@ data %>% select(num_range("Q2_b_",1:6), career = Q20)      %>%
          ggplot(aes(x = ds, fill = career)) + 
          geom_bar(colour = "black") +
          theme_bw() + ylab("Numbers") +
-         geom_text(aes(label = ..count..), position = position_stack(0.5), stat = "count", vjust = -0.35, size = 2)  +
+         geom_text(aes(label = ..count..), position = position_stack(0.5), stat = "count", size = 2)  +
          xlab("Data sources") + 
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
@@ -896,7 +896,7 @@ data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
          ggplot(aes(x = ds, fill = gender)) + 
          geom_bar(colour = "black") +
          theme_bw() + ylab("Numbers") +
-         geom_text(aes(label = ..count..), position = position_stack(0.5), stat = "count", vjust = -0.35, size = 2)  +
+         geom_text(aes(label = ..count..), position = position_stack(0.5), stat = "count", size = 2)  +
          xlab("Data sources") + 
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
@@ -944,7 +944,8 @@ data %>% select(num_range("Q2_b_",1:6), institutions = CleanLocs)     %>%
          ggplot(aes(x = institutions, fill = ds)) + 
          geom_bar(colour = "black") + theme_bw() +
          ylab("Numbers") + xlab("Institutions") + labs(fill = "Data sources") +
-         theme(axis.text.x = element_text(size = 8, angle = -90, vjust = 0.15, hjust=0)) +
+         theme(axis.text.x = element_text(size = 8, angle = -90, vjust = 0.15, hjust=0),
+               legend.text=element_text(size = 6)) +
          geom_text(aes(label = ..count..), position = position_stack(),  stat = "count", vjust = -0.35, size = 2)
 
 ```
