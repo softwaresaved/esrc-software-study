@@ -1445,7 +1445,7 @@ data %>% select(id = URN, starts_with("Q6_b"))                         %>%
 
 How is the software you use currently being supported and maintained? 
 
-### How software is maintained - frequency
+### How software is maintained
 ```{r sw_maintenace}
 
 data %>% select(num_range("Q7_", 1:7))              %>%
@@ -1514,6 +1514,8 @@ listOther("Q8")
 
 Do you develop or extend software yourself? (As described above, software includes scripts, applications, tools, codes and formulae in spreadsheets)
 
+### Responses
+
 ```{r develop_sw}
 data %>% select("Q9")    %>%
          group_by(Q9)    %>% 
@@ -1521,8 +1523,8 @@ data %>% select("Q9")    %>%
          ggplot(aes(x = reorder(Q9, -n))) + 
          geom_bar(fill = "light blue", colour = "black") +
          theme_bw() +
-         xlab("Do you develop software?") + ylab("Number") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5)
+         xlab("Do you develop software?") + ylab("Numbers") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3)
 ```
 
 ### How you extend software
@@ -1548,7 +1550,7 @@ If you write or extend software (including scripts, applications, tools, codes a
 data %>% select(num_range("Q10_", 1:7))                 %>%
          select(num_range("Q10_", 1:7))                 %>%
          pivot_longer(cols = num_range("Q10_", 1:7),
-                      names_to = "questions",
+                      names_to = NULL,
                       values_to = "swuse")              %>%
          filter(swuse != 0)                             %>%
          group_by(swuse)                                %>%
@@ -1557,7 +1559,7 @@ data %>% select(num_range("Q10_", 1:7))                 %>%
          geom_bar(fill = "light blue", colour = "black") +
          theme_bw() +
          xlab("Who do you share your software with?") + ylab("Number") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
 
@@ -1614,7 +1616,7 @@ data %>% select(num_range("Q11_", 1:12))                 %>%
          ggplot(aes(x = reorder(skills, -n))) + 
          geom_bar(fill = "light blue", colour = "black") +
          theme_bw() +
-         xlab("Where skills are acquired") + ylab("Number") +
+         xlab("Where skills are acquired") + ylab("Numbers") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
@@ -1632,7 +1634,7 @@ data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
          ggplot(aes(x = reorder(skills, -n), fill = career)) + 
          geom_bar(colour = "black") +
          theme_bw() +
-         xlab("Where skills are acquired") + ylab("Number") +
+         xlab("Where skills are acquired") + ylab("Numbers") +
          geom_text(aes(label = ..count..), position = position_stack(vjust = 0.5), 
                    stat = "count", size = 2) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
@@ -1707,7 +1709,7 @@ listOther("Q11_b_i")
 
 Do you feel in your field that the development and maintenance of research software are sufficiently recognised or rewarded?
 
-### Frequency of recognition responses
+### Recognition responses
 
 ```{r recognition}
 
@@ -1718,7 +1720,7 @@ data %>%  select(rew = "Q12") %>%
           geom_bar(fill = "light blue", colour = "black") +
           theme_bw() +
           xlab("Development/Maintenance of rsearch software rewarded/recognised") +
-          ylab("Number") +
+          ylab("Numbers") +
           geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 2) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
@@ -1735,7 +1737,7 @@ data %>%  select(rew = Q12, career =Q20) %>%
           geom_bar(colour = "black") +
           theme_bw() +
           xlab("Development/Maintenance of rsearch software rewarded/recognised") +
-          ylab("Number") +
+          ylab("Numbers") +
           geom_text(aes(label = ..count..), position = position_stack(vjust = 0.5), 
                    stat = "count", size = 2) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
@@ -1756,13 +1758,14 @@ data %>%  select(rew = Q12, career =Q20) %>%
           mutate(per = n()/N)            %>% 
           distinct(rew, career, per)     %>% 
           ggplot(aes(x = rew, y = per, fill = career)) + 
-          geom_col(position = "dodge", colour = "black") +
+          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
           theme_bw() +
           xlab("Development/Maintenance of rsearch software rewarded/recognised") +
           ylab("Percentage") +
           scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-          geom_text(aes(label = scales::percent(per, accuracy = 1)), position = position_dodge(width = 0.9), vjust = -0.5,
-                   size = 2) +
+          geom_text(aes(label = scales::percent(per, accuracy = 1)), 
+                    position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
+                    size = 2) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
           scale_fill_brewer(palette = "Set1", name = "Career stage")
 
