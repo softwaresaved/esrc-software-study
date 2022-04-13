@@ -642,7 +642,7 @@ data %>% select(num_range("Q2_", 1:2)) %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-### Use of cata by career stage
+### Use of data by career stage
 
 ```{r use_of_data_career}
 data %>% select(num_range("Q2_", 1:2), career = Q20) %>%
@@ -654,7 +654,7 @@ data %>% select(num_range("Q2_", 1:2), career = Q20) %>%
          theme_bw() +
          xlab("Use of data") + ylab("Number") +
          geom_text(aes(x = datause, label = ..count..),
-                position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
+                position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 2) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
@@ -682,7 +682,7 @@ data %>% select(num_range("Q2_", 1:2), career = Q20)                          %>
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-### Use of cata by gender
+### Use of data by gender
 
 ```{r use_of_data_gender_num}
 data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>%
@@ -699,7 +699,7 @@ data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
-### Use of cata by % gender
+### Use of data by % gender
 
 ```{r use_of_data_gender_per}
 data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>%
@@ -715,7 +715,7 @@ data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>
          theme_bw() + scale_y_continuous(labels = scales::percent_format(accuarcy = 1)) +
          xlab("Use of data") + ylab("Percentage") +
          geom_text(aes(x = datause, label = scales::percent(per, accuracy = 1 )), vjust = -0.5,
-                position = position_dodge(width = 0.9), colour = "black", size = 3) +
+                position = position_dodge(width = 0.9), colour = "black", size = 2) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
