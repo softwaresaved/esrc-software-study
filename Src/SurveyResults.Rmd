@@ -625,7 +625,7 @@ data["Q23"] <- gsub(2, "No", data[["Q23"]])
 
 Do you create or re-use data to undertake your research (Please check all that apply)
 
-### Frequency of results
+### Use of data results
 
 ```{r use_of_data}
 data %>% select(num_range("Q2_", 1:2)) %>%
@@ -636,11 +636,11 @@ data %>% select(num_range("Q2_", 1:2)) %>%
          geom_bar(fill = "light blue", colour = "black") +
          theme_bw() +
          xlab("Use of data") + ylab("Number") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.25, size = 3) +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.35, size = 3) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-### Segemented by career stage
+### Use of cata by career stage
 
 ```{r use_of_data_career}
 data %>% select(num_range("Q2_", 1:2), career = Q20) %>%
@@ -656,7 +656,7 @@ data %>% select(num_range("Q2_", 1:2), career = Q20) %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-### As percentage of career stage population
+### Use of data as % of career stage population
 
 Percentages are given as the fraction from the total for that particular career stage.
 
@@ -678,6 +678,80 @@ data %>% select(num_range("Q2_", 1:2), career = Q20)                          %>
          geom_text(aes(x = datause, label = scales::percent(per, accuracy = 1)), 
                    position = position_dodge(width = 0.9), vjust = -0.5, size = 2) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
+### Use of cata by gender
+
+```{r use_of_data_gender}
+data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>%
+         pivot_longer(cols = num_range("Q2_", 1:2), 
+                      names_to = NULL, values_to = "datause")                 %>%
+         filter(datause != 0)                                                 %>%
+         group_by(datause, gender)                                            %>% 
+         ggplot(aes(x = datause, fill = gender)) +
+         geom_bar(colour = "black") +
+         theme_bw() +
+         xlab("Use of data") + ylab("Number") +
+         geom_text(aes(x = datause, label = ..count..),
+                position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+### Use of cata by % gender
+
+```{r use_of_data_gender}
+data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>%
+         pivot_longer(cols = num_range("Q2_", 1:2), 
+                      names_to = NULL, values_to = "datause")                 %>%
+         filter(datause != 0)                                                 %>%
+         group_by(gender)                                                     %>% 
+         mutate(N = n())                                                      %>% 
+         group_by(datause, gender)                                            %>%
+         mutate(per = n()/N)                                                  %>% 
+         ggplot(aes(x = datause, y = per, fill = gender)) +
+         geom_col(position = "dodge", colour = "black") +
+         theme_bw() + scale_y_continuous(labels = scales::percent_format(accuarcy = 1)) +
+         xlab("Use of data") + ylab("Percentage") +
+         geom_text(aes(x = datause, label = scales::percent(per, accuracy = 1 )), vjust = -0.5,
+                position = position_dodge(width = 0.9), colour = "black", size = 3) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+### Datause by institution
+
+```{r datause_institution}
+
+data %>% select(num_range("Q2_", 1:2), institution = CleanLocs)              %>%
+         pivot_longer(cols = num_range("Q2_", 1:2), 
+                      names_to = NULL, values_to = "datause")                %>%
+         filter(datause != 0)                                                %>% 
+         group_by(institution)                                               %>% 
+         mutate(N = n())                                                     %>% 
+         group_by(datause, institution)                                      %>% 
+         mutate(per = n()/N)                                                 %>% 
+         filter(per > 0)                                                     %>% 
+         ggplot(aes(x = datause, y = institution, size = per)) + 
+         theme_bw() +
+         geom_point(alpha = 0.25) + xlab("Data use") + ylab("Instituion") +
+         scale_size_continuous(labels = scales::percent) +
+         theme(axis.text.y = element_text(size = 8)) 
+```
+
+```{r datause_institution_bar}
+
+data %>% select(num_range("Q2_", 1:2), institution = CleanLocs)              %>%
+         pivot_longer(cols = num_range("Q2_", 1:2), 
+                      names_to = NULL, values_to = "datause")                %>%
+         filter(datause != 0)                                                %>% 
+         group_by(datause, institution)                                      %>% 
+         filter(n() > 0)                                                     %>% 
+         ggplot(aes(x = institution, fill = datause)) + 
+         geom_bar(colour = "black") +
+         theme_bw() +
+         ylab("Numbers") + xlab("Instituion") + labs(fill = "Data use") +
+         theme(axis.text.x = element_text(size = 8, angle = -90, vjust = 0.15, hjust=0)) +
+         geom_text(aes(label = ..count..), position = position_stack(),  stat = "count", vjust = -0.35, size = 2)
+
 ```
 
 
