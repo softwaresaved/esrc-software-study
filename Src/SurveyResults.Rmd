@@ -766,15 +766,16 @@ contrbute an A_B_D then we count all the combined choices.
 
 ```{r datause_choices}
 
-data %>% select(id = URN, num_range("Q2_",1:2))                      %>%
+data %>% select(id = URN, num_range("Q2_",1:2))                       %>%
          pivot_longer(cols = starts_with("Q2_"),
                       names_to = NULL,
                       values_to = "ds")                                %>%
          filter(ds != 0)                                               %>%  
          group_by(id)                                                  %>% 
          mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
+         distinct(id, choices)                                         %>% 
          ungroup()                                                     %>% 
-         select(-id, -ds)                                              %>% 
+         select(-id)                                                   %>% 
          group_by(choices)                                             %>% 
          tally()                                                       %>% 
          arrange(desc(n))                                              %>% 
@@ -948,8 +949,7 @@ data %>% select(num_range("Q2_b_",1:6), institutions = CleanLocs)     %>%
 For each multiple choice replace spaces by "-"s and collapse all the non-empty
 choices and join them with an "_". So, if an individual only chose A then that
 would only contribute an A, if an individual chose A, B and D then that would
-contrbute an A_B_D then we count all the combined choices. Here we only show
-where the count > 5.
+contrbute an A_B_D then we count all the combined choices. 
 
 ```{r ds_choices}
 
@@ -960,11 +960,12 @@ data %>% select(id = URN, num_range("Q2_b_",1:6))                      %>%
          filter(ds != 0)                                               %>%  
          group_by(id)                                                  %>% 
          mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
+         distinct(id, choices)                                         %>% 
          ungroup()                                                     %>% 
-         select(-id, -ds)                                              %>% 
+         select(-id)                                                   %>% 
          group_by(choices)                                             %>% 
          tally()                                                       %>% 
-         filter(n > 5)                                                 %>% 
+        # filter(n > 5)                                                %>% 
          arrange(desc(n))                                              %>% 
          kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Number"))
 ```
