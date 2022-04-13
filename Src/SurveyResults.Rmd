@@ -675,12 +675,12 @@ data %>% select(num_range("Q2_", 1:2), career = Q20)                          %>
          mutate(per = n()/N)                                                  %>%
          distinct(datause, career, per)                                       %>% 
          ggplot(aes(x = datause, y = per, fill = career)) +
-         geom_col(colour = "black", position = "dodge") +
+         geom_col(colour = "black", position = position_dodge2(width = 0.9, preserve = "single")) +
          theme_bw() +
          scale_y_continuous(labels = scales::percent) +
          xlab("Use of data") + ylab("Percent") +
          geom_text(aes(x = datause, label = scales::percent(per, accuracy = 1)), 
-                   position = position_dodge(width = 0.9), vjust = -0.5, size = 2) +
+                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 2) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
@@ -712,12 +712,13 @@ data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>
          mutate(N = n())                                                      %>% 
          group_by(datause, gender)                                            %>%
          mutate(per = n()/N)                                                  %>% 
+         distinct(datause, gender, per)                                       %>% 
          ggplot(aes(x = datause, y = per, fill = gender)) +
-         geom_col(position = "dodge", colour = "black") +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() + scale_y_continuous(labels = scales::percent_format(accuarcy = 1)) +
          xlab("Use of data") + ylab("Percentage") +
          geom_text(aes(x = datause, label = scales::percent(per, accuracy = 1 )), vjust = -0.5,
-                position = position_dodge(width = 0.9), colour = "black", size = 2) +
+                position = position_dodge2(width = 0.9, preserve = "single"), colour = "black", size = 2) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
@@ -869,11 +870,13 @@ data %>% select(num_range("Q2_b_",1:6), career = Q20)      %>%
          mutate(N = n())                                   %>% 
          group_by(ds, career)                              %>% 
          mutate(per = n()/ N)                              %>% 
+         distinct(ds, career, per)                         %>% 
          ggplot(aes(x = ds, y = per, fill = career)) + 
-         geom_col(position = "dodge", colour = "black") +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() + ylab("Percent") +
          scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-         geom_text(aes(label = scales::percent(per, accuracy = 1)), position = position_dodge(width = 0.9), vjust = -0.35, size = 2)  +
+         geom_text(aes(label = scales::percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.35, size = 2)  +
          xlab("Data sources") + 
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
@@ -912,11 +915,12 @@ data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
          mutate(N = n())                                   %>% 
          group_by(ds, gender)                              %>% 
          mutate(per = n()/N)                               %>% 
+         distinct(ds, gender, per)                         %>% 
          ggplot(aes(x = ds, y = per, fill = gender)) + 
-         geom_col(position = "dodge", colour = "black") +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() + ylab("Percent") +
          scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-         geom_text(aes(label = scales::percent(per, accuracy = 1)), position = position_dodge(width = 0.9), vjust = -0.35, size = 2)  +
+         geom_text(aes(label = scales::percent(per, accuracy = 1)), position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.35, size = 2)  +
          xlab("Data sources") + 
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
@@ -1044,13 +1048,13 @@ data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
         mutate(per = n()/N)                                                %>% 
         distinct(career, DataSharing, per)                                 %>% 
         ggplot(aes(x = DataSharing, y= per,fill = career)) +
-        geom_col(position = "dodge", colour = "black") + 
+        geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
         theme_bw() +
         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
         xlab("Data sharing habits") + ylab("Number") +
         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
         geom_text(aes(x = DataSharing, label = scales::percent(per, accuracy = 1)), vjust = -0.5,
-                        position = position_dodge(width = 0.9), colour = "black", size = 2) +
+                        position = position_dodge2(width = 0.9, preserve = "single"), colour = "black", size = 2) +
         scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
@@ -1146,13 +1150,11 @@ data %>% select(num_range("Q4_",1:26), career = "Q20")                       %>%
          mutate(per = n()/N)                                                 %>% 
          distinct(software, career, per)                                     %>% 
          ggplot(aes(x = software, y = per, fill = career)) +
-         geom_col(position = "dodge", colour = "black") +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() +
          scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
          theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
          ylab("Percentage") + xlab("Software used") +
-         # geom_text(aes(x = software, label = scales::percent(per, accuracy = 1)),
-         #        position = position_dodge(width = 0.9), colour = "black", size = 2) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
@@ -1278,12 +1280,12 @@ bind_cols(data["Q20"], important_software)                        %>%
                        mutate(per = n/N)                          %>% 
                        distinct(career, software, per, N)         %>% 
                        ggplot(aes(x = reorder(software, -N), y = per, fill = career)) +
-                       geom_col(position = "dodge", colour = "black") + 
+                       geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
                        theme_bw() +
                        scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
                        theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
                        geom_text(aes(x = software, label = scales::percent(per, accuracy = 1)), 
-                                 position = position_dodge(width = 0.9), vjust = -0.5,
+                                 position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
                                  size = 2) +
                        ylab("percentage") + xlab("Most important software") +
                        scale_fill_brewer(palette = "Set1", name = "Career stage") +
@@ -1841,9 +1843,9 @@ data %>% select(num_range("Q13_1_",1:5), career = Q20)     %>%
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
          distinct(understanding, career, per)                                           %>% 
          ggplot(aes(x = understanding, y = per, fill = career)) + 
-         geom_col(position = "dodge", colour = "black") +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          geom_text(aes(y = per, label = scales::percent(per, accuracy = 1)), 
-                       position = position_dodge(width = 0.9), size = 2, vjust = -0.5) +
+                       position = position_dodge2(width = 0.9, preserve = "single"), size = 2, vjust = -0.5) +
          scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
          theme_bw() + ylab("Percent") +
          xlab("Aware of how s/w I use is funded, managed and licensed") +
@@ -1905,9 +1907,9 @@ data %>% select(num_range("Q13_2_",1:5), career = Q20)     %>%
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
          distinct(understanding, career, per)                                           %>% 
          ggplot(aes(x = understanding, y = per, fill = career)) + 
-         geom_col(position = "dodge", colour = "black") +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          geom_text(aes(y = per, label = scales::percent(per, accuracy = 1)), 
-                       position = position_dodge(width = 0.9), size = 2, vjust = -0.5) +
+                       position = position_dodge2(width = 0.9, preserve = "single"), size = 2, vjust = -0.5) +
          scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
          theme_bw() + ylab("Percent") +
          xlab("Aware of how institution/funder's policies on how s/w is funded, managed and licensed") +
@@ -1969,14 +1971,15 @@ data %>% select(num_range("Q13_3_",1:5), career = Q20)     %>%
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
          distinct(understanding, career, per)                                           %>% 
          ggplot(aes(x = understanding, y = per, fill = career)) + 
-         geom_col(position = "dodge", colour = "black") +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          geom_text(aes(y = per, label = scales::percent(per, accuracy = 1)), 
-                       position = position_dodge(width = 0.9), size = 2, vjust = -0.5) +
+                       position = position_dodge2(width = 0.9, preserve = "single"), size = 2, vjust = -0.5) +
          scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
          theme_bw() + ylab("Percent") +
          xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
+
 ### Q13d Insufficient incentive to learn how software is funded, managed and licensed
 
 There is insufficient incentive for me to learn how my software is funded, managed and licensed
@@ -2032,9 +2035,9 @@ data %>% select(num_range("Q13_4_",1:5), career = Q20)     %>%
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
          distinct(understanding, career, per)                                           %>% 
          ggplot(aes(x = understanding, y = per, fill = career)) + 
-         geom_col(position = "dodge", colour = "black") +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          geom_text(aes(y = per, label = scales::percent(per, accuracy = 1)), 
-                       position = position_dodge(width = 0.9), size = 2, vjust = -0.5) +
+                       position = position_dodge2(width = 0.9, preserve = "single"), size = 2, vjust = -0.5) +
          scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
          theme_bw() + ylab("Percent") +
          xlab("Insufficient incentive for me to learn how my s/w is funded, managed and licensed") +
@@ -2417,9 +2420,9 @@ data %>%  select(num_range("Q19_", 1:22), career = "Q20") %>%
           mutate(per = scales::percent(n/N, accuracy = 0.1))      %>%
           distinct(disciplines, career, per, y)                   %>%
           ggplot(aes(x = disciplines, y = y, fill = career)) +
-          geom_col(position = "dodge", colour = "black") +
+          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
           geom_text(aes(x = disciplines, y = y, label = scales::percent(y, accuracy = 1)), 
-                        position = position_dodge(width = 0.9), vjust = -0.5,
+                        position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
                         size = 2) +
           theme_bw() + scale_y_continuous(labels = scales::percent) +
           xlab("Discipline") + ylab("Percentage") + labs(fill = "Career stage") +
@@ -2589,10 +2592,10 @@ data %>% select(gender = Q21, career = Q20)                     %>%
          mutate(per = n()/N)                                    %>% 
          distinct(gender, career, per)                          %>% 
          ggplot(aes(x = gender, y = per, fill = career)) +
-         geom_col(position = "dodge", colour = "black") +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() + scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
          geom_text(aes(label = scales::percent(per, accuracy = 1)), 
-                   position = position_dodge(width = 0.9), size = 2, vjust = -0.5) +
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 2, vjust = -0.5) +
          xlab("Gender") + ylab("Number") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
@@ -2736,13 +2739,14 @@ data %>% select(dis = Q23, career = Q20)    %>%
          mutate(N = n())                    %>% 
          group_by(dis, career)              %>% 
          mutate(per = n()/N)                %>% 
+         distinct(career, dis, per)         %>% 
          ggplot(aes(x = dis, y = per, fill = career)) +
-         geom_col(position = "dodge", colour = "black") +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() +
          scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
          xlab("Disability") + ylab("Percent") +
          geom_text(aes(x = dis, label = scales::percent(per, accuracy = 1)),
-                   position = position_dodge(width = 0.9), colour = "black", size = 2, vjust = -0.5) +
+                   position = position_dodge2(width = 0.9, preserve = "single"), colour = "black", size = 2, vjust = -0.5) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
