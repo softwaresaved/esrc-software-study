@@ -26,6 +26,10 @@ library(kableExtra, quietly = TRUE)
 library(ggrepel)
 library(webshot, quietly = TRUE) # Need to do (first time): webshot::install_phantomjs()
 
+```
+
+```{r functions, include=FALSE}
+
 # Function to list "Other" inputs separated by career stage
 listOther <- function(Quest){
   
@@ -39,7 +43,6 @@ listOther <- function(Quest){
            cat(a$line)
   }
 }
-
 ```
 
 ```{r read_data}
@@ -759,6 +762,24 @@ data %>% select(num_range("Q2_", 1:2), institution = CleanLocs)              %>%
 
 What are your most important data source(s)?
 
+Number of responses by career stage.
+
+```{r important_srcs_resp_career}
+
+data %>% select(Q2_a, career = Q20) %>% 
+         group_by(career)           %>% 
+         mutate(N = n())            %>% 
+         distinct(career, N)        %>% 
+         ggplot(aes(x = career, y = N, fill = career)) +
+         geom_col(colour = "black") +
+         theme_bw() + theme(legend.position = "none") +
+         xlab("Career stage") + ylab("Number of responses") +
+         geom_text(aes(x = career, label = N), vjust = -0.5,  colour = "black", size = 3) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
+With the actual responses:
+
 ```{r important_data, results = 'asis'}
 
 listOther("Q2_a")
@@ -768,6 +789,8 @@ listOther("Q2_a")
 ## Q2b Reusing existing data
 
 If you re-use existing data, where do you find these?
+
+### Reusing existing data responses
 
 ```{r data_sources}
 
@@ -785,6 +808,92 @@ data %>% select(num_range("Q2_b_",1:6))      %>%
          xlab("Data sources") + 
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          theme(legend.position = "none")
+```
+
+### Reusing existing data by career
+
+```{r data_sources_career}
+
+data %>% select(num_range("Q2_b_",1:6), career = Q20)      %>%
+         pivot_longer(cols = starts_with("Q2_b_"),
+                      names_to = NULL,
+                      values_to = "ds")                    %>%
+         filter(ds != 0)                                   %>%
+         group_by(ds, career)                              %>% 
+         mutate(n = n())                                   %>% 
+         ggplot(aes(x = ds, fill = career)) + 
+         geom_bar(colour = "black") +
+         theme_bw() + ylab("Numbers") +
+         geom_text(aes(label = ..count..), position = position_stack(0.5), stat = "count", vjust = -0.35, size = 2)  +
+         xlab("Data sources") + 
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
+### Reusing existing data by % career population
+
+```{r data_sources_career_per}
+
+data %>% select(num_range("Q2_b_",1:6), career = Q20)      %>%
+         pivot_longer(cols = starts_with("Q2_b_"),
+                      names_to = NULL,
+                      values_to = "ds")                    %>%
+         filter(ds != 0)                                   %>%
+         group_by(career)                                  %>% 
+         mutate(N = n())                                   %>% 
+         group_by(ds, career)                              %>% 
+         mutate(per = n()/ N)                              %>% 
+         ggplot(aes(x = ds, y = per, fill = career)) + 
+         geom_col(position = "dodge", colour = "black") +
+         theme_bw() + ylab("Percent") +
+         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+         geom_text(aes(label = scales::percent(per, accuracy = 1)), position = position_dodge(width = 0.9), vjust = -0.35, size = 2)  +
+         xlab("Data sources") + 
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
+### Reusing existing data by gender
+
+```{r data_sources_gender}
+
+data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
+         pivot_longer(cols = starts_with("Q2_b_"),
+                      names_to = NULL,
+                      values_to = "ds")                    %>%
+         filter(ds != 0)                                   %>%
+         group_by(ds, gender)                              %>% 
+         mutate(n = n())                                   %>% 
+         ggplot(aes(x = ds, fill = gender)) + 
+         geom_bar(colour = "black") +
+         theme_bw() + ylab("Numbers") +
+         geom_text(aes(label = ..count..), position = position_stack(0.5), stat = "count", vjust = -0.35, size = 2)  +
+         xlab("Data sources") + 
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+### Reusing existing data by gender %
+
+```{r data_sources_gender_per}
+
+data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
+         pivot_longer(cols = starts_with("Q2_b_"),
+                      names_to = NULL,
+                      values_to = "ds")                    %>%
+         filter(ds != 0)                                   %>%
+         group_by(gender)                                  %>% 
+         mutate(N = n())                                   %>% 
+         group_by(ds, gender)                              %>% 
+         mutate(per = n()/N)                               %>% 
+         ggplot(aes(x = ds, y = per, fill = gender)) + 
+         geom_col(position = "dodge", colour = "black") +
+         theme_bw() + ylab("Percent") +
+         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+         geom_text(aes(label = scales::percent(per, accuracy = 1)), position = position_dodge(width = 0.9), vjust = -0.35, size = 2)  +
+         xlab("Data sources") + 
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
 ### Other data sources
