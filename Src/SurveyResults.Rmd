@@ -2400,7 +2400,7 @@ listOther("Q18")
 Research Discipline: Level one codes from the Primary Research Areas covered by ESRC discipline funding remit. Use the 'Other' option if your discipline is not listed. (Please check all that apply.)
 
 
-### Distribution of the discipline of respondents
+### Discipline of respondents
 
 ```{r research_disc}
 data %>%  select(num_range("Q19_", 1:22))               %>%
@@ -2417,7 +2417,8 @@ data %>%  select(num_range("Q19_", 1:22))               %>%
           geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
-### Distribution of the discipline of respondents with career stage
+
+### Discipline by career stage
 
 ```{r research_disc_careers}
 data %>%  select(num_range("Q19_", 1:22), career = Q20) %>%
@@ -2432,7 +2433,7 @@ data %>%  select(num_range("Q19_", 1:22), career = Q20) %>%
           ggplot(aes(x = reorder(disciplines, -N), fill = career)) +
           geom_bar(colour = "black") +
           theme_bw() +
-          xlab("Discipline") + ylab("Number") +
+          xlab("Discipline") + ylab("Numbers") +
           geom_text(aes(x = disciplines, label = n), position = position_stack(vjust = 0.5), 
                                  stat = "count", size = 2) +
           scale_fill_brewer(palette = "Set1", name = "Career stage") +
@@ -2536,7 +2537,7 @@ data %>% select(Institutions = CleanLocs, num_range("Q19_", 1:22))       %>%
 
 Career stage: Please select the career stage that most accurately describes your role.
 
-### Frequency of responses for career stage
+### Career stage numbers
 
 ```{r career}
 
@@ -2546,8 +2547,24 @@ data %>%  select(career = Q20) %>%
           ggplot(aes(x = reorder(career, -n))) +
           geom_bar(fill = "light blue", colour = "black") +
           theme_bw() +
-          xlab("Career stage") + ylab("Number")  +
+          xlab("Career stage") + ylab("Numbers")  +
           geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3)
+```
+
+### Career stage pie
+
+```{r career_pie}
+
+data %>%  select(career = Q20)     %>%
+          mutate(N = n())          %>% 
+          group_by(career)         %>% 
+          mutate(per =  n()/N)     %>% 
+          distinct(career, per)    %>% 
+          ggplot(aes(x = "", y = per, fill = career)) +
+          geom_bar(stat="identity", width=1, colour = "black") + coord_polar("y", start=0) +
+          theme_void() +
+          geom_text(aes(y = per, label = scales::percent(per, accuracy = 1)), colour = "black", position = position_stack(0.5), size = 2.5) +
+          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
 ## Q21 Gender
