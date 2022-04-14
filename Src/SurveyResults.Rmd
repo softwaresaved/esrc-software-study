@@ -724,6 +724,9 @@ data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>
 
 ### Data use by institution
 
+In order to make the diagram less busy only institutions that have more than 2 
+entries are shown.
+
 ```{r datause_institution}
 
 data %>% select(num_range("Q2_", 1:2), institution = CleanLocs)              %>%
@@ -732,15 +735,19 @@ data %>% select(num_range("Q2_", 1:2), institution = CleanLocs)              %>%
          filter(datause != 0 & !is.na(institution))                          %>% 
          group_by(institution)                                               %>% 
          mutate(N = n())                                                     %>% 
+         filter(N > 2)                                                       %>% 
          group_by(datause, institution)                                      %>% 
          mutate(per = n()/N)                                                 %>% 
          filter(per > 0)                                                     %>% 
          ggplot(aes(x = datause, y = institution, size = per)) + 
          theme_bw() +
          geom_point(alpha = 0.25) + xlab("Data use") + ylab("Institutions") + labs(size = "Percent") +
-         scale_size_continuous(labels = scales::percent) +
+         scale_size_continuous(labels = scales::percent_format(accuracy = 1)) +
          theme(axis.text.y = element_text(size = 6)) 
 ```
+
+As with the previous diagram only institutions that have more than 2 
+entries are shown.
 
 ```{r datause_institution_bar}
 
@@ -748,8 +755,9 @@ data %>% select(num_range("Q2_", 1:2), institution = CleanLocs)              %>%
          pivot_longer(cols = num_range("Q2_", 1:2), 
                       names_to = NULL, values_to = "datause")                %>%
          filter(datause != 0)                                                %>% 
+         group_by(institution)                                               %>% 
+         filter(n() > 2)                                                     %>% 
          group_by(datause, institution)                                      %>% 
-         filter(n() > 0)                                                     %>% 
          ggplot(aes(x = institution, fill = datause)) + 
          geom_bar(colour = "black") +
          theme_bw() +
@@ -2739,10 +2747,10 @@ data %>% select(dis = "Q23") %>%
          geom_bar(fill = "light blue", colour = "black") +
          theme_bw() +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         xlab("Disability") + ylab("Number")  
+         xlab("Disability") + ylab("Numbers")  
 ```
 
-### Disability and career stage
+### Disability by career stage
 
 ```{r dissability_career}
 
@@ -2777,6 +2785,23 @@ data %>% select(dis = Q23, career = Q20)    %>%
          geom_text(aes(x = dis, label = scales::percent(per, accuracy = 1)),
                    position = position_dodge2(width = 0.9, preserve = "single"), colour = "black", size = 2, vjust = -0.5) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
+### Disability by gender
+
+```{r dissability_gender}
+
+data %>% select(dis = Q23, gender = Q21) %>% 
+         group_by(dis)                   %>% 
+         mutate(n = n())                 %>% 
+         group_by(dis, gender)           %>% 
+         ggplot(aes(x = reorder(dis, -n), fill = gender)) +
+         geom_bar(colour = "black") +
+         theme_bw() +
+         xlab("Disability") + ylab("Number") +
+         geom_text(aes(x = dis, label = ..count..),
+                   position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
 ## Q24-Q27 Not relevant
