@@ -5,7 +5,7 @@ date: "`r Sys.Date()`"
 output: 
     word_document:
       toc: true
-      number_sections: false
+      number_sections: true
       toc_depth: 4
 ---
 
@@ -937,7 +937,7 @@ data %>% select(num_range("Q2_b_",1:6), institutions = CleanLocs)     %>%
          pivot_longer(cols = starts_with("Q2_b_"),
                       names_to = NULL,
                       values_to = "ds")                               %>%
-         filter(ds != 0)                                              %>%
+         filter(ds != 0 & !is.na(institutions))                       %>%
          group_by(institutions)                                       %>% 
          filter(n() > 2)                                              %>% 
          group_by(ds, institutions)                                   %>% 
@@ -1036,7 +1036,7 @@ data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
                     position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
         scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
-### Data sharing segmented by percentage responses at a given career stage
+### Data sharing segmented by percentage responses at each career stage
 
 ```{r sharing_data_career_per}
 
@@ -1137,7 +1137,7 @@ data %>% select(num_range("Q4_",1:26), career = "Q20")                       %>%
         theme(axis.text.x = element_text(size = 8))  
 ```
 
-### Software used segmented by career as percentage of career segment population
+### Software used by percentage career stage population
 
 ```{r sw_used_career_per2}
 
@@ -1729,7 +1729,7 @@ data %>%  select(rew = "Q12") %>%
 
 ```
 
-### Frequency of recognition responses segmented by career stage
+### Recognition segmented by career stage
 
 ```{r recognition_careerStage}
 
@@ -1748,7 +1748,7 @@ data %>%  select(rew = Q12, career =Q20) %>%
 
 ```
 
-### Frequency of recognition responses segmented by percentage of career stage population
+### Recognition segmented by career stage percentage of population
 
 The percentages are given as a proportion of the given career stage population.
 
@@ -1793,7 +1793,7 @@ When answering this question, think about the most important piece of software y
 
 I am aware of how the software I use is funded, managed and licensed
 
-#### Distribution of answers
+#### Responses
 
 ```{r aware_sw}
 
@@ -1810,7 +1810,7 @@ data %>% select(num_range("Q13_1_",1:5))            %>%
          xlab("Aware of how s/w I use is funded, managed and licensed")
 ```
 
-#### Distribution of answers with career stages
+#### Responses by career stages
 
 ```{r aware_sw_career}
 
@@ -1828,7 +1828,7 @@ data %>% select(num_range("Q13_1_",1:5), career = Q20)     %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-#### Distribution of answers as % of career stage
+#### Responses as % of career stage
 
 ```{r aware_sw_career_per}
 
@@ -1853,11 +1853,11 @@ data %>% select(num_range("Q13_1_",1:5), career = Q20)     %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-### Q13b Clarity of institution/funder's software funding, managent and licensing
+### Q13b Clarity of software funding, managent and licensing
 
 My institution/funder's policies on how software is funded, managed and licensed are clear to me
 
-#### Distribution of answers
+#### Responses
 
 ```{r aware_policies}
 
@@ -1874,7 +1874,7 @@ data %>% select(num_range("Q13_2_",1:5))            %>%
          xlab("Aware of how institution/funder's policies on how s/w is funded, managed and licensed")
 ```
 
-#### Distribution of answers with career stages
+#### Responses by career stage
 
 ```{r aware_policies_career}
 
@@ -1892,7 +1892,7 @@ data %>% select(num_range("Q13_2_",1:5), career = Q20)     %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-#### Distribution of answers as % of career stage
+#### Responses as % of career stage
 
 ```{r aware_policies_career_per}
 
@@ -1917,11 +1917,11 @@ data %>% select(num_range("Q13_2_",1:5), career = Q20)     %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-### Q13c Insufficient attention paid to software funding, management and licensing 
+### Q13c Insufficient attention paid to s/w funding, management and licensing 
 
 There is insufficient attention paid to software funding, management and licensing by the economic and social sciences research community
 
-#### Distribution of answers
+#### Responses
 
 ```{r insufficient_attention}
 
@@ -1938,7 +1938,7 @@ data %>% select(num_range("Q13_3_",1:5))            %>%
          xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community")
 ```
 
-#### Distribution of answers with career stages
+#### Responses by career stage
 
 ```{r insufficient_attention_career}
 
@@ -1956,7 +1956,7 @@ data %>% select(num_range("Q13_3_",1:5), career = Q20)     %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-#### Distribution of answers as % of career stage
+#### Responses as % of career stage
 
 ```{r insufficient_attention_career_per}
 
@@ -1981,11 +1981,11 @@ data %>% select(num_range("Q13_3_",1:5), career = Q20)     %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-### Q13d Insufficient incentive to learn how software is funded, managed and licensed
+### Q13d Insufficient incentive to learn how s/w is funded, managed and licensed
 
 There is insufficient incentive for me to learn how my software is funded, managed and licensed
 
-#### Distribution of answers
+#### Responses
 
 ```{r insufficient_incentives}
 
@@ -2002,7 +2002,7 @@ data %>% select(num_range("Q13_4_",1:5))            %>%
          xlab("Insufficient incentive for me to learn how my s/w is funded, managed and licensed")
 ```
 
-#### Distribution of answers with career stages
+#### Responses by career stage
 
 ```{r insufficient_incentives_career}
 
@@ -2064,10 +2064,10 @@ data %>%  select(num_range("Q14_", 1:9))         %>%
   geom_bar(fill = "light blue", colour = "black") +
   theme_bw() +
   xlab("Where software is run") + ylab("Number") +
-  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 2) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
-### Distribution of where software is run with career stage
+### Where software is run by career stage
 
 ```{r where_sw_run_career}
 
@@ -2252,6 +2252,7 @@ data %>% select(Institution = CleanLocs) %>%
         kbl(format="pipe", align = c("l","r"),
                 col.names = c("Institution", "Number"))
 ```
+
 ### Map institutions
 
 ```{r mapInstitutions}
