@@ -632,6 +632,7 @@ Do you create or re-use data to undertake your research (Please check all that a
 ### Use of data results
 
 ```{r use_of_data}
+
 data %>% select(num_range("Q2_", 1:2)) %>%
          pivot_longer(cols = num_range("Q2_", 1:2), values_to = "datause")    %>%
          filter(datause != 0)                                                 %>%
@@ -1706,6 +1707,27 @@ data %>% select(num_range("Q11_b_", 1:22)) %>%
          arrange(desc(n))                              %>%
          kbl(format="pipe", align = c("l","r"),
                 col.names = c("NCRM course", "Numbers"))
+```
+
+#### NCRM courses by career stage
+
+```{r ncrm_courses_career}
+
+data %>% select(starts_with("Q11_b_"), career = Q20) %>%
+         pivot_longer(cols = starts_with("Q11_b_"),
+                      names_to = NULL,
+                      values_to = "ncrm")              %>%
+         filter(ncrm != 0)                             %>%
+         group_by(career)                              %>% 
+         mutate(n = n())                               %>%
+         ungroup()                                     %>% 
+         distinct(career, n)                           %>% 
+         ggplot(aes(x = career, y = n, fill = career)) +
+         geom_col(colour = "black") + theme_bw() +
+         scale_fill_brewer(palette = "Set1", name = "Career stage") +
+         theme(legend.position = "none")  + ylab("Number of NCRM courses taken") +
+         xlab("Career stage") + geom_text(aes(x = career, label = n ), vjust = -0.5, size = 3)
+
 ```
 
 ### Other NCRM courses
