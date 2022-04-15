@@ -616,7 +616,7 @@ data["Q23"] <- gsub(2, "No", data[["Q23"]])
 ```
 
 
-```{r child = 'internal/contents.Rmd'}
+```{r internal_document, child = 'internal/contents.Rmd'}
 
 # This file will not be included in the repo until after the report is completed
 
@@ -639,7 +639,7 @@ data %>% select(num_range("Q2_", 1:2)) %>%
          ggplot(aes(x = datause)) +
          geom_bar(fill = "light blue", colour = "black") +
          theme_bw() +
-         xlab("Use of data") + ylab("Number") +
+         xlab("Use of data") + ylab("Numbers") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.35, size = 3) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
@@ -654,7 +654,7 @@ data %>% select(num_range("Q2_", 1:2), career = Q20) %>%
          ggplot(aes(x = datause, fill = career)) +
          geom_bar(colour = "black") +
          theme_bw() +
-         xlab("Use of data") + ylab("Number") +
+         xlab("Use of data") + ylab("Numbers") +
          geom_text(aes(x = datause, label = ..count..),
                 position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 2) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
@@ -695,7 +695,7 @@ data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>
          ggplot(aes(x = datause, fill = gender)) +
          geom_bar(colour = "black") +
          theme_bw() +
-         xlab("Use of data") + ylab("Number") +
+         xlab("Use of data") + ylab("Numbers") +
          geom_text(aes(x = datause, label = ..count..),
                 position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
@@ -789,7 +789,7 @@ data %>% select(id = URN, num_range("Q2_",1:2))                       %>%
          group_by(choices)                                             %>% 
          tally()                                                       %>% 
          arrange(desc(n))                                              %>% 
-         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Number"))
+         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
 
 ## Q2a most important sources of data
@@ -838,7 +838,7 @@ data %>% select(num_range("Q2_b_",1:6))      %>%
          mutate(n = n())                     %>% 
          ggplot(aes(x = reorder(ds, -n), fill = ds)) + 
          geom_bar(fill = "light blue", colour = "black") +
-         theme_bw() + ylab("Number") +
+         theme_bw() + ylab("Numbers") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.35, size = 2)  +
          xlab("Data sources") + 
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
@@ -981,7 +981,7 @@ data %>% select(id = URN, num_range("Q2_b_",1:6))                      %>%
          tally()                                                       %>% 
         # filter(n > 5)                                                %>% 
          arrange(desc(n))                                              %>% 
-         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Number"))
+         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
 
 ### Other data sources
@@ -1021,7 +1021,7 @@ data %>% select(num_range("Q3_", 1:7))                               %>%
         geom_bar(fill = "light blue", colour = "black") + 
         theme_bw() +
         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-        xlab("Data sharing habits") + ylab("Number") +
+        xlab("Data sharing habits") + ylab("Numbers") +
         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
         theme(legend.position = "none") 
 ```
@@ -1039,12 +1039,13 @@ data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
         geom_bar(colour = "black") + 
         theme_bw() +
         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-        xlab("Data sharing habits") + ylab("Number") +
+        xlab("Data sharing habits") + ylab("Numbers") +
         geom_text(aes(x = DataSharing, label = ..count..),
                     position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
         scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
-### Data sharing segmented by percentage responses at each career stage
+
+### Data sharing by percentage at each career stage
 
 ```{r sharing_data_career_per}
 
@@ -1060,7 +1061,7 @@ data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
         theme_bw() +
         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-        xlab("Data sharing habits") + ylab("Number") +
+        xlab("Data sharing habits") + ylab("Numbers") +
         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
         geom_text(aes(x = DataSharing, label = scales::percent(per, accuracy = 1)), vjust = -0.5,
                         position = position_dodge2(width = 0.9, preserve = "single"), colour = "black", size = 2) +
@@ -1093,7 +1094,7 @@ data %>% select(num_range("Q4_",1:26))                              %>%
          geom_bar(colour = "black", fill = "light blue") +
          theme_bw() +
          theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
-         ylab("Number") + xlab("Software used") +
+         ylab("Numbers") + xlab("Software used") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 2) +
          theme(legend.position = "none")
 ```
@@ -1112,7 +1113,7 @@ data %>% select(num_range("Q4_",1:26), career = "Q20")                       %>%
          geom_bar(colour = "black") +
          theme_bw() +
          theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
-         ylab("Number") + xlab("Software used") +
+         ylab("Numbers") + xlab("Software used") +
          geom_text(aes(x = software, label = ..count..),
                 position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 2) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
@@ -1327,7 +1328,7 @@ data %>% select(Q6)       %>%
          geom_bar(fill = "light blue", colour = "black") + 
          theme_bw() +
          xlab("Use of Open Source") + 
-         ylab("Number") +
+         ylab("Numbers") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) 
 
 ```
@@ -1399,7 +1400,7 @@ data %>% select(id = URN, starts_with("Q6_a"))                         %>%
          tally()                                                       %>% 
          filter(n > 1)                                                %>% 
          arrange(desc(n))                                              %>% 
-         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Number"))
+         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
 
 
@@ -1449,7 +1450,7 @@ data %>% select(id = URN, starts_with("Q6_b"))                         %>%
          tally()                                                       %>% 
          #filter(n > 1)                                                %>% 
          arrange(desc(n))                                              %>% 
-         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Number"))
+         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
 
 ## Q7 How software is being maintained
@@ -1470,7 +1471,7 @@ data %>% select(num_range("Q7_", 1:7))              %>%
          geom_bar(fill = "light blue", colour = "black") +
          theme_bw() +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         xlab("How Software is being maintained") + ylab("Number") +
+         xlab("How Software is being maintained") + ylab("Numbers") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 2)
 ```
 
@@ -1498,7 +1499,7 @@ data %>% select(id = URN, num_range("Q7_", 1:7))                       %>%
          tally()                                                       %>% 
          filter(n  > 1)                                                %>% 
          arrange(desc(n))                                              %>% 
-         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Number"))
+         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
 
 ### Other maintenance mechanisms
@@ -1569,7 +1570,7 @@ data %>% select(num_range("Q10_", 1:7))                 %>%
          ggplot(aes(x = reorder(swuse, -n))) + 
          geom_bar(fill = "light blue", colour = "black") +
          theme_bw() +
-         xlab("Who do you share your software with?") + ylab("Number") +
+         xlab("Who do you share your software with?") + ylab("Numbers") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
@@ -1598,7 +1599,7 @@ data %>% select(id = URN, num_range("Q10_", 1:7))                       %>%
          tally()                                                       %>% 
          filter(n  > 1)                                                %>% 
          arrange(desc(n))                                              %>% 
-         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Number"))
+         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
 
 ### Other extending mechanisms
@@ -1676,7 +1677,7 @@ data %>% select(id = URN, num_range("Q11_", 1:12))                     %>%
          tally()                                                       %>% 
          filter(n  > 1)                                                %>% 
          arrange(desc(n))                                              %>% 
-         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Number"))
+         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
 
 ### Other ways of acquiring skills
@@ -1704,7 +1705,7 @@ data %>% select(num_range("Q11_b_", 1:22)) %>%
          tally()                                       %>%
          arrange(desc(n))                              %>%
          kbl(format="pipe", align = c("l","r"),
-                col.names = c("NCRM course", "Number"))
+                col.names = c("NCRM course", "Numbers"))
 ```
 
 ### Other NCRM courses
@@ -1814,7 +1815,7 @@ data %>% select(num_range("Q13_1_",1:5))            %>%
          ggplot(aes(x = understanding)) + 
          geom_bar(colour = "black", fill = "light blue") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         theme_bw() + ylab("Number") +
+         theme_bw() + ylab("Numbers") +
          xlab("Aware of how s/w I use is funded, managed and licensed")
 ```
 
@@ -1831,7 +1832,7 @@ data %>% select(num_range("Q13_1_",1:5), career = Q20)     %>%
          ggplot(aes(x = understanding, fill = career)) + 
          geom_bar(colour = "black") +
          geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 2) +
-         theme_bw() + ylab("Number") +
+         theme_bw() + ylab("Numbers") +
          xlab("Aware of how s/w I use is funded, managed and licensed") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
@@ -1878,7 +1879,7 @@ data %>% select(num_range("Q13_2_",1:5))            %>%
          ggplot(aes(x = understanding)) + 
          geom_bar(colour = "black", fill = "light blue") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         theme_bw() + ylab("Number") +
+         theme_bw() + ylab("Numbers") +
          xlab("Aware of how institution/funder's policies on how s/w is funded, managed and licensed")
 ```
 
@@ -1895,7 +1896,7 @@ data %>% select(num_range("Q13_2_",1:5), career = Q20)     %>%
          ggplot(aes(x = understanding, fill = career)) + 
          geom_bar(colour = "black") +
          geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 2) +
-         theme_bw() + ylab("Number") +
+         theme_bw() + ylab("Numbers") +
          xlab("Aware of how institution/funder's policies on how s/w is funded, managed and licensed") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
@@ -1942,7 +1943,7 @@ data %>% select(num_range("Q13_3_",1:5))            %>%
          ggplot(aes(x = understanding)) + 
          geom_bar(colour = "black", fill = "light blue") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         theme_bw() + ylab("Number") +
+         theme_bw() + ylab("Numbers") +
          xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community")
 ```
 
@@ -1959,7 +1960,7 @@ data %>% select(num_range("Q13_3_",1:5), career = Q20)     %>%
          ggplot(aes(x = understanding, fill = career)) + 
          geom_bar(colour = "black") +
          geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 2) +
-         theme_bw() + ylab("Number") +
+         theme_bw() + ylab("Numbers") +
          xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
@@ -2006,7 +2007,7 @@ data %>% select(num_range("Q13_4_",1:5))            %>%
          ggplot(aes(x = understanding)) + 
          geom_bar(colour = "black", fill = "light blue") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         theme_bw() + ylab("Number") +
+         theme_bw() + ylab("Numbers") +
          xlab("Insufficient incentive for me to learn how my s/w is funded, managed and licensed")
 ```
 
@@ -2023,7 +2024,7 @@ data %>% select(num_range("Q13_4_",1:5), career = Q20)     %>%
          ggplot(aes(x = understanding, fill = career)) + 
          geom_bar(colour = "black") +
          geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 2) +
-         theme_bw() + ylab("Number") +
+         theme_bw() + ylab("Numbers") +
          xlab("Insufficient incentive for me to learn how my s/w is funded, managed and licensed") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
@@ -2071,7 +2072,7 @@ data %>%  select(num_range("Q14_", 1:9))         %>%
   ggplot(aes(x = reorder(runon, -n))) +
   geom_bar(fill = "light blue", colour = "black") +
   theme_bw() +
-  xlab("Where software is run") + ylab("Number") +
+  xlab("Where software is run") + ylab("Numbers") +
   geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 2) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
@@ -2090,7 +2091,7 @@ data %>%  select(num_range("Q14_", 1:9), career = Q20)         %>%
   ggplot(aes(x = reorder(runon, -n), fill  = career)) +
   geom_bar( colour = "black") +
   theme_bw() +
-  xlab("Where software is run") + ylab("Number") +
+  xlab("Where software is run") + ylab("Numbers") +
   geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 2) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
   scale_fill_brewer(palette = "Set1", name = "Career stage")
@@ -2121,7 +2122,7 @@ data %>% select(id = URN, num_range("Q14_", 1:9))                       %>%
          tally()                                                       %>% 
          filter(n  > 1)                                                %>% 
          arrange(desc(n))                                              %>% 
-         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Number"))
+         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
 
 ### Other platforms used
@@ -2154,7 +2155,7 @@ data %>% select(starts_with("Q15_"), -"Q15_a") %>%
          geom_bar(fill = "light blue", colour = "black") +
          theme_bw() +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         ylab("Number") + xlab("Aware of the policy for")  +
+         ylab("Numbers") + xlab("Aware of the policy for")  +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
 ```
@@ -2175,7 +2176,7 @@ data %>% select(starts_with("Q15_"), -"Q15_a", career = Q20) %>%
          geom_bar(colour = "black") +
          theme_bw() +
          geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 3) +
-         ylab("Number") + xlab("Aware of the policy for") +
+         ylab("Numbers") + xlab("Aware of the policy for") +
          scale_fill_brewer(palette = "Set1", name = "Career stage") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
@@ -2233,7 +2234,7 @@ data %>%  select(num_range("Q16_", 1:13))         %>%
   ggplot(aes(x = reorder(barriers, -n))) +
   geom_bar(fill = "light blue", colour = "black") +
   theme_bw() +
-  xlab("Barriers to software use") + ylab("Number") +
+  xlab("Barriers to software use") + ylab("Numbers") +
   geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 2) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
@@ -2253,7 +2254,7 @@ data %>%  select(num_range("Q16_", 1:13), career = Q20) %>%
   ggplot(aes(x = reorder(barriers, -n), fill  = career)) +
   geom_bar(colour = "black") +
   theme_bw() +
-  xlab("Barriers to software use") + ylab("Number") +
+  xlab("Barriers to software use") + ylab("Numbers") +
   geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 2) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
   scale_fill_brewer(palette = "Set1", name = "Career stage")
@@ -2299,7 +2300,7 @@ data %>%  select(num_range("Q16_", 1:13), gender = Q21) %>%
   ggplot(aes(x = reorder(barriers, -n), fill  = gender)) +
   geom_bar(colour = "black") +
   theme_bw() +
-  xlab("Barriers to software use") + ylab("Number") +
+  xlab("Barriers to software use") + ylab("Numbers") +
   geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 2) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
   scale_fill_brewer(palette = "Set2", name = "Gender")
@@ -2331,7 +2332,7 @@ data %>%  select(num_range("Q16_", 1:13), gender = Q21) %>%
 
 ```
 
-### Barriers by dissability
+### Barriers and dissability
 
 ```{r barriers_dis}
 
@@ -2374,7 +2375,7 @@ data %>% select(id = URN, num_range("Q16_", 1:13))                       %>%
          group_by(choices)                                             %>% 
          tally()                                                       %>% 
          arrange(desc(n))                                              %>% 
-         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Number"))
+         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
 
 
@@ -2402,7 +2403,7 @@ data %>% select(Institution = CleanLocs) %>%
          arrange(desc(n))                %>%
         head(n = 12)                     %>% 
         kbl(format="pipe", align = c("l","r"),
-                col.names = c("Institution", "Number"))
+                col.names = c("Institution", "Numbers"))
 ```
 
 ### Map institutions
@@ -2446,7 +2447,7 @@ funding %>% pivot_longer(cols = num_range("Q18_", 1:7),
             filter(n > 2)                                %>%
             ggplot(aes(x = reorder(funding, -n), y = n)) +
             geom_col(colour = "black", fill = "light blue") +
-            theme_bw() + xlab("Funding body") + ylab("Number") +
+            theme_bw() + xlab("Funding body") + ylab("Numbers") +
             geom_text(aes(x = funding, label = n), vjust = -0.5, size = 2) +
             theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
@@ -2469,7 +2470,7 @@ funding %>% mutate(nelements = rowSums(!is.na(.)))                             %
             filter(N > 1)                                                      %>%
             ggplot(aes(x = reorder(funding, -N), y = N)) +
             geom_col(colour = "black", fill = "light blue") +
-            theme_bw() + xlab("Funding body") + ylab("Number") +
+            theme_bw() + xlab("Funding body") + ylab("Numbers") +
             geom_text(aes(x = funding, label = N), vjust = -0.6, size = 2) +
             theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
@@ -2494,7 +2495,7 @@ bind_cols(funding, data["Q20"]) %>% select(num_range("Q18_", 1:7), career = Q20)
             distinct(funding, N, career)                                         %>% 
             ggplot(aes(x = reorder(funding, -N), y = N, fill = career)) +
             geom_col(colour = "black") +
-            theme_bw() + xlab("Funding body") + ylab("Number") +
+            theme_bw() + xlab("Funding body") + ylab("Numbers") +
             geom_text(aes(x = funding, label = N), position = position_stack(vjust = 0.5), size = 2) +
             theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
             scale_fill_brewer(palette = "Set1", name = "Career stage")
@@ -2530,7 +2531,7 @@ data %>%  select(num_range("Q19_", 1:22))               %>%
           ggplot(aes(x = reorder(disciplines, -n))) +
           geom_bar(fill = "light blue", colour = "black") +
           theme_bw() +
-          xlab("Discipline") + ylab("Number") +
+          xlab("Discipline") + ylab("Numbers") +
           geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
@@ -2581,7 +2582,8 @@ data %>%  select(num_range("Q19_", 1:22), career = "Q20") %>%
                         size = 2) +
           theme_bw() + scale_y_continuous(labels = scales::percent) +
           xlab("Discipline") + ylab("Percentage") + labs(fill = "Career stage") +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
 ### Discipline by gender
@@ -2596,13 +2598,62 @@ data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
           ggplot(aes(x = disciplines, fill = gender)) +
           geom_bar(colour = "black") +
           theme_bw() +
-          xlab("Discipline") + ylab("Number") + labs(fill = "Gender") +
+          xlab("Discipline") + ylab("Numbers") + labs(fill = "Gender") +
           geom_text(aes(x = disciplines, label = ..count..),
                    position = position_stack(vjust = 0.5), stat = "count", colour = "white", size = 2) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
 
 
+```
+### Discipline by percentage gender
+
+Percentages are in relation to a given gender.
+
+```{r research_disc_gender_per}
+data %>%  select(num_range("Q19_", 1:22), gender = "Q20") %>%
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = "questions",
+                       values_to = "disciplines")                 %>%
+          filter(disciplines != 0)                                %>%
+          group_by(gender)                                        %>% 
+          mutate(N = n())                                         %>% 
+          group_by(disciplines, gender)                           %>%
+          mutate(n = n())                                         %>%
+          mutate(y = n/N)                                         %>%
+          mutate(per = scales::percent(n/N, accuracy = 0.1))      %>%
+          distinct(disciplines, gender, per, y)                   %>%
+          ggplot(aes(x = disciplines, y = y, fill = gender)) +
+          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+          geom_text(aes(x = disciplines, y = y, label = scales::percent(y, accuracy = 1)), 
+                        position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
+                        size = 2) +
+          theme_bw() + scale_y_continuous(labels = scales::percent) +
+          xlab("Discipline") + ylab("Percentage") + labs(fill = "Gender") +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+### Discipline by dissability
+
+```{r research_disc_dissability}
+data %>%  select(num_range("Q19_", 1:22), disability = Q23) %>%
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = "questions",
+                      values_to = "disciplines")            %>%
+          filter(disciplines != 0)                          %>%
+          group_by(disciplines)                             %>% 
+          mutate(N = n())                                   %>% 
+          group_by(disciplines, disability)                 %>% 
+          mutate( n = n())                                  %>% 
+          ggplot(aes(x = reorder(disciplines, -N), fill = disability)) +
+          geom_bar(colour = "black") +
+          theme_bw() +
+          xlab("Discipline") + ylab("Numbers") +
+          geom_text(aes(x = disciplines, label = n), position = position_stack(vjust = 0.5), 
+                                 stat = "count", size = 2) +
+          scale_fill_brewer(palette = "Set3", name = "Disability") +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
 
 ### Discipline by institution
@@ -2698,7 +2749,7 @@ data %>% select(gender = Q21)                                   %>%
          geom_bar(fill = "light blue", colour = "black") +
          theme_bw() +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         xlab("Gender") + ylab("Number") 
+         xlab("Gender") + ylab("Numbers") 
 ```
 
 ### Gender distribution segmented by career stage
@@ -2712,7 +2763,7 @@ data %>% select(gender = Q21, career = Q20)                     %>%
          theme_bw() +
          geom_text(aes(label = ..count..), stat = "count", 
                    position = position_stack(vjust = 0.5), size = 2, colour = "white") +
-         xlab("Gender") + ylab("Number") + labs(fill = "Career stage") +
+         xlab("Gender") + ylab("Numbers") + labs(fill = "Career stage") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
 
@@ -2745,7 +2796,7 @@ data %>% select(ethnicity = "Q22", career = "Q20", gender = "Q21") %>%
          ggplot(aes(x = career, y = ethnicity, size = n, colour = gender)) +
          geom_point(alpha = 0.25) + geom_jitter() + theme_bw() +
          xlab("Career stage") + ylab("Ethnicity") +
-         labs(colour = "Gender", size = "Number") +
+         labs(colour = "Gender", size = "Numbers") +
          scale_y_discrete(expand = expansion(add = 0.75), 
                           labels = function(x) stringr::str_wrap(x, width = 35)) + 
          theme(axis.text.y = element_text(size = 8)) +
@@ -2767,7 +2818,7 @@ data %>% select(gender = Q21, career = Q20)                     %>%
          theme_bw() + scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
          geom_text(aes(label = scales::percent(per, accuracy = 1)), 
                    position = position_dodge2(width = 0.9, preserve = "single"), size = 2, vjust = -0.5) +
-         xlab("Gender") + ylab("Number") +
+         xlab("Gender") + ylab("Numbers") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
@@ -2787,7 +2838,7 @@ data %>% select(ethnicity = "Q22")    %>%
          scale_y_discrete(expand = expansion(add = 0.75), 
                           labels = function(x) stringr::str_wrap(x, width = 35)) + 
          theme(axis.text.y = element_text(size = 8)) +
-         xlab("Number") + ylab("Ethnicity") +
+         xlab("Numbers") + ylab("Ethnicity") +
          geom_text(aes(y = ethnicity, label = n), hjust = -0.75, size = 2)
   
 ```
@@ -2803,7 +2854,7 @@ data %>% select(ethnicity = "Q22", career = Q20)    %>%
          ggplot(aes(y = reorder(ethnicity, -N), fill = career)) +
          geom_bar(colour = "black") +
          theme_bw() +
-         xlab("Number") + ylab("Ethnicity") +
+         xlab("Numbers") + ylab("Ethnicity") +
          scale_y_discrete(expand = expansion(add = 0.75), 
                           labels = function(x) stringr::str_wrap(x, width = 35)) + 
          theme(axis.text.y = element_text(size = 8)) +
@@ -2824,7 +2875,7 @@ data %>% select(ethnicity = Q22, gender = Q21)    %>%
          ggplot(aes(y = reorder(ethnicity, -N), fill = gender)) +
          geom_bar(colour = "black") +
          theme_bw() +
-         xlab("Number") + ylab("Ethnicity") +
+         xlab("Numbers") + ylab("Ethnicity") +
          scale_y_discrete(expand = expansion(add = 0.75), 
                           labels = function(x) stringr::str_wrap(x, width = 35)) + 
          theme(axis.text.y = element_text(size = 8)) +
@@ -2895,7 +2946,7 @@ data %>% select(dis = Q23, career = Q20) %>%
          ggplot(aes(x = reorder(dis, -n), fill = career)) +
          geom_bar(colour = "black") +
          theme_bw() +
-         xlab("Disability") + ylab("Number") +
+         xlab("Disability") + ylab("Numbers") +
          geom_text(aes(x = dis, label = ..count..),
                    position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
@@ -2932,7 +2983,7 @@ data %>% select(dis = Q23, gender = Q21) %>%
          ggplot(aes(x = reorder(dis, -n), fill = gender)) +
          geom_bar(colour = "black") +
          theme_bw() +
-         xlab("Disability") + ylab("Number") +
+         xlab("Disability") + ylab("Numbers") +
          geom_text(aes(x = dis, label = ..count..),
                    position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
