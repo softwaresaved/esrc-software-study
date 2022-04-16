@@ -7,6 +7,9 @@ output:
       toc: true
       number_sections: true
       toc_depth: 4
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
@@ -25,7 +28,8 @@ library(RColorBrewer, quietly = TRUE)
 library(leaflet, quietly = TRUE)
 library(stringr, quietly = TRUE)
 library(kableExtra, quietly = TRUE)
-library(webshot, quietly = TRUE) # Need to do (first time): webshot::install_phantomjs()
+library(webshot, quietly = TRUE) 
+library(tibble)
 
 ```
 
@@ -35,7 +39,7 @@ library(webshot, quietly = TRUE) # Need to do (first time): webshot::install_pha
 listOther <- function(Quest){
   
   for(careertype in c("Junior", "Early", "Mid", "Senior", "Other","-")){
-    cat("\n\n*  **",careertype," career stage** \n\n", sep = "")
+    cat("\n\n*  **'",careertype,"' career stage**' \n\n", sep = "")
     data %>% select(other = all_of(Quest), career = Q20)        %>%
              filter(!is.na(other) & careertype == career)       %>% 
              mutate(line = paste0("   1. ",other,"\n"))         %>% 
@@ -71,17 +75,29 @@ names(important_software) <- gsub(" ", "_", names(important_software))
 # Count non-NA entries per row
 important_software$count <- rowSums(!is.na(important_software))
 
-# Cleaned up locations (Q17) (used OpenRefine to cluster some of the data)
-cleanlocs <- read_csv("../Data/CleanedLocations.csv", col_types = cols(Q17 = col_character()))
+# Add the identifier to the data frame.
+important_software$URN <- data0$URN
 
 # Read funding "cleaned" funding bodies.
 funding <- read_csv("../Data/Q18-Other-funding.csv", show_col_types = FALSE)
 
+# Attach the funding to the tibble
+funding$URN <- data0$URN
+
+# Cleaned up locations (Q17) (used OpenRefine to cluster some of the data)
+cleanlocs <- read_csv("../Data/CleanedLocations.csv", col_types = cols(Q17 = col_character()))
+
 # Attach the cleaned locations to the data set
 data0$CleanLocs <- cleanlocs[[1]]
 
-```
+# Remove three non-UK contributions
+uids <-  c("839822-839804-89766209", "839822-839804-90413512", "839822-839804-91099977")
 
+data0 <- data0 %>% filter(!(URN %in% uids))
+funding <- funding %>% filter(!(URN %in% uids))
+important_software <- important_software %>% filter(!(URN %in% uids))
+
+```
 
 ```{r remap_data}
 
@@ -615,19 +631,18 @@ data["Q23"] <- gsub(2, "No", data[["Q23"]])
 
 ```
 
-
 ```{r internal_document, child = 'internal/contents.Rmd'}
 
 # This file will not be included in the repo until after the report is completed
 
 ```
 
-
 # Survey results
 
 ## Q2 Use of data
 
-Do you create or re-use data to undertake your research (Please check all that apply)
+Do you create or re-use data to undertake your research (Please check
+all that apply)
 
 ### Use of data results
 
@@ -641,7 +656,7 @@ data %>% select(num_range("Q2_", 1:2)) %>%
          geom_bar(fill = "light blue", colour = "black") +
          theme_bw() +
          xlab("Use of data") + ylab("Numbers") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.35, size = 3) +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
@@ -657,13 +672,14 @@ data %>% select(num_range("Q2_", 1:2), career = Q20) %>%
          theme_bw() +
          xlab("Use of data") + ylab("Numbers") +
          geom_text(aes(x = datause, label = ..count..),
-                position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 2) +
+                position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
 ### Use of data as % of career stage population
 
-Percentages are given as the fraction from the total for that particular career stage.
+Percentages are given as the fraction from the total for that particular
+career stage.
 
 ```{r use_of_data_career_per}
 
@@ -725,8 +741,8 @@ data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>
 
 ### Data use by institution
 
-In order to make the diagram less busy only institutions that have more than 2 
-entries are shown.
+In order to make the diagram less busy only institutions that have more
+than 2 entries are shown.
 
 ```{r datause_institution}
 
@@ -747,7 +763,7 @@ data %>% select(num_range("Q2_", 1:2), institution = CleanLocs)              %>%
          theme(axis.text.y = element_text(size = 6)) 
 ```
 
-As with the previous diagram only institutions that have more than 2 
+As with the previous diagram only institutions that have more than 2
 entries are shown.
 
 ```{r datause_institution_bar}
@@ -764,16 +780,18 @@ data %>% select(num_range("Q2_", 1:2), institution = CleanLocs)              %>%
          theme_bw() +
          ylab("Numbers") + xlab("Institution") + labs(fill = "Data use") +
          theme(axis.text.x = element_text(size = 6, angle = -90, vjust = 0.15, hjust=0)) +
-         geom_text(aes(label = ..count..), position = position_stack(),  stat = "count", vjust = -0.35, size = 2)
+         geom_text(aes(label = ..count..), position = position_stack(),  
+                   stat = "count", vjust = -0.5, size = 2)
 
 ```
 
 ### Counting combined choices
 
-For each multiple choice replace spaces by "-"s and collapse all the non-empty
-choices and join them with an "_". So, if an individual only chose A then that
-would only contribute an A, if an individual chose A, B and D then that would
-contribute an A_B_D then we count all the combined choices. 
+For each multiple choice replace spaces by "-"s and collapse all the
+non-empty choices and join them with an "\_". So, if an individual only
+chose A then that would only contribute an A, if an individual chose A,
+B and D then that would contribute an A_B\_D then we count all the
+combined choices.
 
 ```{r datause_choices}
 
@@ -820,7 +838,6 @@ With the actual responses:
 listOther("Q2_a")
 
 ```
-
 
 ## Q2b Reusing existing data
 
@@ -937,8 +954,8 @@ data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
 
 ### Reusing existing data by Institution
 
-Only showing institutions that have more than 2 total entries to make the diagram
-less busy.
+Only showing institutions that have more than 2 total entries to make
+the diagram less busy.
 
 ```{r dataSources_institutions}
 
@@ -961,10 +978,11 @@ data %>% select(num_range("Q2_b_",1:6), institutions = CleanLocs)     %>%
 
 ### Counting combined choices
 
-For each multiple choice replace spaces by "-"s and collapse all the non-empty
-choices and join them with an "_". So, if an individual only chose A then that
-would only contribute an A, if an individual chose A, B and D then that would
-contribute an A_B_D then we count all the combined choices. 
+For each multiple choice replace spaces by "-"s and collapse all the
+non-empty choices and join them with an "\_". So, if an individual only
+chose A then that would only contribute an A, if an individual chose A,
+B and D then that would contribute an A_B\_D then we count all the
+combined choices.
 
 ```{r ds_choices}
 
@@ -997,7 +1015,8 @@ listOther("Q2_b_i")
 
 ## Q2c Data processes
 
-If you create, collect or generate your own data, could you briefly describe how this is done?
+If you create, collect or generate your own data, could you briefly
+describe how this is done?
 
 ```{r data_processes, results='asis'}
 
@@ -1079,7 +1098,7 @@ listOther("Q3_a")
 
 ## Q4 Software used in research
 
-What software do you use in your research? 
+What software do you use in your research?
 
 ### Software used in research chart
 
@@ -1121,7 +1140,6 @@ data %>% select(num_range("Q4_",1:26), career = "Q20")                       %>%
 ```
 
 ### Software used by career percent of software use
-
 
 ```{r sw_used_career_per1}
 
@@ -1183,11 +1201,11 @@ What software(s) is/are most important to your work?
 
 ### Frequency of most important software
 
-This chart is derived from the processed data input by the interviewees - an
-interviewee may have input more than one choice - each of these is counted as
-an integral choice (could normalise so that if an interviewee put in N choices
-each would contribute 1/N to the count). Only values with more than 2 entries
-are shown.
+This chart is derived from the processed data input by the
+interviewees - an interviewee may have input more than one choice - each
+of these is counted as an integral choice (could normalise so that if an
+interviewee put in N choices each would contribute 1/N to the count).
+Only values with more than 2 entries are shown.
 
 ```{r important_sw_bar}
 
@@ -1269,9 +1287,10 @@ bind_cols(data["Q20"], important_software)                        %>%
 
 ### Most important software as a percentage at a given career stage
 
-The percentages here are taken as a percentage of the responses from each career stage. Only software that has been nominated more than twice are shown. Note that an 
-individual may have suggested more than one piece of software - this has not been
-normalised.
+The percentages here are taken as a percentage of the responses from
+each career stage. Only software that has been nominated more than twice
+are shown. Note that an individual may have suggested more than one
+piece of software - this has not been normalised.
 
 ```{r important_sw_bar_career_per2}
 
@@ -1304,7 +1323,6 @@ bind_cols(data["Q20"], important_software)                        %>%
 
 
 ```
-
 
 ### List of choices
 
@@ -1356,7 +1374,8 @@ data %>% select(Q6, career = "Q20")       %>%
 
 ## Q6a Reason for using open source
 
-If you answered yes to the previous question, what are your main reasons for using open source software?
+If you answered yes to the previous question, what are your main reasons
+for using open source software?
 
 ### Responses
 
@@ -1379,11 +1398,11 @@ data %>% select(starts_with("Q6_a"))        %>%
 
 ### Counting combined choices
 
-For each multiple choice replace spaces by "-"s and collapse all the non-empty
-choices and join them with an "_". So, if an individual only chose A then that
-would only contribute an A, if an individual chose A, B and D then that would
-contribute an A_B_D then we count all the combined choices. Only counting values
-that have a count greater than 1.
+For each multiple choice replace spaces by "-"s and collapse all the
+non-empty choices and join them with an "\_". So, if an individual only
+chose A then that would only contribute an A, if an individual chose A,
+B and D then that would contribute an A_B\_D then we count all the
+combined choices. Only counting values that have a count greater than 1.
 
 ```{r reason4os_choices}
 
@@ -1404,10 +1423,10 @@ data %>% select(id = URN, starts_with("Q6_a"))                         %>%
          kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
 
-
 ## Q6b Reasons for not using OS
 
-If you answered no to the previous question, what are your main reasons for not using open source software? 
+If you answered no to the previous question, what are your main reasons
+for not using open source software?
 
 ### Responses
 
@@ -1430,10 +1449,11 @@ data %>% select(starts_with("Q6_b"))        %>%
 
 ### Counting combined choices
 
-For each multiple choice replace spaces by "-"s and collapse all the non-empty
-choices and join them with an "_". So, if an individual only chose A then that
-would only contribute an A, if an individual chose A, B and D then that would
-contribute an A_B_D then we count all the combined choices. 
+For each multiple choice replace spaces by "-"s and collapse all the
+non-empty choices and join them with an "\_". So, if an individual only
+chose A then that would only contribute an A, if an individual chose A,
+B and D then that would contribute an A_B\_D then we count all the
+combined choices.
 
 ```{r reasons4NotOS_choices}
 
@@ -1456,9 +1476,10 @@ data %>% select(id = URN, starts_with("Q6_b"))                         %>%
 
 ## Q7 How software is being maintained
 
-How is the software you use currently being supported and maintained? 
+How is the software you use currently being supported and maintained?
 
 ### How software is maintained
+
 ```{r sw_maintenace}
 
 data %>% select(num_range("Q7_", 1:7))              %>%
@@ -1478,11 +1499,12 @@ data %>% select(num_range("Q7_", 1:7))              %>%
 
 ### Counting combined choices
 
-For each multiple choice replace spaces by "-"s and collapse all the non-empty
-choices and join them with an "_". So, if an individual only chose A then that
-would only contribute an A, if an individual chose A, B and D then that would
-contribute an A_B_D then we count all the combined choices. Only showing 
-combinations that have a count greater than 1.
+For each multiple choice replace spaces by "-"s and collapse all the
+non-empty choices and join them with an "\_". So, if an individual only
+chose A then that would only contribute an A, if an individual chose A,
+B and D then that would contribute an A_B\_D then we count all the
+combined choices. Only showing combinations that have a count greater
+than 1.
 
 ```{r swMaintained_choices}
 
@@ -1511,10 +1533,13 @@ listOther("Q7_a")
 
 ```
 
-
 ## Q8 Software workflows
 
-Do you use different pieces of software in combination to achieve a specific goal or purpose? For instance, you could use audio software to record interviews, transcription software to transcribe the interviews, and qualitative coding software to bring documents, transcripts and photographs together for further analysis. If yes, please specify.
+Do you use different pieces of software in combination to achieve a
+specific goal or purpose? For instance, you could use audio software to
+record interviews, transcription software to transcribe the interviews,
+and qualitative coding software to bring documents, transcripts and
+photographs together for further analysis. If yes, please specify.
 
 ```{r sw_wf, results = 'asis'}
 
@@ -1522,10 +1547,11 @@ listOther("Q8")
 
 ```
 
-
 ## Q9 Do you develop software
 
-Do you develop or extend software yourself? (As described above, software includes scripts, applications, tools, codes and formulae in spreadsheets)
+Do you develop or extend software yourself? (As described above,
+software includes scripts, applications, tools, codes and formulae in
+spreadsheets)
 
 ### Responses
 
@@ -1542,8 +1568,8 @@ data %>% select("Q9")    %>%
 
 ### How you extend software
 
-If you answered yes to the above, could you briefly describe what software(s) you write or extend?
-
+If you answered yes to the above, could you briefly describe what
+software(s) you write or extend?
 
 ```{r extending_sw, results='asis'}
 
@@ -1551,10 +1577,10 @@ listOther("Q9_a")
 
 ```
 
-
 ## Q10 Extending software
 
-If you write or extend software (including scripts, applications, tools, codes and formulae in spreadsheets), do you (check all that apply)
+If you write or extend software (including scripts, applications, tools,
+codes and formulae in spreadsheets), do you (check all that apply)
 
 ### Bar chart
 
@@ -1578,11 +1604,12 @@ data %>% select(num_range("Q10_", 1:7))                 %>%
 
 ### Counting combined choices
 
-For each multiple choice replace spaces by "-"s and collapse all the non-empty
-choices and join them with an "_". So, if an individual only chose A then that
-would only contribute an A, if an individual chose A, B and D then that would
-contribute an A_B_D then we count all the combined choices. Only showing combinations
-that have a count greater than 1.
+For each multiple choice replace spaces by "-"s and collapse all the
+non-empty choices and join them with an "\_". So, if an individual only
+chose A then that would only contribute an A, if an individual chose A,
+B and D then that would contribute an A_B\_D then we count all the
+combined choices. Only showing combinations that have a count greater
+than 1.
 
 ```{r extendingSW_choices}
 
@@ -1611,10 +1638,10 @@ listOther("Q10_a")
 
 ```
 
-
 ## Q11 Acquiring skills
 
-How did you acquire the skills necessary to utilise software in your research? (Please check all that apply.)
+How did you acquire the skills necessary to utilise software in your
+research? (Please check all that apply.)
 
 ### How skills are acquired
 
@@ -1656,11 +1683,12 @@ data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
 
 ### Counting combined choices
 
-For each multiple choice replace spaces by "-"s and collapse all the non-empty
-choices and join them with an "_". So, if an individual only chose A then that
-would only contribute an A, if an individual chose A, B and D then that would
-contribute an A_B_D then we count all the combined choices. Only showing combinations
-that have a count greater than 1.
+For each multiple choice replace spaces by "-"s and collapse all the
+non-empty choices and join them with an "\_". So, if an individual only
+chose A then that would only contribute an A, if an individual chose A,
+B and D then that would contribute an A_B\_D then we count all the
+combined choices. Only showing combinations that have a count greater
+than 1.
 
 ```{r acquiringSkills_choices}
 
@@ -1689,11 +1717,48 @@ listOther("Q11_a")
 
 ```
 
-
-
 ### Q11b NCRM courses
 
-If you have participated in National Centre for Research Methods training at any point please indicate which training course(s) you have taken here: (Check all that apply)
+If you have participated in National Centre for Research Methods
+training at any point please indicate which training course(s) you have
+taken here: (Check all that apply)
+
+#### NCRM courses overview stats
+
+The table below specifies the courses taken from the list we gave in the
+survey.
+
+```{r ncrm_courses_stats, results='asis'}
+
+data %>% select(id = URN, num_range("Q11_b_", 1:22), career = Q20) %>%
+         pivot_longer(cols = num_range("Q11_b_", 1:22),
+                      names_to = NULL,
+                      values_to = "ncrm")              %>%
+         filter(ncrm != 0)                             %>%
+         group_by(id)                                  %>% 
+         mutate(N = n())                               %>% 
+         ungroup()                                     %>% 
+         distinct(career, N) -> a
+
+data %>% select(id = URN, starts_with("Q11_b_"), career = Q20) %>%
+         pivot_longer(cols = starts_with("Q11_b_"),
+                      names_to = NULL,
+                      values_to = "ncrm")              %>%
+         filter(ncrm != 0)                             %>%
+         group_by(id)                                  %>% 
+         mutate(N = n())                               %>% 
+         ungroup()                                     %>% 
+         distinct(career, N) -> b
+```
+
+Out of the `r nrow(data)` individuals that took the survey, `r nrow(a)`
+individuals have taken NCRM courses or, if we take the `Other` content
+this rises to `r nrow(b)` individuals that is
+`r scales::percent(nrow(a)/nrow(data), accuracy = 0.1)` or
+`r scales::percent(nrow(b)/nrow(data), accuracy = 0.1)` respectively
+have taken NCRM courses.
+
+#### List of NCRM courses taken
 
 ```{r ncrm_courses, results='asis'}
 
@@ -1751,6 +1816,34 @@ data %>% select(starts_with("Q11_b_"), gender = Q21) %>%
 
 ```
 
+#### Number of NCRM courses by individual
+
+Need to be slightly careful with this measure - it counts an entry in
+"Other" as a course even if a list is given there.
+
+```{r ncrm_courses_individual}
+
+data %>% select(id = URN, starts_with("Q11_b_"), career = Q20) %>%
+         pivot_longer(cols = starts_with("Q11_b_"),
+                      names_to = NULL,
+                      values_to = "ncrm")              %>%
+         filter(ncrm != 0)                             %>%
+         group_by(id)                                  %>% 
+         mutate(N = n())                               %>% # Number of courses taken by individual
+         group_by(career, N)                           %>% 
+         mutate(n = n())                               %>% # Number of individuals that take N courses
+         ungroup()                                     %>% 
+         distinct(career, n, N)                        %>% 
+         ggplot(aes(x = N, y = n, fill = career)) +
+         geom_col(colour = "black") + theme_bw() +
+         scale_fill_brewer(palette = "Set1", name = "Career stage") +
+         theme(legend.position = "none")  + ylab("Number of people") +
+         #scale_x_discrete() +
+         xlab("Number of courses taken") + 
+         geom_text(aes(x = N, label = n), position = position_stack(0.5),  size = 3)
+
+```
+
 ### Other NCRM courses
 
 ```{r other_ncrm_courses, results='asis'}
@@ -1759,10 +1852,10 @@ listOther("Q11_b_i")
 
 ```
 
-
 ## Q12 Recognition
 
-Do you feel in your field that the development and maintenance of research software are sufficiently recognised or rewarded?
+Do you feel in your field that the development and maintenance of
+research software are sufficiently recognised or rewarded?
 
 ### Recognition responses
 
@@ -1802,7 +1895,8 @@ data %>%  select(rew = Q12, career =Q20) %>%
 
 ### Recognition segmented by career stage percentage of population
 
-The percentages are given as a proportion of the given career stage population.
+The percentages are given as a proportion of the given career stage
+population.
 
 ```{r recognition_careerStage_per}
 
@@ -1828,7 +1922,8 @@ data %>%  select(rew = Q12, career =Q20) %>%
 
 ### Rationale
 
-If you answered yes or no can you briefly state your reasons for answering this way
+If you answered yes or no can you briefly state your reasons for
+answering this way
 
 ```{r recognition_rationale, results = 'asis'}
 
@@ -1836,12 +1931,13 @@ listOther("Q12_a")
 
 ```
 
-
 ## Q13 Licensing
 
-When answering this question, think about the most important piece of software you use for research that you couldn't live without. To what level do you agree/disagree with the following statements?
+When answering this question, think about the most important piece of
+software you use for research that you couldn't live without. To what
+level do you agree/disagree with the following statements?
 
-### Q13a Awareness of software funding, managent and licensing 
+### Q13a Awareness of software funding, managent and licensing
 
 I am aware of how the software I use is funded, managed and licensed
 
@@ -1907,7 +2003,8 @@ data %>% select(num_range("Q13_1_",1:5), career = Q20)     %>%
 
 ### Q13b Clarity of software funding, managent and licensing
 
-My institution/funder's policies on how software is funded, managed and licensed are clear to me
+My institution/funder's policies on how software is funded, managed and
+licensed are clear to me
 
 #### Responses
 
@@ -1969,9 +2066,10 @@ data %>% select(num_range("Q13_2_",1:5), career = Q20)     %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-### Q13c Insufficient attention paid to s/w funding, management and licensing 
+### Q13c Insufficient attention paid to s/w funding, management and licensing
 
-There is insufficient attention paid to software funding, management and licensing by the economic and social sciences research community
+There is insufficient attention paid to software funding, management and
+licensing by the economic and social sciences research community
 
 #### Responses
 
@@ -2035,7 +2133,8 @@ data %>% select(num_range("Q13_3_",1:5), career = Q20)     %>%
 
 ### Q13d Insufficient incentive to learn how s/w is funded, managed and licensed
 
-There is insufficient incentive for me to learn how my software is funded, managed and licensed
+There is insufficient incentive for me to learn how my software is
+funded, managed and licensed
 
 #### Responses
 
@@ -2099,7 +2198,10 @@ data %>% select(num_range("Q13_4_",1:5), career = Q20)     %>%
 
 ## Q14 Where software is run
 
-Where do you normally run your digital tools/software? Please check all that apply. The UK Tier 1 provides a national supercomputing service, e.g. ARCHER2, and Tier 2 systems provide computational services somewhere between institutional and the national Tier 1 service.
+Where do you normally run your digital tools/software? Please check all
+that apply. The UK Tier 1 provides a national supercomputing service,
+e.g. ARCHER2, and Tier 2 systems provide computational services
+somewhere between institutional and the national Tier 1 service.
 
 ### Distribution of where software is run
 
@@ -2119,6 +2221,7 @@ data %>%  select(num_range("Q14_", 1:9))         %>%
   geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 2) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
+
 ### Where software is run by career stage
 
 ```{r where_sw_run_career}
@@ -2143,11 +2246,12 @@ data %>%  select(num_range("Q14_", 1:9), career = Q20)         %>%
 
 ### Counting combined choices
 
-For each multiple choice replace spaces by "-"s and collapse all the non-empty
-choices and join them with an "_". So, if an individual only chose A then that
-would only contribute an A, if an individual chose A, B and D then that would
-contribute an A_B_D then we count all the combined choices. Only showing 
-combinations that have a count greater than 1.
+For each multiple choice replace spaces by "-"s and collapse all the
+non-empty choices and join them with an "\_". So, if an individual only
+chose A then that would only contribute an A, if an individual chose A,
+B and D then that would contribute an A_B\_D then we count all the
+combined choices. Only showing combinations that have a count greater
+than 1.
 
 ```{r run_choices}
 
@@ -2177,11 +2281,15 @@ listOther("Q14_a")
 ```
 
 ## Q15 Licensing policy
-A licensing policy provides instruction or guidance on what software licenses are preferred for the release of software.
 
-A publishing policy provides instruction or guidance on how software should be made available to others. 
+A licensing policy provides instruction or guidance on what software
+licenses are preferred for the release of software.
 
-Which relevant software policies are you aware of (please check all you are aware of)?
+A publishing policy provides instruction or guidance on how software
+should be made available to others.
+
+Which relevant software policies are you aware of (please check all you
+are aware of)?
 
 ### Licensing policies awareness distributions
 
@@ -2257,11 +2365,10 @@ listOther("Q15_a")
 
 ```
 
-
-
 ## Q16 Barriers to use
 
-What barriers have you experienced to the use of software in your research? (Check all that apply.)
+What barriers have you experienced to the use of software in your
+research? (Check all that apply.)
 
 ### Barriers frequencies
 
@@ -2398,10 +2505,11 @@ data %>%  select(num_range("Q16_", 1:13), dis = Q23) %>%
 
 ### Counting combined choices
 
-For each multiple choice replace spaces by "-"s and collapse all the non-empty
-choices and join them with an "_". So, if an individual only chose A then that
-would only contribute an A, if an individual chose A, B and D then that would
-contribute an A_B_D then we count all the combined choices. 
+For each multiple choice replace spaces by "-"s and collapse all the
+non-empty choices and join them with an "\_". So, if an individual only
+chose A then that would only contribute an A, if an individual chose A,
+B and D then that would contribute an A_B\_D then we count all the
+combined choices.
 
 ```{r barrier_choices}
 
@@ -2421,7 +2529,6 @@ data %>% select(id = URN, num_range("Q16_", 1:13))                       %>%
          kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
 
-
 ### Other barriers
 
 ```{r other_barriers, results='asis'}
@@ -2430,11 +2537,9 @@ listOther("Q16_a")
 
 ```
 
-
-
 ## Q17 Institutions
 
-### Top 12 institutions 
+### Top 12 institutions
 
 The top 12 institutional affiliations of respondents to the survey.
 
@@ -2468,16 +2573,14 @@ data %>%
 
 ```
 
-
-         
 ## Q18 Funding
 
 ### Funding distribution
 
 The list given in the listing below has been manipulated to provide some
-level of uniformity. Note that in this instance all contributions are counted
-equally, i.e. a respondent may have suggested more than one funding body - each
-of these is given a count of 1.
+level of uniformity. Note that in this instance all contributions are
+counted equally, i.e. a respondent may have suggested more than one
+funding body - each of these is given a count of 1.
 
 ```{r funding}
 
@@ -2497,8 +2600,9 @@ funding %>% pivot_longer(cols = num_range("Q18_", 1:7),
 
 ### Funding distribution normalised
 
-The graph below normalises the contributions suggested by the responder, i.e. if they mayd N suggestion then
-each suggestion contributes 1/N to the total.
+The graph below normalises the contributions suggested by the responder,
+i.e. if they mayd N suggestion then each suggestion contributes 1/N to
+the total.
 
 ```{r funding_norm}
 
@@ -2519,7 +2623,6 @@ funding %>% mutate(nelements = rowSums(!is.na(.)))                             %
 ```
 
 ### Funding distribution normalised with career stage
-
 
 ```{r funding_norm_career}
 
@@ -2554,12 +2657,11 @@ listOther("Q18")
 
 ```
 
-
-
 ## Q19 Reserach discipline
 
-Research Discipline: Level one codes from the Primary Research Areas covered by ESRC discipline funding remit. Use the 'Other' option if your discipline is not listed. (Please check all that apply.)
-
+Research Discipline: Level one codes from the Primary Research Areas
+covered by ESRC discipline funding remit. Use the 'Other' option if your
+discipline is not listed. (Please check all that apply.)
 
 ### Discipline of respondents
 
@@ -2649,6 +2751,7 @@ data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
 
 
 ```
+
 ### Discipline by percentage gender
 
 Percentages are in relation to a given gender.
@@ -2722,7 +2825,8 @@ data %>% select(Institutions = CleanLocs, num_range("Q19_", 1:22))       %>%
          scale_size_continuous(labels = scales::percent)
 ```
 
-The same graph but this time the percentage is by discipline (the % of the discipline at each institution):
+The same graph but this time the percentage is by discipline (the % of
+the discipline at each institution):
 
 ```{r awareness_dist_per}
 
@@ -2744,9 +2848,11 @@ data %>% select(Institutions = CleanLocs, num_range("Q19_", 1:22))       %>%
          labs(size = "Discipline %") + 
          scale_size_continuous(labels = scales::percent_format(accuracy = 1))
 ```
+
 ## Q20 Career stage
 
-Career stage: Please select the career stage that most accurately describes your role.
+Career stage: Please select the career stage that most accurately
+describes your role.
 
 ### Career stage numbers
 
@@ -2780,7 +2886,11 @@ data %>%  select(career = Q20)     %>%
 
 ## Q21 Gender
 
-Gender (we are asking this to ensure that we get a balance of the community). If you prefer to self-describe, please write in the "Other" option. We apologise in advance for "othering" you. Unfortunately, this is the only write-in option available for multiple-choice questions on this platform.
+Gender (we are asking this to ensure that we get a balance of the
+community). If you prefer to self-describe, please write in the "Other"
+option. We apologise in advance for "othering" you. Unfortunately, this
+is the only write-in option available for multiple-choice questions on
+this platform.
 
 ### Gender distribution
 
@@ -3034,7 +3144,8 @@ data %>% select(dis = Q23, gender = Q21) %>%
 
 ## Q24-Q27 Not relevant
 
-These questions asked about inclusion in prize draw and volunteering for interviews.
+These questions asked about inclusion in prize draw and volunteering for
+interviews.
 
 ## Q28 Comments about the survey
 
