@@ -2002,7 +2002,7 @@ data %>% select(num_range("Q11_", 1:12))                 %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
 
-### How skills are acquired segmented by career stage
+### How skills are acquired by career stage
 
 ```{r acquiring_skills_career}
 data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
@@ -2017,9 +2017,84 @@ data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
          theme_bw() +
          xlab("Where skills are acquired") + ylab("Numbers") +
          geom_text(aes(label = ..count..), position = position_stack(vjust = 0.5), 
-                   stat = "count", size = 2) +
+                   stat = "count", size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
+### How skills are acquired by % career stage
+
+```{r acquiring_skills_career_per}
+
+data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
+         pivot_longer(cols = num_range("Q11_", 1:12),
+                      names_to = "questions",
+                      values_to = "skills")              %>%
+         filter(skills != 0)                             %>%
+         group_by(career)                                %>% 
+         mutate(N = n())                                 %>% 
+         group_by(career, skills)                        %>% 
+         mutate(per = n()/N)                             %>% 
+         distinct(career, skills, per)                   %>% 
+         ggplot(aes(x = skills, y = per, fill = career)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"),
+                  colour = "black") +
+         theme_bw() +
+         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+         xlab("Where skills are acquired") + ylab("Percent") +
+         geom_text(aes(label = scales::percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"),
+                   vjust = -0.5, size = 2) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
+### How skills are acquired by gender
+
+```{r acquiring_skills_career}
+
+data %>% select(num_range("Q11_", 1:12), gender = Q21)   %>%
+         pivot_longer(cols = num_range("Q11_", 1:12),
+                      names_to = "questions",
+                      values_to = "skills")              %>%
+         filter(skills != 0)                             %>%
+         group_by(skills)                                %>% 
+         mutate(n = n())                                 %>% 
+         ggplot(aes(x = reorder(skills, -n), fill = gender)) + 
+         geom_bar(colour = "black") +
+         theme_bw() +
+         xlab("Where skills are acquired") + ylab("Numbers") +
+         geom_text(aes(label = ..count..), position = position_stack(vjust = 0.5), 
+                   stat = "count", size = 3) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+### How skills are acquired by % gender pop
+
+```{r acquiring_skills_gender_per}
+
+data %>% select(num_range("Q11_", 1:12), gender = Q21)   %>%
+         pivot_longer(cols = num_range("Q11_", 1:12),
+                      names_to = "questions",
+                      values_to = "skills")              %>%
+         filter(skills != 0)                             %>%
+         group_by(gender)                                %>% 
+         mutate(N = n())                                 %>% 
+         group_by(gender, skills)                        %>% 
+         mutate(per = n()/N)                             %>% 
+         distinct(gender, skills, per)                   %>% 
+         ggplot(aes(x = skills, y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"),
+                  colour = "black") +
+         theme_bw() +
+         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+         xlab("Where skills are acquired") + ylab("Percent") +
+         geom_text(aes(label = scales::percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"),
+                   vjust = -0.5, size = 2) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
 ### Counting combined choices
@@ -2239,7 +2314,7 @@ data %>%  select(rew = Q12, career =Q20) %>%
 
 ```
 
-### Recognition segmented by career stage percentage of population
+### Recognition segmented by career stage percentage
 
 The percentages are given as a proportion of the given career stage
 population.
@@ -2263,6 +2338,52 @@ data %>%  select(rew = Q12, career =Q20) %>%
                     size = 2) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
           scale_fill_brewer(palette = "Set1", name = "Career stage")
+
+```
+
+### Recognition segmented by gender
+
+```{r recognition_gender}
+
+data %>%  select(rew = Q12, gender = Q21) %>%
+          group_by(rew)       %>% 
+          mutate(n = n())     %>% 
+          ggplot(aes(x = reorder(rew, -n), fill = gender)) + 
+          geom_bar(colour = "black") +
+          theme_bw() +
+          xlab("Development/Maintenance of rsearch software rewarded/recognised") +
+          ylab("Numbers") +
+          geom_text(aes(label = ..count..), position = position_stack(vjust = 0.5), 
+                   stat = "count", size = 3) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+          scale_fill_brewer(palette = "Set2", name = "Gender")
+
+```
+
+### Recognition segmented by gender percentage
+
+The percentages are given as a proportion of the given gender
+population.
+
+```{r recognition_gender_per}
+
+data %>%  select(rew = Q12, gender =Q21) %>%
+          group_by(gender)               %>% 
+          mutate(N = n())                %>% 
+          group_by(rew, gender)          %>% 
+          mutate(per = n()/N)            %>% 
+          distinct(rew, gender, per)     %>% 
+          ggplot(aes(x = rew, y = per, fill = gender)) + 
+          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+          theme_bw() +
+          xlab("Development/Maintenance of rsearch software rewarded/recognised") +
+          ylab("Percentage") +
+          scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+          geom_text(aes(label = scales::percent(per, accuracy = 1)), 
+                    position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
+                    size = 2) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+          scale_fill_brewer(palette = "Set2", name = "Gender")
 
 ```
 
@@ -2304,7 +2425,7 @@ data %>% select(num_range("Q13_1_",1:5))            %>%
          xlab("Aware of how s/w I use is funded, managed and licensed")
 ```
 
-#### Responses by career stages
+#### Responses by career stage
 
 ```{r aware_sw_career}
 
@@ -2348,6 +2469,53 @@ data %>% select(num_range("Q13_1_",1:5), career = Q20)                          
          theme_bw() + ylab("Percent") +
          xlab("Aware of how s/w I use is funded, managed and licensed") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
+#### Responses by gender
+
+```{r aware_sw_gender}
+
+data %>% select(num_range("Q13_1_",1:5), gender = Q21)     %>%
+         pivot_longer(cols = starts_with("Q13"),
+                      names_to = NULL,
+                      values_to = "understanding")         %>%
+         filter(understanding != 0)                        %>%
+         mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
+         ggplot(aes(x = understanding, fill = gender)) + 
+         geom_bar(colour = "black") +
+         geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 3) +
+         theme_bw() + ylab("Numbers") +
+         xlab("Aware of how s/w I use is funded, managed and licensed") +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+#### Responses as % of gender
+
+Percentages may not add up to 100% as members that have not answered the question 
+are not shown.
+
+```{r aware_sw_gender_per}
+
+data %>% select(num_range("Q13_1_",1:5), gender = Q21)                                  %>%
+         pivot_longer(cols = starts_with("Q13"),
+                      names_to = NULL,
+                      values_to = "understanding")                                      %>%
+         filter(understanding != 0)                                                     %>%
+         group_by(gender)                                                               %>% 
+         mutate(N = n())                                                                %>%
+         group_by(understanding, gender)                                                %>% 
+         mutate(per = n()/N)                                                            %>% 
+         mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
+         distinct(understanding, gender, per)                                           %>% 
+         ggplot(aes(x = understanding, y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         geom_text(aes(y = per, label = scales::percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), 
+                   size = 2, vjust = -0.5) +
+         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+         theme_bw() + ylab("Percent") +
+         xlab("Aware of how s/w I use is funded, managed and licensed") +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
 ### Q13b Clarity of software funding, managent and licensing
@@ -2408,11 +2576,54 @@ data %>% select(num_range("Q13_2_",1:5), career = Q20)     %>%
          ggplot(aes(x = understanding, y = per, fill = career)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          geom_text(aes(y = per, label = scales::percent(per, accuracy = 1)), 
-                       position = position_dodge2(width = 0.9, preserve = "single"), size = 2, vjust = -0.5) +
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 2, vjust = -0.5) +
          scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
          theme_bw() + ylab("Percent") +
          xlab("Aware of how institution/funder's policies on how s/w is funded, managed and licensed") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
+#### Responses by gender
+
+```{r aware_policies_gender}
+
+data %>% select(num_range("Q13_2_",1:5), gender = Q21)     %>%
+         pivot_longer(cols = starts_with("Q13"),
+                      names_to = NULL,
+                      values_to = "understanding")         %>%
+         filter(understanding != 0)                        %>%
+         mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
+         ggplot(aes(x = understanding, fill = gender)) + 
+         geom_bar(colour = "black") +
+         geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 3) +
+         theme_bw() + ylab("Numbers") +
+         xlab("Aware of how institution/funder's policies on how s/w is funded, managed and licensed") +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+#### Responses as % of gender pop
+
+```{r aware_policies_gender_per}
+
+data %>% select(num_range("Q13_2_",1:5), gender = Q21)     %>%
+         pivot_longer(cols = starts_with("Q13"),
+                      names_to = NULL,
+                      values_to = "understanding")                                      %>%
+         filter(understanding != 0)                                                     %>%
+         group_by(gender)                                                               %>% 
+         mutate(N = n())                                                                %>% 
+         group_by(understanding, gender)                                                %>% 
+         mutate(per = n()/N)                                                            %>% 
+         mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
+         distinct(understanding, gender, per)                                           %>% 
+         ggplot(aes(x = understanding, y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         geom_text(aes(y = per, label = scales::percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 2, vjust = -0.5) +
+         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+         theme_bw() + ylab("Percent") +
+         xlab("Aware of how institution/funder's policies on how s/w is funded, managed and licensed") +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
 ### Q13c Insufficient attention paid to s/w funding, management and licensing
@@ -2480,6 +2691,49 @@ data %>% select(num_range("Q13_3_",1:5), career = Q20)     %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
+#### Responses by gender
+
+```{r insufficient_attention_gender}
+
+data %>% select(num_range("Q13_3_",1:5), gender = Q21)     %>%
+         pivot_longer(cols = starts_with("Q13"),
+                      names_to = NULL,
+                      values_to = "understanding")         %>%
+         filter(understanding != 0)                        %>%
+         mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
+         ggplot(aes(x = understanding, fill = gender)) + 
+         geom_bar(colour = "black") +
+         geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 3) +
+         theme_bw() + ylab("Numbers") +
+         xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community") +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+#### Responses as % of gender pop
+
+```{r insufficient_attention_gender_per}
+
+data %>% select(num_range("Q13_3_",1:5), gender = Q21)     %>%
+         pivot_longer(cols = starts_with("Q13"),
+                      names_to = NULL,
+                      values_to = "understanding")                                      %>%
+         filter(understanding != 0)                                                     %>%
+         group_by(gender)                                                               %>% 
+         mutate(N = n())                                                                %>% 
+         group_by(understanding, gender)                                                %>% 
+         mutate(per = n()/N)                                                            %>% 
+         mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
+         distinct(understanding, gender, per)                                           %>% 
+         ggplot(aes(x = understanding, y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         geom_text(aes(y = per, label = scales::percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 2, vjust = -0.5) +
+         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+         theme_bw() + ylab("Percent") +
+         xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community") +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
 ### Q13d Insufficient incentive to learn how s/w is funded, managed and licensed
 
 There is insufficient incentive for me to learn how my software is
@@ -2545,6 +2799,50 @@ data %>% select(num_range("Q13_4_",1:5), career = Q20)     %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
+#### Responses by gender
+
+```{r insufficient_incentives_gender}
+
+data %>% select(num_range("Q13_4_",1:5), gender = Q21)     %>%
+         pivot_longer(cols = starts_with("Q13"),
+                      names_to = NULL,
+                      values_to = "understanding")         %>%
+         filter(understanding != 0)                        %>%
+         mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
+         ggplot(aes(x = understanding, fill = gender)) + 
+         geom_bar(colour = "black") +
+         geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 3) +
+         theme_bw() + ylab("Numbers") +
+         xlab("Insufficient incentive for me to learn how my s/w is funded, managed and licensed") +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+#### Distribution of answers as % of gender pop
+
+```{r insufficient_incentives_gender_per}
+
+data %>% select(num_range("Q13_4_",1:5), gender = Q21)     %>%
+         pivot_longer(cols = starts_with("Q13"),
+                      names_to = NULL,
+                      values_to = "understanding")                                      %>%
+         filter(understanding != 0)                                                     %>%
+         group_by(gender)                                                               %>% 
+         mutate(N = n())                                                                %>% 
+         group_by(understanding, gender)                                                %>% 
+         mutate(per = n()/N)                                                            %>% 
+         mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
+         distinct(understanding, gender, per)                                           %>% 
+         ggplot(aes(x = understanding, y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         geom_text(aes(y = per, label = scales::percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), 
+                   size = 2, vjust = -0.5) +
+         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+         theme_bw() + ylab("Percent") +
+         xlab("Insufficient incentive for me to learn how my s/w is funded, managed and licensed") +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
 ## Q14 Where software is run
 
 Where do you normally run your digital tools/software? Please check all
@@ -2590,6 +2888,29 @@ data %>%  select(num_range("Q14_", 1:9), career = Q20)         %>%
   geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 2) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
   scale_fill_brewer(palette = "Set1", name = "Career stage")
+
+```
+
+
+### Where software is run by gender
+
+```{r where_sw_run_gender}
+
+data %>%  select(num_range("Q14_", 1:9), gender = Q21)         %>%
+  pivot_longer(cols = num_range("Q14_", 1:9),
+               names_to = NULL,
+               values_to = "runon")              %>%
+  filter(runon != 0)                             %>%
+  group_by(runon)                                %>% 
+  mutate(n = n())                                %>% 
+  group_by(gender, runon)                        %>% 
+  ggplot(aes(x = reorder(runon, -n), fill  = gender)) +
+  geom_bar( colour = "black") +
+  theme_bw() +
+  xlab("Where software is run") + ylab("Numbers") +
+  geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 3) +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+  scale_fill_brewer(palette = "Set2", name = "Gender")
 
 ```
 
