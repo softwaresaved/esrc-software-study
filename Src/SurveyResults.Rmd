@@ -1873,7 +1873,30 @@ data %>% select(num_range("Q10_", 1:7), career = Q20)   %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
+### Extending software by % career stage
 
+```{r extending_career_per}
+
+data %>% select(num_range("Q10_", 1:7), career = Q20)   %>%
+         pivot_longer(cols = num_range("Q10_", 1:7),
+                      names_to = NULL,
+                      values_to = "swuse")              %>%
+         filter(swuse != 0)                             %>%
+         group_by(career)                               %>%
+         mutate(N = n())                                %>% 
+         group_by(swuse, career)                        %>%
+         mutate(per = n()/N)                            %>% 
+         distinct(swuse, career, per)                   %>% 
+         ggplot(aes(x = swuse, y = per, fill = career)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() +
+         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+         xlab("Who do you share your software with?") + ylab("Percent") +
+         geom_text(aes(label = scales::percent(per, accuracy=1)), vjust = -0.5,
+                   position = position_dodge2(width = 0.9, preserve = "single"),  size = 2) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
 ### Counting combined choices
 
 For each multiple choice replace spaces by "-"s and collapse all the
