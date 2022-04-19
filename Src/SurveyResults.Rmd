@@ -1711,7 +1711,7 @@ data %>% select(num_range("Q7_", 1:7), career = Q20)  %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("How Software is maintained") + ylab("Numbers") +
          geom_text(aes(label = ..count..), 
-                   position = position_stack(0.5), stat = "count", size = 2) +
+                   position = position_stack(0.5), stat = "count", size = 3) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 
 ```
@@ -1797,6 +1797,25 @@ data %>% select("Q9", career = Q20)    %>%
          xlab("Do you develop software?") + ylab("Numbers") +
          geom_text(aes(label = ..count..), stat = "count", 
                    position = position_stack(0.5), size = 3) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+### Responses by % career stage
+
+```{r develop_sw_career_per}
+data %>% select("Q9", career = Q20)    %>%
+         group_by(career)              %>% 
+         mutate(N = n())               %>% 
+         group_by(Q9, career)          %>% 
+         mutate(per = n()/N)           %>%
+         distinct(Q9, career, per)     %>% 
+         ggplot(aes(x = Q9, y = per, fill = career)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() +
+         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+         xlab("Do you develop software?") + ylab("Percent") +
+         geom_text(aes(label = scales::percent(per, accuracy = 1)),
+                   position = position_dodge2(width = 0.9, preserve = "single"),  
+                   vjust = -0.5, size = 2) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
