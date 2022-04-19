@@ -1344,7 +1344,7 @@ listOther("Q4_a")
 
 What software(s) is/are most important to your work?
 
-### Frequency of most important software
+### Frequency of the most important software
 
 This chart is derived from the processed data input by the
 interviewees - an interviewee may have input more than one choice - each
@@ -1368,7 +1368,7 @@ important_software %>% select(starts_with("Q5"))             %>%
                        theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
                        geom_text(aes(x = software, label = n), vjust = -0.5, size = 2) +
                        ylab("Numbers") + xlab("Most important software") +
-                      theme(axis.text.x = element_text(size = 8))  
+                       theme(axis.text.x = element_text(size = 8))  
 
 ```
 
@@ -1379,7 +1379,7 @@ important_software %>% select(starts_with("Q5"))             %>%
 bind_cols(data["Q20"], important_software)                        %>% 
                        select(starts_with("Q5"), career = "Q20")  %>%
                        pivot_longer(cols =  starts_with("Q5"),
-                                    names_to = "name",
+                                    names_to = NULL,
                                     values_to = "software")       %>%
                        filter(!is.na(software))                   %>%
                        group_by(software)                         %>%
@@ -1392,7 +1392,7 @@ bind_cols(data["Q20"], important_software)                        %>%
                        theme_bw() +
                        theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
                        geom_text(aes(x = software, label = n), position = position_stack(vjust = 0.5), 
-                                 stat = "count", size = 2) +
+                                 stat = "count", size = 3) +
                        ylab("Numbers") + xlab("Most important software") +
                        scale_fill_brewer(palette = "Set1", name = "Career stage") +
                        theme(axis.text.x = element_text(size = 8))  
@@ -1400,6 +1400,8 @@ bind_cols(data["Q20"], important_software)                        %>%
 ```
 
 ### Software used by % career stage
+
+Only show software that has more than 2 votes.
 
 ```{r important_sw_bar_career_per}
 
@@ -1411,7 +1413,7 @@ bind_cols(data["Q20"], important_software)                        %>%
                        filter(!is.na(software))                   %>%
                        group_by(software)                         %>% 
                        mutate(N = n())                            %>%
-                      filter(N > 2)                               %>% 
+                       filter(N > 2)                               %>% 
                        group_by(career, software)                 %>%
                        mutate(n = n())                            %>%
                        mutate(per = n/N)                          %>% 
@@ -1423,7 +1425,7 @@ bind_cols(data["Q20"], important_software)                        %>%
                        theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
                        geom_text(aes(x = software, y = per, label = scales::percent(per, accuracy = 1)), 
                                  position = position_fill(vjust = 0.5),
-                                 size = 2) +
+                                 size = 2.5) +
                        ylab("Percentage") + xlab("Most important software") +
                        scale_fill_brewer(palette = "Set1", name = "Career stage") +
                        theme(axis.text.x = element_text(size = 8))  
@@ -1433,34 +1435,36 @@ bind_cols(data["Q20"], important_software)                        %>%
 ### Most important software as a percentage at a given career stage
 
 The percentages here are taken as a percentage of the responses from
-each career stage. Only software that has been nominated more than twice
-are shown. Note that an individual may have suggested more than one
-piece of software - this has not been normalised.
+each career stage. Only software that has been nominated more than five times
+are shown otherwise the graph becomes very busy. Note that an individual may 
+have suggested more than one piece of software - this has not been normalised.
 
 ```{r important_sw_bar_career_per2}
 
 bind_cols(data["Q20"], important_software)                        %>% 
                        select(starts_with("Q5"), career = "Q20")  %>%
                        pivot_longer(cols =  starts_with("Q5"),
-                                    names_to = "name",
+                                    names_to = NULL,
                                     values_to = "software")       %>%
+                       filter(!is.na(software))                   %>% 
                        group_by(career)                           %>% 
                        mutate(N = n())                            %>%
-                       filter(!is.na(software))                   %>%
                        group_by(software)                         %>% 
                        mutate(Ns = n())                           %>%  
-                       filter(Ns > 2)                             %>%
+                       filter(Ns > 5)                             %>%
                        group_by(career, software)                 %>%
                        mutate(n = n())                            %>%
                        mutate(per = n/N)                          %>% 
                        distinct(career, software, per, N)         %>% 
                        ggplot(aes(x = reorder(software, -N), y = per, fill = career)) +
-                       geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
+                       geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
+                                colour = "black") + 
                        theme_bw() +
                        scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
                        theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
                        geom_text(aes(x = software, label = scales::percent(per, accuracy = 1)), 
-                                 position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
+                                 position = position_dodge2(width = 0.9, preserve = "single"), 
+                                 vjust = -0.5,
                                  size = 2) +
                        ylab("percentage") + xlab("Most important software") +
                        scale_fill_brewer(palette = "Set1", name = "Career stage") +
@@ -1563,7 +1567,7 @@ data %>% select(id = URN, starts_with("Q6_a"))                         %>%
          select(-id)                                                   %>% 
          group_by(choices)                                             %>% 
          tally()                                                       %>% 
-         filter(n > 1)                                                %>% 
+         filter(n > 1)                                                 %>% 
          arrange(desc(n))                                              %>% 
          kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
@@ -1614,23 +1618,28 @@ data %>% select(starts_with("Q6_b"), career = Q20)        %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-### Responses by career stage
+### Responses by % career stage
 
-```{r reasons4NotOS_career}
+```{r reasons4NotOS_career_per}
 
 data %>% select(starts_with("Q6_b"), career = Q20)  %>%
          pivot_longer(cols = starts_with("Q6_b"),
                       names_to = NULL,
                       values_to = "UseOS")         %>%
          filter(UseOS != 0)                        %>%
+         group_by(career)                          %>% 
+         mutate(N = n())                           %>% 
          group_by(UseOS, career)                   %>% 
-         mutate(n = n())                           %>% 
-         ggplot(aes(x = reorder(UseOS, -n), fill = career)) + 
-         geom_bar(colour = "black") + 
+         mutate(per = n()/N)                       %>% 
+         distinct(UseOS, career, per)              %>% 
+         ggplot(aes(x = UseOS, y = per, fill = career)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
          theme_bw() +
-         geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 3) +
+         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+         geom_text(aes(label = scales::percent(per, accuracy = 1)), vjust = -0.5,
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 2) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         xlab("Reasons for not using Open Source") + ylab("Numbers") +
+         xlab("Reasons for not using Open Source") + ylab("Percent") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
