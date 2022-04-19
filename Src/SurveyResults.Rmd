@@ -1326,7 +1326,7 @@ data %>% select(num_range("Q4_",1:26), num_range("Q19_", 1:22))              %>%
          ggplot(aes(x = software, y = discipline, fill = n)) +
          geom_tile(colour = "black") + scale_fill_continuous(high = "#132B43", low = "#56B1F7") +
          theme_minimal() +
-         geom_text(aes(label = n), size = 3) +
+         geom_text(aes(label = n), colour = "white", size = 3) +
          theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
          ylab("Discipline") + xlab("Software used") + labs(fill = "Numbers")
 ```
