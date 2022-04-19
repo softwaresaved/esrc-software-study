@@ -1293,6 +1293,13 @@ data %>%  select(Institutions = CleanLocs, Latitude, Longitude) %>%
           addTiles()                                            %>%
           addCircleMarkers(lng = ~Longitude, lat = ~Latitude, radius = ~N*0.1)
 
+### Non-UK institutions ----
+
+data %>%  select(id = URN, Institutions = CleanLocs, Latitude, Longitude) %>%
+  filter(!is.na(Institutions) & !is.na(Latitude))       %>%
+  filter(-7 > Longitude | Longitude > 1.6) -> a
+
+
 ### Map institutions - UK ----
 data %>%  select(Institutions = CleanLocs, Latitude, Longitude) %>%
           filter(!is.na(Institutions) & !is.na(Latitude))       %>%
