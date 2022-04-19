@@ -649,9 +649,10 @@ all that apply)
 ```{r use_of_data}
 
 data %>% select(num_range("Q2_", 1:2)) %>%
-         pivot_longer(cols = num_range("Q2_", 1:2), values_to = "datause")    %>%
+         pivot_longer(cols = num_range("Q2_", 1:2), 
+                      names_to = NULL,
+                      values_to = "datause")                                  %>%
          filter(datause != 0)                                                 %>%
-         select(!name)                                                        %>%
          ggplot(aes(x = datause)) +
          geom_bar(fill = "light blue", colour = "black") +
          theme_bw() +
@@ -679,19 +680,15 @@ data %>% select(num_range("Q2_", 1:2), career = Q20) %>%
 
 ### Use of data as % of career stage population
 
-Percentages are given as the fraction from the total for that particular
-career stage - note that these may not add to 100% as those that do not
-create or reuse data are not included in the graph.
-
 ```{r use_of_data_career_per}
 
 data %>% select(num_range("Q2_", 1:2), career = Q20)                          %>%
          pivot_longer(cols = num_range("Q2_", 1:2), 
                       names_to = NULL,
                       values_to = "datause")                                  %>%
+         filter(datause != 0)                                                 %>%
          group_by(career)                                                     %>% 
          mutate(N = n())                                                      %>% 
-         filter(datause != 0)                                                 %>%
          group_by(datause, career)                                            %>% 
          mutate(per = n()/N)                                                  %>%
          distinct(datause, career, per)                                       %>% 
@@ -728,9 +725,9 @@ data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>
 data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>%
          pivot_longer(cols = num_range("Q2_", 1:2), 
                       names_to = NULL, values_to = "datause")                 %>%
+         filter(datause != 0)                                                 %>%
          group_by(gender)                                                     %>% 
          mutate(N = n())                                                      %>% 
-         filter(datause != 0)                                                 %>%
          group_by(datause, gender)                                            %>%
          mutate(per = n()/N)                                                  %>% 
          distinct(datause, gender, per)                                       %>% 
@@ -753,10 +750,10 @@ than 2 entries are shown.
 data %>% select(num_range("Q2_", 1:2), institution = CleanLocs)              %>%
          pivot_longer(cols = num_range("Q2_", 1:2), 
                       names_to = NULL, values_to = "datause")                %>%
+         filter(datause != 0 & !is.na(institution))                          %>% 
          group_by(institution)                                               %>% 
          mutate(N = n())                                                     %>% 
          filter(N > 2)                                                       %>% 
-         filter(datause != 0 & !is.na(institution))                          %>% 
          group_by(datause, institution)                                      %>% 
          mutate(per = n()/N)                                                 %>% 
          filter(per > 0)                                                     %>% 
@@ -776,9 +773,9 @@ data %>% select(num_range("Q2_", 1:2), institution = CleanLocs)              %>%
          pivot_longer(cols = num_range("Q2_", 1:2), 
                       names_to = NULL, 
                       values_to = "datause")                                 %>%
+         filter(datause != 0)                                                %>% 
          group_by(institution)                                               %>% 
          filter(n() > 2)                                                     %>% 
-         filter(datause != 0)                                                %>% 
          group_by(datause, institution)                                      %>% 
          ggplot(aes(x = institution, fill = datause)) + 
          geom_bar(colour = "black") +
@@ -865,7 +862,7 @@ data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
          ggplot(aes(x = choices, y = n, fill = career)) + 
          geom_col(colour = "black") + theme_bw() +
          xlab("Data use") + ylab("Numbers") +
-         geom_text(aes(label = n), position = position_stack(0.5), size = 2) +
+         geom_text(aes(label = n), position = position_stack(0.5), size = 3) +
          scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
@@ -942,7 +939,7 @@ If you re-use existing data, where do you find these?
 
 data %>% select(num_range("Q2_b_",1:6))      %>%
          pivot_longer(cols = everything(),
-                      names_to = "question",
+                      names_to = NULL,
                       values_to = "ds")      %>%
          filter(ds != 0)                     %>%
          group_by(ds)                        %>% 
@@ -970,7 +967,7 @@ data %>% select(num_range("Q2_b_",1:6), career = Q20)      %>%
          ggplot(aes(x = ds, fill = career)) + 
          geom_bar(colour = "black") +
          theme_bw() + ylab("Numbers") +
-         geom_text(aes(label = ..count..), position = position_stack(0.5), stat = "count", size = 2)  +
+         geom_text(aes(label = ..count..), position = position_stack(0.5), stat = "count", size = 3)  +
          xlab("Data sources") + 
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
@@ -984,9 +981,9 @@ data %>% select(num_range("Q2_b_",1:6), career = Q20)      %>%
          pivot_longer(cols = starts_with("Q2_b_"),
                       names_to = NULL,
                       values_to = "ds")                    %>%
+         filter(ds != 0)                                   %>%
          group_by(career)                                  %>% 
          mutate(N = n())                                   %>% 
-         filter(ds != 0)                                   %>%
          group_by(ds, career)                              %>% 
          mutate(per = n()/ N)                              %>% 
          distinct(ds, career, per)                         %>% 
@@ -1015,7 +1012,7 @@ data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
          ggplot(aes(x = ds, fill = gender)) + 
          geom_bar(colour = "black") +
          theme_bw() + ylab("Numbers") +
-         geom_text(aes(label = ..count..), position = position_stack(0.5), stat = "count", size = 2)  +
+         geom_text(aes(label = ..count..), position = position_stack(0.5), stat = "count", size = 3)  +
          xlab("Data sources") + 
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
@@ -1023,8 +1020,6 @@ data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
 
 ### Reusing existing data by gender %
 
-Percentages do not add up to 100% as null values for the population not shown on
-the graph.
 
 ```{r data_sources_gender_per}
 
@@ -1032,9 +1027,9 @@ data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
          pivot_longer(cols = starts_with("Q2_b_"),
                       names_to = NULL,
                       values_to = "ds")                    %>%
+         filter(ds != 0)                                   %>%
          group_by(gender)                                  %>% 
          mutate(N = n())                                   %>% 
-         filter(ds != 0)                                   %>%
          group_by(ds, gender)                              %>% 
          mutate(per = n()/N)                               %>% 
          distinct(ds, gender, per)                         %>% 
@@ -1165,16 +1160,16 @@ data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
 
 ### Data sharing by percentage at each career stage
 
-Percentages at a career stage will not add to 100% as the null values are not 
-shown.
 
 ```{r sharing_data_career_per}
 
 data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
-        pivot_longer(cols = starts_with("Q3_"), values_to = "DataSharing") %>%
+        pivot_longer(cols = starts_with("Q3_"), 
+                     names_to = NULL,
+                     values_to = "DataSharing")                            %>%
+        filter(DataSharing != 0)                                           %>%
         group_by(career)                                                   %>% 
         mutate(N = n())                                                    %>%
-        filter(DataSharing != 0)                                           %>%
         group_by(DataSharing, career)                                      %>% 
         mutate(per = n()/N)                                                %>% 
         distinct(career, DataSharing, per)                                 %>% 
@@ -1185,7 +1180,8 @@ data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
         xlab("Data sharing habits") + ylab("Numbers") +
         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
         geom_text(aes(x = DataSharing, label = scales::percent(per, accuracy = 1)), vjust = -0.5,
-                        position = position_dodge2(width = 0.9, preserve = "single"), colour = "black", size = 2) +
+                      position = position_dodge2(width = 0.9, preserve = "single"), 
+                      colour = "black", size = 2) +
         scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
@@ -1289,7 +1285,7 @@ data %>% select(num_range("Q4_",1:26), career = "Q20")                       %>%
          scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
          theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
          ylab("Percentage") + xlab("Software used") +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
+         scale_fill_brewer(palette = "Set1", name = "Career stage") 
 ```
 
 ### Software used by discipline
@@ -1330,6 +1326,7 @@ data %>% select(num_range("Q4_",1:26), num_range("Q19_", 1:22))              %>%
          ggplot(aes(x = software, y = discipline, fill = n)) +
          geom_tile(colour = "black") + scale_fill_continuous(high = "#132B43", low = "#56B1F7") +
          theme_minimal() +
+         geom_text(aes(label = n), size = 3) +
          theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
          ylab("Discipline") + xlab("Software used") + labs(fill = "Numbers")
 ```
@@ -2081,15 +2078,15 @@ data %>% select(id = URN, starts_with("Q11_b_"), career = Q20) %>%
                       values_to = "ncrm")              %>%
          filter(ncrm != 0)                             %>%
          group_by(id)                                  %>% 
-         mutate(N = n())                               %>% # Number of courses taken by individual
+         mutate(N = n())                               %>% # Number of courses taken by individuals
          group_by(career, N)                           %>% 
-         mutate(n = n())                               %>% # Number of individuals that take N courses
+         mutate(n = n())                               %>% # Number of individuals that have taken N courses
          ungroup()                                     %>% 
          distinct(career, n, N)                        %>% 
          ggplot(aes(x = N, y = n, fill = career)) +
          geom_col(colour = "black") + theme_bw() +
          scale_fill_brewer(palette = "Set1", name = "Career stage") +
-         theme(legend.position = "none")  + ylab("Number of people") +
+         ylab("Number of people") +
          #scale_x_discrete() +
          xlab("Number of courses taken") + 
          geom_text(aes(x = N, label = n), position = position_stack(0.5),  size = 3)
@@ -2139,7 +2136,7 @@ data %>%  select(rew = Q12, career =Q20) %>%
           xlab("Development/Maintenance of rsearch software rewarded/recognised") +
           ylab("Numbers") +
           geom_text(aes(label = ..count..), position = position_stack(vjust = 0.5), 
-                   stat = "count", size = 2) +
+                   stat = "count", size = 3) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
           scale_fill_brewer(palette = "Set1", name = "Career stage")
 
@@ -2222,7 +2219,7 @@ data %>% select(num_range("Q13_1_",1:5), career = Q20)     %>%
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
          ggplot(aes(x = understanding, fill = career)) + 
          geom_bar(colour = "black") +
-         geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 2) +
+         geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 3) +
          theme_bw() + ylab("Numbers") +
          xlab("Aware of how s/w I use is funded, managed and licensed") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
@@ -2230,15 +2227,18 @@ data %>% select(num_range("Q13_1_",1:5), career = Q20)     %>%
 
 #### Responses as % of career stage
 
+Percentages may not add up to 100% as members that have not answered the question 
+are not shown.
+
 ```{r aware_sw_career_per}
 
-data %>% select(num_range("Q13_1_",1:5), career = Q20)     %>%
+data %>% select(num_range("Q13_1_",1:5), career = Q20)                                  %>%
          pivot_longer(cols = starts_with("Q13"),
                       names_to = NULL,
                       values_to = "understanding")                                      %>%
          filter(understanding != 0)                                                     %>%
          group_by(career)                                                               %>% 
-         mutate(N = n())                                                                %>% 
+         mutate(N = n())                                                                %>%
          group_by(understanding, career)                                                %>% 
          mutate(per = n()/N)                                                            %>% 
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
