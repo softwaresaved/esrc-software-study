@@ -2981,7 +2981,7 @@ data %>% select(starts_with("Q15_"), -"Q15_a") %>%
 
 ```
 
-### Licensing policies awareness with career stage distributions
+### Licensing policies awareness by career stage
 
 ```{r licensing_career}
 
@@ -2999,6 +2999,28 @@ data %>% select(starts_with("Q15_"), -"Q15_a", career = Q20) %>%
          geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 3) +
          ylab("Numbers") + xlab("Aware of the policy for") +
          scale_fill_brewer(palette = "Set1", name = "Career stage") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+```
+
+## Licensing policies awareness by gender
+
+```{r licensing_gender}
+
+data %>% select(starts_with("Q15_"), -"Q15_a", gender = Q21) %>%
+         pivot_longer(cols = starts_with("Q15_"),
+                      names_to = NULL,
+                      values_to ="aware")      %>%
+         filter(aware != 0)                    %>%
+         group_by(aware)                       %>%
+         mutate(n = n())                       %>% 
+         group_by(gender, aware)               %>% 
+         ggplot(aes(x = reorder(aware, -n), fill = gender)) +
+         geom_bar(colour = "black") +
+         theme_bw() +
+         geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 3) +
+         ylab("Numbers") + xlab("Aware of the policy for") +
+         scale_fill_brewer(palette = "Set2", name = "Gender") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
 ```
@@ -3040,7 +3062,7 @@ listOther("Q15_a")
 What barriers have you experienced to the use of software in your
 research? (Check all that apply.)
 
-### Barriers frequencies
+### Barriers
 
 ```{r barriers}
 
@@ -3060,7 +3082,7 @@ data %>%  select(num_range("Q16_", 1:13))         %>%
 
 ```
 
-### Barriers frequencies with careers
+### Barriers by career stage
 
 ```{r barriers_careeer}
 
@@ -3156,7 +3178,7 @@ data %>%  select(num_range("Q16_", 1:13), gender = Q21) %>%
 
 ```{r barriers_dis}
 
-data %>%  select(num_range("Q16_", 1:13), dis = Q23) %>%
+data %>%  select(num_range("Q16_", 1:13), dis = Q23)    %>%
   pivot_longer(cols = num_range("Q16_", 1:13),
                names_to = NULL,
                values_to = "barriers")                  %>%
