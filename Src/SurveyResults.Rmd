@@ -4055,19 +4055,22 @@ Do you consider yourself to have a disability
 
 ```{r dissability}
 
-data %>% select(dis = "Q23") %>% 
-         group_by(dis)       %>% 
-         mutate(n = n())     %>% 
-         ggplot(aes(x = reorder(dis, -n))) +
-         geom_bar(fill = "light blue", colour = "black") +
+data %>% select(dis = "Q23")                      %>% 
+         mutate(N = n())                          %>% 
+         group_by(dis)                            %>% 
+         mutate(n = n())                          %>% 
+         mutate(per = percent(n/N, accuracy = 1)) %>% 
+         ggplot(aes(x = reorder(dis, -n), fill = dis)) +
+         geom_bar(colour = "black") +
          theme_bw() +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         xlab("Disability") + ylab("Numbers")  
+         geom_text(aes(label = paste0(n, " (", per, ")")), stat = "count", vjust = -0.5, size = 3) +
+         xlab("Disability") + ylab("Numbers")  + theme(legend.position = "None") +
+         scale_fill_brewer(palette = "Set3", name = "Disability")
 ```
 
 ### Disability by career stage
 
-```{r dissability_career}
+```{r disability_career}
 
 data %>% select(dis = Q23, career = Q20) %>% 
          group_by(dis)                   %>% 
@@ -4082,9 +4085,30 @@ data %>% select(dis = Q23, career = Q20) %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
+As a tile diagram:
+
+```{r disability_career_tile}
+
+data %>% select(dis = Q23, career = Q20)           %>% 
+         mutate(N = n())                           %>% 
+         group_by(dis, career)                     %>% 
+         mutate(n = n())                           %>% 
+         mutate(per = percent(n/N, accuracy = 1))  %>% 
+         ggplot(aes(x = dis, y = career, fill = n)) +
+         geom_tile(colour = "black") +
+         theme_bw() +
+         xlab("Disability") + ylab("Career") +
+         geom_text(aes(label = n), colour = "black", size = 3) +
+         theme(legend.position = "None") +
+         geom_text(aes(label = paste0(n," (", per,")")), colour = "white", size = 3) +
+         #geom_text(aes(label = n), colour = "white", size = 3) +
+         scale_fill_continuous(high = "#132B43", low = "#56B1F7")
+
+```
+
 ### Disability as % of career stage
 
-```{r dissability_career_per}
+```{r disability_career_per}
 
 data %>% select(dis = Q23, career = Q20)    %>% 
          group_by(career)                   %>% 
@@ -4104,7 +4128,7 @@ data %>% select(dis = Q23, career = Q20)    %>%
 
 ### Disability by gender
 
-```{r dissability_gender}
+```{r disability_gender}
 
 data %>% select(dis = Q23, gender = Q21) %>% 
          group_by(dis)                   %>% 
@@ -4117,6 +4141,52 @@ data %>% select(dis = Q23, gender = Q21) %>%
          geom_text(aes(x = dis, label = ..count..),
                    position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+As a tile diagram:
+
+```{r disability_gender_tile}
+
+data %>% select(dis = Q23, gender = Q21)           %>% 
+         mutate(N = n())                           %>% 
+         group_by(dis, gender)                     %>% 
+         mutate(n = n())                           %>% 
+         mutate(per = percent(n/N, accuracy = 1))  %>% 
+         ggplot(aes(x = dis, y = gender, fill = n)) +
+         geom_tile(colour = "black") +
+         theme_bw() +
+         xlab("Disability") + ylab("Gender") +
+         geom_text(aes(label = n), colour = "black", size = 3) +
+         theme(legend.position = "None") +
+         geom_text(aes(label = paste0(n," (", per,")")), colour = "white", size = 3) +
+         #geom_text(aes(label = n), colour = "white", size = 3) +
+         scale_fill_continuous(high = "#132B43", low = "#56B1F7")
+
+```
+
+### Disability vs Institution
+
+```{r disability_institution_tile}
+
+data %>% select(dis = Q23, institution = CleanLocs)    %>%
+         filter(!is.na(dis) & !is.na(institution))     %>% 
+         mutate(N = n())                               %>%
+         group_by(dis, institution)                    %>% 
+         mutate(n = n())                               %>% 
+         mutate(per = percent(n/N, accuracy = 1))      %>% 
+         distinct(dis, institution, per, n)            %>% 
+         ggplot(aes(y = dis, x = institution, fill = n)) +
+         geom_tile(colour = "black") +
+         theme_bw() +
+         xlab("Institution") + ylab("Disability") +
+         scale_y_discrete(expand = expansion(add = 0.75), 
+                          labels = function(x) stringr::str_wrap(x, width = 35)) + 
+         theme(axis.text.y = element_text(size = 8), 
+               axis.text.x = element_text(size = 6, angle = -90, vjust = 0.15, hjust=0),
+               legend.position = "none") +
+         #geom_text(aes(label = paste0(n," (", per,")")), colour = "white", size = 3) +
+         geom_text(aes(label = n), colour = "white", size = 3) +
+         scale_fill_continuous(high = "#132B43", low = "#56B1F7") 
 ```
 
 ## Q24-Q27 Not relevant
