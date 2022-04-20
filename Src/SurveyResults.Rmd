@@ -949,7 +949,7 @@ data %>% select(num_range("Q2_b_",1:6))      %>%
          theme_bw() + ylab("Numbers") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.35, size = 2)  +
          xlab("Data sources") + 
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 8)) +
          theme(legend.position = "none")
 ```
 
@@ -969,7 +969,8 @@ data %>% select(num_range("Q2_b_",1:6), career = Q20)      %>%
          theme_bw() + ylab("Numbers") +
          geom_text(aes(label = ..count..), position = position_stack(0.5), stat = "count", size = 3)  +
          xlab("Data sources") + 
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 8),
+               legend.text=element_text(size = 6)) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
@@ -994,7 +995,8 @@ data %>% select(num_range("Q2_b_",1:6), career = Q20)      %>%
          geom_text(aes(label = scales::percent(per, accuracy = 1)), 
                    position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.35, size = 2)  +
          xlab("Data sources") + 
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 8),
+               legend.text=element_text(size = 6)) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
@@ -1014,7 +1016,8 @@ data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
          theme_bw() + ylab("Numbers") +
          geom_text(aes(label = ..count..), position = position_stack(0.5), stat = "count", size = 3)  +
          xlab("Data sources") + 
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 8),
+               legend.text=element_text(size = 6)) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
@@ -1040,7 +1043,8 @@ data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
          geom_text(aes(label = scales::percent(per, accuracy = 1)), 
                    position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.35, size = 2)  +
          xlab("Data sources") + 
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0, size = 8),
+               legend.text=element_text(size = 6)) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
@@ -1062,7 +1066,7 @@ data %>% select(num_range("Q2_b_",1:6), institutions = CleanLocs)     %>%
          ggplot(aes(x = institutions, fill = ds)) + 
          geom_bar(colour = "black") + theme_bw() +
          ylab("Numbers") + xlab("Institutions") + labs(fill = "Data sources") +
-         theme(axis.text.x = element_text(size = 8, angle = -90, vjust = 0.15, hjust=0),
+         theme(axis.text.x = element_text(size = 6, angle = -90, vjust = 0.15, hjust = 0),
                legend.text=element_text(size = 6)) +
          geom_text(aes(label = ..count..), 
                    position = position_stack(),  stat = "count", vjust = -0.35, size = 2)
