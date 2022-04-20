@@ -3883,7 +3883,7 @@ data %>% select(ethnicity = "Q22", career = Q20)    %>%
          group_by(ethnicity, career)                %>% 
          mutate(per = n()/N)                        %>% 
          distinct(ethnicity, career, per)           %>%
-         filter(!grepl("^White", ethnicity))                %>% 
+         filter(!grepl("^White", ethnicity))        %>% 
          ggplot(aes(y = ethnicity, x = per, fill = career)) +
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() +
@@ -3914,7 +3914,7 @@ data %>% select(ethnicity = Q22, career = Q20)    %>%
          xlab("Career stage") + ylab("Ethnicity") +
          scale_y_discrete(expand = expansion(add = 0.75), 
                           labels = function(x) stringr::str_wrap(x, width = 35)) + 
-         theme(axis.text.y = element_text(size = 8)) +
+         theme(axis.text.y = element_text(size = 8), legend.position = "none") +
          geom_text(aes(label = paste0(n," (", per,")")), colour = "white", size = 3) +
          scale_fill_continuous(high = "#132B43", low = "#56B1F7") 
 
@@ -3956,10 +3956,9 @@ data %>% select(ethnicity = Q22, gender = Q21)    %>%
          xlab("Gender") + ylab("Ethnicity") +
          scale_y_discrete(expand = expansion(add = 0.75), 
                           labels = function(x) stringr::str_wrap(x, width = 35)) + 
-         theme(axis.text.y = element_text(size = 8)) +
+         theme(axis.text.y = element_text(size = 8), legend.position = "none") +
          geom_text(aes(label = paste0(n," (", per,")")), colour = "white", size = 3) +
-         scale_fill_continuous(high = "#132B43", low = "#56B1F7") +
-         labs(fill = "Number")
+         scale_fill_continuous(high = "#132B43", low = "#56B1F7") 
 
 ```
 
@@ -3984,6 +3983,59 @@ data %>% select(ethnicity = Q22, Institution = CleanLocs) %>%
          geom_text(aes(x = Institution, y = ethnicity, label = N), na.rm = TRUE,
                    vjust = 4, size = 2, colour = "black") +
          theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) 
+
+```
+
+Can try to use a tile diagram but this is a bit busy.
+
+```{r ethnicity_institution_tile}
+
+data %>% select(ethnicity = Q22, institution = CleanLocs)    %>%
+         filter(!is.na(ethnicity) & !is.na(institution))     %>% 
+         mutate(N = n())                                     %>%
+         group_by(ethnicity, institution)                    %>% 
+         mutate(n = n())                                     %>% 
+         mutate(per = percent(n/N, accuracy = 1))            %>% 
+         distinct(ethnicity, institution, per, n)            %>% 
+         ggplot(aes(y = ethnicity, x = institution, fill = n)) +
+         geom_tile(colour = "black") +
+         theme_bw() +
+         xlab("Institution") + ylab("Ethnicity") +
+         scale_y_discrete(expand = expansion(add = 0.75), 
+                          labels = function(x) stringr::str_wrap(x, width = 35)) + 
+         theme(axis.text.y = element_text(size = 8), 
+               axis.text.x = element_text(size = 6, angle = -90, vjust = 0.15, hjust=0),
+               legend.position = "none") +
+         #geom_text(aes(label = paste0(n," (", per,")")), colour = "white", size = 3) +
+         geom_text(aes(label = n), colour = "white", size = 3) +
+         scale_fill_continuous(high = "#132B43", low = "#56B1F7") 
+
+```
+
+Zooming in to the non-white component (to make the diagram lss busy).
+
+```{r ethnicity_institution_nonwhite_tile}
+
+data %>% select(ethnicity = Q22, institution = CleanLocs)    %>%
+         filter(!is.na(ethnicity) & !is.na(institution))     %>% 
+         mutate(N = n())                                     %>%
+         group_by(ethnicity, institution)                    %>% 
+         mutate(n = n())                                     %>% 
+         mutate(per = percent(n/N, accuracy = 1))            %>% 
+         filter(!grepl("^White", ethnicity))                 %>% 
+         distinct(ethnicity, institution, per, n)            %>% 
+         ggplot(aes(y = ethnicity, x = institution, fill = n)) +
+         geom_tile(colour = "black") +
+         theme_bw() +
+         xlab("Institution") + ylab("Ethnicity") +
+         scale_y_discrete(expand = expansion(add = 0.75), 
+                          labels = function(x) stringr::str_wrap(x, width = 35)) + 
+         theme(axis.text.y = element_text(size = 8), 
+               axis.text.x = element_text(size = 6, angle = -90, vjust = 0.15, hjust=0),
+               legend.position = "none") +
+         #geom_text(aes(label = paste0(n," (", per,")")), colour = "white", size = 3) +
+         geom_text(aes(label = n), colour = "white", size = 3) +
+         scale_fill_continuous(high = "#132B43", low = "#56B1F7") 
 
 ```
 
