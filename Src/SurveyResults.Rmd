@@ -878,12 +878,12 @@ data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
          pivot_longer(cols = starts_with("Q2_"),
                       names_to = NULL,
                       values_to = "ds")                                %>%
+         filter(ds != 0)                                               %>%  
          group_by(career)                                              %>% 
          mutate(N = n())                                               %>% 
-         filter(ds != 0)                                               %>%  
          group_by(id)                                                  %>% 
          mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         distinct(id, choices, career)                                 %>%
+         distinct(id, choices, career, N)                              %>%
          ungroup()                                                     %>% 
          select(-id)                                                   %>% 
          group_by(choices, career)                                     %>%
@@ -1095,6 +1095,8 @@ data %>% select(id = URN, num_range("Q2_b_",1:6))                      %>%
          arrange(desc(n))                                              %>% 
          kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
+
+
 
 ### Other data sources
 
@@ -1900,7 +1902,7 @@ data %>% select(num_range("Q10_", 1:7), career = Q20)   %>%
 
 ### Extending software by gender
 
-```{r extending_career}
+```{r extending_gender}
 
 data %>% select(num_range("Q10_", 1:7), gender = Q21)   %>%
          pivot_longer(cols = num_range("Q10_", 1:7),
@@ -2051,7 +2053,7 @@ data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
 
 ### How skills are acquired by gender
 
-```{r acquiring_skills_career}
+```{r acquiring_skills_gender}
 
 data %>% select(num_range("Q11_", 1:12), gender = Q21)   %>%
          pivot_longer(cols = num_range("Q11_", 1:12),
@@ -2422,6 +2424,7 @@ data %>% select(num_range("Q13_1_",1:5))            %>%
          geom_bar(colour = "black", fill = "light blue") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          theme_bw() + ylab("Numbers") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("Aware of how s/w I use is funded, managed and licensed")
 ```
 
@@ -2440,6 +2443,7 @@ data %>% select(num_range("Q13_1_",1:5), career = Q20)     %>%
          geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 3) +
          theme_bw() + ylab("Numbers") +
          xlab("Aware of how s/w I use is funded, managed and licensed") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
@@ -2552,7 +2556,7 @@ data %>% select(num_range("Q13_2_",1:5), career = Q20)     %>%
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
          ggplot(aes(x = understanding, fill = career)) + 
          geom_bar(colour = "black") +
-         geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 2) +
+         geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 3) +
          theme_bw() + ylab("Numbers") +
          xlab("Aware of how institution/funder's policies on how s/w is funded, managed and licensed") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
@@ -2660,7 +2664,7 @@ data %>% select(num_range("Q13_3_",1:5), career = Q20)     %>%
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
          ggplot(aes(x = understanding, fill = career)) + 
          geom_bar(colour = "black") +
-         geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 2) +
+         geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 3) +
          theme_bw() + ylab("Numbers") +
          xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
@@ -2753,7 +2757,7 @@ data %>% select(num_range("Q13_4_",1:5))            %>%
          geom_bar(colour = "black", fill = "light blue") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          theme_bw() + ylab("Numbers") +
-         xlab("Insufficient incentive for me to learn how my s/w is funded, managed and licensed")
+         xlab("Insufficient incentive learn how s/w is funded, managed and licensed")
 ```
 
 #### Responses by career stage
@@ -2768,7 +2772,7 @@ data %>% select(num_range("Q13_4_",1:5), career = Q20)     %>%
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
          ggplot(aes(x = understanding, fill = career)) + 
          geom_bar(colour = "black") +
-         geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 2) +
+         geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 3) +
          theme_bw() + ylab("Numbers") +
          xlab("Insufficient incentive for me to learn how my s/w is funded, managed and licensed") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
@@ -2795,7 +2799,7 @@ data %>% select(num_range("Q13_4_",1:5), career = Q20)     %>%
                        position = position_dodge2(width = 0.9, preserve = "single"), size = 2, vjust = -0.5) +
          scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
          theme_bw() + ylab("Percent") +
-         xlab("Insufficient incentive for me to learn how my s/w is funded, managed and licensed") +
+         xlab("Insufficient incentive to learn how s/w is funded, managed and licensed") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
@@ -2813,7 +2817,7 @@ data %>% select(num_range("Q13_4_",1:5), gender = Q21)     %>%
          geom_bar(colour = "black") +
          geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 3) +
          theme_bw() + ylab("Numbers") +
-         xlab("Insufficient incentive for me to learn how my s/w is funded, managed and licensed") +
+         xlab("Insufficient incentive to learn how s/w is funded, managed and licensed") +
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
@@ -2839,7 +2843,7 @@ data %>% select(num_range("Q13_4_",1:5), gender = Q21)     %>%
                    size = 2, vjust = -0.5) +
          scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
          theme_bw() + ylab("Percent") +
-         xlab("Insufficient incentive for me to learn how my s/w is funded, managed and licensed") +
+         xlab("Insufficient incentive to learn how s/w is funded, managed and licensed") +
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
@@ -2865,7 +2869,7 @@ data %>%  select(num_range("Q14_", 1:9))         %>%
   geom_bar(fill = "light blue", colour = "black") +
   theme_bw() +
   xlab("Where software is run") + ylab("Numbers") +
-  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 2) +
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
 
