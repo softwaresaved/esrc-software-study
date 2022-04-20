@@ -1153,7 +1153,7 @@ data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
         ggplot(aes(x = reorder(DataSharing, -n), fill = career)) +
         geom_bar(colour = "black") + 
         theme_bw() +
-        theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+        theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.text=element_text(size = 8)) +
         xlab("Data sharing habits") + ylab("Numbers") +
         geom_text(aes(x = DataSharing, label = ..count..),
                     position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
@@ -1178,7 +1178,7 @@ data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
         ggplot(aes(x = DataSharing, y= per,fill = career)) +
         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
         theme_bw() +
-        theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+        theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.text=element_text(size = 8)) +
         xlab("Data sharing habits") + ylab("Numbers") +
         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
         geom_text(aes(x = DataSharing, label = scales::percent(per, accuracy = 1)), vjust = -0.5,
@@ -1216,7 +1216,7 @@ data %>% select(num_range("Q4_",1:26))                              %>%
          theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
          ylab("Numbers") + xlab("Software used") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 2) +
-         theme(legend.position = "none")
+         theme(axis.text.x = element_text(size = 8), legend.position = "none")
 ```
 
 ### Software used with responses segmented by career
@@ -1233,7 +1233,7 @@ data %>% select(num_range("Q4_",1:26), career = "Q20")                       %>%
          ggplot(aes(x = reorder(software,-n), fill = career)) +
          geom_bar(colour = "black") +
          theme_bw() +
-         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
+         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0, size = 8), legend.text=element_text(size = 8)) +
          ylab("Numbers") + xlab("Software used") +
          geom_text(aes(x = software, label = ..count..),
                 position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 2) +
@@ -1257,14 +1257,13 @@ data %>% select(num_range("Q4_",1:26), career = "Q20")                       %>%
          ggplot(aes(x = reorder(software,-N), y = per, fill = career)) +
          geom_col(colour = "black") +
          theme_bw() +
-         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
+         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0, size = 8), legend.text=element_text(size = 8)) +
          ylab("Percent") + xlab("Software used") +
          scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
          geom_text(aes(x = software, y = per, label = scales::percent(per, accuracy = 1)), 
                  position = position_fill(vjust = 0.5),
                  size = 2) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage") +
-        theme(axis.text.x = element_text(size = 8))  
+         scale_fill_brewer(palette = "Set1", name = "Career stage") 
 ```
 
 ### Software used by percentage career stage population
@@ -1285,7 +1284,7 @@ data %>% select(num_range("Q4_",1:26), career = "Q20")                       %>%
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() +
          scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
+         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0, size = 8), legend.text=element_text(size = 8)) +
          ylab("Percentage") + xlab("Software used") +
          scale_fill_brewer(palette = "Set1", name = "Career stage") 
 ```
@@ -1308,7 +1307,7 @@ data %>% select(num_range("Q4_",1:26), num_range("Q19_", 1:22))              %>%
          ggplot(aes(x = software, y = discipline, size = n)) +
          geom_point(colour = "black", alpha = 0.25) +
          theme_bw() +
-         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
+         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0), legend.text=element_text(size = 8)) +
          ylab("Discipline") + xlab("Software used") + labs(size = "Numbers")
 ```
 
@@ -1328,6 +1327,7 @@ data %>% select(num_range("Q4_",1:26), num_range("Q19_", 1:22))              %>%
          ggplot(aes(x = software, y = discipline, fill = n)) +
          geom_tile(colour = "black") + scale_fill_continuous(high = "#132B43", low = "#56B1F7") +
          theme_minimal() +
+         theme(legend.text=element_text(size = 8)) +
          geom_text(aes(label = n), colour = "white", size = 3) +
          theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
          ylab("Discipline") + xlab("Software used") + labs(fill = "Numbers")
@@ -1397,7 +1397,7 @@ bind_cols(data["Q20"], important_software)                        %>%
                                  stat = "count", size = 3) +
                        ylab("Numbers") + xlab("Most important software") +
                        scale_fill_brewer(palette = "Set1", name = "Career stage") +
-                       theme(axis.text.x = element_text(size = 8))  
+                       theme(axis.text.x = element_text(size = 8), legend.text=element_text(size = 8))  
 
 ```
 
@@ -1430,7 +1430,7 @@ bind_cols(data["Q20"], important_software)                        %>%
                                  size = 2.5) +
                        ylab("Percentage") + xlab("Most important software") +
                        scale_fill_brewer(palette = "Set1", name = "Career stage") +
-                       theme(axis.text.x = element_text(size = 8))  
+                       theme(axis.text.x = element_text(size = 8), legend.text=element_text(size = 8))  
 
 ```
 
@@ -1470,7 +1470,7 @@ bind_cols(data["Q20"], important_software)                        %>%
                                  size = 2) +
                        ylab("percentage") + xlab("Most important software") +
                        scale_fill_brewer(palette = "Set1", name = "Career stage") +
-                       theme(axis.text.x = element_text(size = 8))  
+                       theme(axis.text.x = element_text(size = 8), legend.text=element_text(size = 8))  
 
 
 ```
@@ -1528,7 +1528,7 @@ data %>% select(Q6, career = "Q20")       %>%
 If you answered yes to the previous question, what are your main reasons
 for using open source software?
 
-### Responses
+### Using OS
 
 ```{r reason4os}
 
@@ -1546,6 +1546,97 @@ data %>% select(starts_with("Q6_a"))        %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("Reasons for using Open Source") + ylab("Numbers")
 ```
+
+### Using OS by career 
+
+```{r reason4os_career}
+
+data %>% select(starts_with("Q6_a"), career = Q20)   %>%
+         pivot_longer(cols = starts_with("Q6_a"),
+                      names_to = NULL,
+                      values_to = "UseOS")           %>%
+         filter(UseOS != 0)                          %>%
+         group_by(UseOS, career)                     %>% 
+         mutate(n = n())                             %>% 
+         ggplot(aes(x = reorder(UseOS, -n), fill = career)) + 
+         geom_bar(colour = "black") + 
+         theme_bw() +
+         geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 3) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("Reasons for using Open Source") + ylab("Numbers") +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
+### Using OS by % career stage pop 
+
+```{r reason4os_career_per}
+
+data %>% select(starts_with("Q6_a"), career = Q20)   %>%
+         pivot_longer(cols = starts_with("Q6_a"),
+                      names_to = NULL,
+                      values_to = "UseOS")           %>%
+         filter(UseOS != 0)                          %>%
+         group_by(career)                            %>% 
+         mutate(N = n())                             %>% 
+         group_by(UseOS, career)                     %>% 
+         mutate(per = n()/N)                         %>%
+         distinct(UseOS, career, per)                %>% 
+         ggplot(aes(x = UseOS, y = per, fill = career)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
+         theme_bw() +
+         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+         geom_text(aes(label = scales::percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 2) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("Reasons for using Open Source") + ylab("Numbers") +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
+### Using OS by gender 
+
+```{r reason4os_gender}
+
+data %>% select(starts_with("Q6_a"), gender = Q21)   %>%
+         pivot_longer(cols = starts_with("Q6_a"),
+                      names_to = NULL,
+                      values_to = "UseOS")           %>%
+         filter(UseOS != 0)                          %>%
+         group_by(UseOS, gender)                     %>% 
+         mutate(n = n())                             %>% 
+         ggplot(aes(x = reorder(UseOS, -n), fill = gender)) + 
+         geom_bar(colour = "black") + 
+         theme_bw() +
+         geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 3) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("Reasons for using Open Source") + ylab("Numbers") +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+### Using OS by % gender pop 
+
+```{r reason4os_gender_per}
+
+data %>% select(starts_with("Q6_a"), gender = Q21)   %>%
+         pivot_longer(cols = starts_with("Q6_a"),
+                      names_to = NULL,
+                      values_to = "UseOS")           %>%
+         filter(UseOS != 0)                          %>%
+         group_by(gender)                            %>% 
+         mutate(N = n())                             %>% 
+         group_by(UseOS, gender)                     %>% 
+         mutate(per = n()/N)                         %>%
+         distinct(UseOS, gender, per)                %>% 
+         ggplot(aes(x = UseOS, y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
+         theme_bw() +
+         scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+         geom_text(aes(label = scales::percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 2) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("Reasons for using Open Source") + ylab("Numbers") +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
 
 ### Counting combined choices
 
