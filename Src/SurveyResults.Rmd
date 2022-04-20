@@ -3693,17 +3693,24 @@ this platform.
 ### Gender distribution
 
 ```{r gender}
-data %>% select(gender = Q21)                                   %>%
-         group_by(gender)                                       %>% 
-         mutate(n = n())                                        %>% 
-         ggplot(aes(x = gender)) +
-         geom_bar(fill = "light blue", colour = "black") +
-         theme_bw() +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         xlab("Gender") + ylab("Numbers") 
+
+data %>%  select(gender = Q21)                      %>%
+          mutate(N = n())                           %>% 
+          group_by(gender)                          %>% 
+          mutate(n =  n())                          %>% 
+          mutate(per = percent(n/N, accuracy = 1))  %>% 
+          distinct(n, per, gender)                  %>% 
+          ggplot(aes(x = reorder(gender, -n),  y = n, fill = gender)) +
+          geom_col(colour = "black") +
+          theme_bw() +
+          xlab("Gender") + ylab("Numbers")  +
+          geom_text(aes(label = paste0(n," (", per, ")")), vjust = -0.5, size = 3) +
+          scale_fill_brewer(palette = "Set2", name = "Gender") +
+          theme(legend.position = "none")
+
 ```
 
-### Gender distribution segmented by career stage
+### Gender by career stage
 
 ```{r gender_career}
 data %>% select(gender = Q21, career = Q20)                     %>%
@@ -3733,6 +3740,27 @@ data %>% select(gender = Q21, career = Q20) %>%
          geom_text(aes(x = gender,
                        y = career, label = size), vjust = 2) +
          xlab("Gender") + ylab("Career stage") + theme(legend.position = "none") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+```
+Same information in a tile diagram.
+
+```{r gender_career_tile}
+
+data %>% select(gender = Q21, career = Q20)             %>%
+         mutate(N = n())                                %>% 
+         group_by(gender, career)                       %>%
+         mutate(size = n())                             %>%
+         mutate(per = percent(size/N, accuracy = 1))    %>% 
+         ggplot(aes(x = gender,
+                    y = career, colour = size)) +
+         geom_tile(aes(fill = size)) + 
+         theme_bw() +
+         geom_text(aes(x = gender,
+                       y = career, label = paste0(size," (",per,")")), colour = "white") +
+         xlab("Gender") + ylab("Career stage") + 
+         scale_fill_continuous(high = "#132B43", low = "#56B1F7") + 
+         theme(legend.position = "none") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
 ```
