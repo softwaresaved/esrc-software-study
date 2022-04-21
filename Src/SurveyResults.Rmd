@@ -95,6 +95,8 @@ data0$CleanLocs <- cleanlocs[[1]]
 
 # Remove three non-UK contributions
 uids <-  c("839822-839804-89766209", "839822-839804-90413512", "839822-839804-91099977")
+# Remove one of two entries from the same person
+uids <- c(uids, "839822-839804-91122774")
 
 data0 <- data0 %>% filter(!(URN %in% uids))
 funding <- funding %>% filter(!(URN %in% uids))
@@ -490,6 +492,10 @@ for(i in seq_len(13)){
 }
 
 ## Q17 Institutional affiliation -------------------------------------------
+
+# Amend some data values that can be derived from other fields
+data$Q17[!is.na(data$Q17) & data$Q17 == "PhD student"] <- "University of Bristol"
+data$Q17[!is.na(data$Q17) & data$Q17 == "University"] <-  NA # Can't place
 
 # Add longitude and Latitude coordinates for the institutions
 data <- data %>% left_join(locations, by = c("CleanLocs" = "Location"))
@@ -1619,7 +1625,7 @@ My interpretation of this graph is that obtuse angles are negatively correlated,
 acute are positively correlated, circles are not correlated. The thinner the ellipse
 the stronger the correlation or anti correlation.
 
-```{r q6b_correlations}
+```{r q6a_correlations}
 
 data0 %>% select(starts_with("Q6_a")) -> q  
 names(q) <- os_reasons
@@ -3534,18 +3540,18 @@ listOther("Q16_a")
 
 ## Q17 Institutions
 
-### Top 12 institutions
+### Institutions
 
-The top 12 institutional affiliations of respondents to the survey.
+The institutional affiliations of respondents to the survey.
 
 ```{r TabulateInstitutions}
-data %>% select(Institution = CleanLocs) %>%
-         #filter(!is.na(Institution))     %>%
-         group_by(Institution)           %>%
-         tally()                         %>%
-         arrange(desc(n))                %>%
-        head(n = 12)                     %>% 
-        kbl(format="pipe", align = c("l","r"),
+data %>% select(Institution = CleanLocs)     %>%
+         #filter(!is.na(institution))        %>%
+         group_by(Institution)               %>%
+         replace_na(list(Institution = "-")) %>% 
+         tally()                             %>%
+         arrange(desc(n))                    %>%
+         kbl(format="pipe", align = c("l","r"),
                 col.names = c("Institution", "Numbers"))
 ```
 
