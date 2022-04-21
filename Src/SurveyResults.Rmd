@@ -31,6 +31,8 @@ library(kableExtra, quietly = TRUE)
 library(webshot, quietly = TRUE) 
 library(tibble)
 library(scales)
+library(ellipse, warn.conflicts = FALSE)
+
 
 ```
 
@@ -939,7 +941,7 @@ If you re-use existing data, where do you find these?
 ```{r data_sources}
 
 data %>% select(num_range("Q2_b_",1:6))      %>%
-         pivot_longer(cols = everything(),
+         pivot_longer(cols = num_range("Q2_b_",1:6),
                       names_to = NULL,
                       values_to = "ds")      %>%
          filter(ds != 0)                     %>%
@@ -954,6 +956,25 @@ data %>% select(num_range("Q2_b_",1:6))      %>%
          theme(legend.position = "none")
 ```
 
+### Choice correlations
+
+My interpretation of this graph is that obtuse angles are negatively correlated, 
+acute are positively correlated, circles are not correlated. The thinner the ellipse
+the stronger the correlation or anti correlation.
+
+```{r q2_correlations}
+
+data0 %>% select(num_range("Q2_b_",1:6)) -> q  
+names(q) <- ds
+
+q <- apply(q, 2, function(x) as.integer(x))
+
+my_colors <- brewer.pal(5, "Spectral")
+my_colors <- colorRampPalette(my_colors)(100)
+
+plotcorr(cor(q), col=my_colors[cor(q)*50+50],cex.lab = 0.5*par("cex.lab"))
+
+```
 ### Reusing existing data by career
 
 ```{r data_sources_career}
@@ -1133,7 +1154,9 @@ How do you share your data?
 ```{r sharing_data}
 
 data %>% select(num_range("Q3_", 1:7))                               %>%
-        pivot_longer(cols = everything(), values_to = "DataSharing") %>%
+        pivot_longer(cols = num_range("Q3_", 1:7),
+                     names_to = NULL,
+                     values_to = "DataSharing")                      %>%
         filter(DataSharing != 0)                                     %>%
         group_by(DataSharing)                                        %>% 
         mutate(n = n())                                              %>% 
@@ -1144,6 +1167,26 @@ data %>% select(num_range("Q3_", 1:7))                               %>%
         xlab("Data sharing habits") + ylab("Numbers") +
         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
         theme(legend.position = "none") 
+```
+
+### Choice correlations
+
+My interpretation of this graph is that obtuse angles are negatively correlated, 
+acute are positively correlated, circles are not correlated. The thinner the ellipse
+the stronger the correlation or anti correlation.
+
+```{r q3_correlations}
+
+data0 %>% select(num_range("Q3_", 1:7)) -> q  
+names(q) <- sharing
+
+q <- apply(q, 2, function(x) as.integer(x))
+
+my_colors <- brewer.pal(5, "Spectral")
+my_colors <- colorRampPalette(my_colors)(100)
+
+plotcorr(cor(q), col=my_colors[cor(q)*50+50])
+
 ```
 
 ### Data sharing by career stage
@@ -1224,6 +1267,25 @@ data %>% select(num_range("Q4_",1:26))                              %>%
          theme(axis.text.x = element_text(size = 8), legend.position = "none")
 ```
 
+### Choice correlations
+
+My interpretation of this graph is that obtuse angles are negatively correlated, 
+acute are positively correlated, circles are not correlated. The thinner the ellipse
+the stronger the correlation or anti correlation.
+
+```{r q4_correlations}
+
+data0 %>% select(num_range("Q4_",1:26)) -> q  
+names(q) <- software
+
+q <- apply(q, 2, function(x) as.integer(x))
+
+my_colors <- brewer.pal(5, "Spectral")
+my_colors <- colorRampPalette(my_colors)(100)
+
+plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
+
+```
 ### Software used with responses segmented by career
 
 ```{r sw_used_career}
@@ -1538,7 +1600,7 @@ for using open source software?
 ```{r reason4os}
 
 data %>% select(starts_with("Q6_a"))        %>%
-         pivot_longer(cols = everything(),
+         pivot_longer(cols = starts_with("Q6_a"),
                       names_to = NULL,
                       values_to = "UseOS")  %>%
          filter(UseOS != 0)                 %>%
@@ -1551,7 +1613,25 @@ data %>% select(starts_with("Q6_a"))        %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("Reasons for using Open Source") + ylab("Numbers")
 ```
+### Choice correlations
 
+My interpretation of this graph is that obtuse angles are negatively correlated, 
+acute are positively correlated, circles are not correlated. The thinner the ellipse
+the stronger the correlation or anti correlation.
+
+```{r q6b_correlations}
+
+data0 %>% select(starts_with("Q6_a")) -> q  
+names(q) <- os_reasons
+
+q <- apply(q, 2, function(x) as.integer(x))
+
+my_colors <- brewer.pal(5, "Spectral")
+my_colors <- colorRampPalette(my_colors)(100)
+
+plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
+
+```
 ### Using OS by career 
 
 ```{r reason4os_career}
@@ -1695,6 +1775,26 @@ data %>% select(starts_with("Q6_b"))        %>%
          xlab("Reasons for not using Open Source") + ylab("Numbers")
 ```
 
+### Choice correlations
+
+My interpretation of this graph is that obtuse angles are negatively correlated, 
+acute are positively correlated, circles are not correlated. The thinner the ellipse
+the stronger the correlation or anti correlation.
+
+```{r q6b_correlations}
+
+data0 %>% select(starts_with("Q6_b")) -> q  
+names(q) <- no_os
+
+q <- apply(q, 2, function(x) as.integer(x))
+
+my_colors <- brewer.pal(5, "Spectral")
+my_colors <- colorRampPalette(my_colors)(100)
+
+plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
+
+```
+
 ### Responses by career stage
 
 ```{r reasons4NotOS_career}
@@ -1790,6 +1890,26 @@ data %>% select(num_range("Q7_", 1:7))              %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("How Software is being maintained") + ylab("Numbers") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 2)
+```
+
+### Choice correlations
+
+My interpretation of this graph is that obtuse angles are negatively correlated, 
+acute are positively correlated, circles are not correlated. The thinner the ellipse
+the stronger the correlation or anti correlation.
+
+```{r q7_correlations}
+
+data0 %>% select(num_range("Q7_", 1:7)) -> q  
+names(q) <- swmaintained
+
+q <- apply(q, 2, function(x) as.integer(x))
+
+my_colors <- brewer.pal(5, "Spectral")
+my_colors <- colorRampPalette(my_colors)(100)
+
+plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
+
 ```
 
 ### Software maintainance by career
@@ -1952,6 +2072,25 @@ data %>% select(num_range("Q10_", 1:7))                 %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
 
+### Choice correlations
+
+My interpretation of this graph is that obtuse angles are negatively correlated, 
+acute are positively correlated, circles are not correlated. The thinner the ellipse
+the stronger the correlation or anti correlation.
+
+```{r q10_correlations}
+
+data0 %>% select(num_range("Q10_", 1:7)) -> q  
+names(q) <- swuse
+
+q <- apply(q, 2, function(x) as.integer(x))
+
+my_colors <- brewer.pal(5, "Spectral")
+my_colors <- colorRampPalette(my_colors)(100)
+
+plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
+
+```
 ### Extending software by career
 
 ```{r extending_career}
@@ -1971,6 +2110,7 @@ data %>% select(num_range("Q10_", 1:7), career = Q20)   %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
+
 ### Extending software by % career stage
 
 ```{r extending_career_per}
@@ -2098,6 +2238,26 @@ data %>% select(num_range("Q11_", 1:12))                 %>%
          xlab("Where skills are acquired") + ylab("Numbers") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+```
+
+### Choice correlations
+
+My interpretation of this graph is that obtuse angles are negatively correlated, 
+acute are positively correlated, circles are not correlated. The thinner the ellipse
+the stronger the correlation or anti correlation.
+
+```{r q11_correlations}
+
+data0 %>% select(num_range("Q11_", 1:12)) -> q  
+names(q) <- skills
+
+q <- apply(q, 2, function(x) as.integer(x))
+
+my_colors <- brewer.pal(5, "Spectral")
+my_colors <- colorRampPalette(my_colors)(100)
+
+plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
+
 ```
 
 ### How skills are acquired by career stage
@@ -2969,6 +3129,28 @@ data %>%  select(num_range("Q14_", 1:9))         %>%
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
 
+### Choice correlations
+
+My interpretation of this graph is that obtuse angles are negatively correlated, 
+acute are positively correlated, circles are not correlated. The thinner the ellipse
+the stronger the correlation or anti correlation. Removed the use of tier 1 and
+tier 2 as these got no response.
+
+```{r q14_correlations}
+
+data0 %>% select(num_range("Q14_", 1:9)) -> q  
+ q <- q[,c(-6, -7)]
+names(q) <- hw[c(-6, -7)]
+
+q <- apply(q, 2, function(x) as.integer(x))
+
+my_colors <- brewer.pal(5, "Spectral")
+my_colors <- colorRampPalette(my_colors)(100)
+
+plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
+
+```
+
 ### Where software is run by career stage
 
 ```{r where_sw_run_career}
@@ -3081,6 +3263,7 @@ data %>% select(starts_with("Q15_"), -"Q15_a") %>%
 
 ```
 
+
 ### Licensing policies awareness by career stage
 
 ```{r licensing_career}
@@ -3103,7 +3286,7 @@ data %>% select(starts_with("Q15_"), -"Q15_a", career = Q20) %>%
 
 ```
 
-## Licensing policies awareness by gender
+### Licensing policies awareness by gender
 
 ```{r licensing_gender}
 
@@ -3179,6 +3362,26 @@ data %>%  select(num_range("Q16_", 1:13))         %>%
   xlab("Barriers to software use") + ylab("Numbers") +
   geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 2) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+```
+
+### Choice correlations
+
+My interpretation of this graph is that obtuse angles are negatively correlated, 
+acute are positively correlated, circles are not correlated. The thinner the ellipse
+the stronger the correlation or anti correlation.
+
+```{r q16_correlations}
+
+data0 %>% select(num_range("Q16_", 1:13)) -> q  
+names(q) <- barriers
+
+q <- apply(q, 2, function(x) as.integer(x))
+
+my_colors <- brewer.pal(5, "Spectral")
+my_colors <- colorRampPalette(my_colors)(100)
+
+plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
 
 ```
 
