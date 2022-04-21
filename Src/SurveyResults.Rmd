@@ -96,7 +96,7 @@ data0$CleanLocs <- cleanlocs[[1]]
 # Remove three non-UK contributions
 uids <-  c("839822-839804-89766209", "839822-839804-90413512", "839822-839804-91099977")
 # Remove one of two entries from the same person
-uids <- c(uids, "839822-839804-91122774")
+uids <- c(uids, "839822-839804-91021028")
 
 data0 <- data0 %>% filter(!(URN %in% uids))
 funding <- funding %>% filter(!(URN %in% uids))
@@ -467,7 +467,7 @@ data$Q15_2_2 <- gsub("1", "FunderPublishing", data$Q15_2_2)
 data$Q15_3_1 <- gsub("1", "ProjectLicensing", data$Q15_3_1)
 data$Q15_3_2 <- gsub("1", "ProjectPublishing", data$Q15_3_2)
 
-# ## Q16 barriers to the use of software -------------------------------------
+## Q16 barriers to the use of software -------------------------------------
 # 1	Lack of expertise within your team
 # 2	Unsure how to best engage with research technical specialists such as software engineers, digital archivists, etc.
 # 3	Training is not available
@@ -494,8 +494,9 @@ for(i in seq_len(13)){
 ## Q17 Institutional affiliation -------------------------------------------
 
 # Amend some data values that can be derived from other fields
-data$Q17[!is.na(data$Q17) & data$Q17 == "PhD student"] <- "University of Bristol"
-data$Q17[!is.na(data$Q17) & data$Q17 == "University"] <-  NA # Can't place
+data$CleanLocs[!is.na(data$CleanLocs) & data$CleanLocs == "PhD student"] <- "University of Bristol"
+data$CleanLocs[!is.na(data$CleanLocs) & data$CleanLocs == "Bristol"] <- "University of Bristol"
+data$CleanLocs[!is.na(data$CleanLocs) & data$CleanLocs == "University"] <-  NA # Can't place
 
 # Add longitude and Latitude coordinates for the institutions
 data <- data %>% left_join(locations, by = c("CleanLocs" = "Location"))
@@ -3550,9 +3551,10 @@ data %>% select(Institution = CleanLocs)     %>%
          group_by(Institution)               %>%
          replace_na(list(Institution = "-")) %>% 
          tally()                             %>%
+         filter(n > 3)                       %>% 
          arrange(desc(n))                    %>%
          kbl(format="pipe", align = c("l","r"),
-                col.names = c("Institution", "Numbers"))
+                col.names = c("Institutions", "Responses"))
 ```
 
 ### Map institutions
