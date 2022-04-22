@@ -826,7 +826,7 @@ data %>% select(id = URN, num_range("Q2_",1:2))                       %>%
 
 ### Combined plot
 
-Can produce a plot of the above table.
+Can produce a plot of the above table. N = 163.
 
 ```{r datause_choices_plot}
 
@@ -839,14 +839,16 @@ data %>% select(id = URN, num_range("Q2_",1:2))                       %>%
          mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
          distinct(id, choices)                                         %>% 
          ungroup()                                                     %>% 
-         select(-id)                                                   %>% 
-         group_by(choices)                                             %>% 
-         tally()                                                       %>% 
+         select(-id)                                                   %>%
+         mutate(N = n())                                               %>% 
+         group_by(choices)                                             %>%
+         tally()                                                       %>%
+         mutate(per = percent(n/N, accuracy = 1))                      %>% 
          arrange(desc(n))                                              %>% 
          ggplot(aes(x = choices, y = n)) + 
          geom_col(fill = "light blue", colour = "black") + theme_bw() +
          xlab("Data use") + ylab("Numbers") +
-         geom_text(aes(label = n), vjust = -0.5, size = 2) +
+         geom_text(aes(label = paste0(n," (",per,")")), vjust = -0.5, size = 3) +
          scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse"))
 ```
 
@@ -889,28 +891,60 @@ data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
                       names_to = NULL,
                       values_to = "ds")                                %>%
          filter(ds != 0)                                               %>%  
-         group_by(career)                                              %>% 
-         mutate(N = n())                                               %>% 
          group_by(id)                                                  %>% 
          mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         distinct(id, choices, career, N)                              %>%
+         distinct(id, choices, career)                                 %>%
+         group_by(career)                                              %>% 
+         mutate(N = n())                                               %>% 
          ungroup()                                                     %>% 
          select(-id)                                                   %>% 
          group_by(choices, career)                                     %>%
-         mutate(per = n()/N)                                           %>% 
-         distinct(choices, career, per)                                %>% 
-         ggplot(aes(x = choices, y = per, fill = career)) + 
+         mutate(n = n())                                               %>% 
+         mutate(per = percent(n/N, accuracy = 1))                      %>% 
+         distinct(choices, career, per, n)                             %>% 
+         ggplot(aes(x = choices, y = n/N, fill = career)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
          theme_bw() +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          xlab("Data use") + ylab("Percentage") +
-         geom_text(aes(label = percent(per, accuracy = 1)), 
+         geom_text(aes(label = paste0(n," (",per,")")), 
                    position = position_dodge2(width = 0.9, preserve = "single"), 
                    vjust = -0.5, size = 2) +
          scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
+Filter out the "Other" and "-" categories.
 
+```{r datause_choices_career_per2}
+
+data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
+         pivot_longer(cols = starts_with("Q2_"),
+                      names_to = NULL,
+                      values_to = "ds")                                %>%
+         filter(ds != 0)                                               %>% 
+         group_by(id)                                                  %>% 
+         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
+         distinct(id, choices, career)                                 %>%
+         group_by(career)                                              %>% 
+         mutate(N = n())                                               %>% 
+         ungroup()                                                     %>% 
+         select(-id)                                                   %>% 
+         group_by(choices, career)                                     %>%
+         mutate(n = n())                                               %>% 
+         mutate(per = percent(n/N, accuracy = 1))                      %>% 
+         filter(career != "Other" & career != "-")                     %>% 
+         distinct(choices, career, per, n)                             %>% 
+         ggplot(aes(x = choices, y = n/N, fill = career)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
+         theme_bw() +
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         xlab("Data use") + ylab("Percent") +
+         geom_text(aes(label = paste0(n," (",per,")")), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), 
+                   vjust = -0.5, size = 2.5) +
+         scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
 ## Q2a most important sources of data
 
 What are your most important data source(s)?
