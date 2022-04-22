@@ -93,6 +93,11 @@ cleanlocs <- read_csv("../Data/CleanedLocations.csv", col_types = cols(Q17 = col
 # Attach the cleaned locations to the data set
 data0$CleanLocs <- cleanlocs[[1]]
 
+# Add some slightly simplified version of other disciplines for Q19
+otherdis <- read_csv("../Data/q19-other-disciplines.csv", show_col_types = FALSE)
+# Join with the current data
+data0 <-  data0 %>% left_join(otherdis, by = "URN")
+
 # Remove three non-UK contributions
 uids <-  c("839822-839804-89766209", "839822-839804-90413512", "839822-839804-91099977")
 # Remove one of two entries from the same person
@@ -3911,6 +3916,21 @@ data %>% select(Institutions = CleanLocs, num_range("Q19_", 1:22))       %>%
 ```
 
 ### Other disciplines
+
+We can simplify/generalise the values provided to get an overview
+
+```{r simplified_other_disciplines}
+
+data %>% select(OtherDisciplines)         %>% 
+         group_by(OtherDisciplines)       %>% 
+         filter(!is.na(OtherDisciplines)) %>% 
+         tally()                          %>% 
+         arrange(desc(n))                 %>% 
+         kbl(format="pipe", align = c("l","r"), col.names = c("Discipline", "Count"))
+```
+
+
+The actual values provided are as below:
 
 ```{r other_disciplines, results = 'asis'}
 
