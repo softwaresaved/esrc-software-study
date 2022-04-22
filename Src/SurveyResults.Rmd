@@ -3943,7 +3943,7 @@ listOther("Q19_a")
 Career stage: Please select the career stage that most accurately
 describes your role.
 
-### Career stage numbers
+### Career stage
 
 ```{r career}
 
@@ -4348,7 +4348,7 @@ listOther("Q22_a")
 
 Do you consider yourself to have a disability
 
-### Disability frequency
+### Disability
 
 ```{r dissability}
 
@@ -4394,7 +4394,7 @@ data %>% select(dis = Q23, career = Q20)           %>%
          ggplot(aes(x = dis, y = career, fill = n)) +
          geom_tile(colour = "black") +
          theme_bw() +
-         xlab("Disability") + ylab("Career") +
+         xlab("Disability") + ylab("Career stage") +
          geom_text(aes(label = n), colour = "black", size = 3) +
          theme(legend.position = "None") +
          geom_text(aes(label = paste0(n," (", per,")")), colour = "white", size = 3) +
@@ -4484,6 +4484,29 @@ data %>% select(dis = Q23, institution = CleanLocs)    %>%
          #geom_text(aes(label = paste0(n," (", per,")")), colour = "white", size = 3) +
          geom_text(aes(label = n), colour = "white", size = 3) +
          scale_fill_continuous(high = "#132B43", low = "#56B1F7") 
+```
+
+### Disability by discipline
+
+```{r research_dis_tile}
+data %>%  select(dis = Q23, num_range("Q19_", 1:22))      %>%
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = NULL,
+                      values_to = "disciplines")          %>%
+          filter(disciplines != 0)                        %>%
+          mutate(N = n())                                 %>% 
+          group_by(dis, disciplines)                      %>% 
+          mutate(n = n())                                 %>% 
+          mutate(per = percent(n/N, accuracy = 1))        %>% 
+          ggplot(aes(x = reorder(disciplines, -n), y = dis)) +
+          geom_tile(aes(fill = n), colour = "black") +
+          theme_bw() +
+          xlab("Discipline") + ylab("Disability") +
+          #geom_text(aes(label = paste0(n, " (",per,")")), colour = "white", size = 2) +
+          geom_text(aes(label = n), colour = "white", size = 2) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0),
+                legend.position = "None")  +
+         scale_fill_continuous(high = "#132B43", low = "#56B1F7")
 ```
 
 ## Q24-Q27 Not relevant
