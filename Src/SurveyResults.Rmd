@@ -3708,13 +3708,15 @@ data %>%  select(num_range("Q19_", 1:22))               %>%
                        names_to = "questions",
                       values_to = "disciplines")        %>%
           filter(disciplines != 0)                      %>%
+          mutate(N = n())                               %>% 
           group_by(disciplines)                         %>% 
           mutate(n = n())                               %>% 
+          mutate(per = percent(n/N, accuracy = 1))      %>% 
           ggplot(aes(x = reorder(disciplines, -n))) +
           geom_bar(fill = "light blue", colour = "black") +
           theme_bw() +
           xlab("Discipline") + ylab("Numbers") +
-          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
+          geom_text(aes(label = paste0(n, " (",per,")")), stat = "count", vjust = -0.5, size = 2) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
 
@@ -3884,6 +3886,36 @@ data %>% select(Institutions = CleanLocs, num_range("Q19_", 1:22))       %>%
          ylab("Institutions") + xlab("Discipline") +
          labs(size = "Discipline %") + 
          scale_size_continuous(labels = percent_format(accuracy = 1))
+```
+As a tile diagram:
+
+```{r awareness_dist_per_tile}
+
+data %>% select(Institutions = CleanLocs, num_range("Q19_", 1:22))       %>%
+         pivot_longer(cols = starts_with("Q19"),
+                      names_to = NULL,
+                      values_to ="discipline")                           %>%
+         filter(discipline != 0 & !is.na(Institutions))                  %>%
+         mutate(N = n())                                                 %>% 
+         group_by(discipline, Institutions)                              %>%
+         mutate(n = n())                                                 %>%
+         mutate(per = percent(n/N, accuracy = 1))                        %>% 
+         ggplot(aes(x = discipline, y = Institutions)) +
+         theme_bw() +
+         geom_tile(aes(fill = n)) +
+         theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0),
+               axis.text.y = element_text(size = 6), legend.position = "None") +
+         geom_text(aes(label = n), size = 2, colour = "white") +
+         ylab("Institutions") + xlab("Discipline") +
+         scale_fill_continuous(high = "#132B43", low = "#56B1F7")
+```
+
+### Other disciplines
+
+```{r other_disciplines, results = 'asis'}
+
+listOther("Q19_a")
+
 ```
 
 ## Q20 Career stage
