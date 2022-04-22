@@ -950,6 +950,35 @@ data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
          scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
+### Combined data use by institution
+
+```{r}
+data %>% select(id = URN, num_range("Q2_",1:2), institution = CleanLocs)          %>%
+         pivot_longer(cols = starts_with("Q2_"),
+                      names_to = NULL,
+                      values_to = "ds")                                %>%
+         filter(ds != 0)                                               %>%  
+         group_by(id)                                                  %>% 
+         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
+         distinct(id, choices, institution)                            %>%
+         ungroup()                                                     %>% 
+         select(-id)                                                   %>% 
+         group_by(institution)                                         %>% 
+         filter(n() > 3)                                               %>% 
+         group_by(choices, institution)                                %>%
+         mutate(n = n())                                               %>% 
+         distinct(choices, institution, n)                             %>% 
+         ggplot(aes(x = choices, y = institution)) + 
+         geom_tile(aes(fill = n)) + 
+         theme_bw() +
+         xlab("Data use") + ylab("Institutions") +
+         theme(axis.text.y = element_text(size = 8), legend.position = "None") +
+         geom_text(aes(label = n), size = 2, colour = "white") +
+         scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
+         scale_fill_continuous(high = "#132B43", low = "#56B1F7")
+```
+
+
 ## Q2a most important sources of data
 
 What are your most important data source(s)?
