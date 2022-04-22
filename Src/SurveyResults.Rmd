@@ -830,7 +830,7 @@ Can produce a plot of the above table. N = 163.
 
 ```{r datause_choices_plot}
 
-data %>% select(id = URN, num_range("Q2_",1:2))                       %>%
+data %>% select(id = URN, num_range("Q2_",1:2))                        %>%
          pivot_longer(cols = starts_with("Q2_"),
                       names_to = NULL,
                       values_to = "ds")                                %>%
@@ -842,9 +842,9 @@ data %>% select(id = URN, num_range("Q2_",1:2))                       %>%
          select(-id)                                                   %>%
          mutate(N = n())                                               %>% 
          group_by(choices)                                             %>%
-         tally()                                                       %>%
+         mutate(n = n())                                               %>%
          mutate(per = percent(n/N, accuracy = 1))                      %>% 
-         arrange(desc(n))                                              %>% 
+         distinct(n, N, choices, per)                                  %>% 
          ggplot(aes(x = choices, y = n)) + 
          geom_col(fill = "light blue", colour = "black") + theme_bw() +
          xlab("Data use") + ylab("Numbers") +
@@ -901,7 +901,7 @@ data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
          group_by(choices, career)                                     %>%
          mutate(n = n())                                               %>% 
          mutate(per = percent(n/N, accuracy = 1))                      %>% 
-         distinct(choices, career, per, n)                             %>% 
+         distinct(choices, career, per, n, N)                          %>% 
          ggplot(aes(x = choices, y = n/N, fill = career)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
          theme_bw() +
@@ -933,7 +933,7 @@ data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
          mutate(n = n())                                               %>% 
          mutate(per = percent(n/N, accuracy = 1))                      %>% 
          filter(career != "Other" & career != "-")                     %>% 
-         distinct(choices, career, per, n)                             %>% 
+         distinct(choices, career, per, n, N)                          %>% 
          ggplot(aes(x = choices, y = n/N, fill = career)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
          theme_bw() +
