@@ -98,6 +98,11 @@ otherdis <- read_csv("../Data/q19-other-disciplines.csv", show_col_types = FALSE
 # Join with the current data
 data0 <-  data0 %>% left_join(otherdis, by = "URN")
 
+# Important data sources
+importantds <- read_csv("../Data/q2a-mostimportantds.csv", show_col_types = FALSE)
+names(importantds) <-  gsub(" ", "_",names(importantds))
+data0 <- data0 %>% left_join(select(importantds, -Q2_a), by = "URN")
+
 # Remove three non-UK contributions
 uids <-  c("839822-839804-89766209", "839822-839804-90413512", "839822-839804-91099977")
 # Remove one of two entries from the same person
@@ -1053,7 +1058,33 @@ data %>% select(URN, num_range("Q2_",1:2))                                   %>%
 
 What are your most important data source(s)?
 
-Number of responses by career stage.
+### Plot important data sources
+
+This is a simplified version of the input provided by the respondents.
+
+```{r importantDS}
+
+data %>% select(num_range("ImportantDS_", 1:7))                %>% 
+         pivot_longer(cols = num_range("ImportantDS_", 1:7),
+                      names_to = NULL,
+                      values_to = "importantDS")               %>%
+         filter(!is.na(importantDS))                           %>%
+         group_by(importantDS)                                 %>% 
+         mutate(n = n())                                       %>% 
+         distinct(importantDS, n)                              %>% 
+         filter(n > 2)                                         %>% 
+         ggplot(aes(x = reorder(importantDS, -n), y = n)) +
+         geom_col(fill="light blue", colour = "black") +
+         theme_bw() +
+         geom_text(aes(label = n), vjust = -0.5, size = 2) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 8)) +
+         xlab("Data sources") + ylab("Numbers")
+
+```
+
+### List resources
+
+Responses by career stage.
 
 ```{r important_srcs_resp_career}
 
