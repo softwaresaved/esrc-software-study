@@ -1936,7 +1936,7 @@ data %>% select(Q6)       %>%
          geom_bar(fill = "light blue", colour = "black") + 
          theme_bw() +
          xlab("Use of Open Source") + 
-         ylab("Numbers") +
+         ylab("Numbers") + ylim(0, 110) +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) 
 
 ```
@@ -1957,10 +1957,83 @@ data %>% select(Q6, career = "Q20")       %>%
          ylab("Numbers") +
          geom_text(aes(x = Q6, label = n), position = position_stack(vjust = 0.5), 
                                  stat = "count", size = 3) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage") 
+         scale_fill_brewer(palette = "Set1", name = "Career stage") +
+         theme(axis.text.x = element_text(size = 8),
+               legend.text=element_text(size = 6))  
 
 ```
 
+### OS by % career stage
+
+```{r use_os_caree_per}
+
+data %>% select(os = Q6, career = "Q20")           %>%
+         group_by(career)                          %>% 
+         filter(career != "Other" & career != "-") %>% 
+         mutate(N = n())                           %>% 
+         group_by(os, career)                      %>% 
+         mutate(n = n())                           %>% 
+         mutate(per = percent(n/N, accuracy = 1))  %>%
+         distinct(n, N, os, per, career)           %>% 
+         ggplot(aes(x = os, y = n/N, fill = career)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
+         theme_bw() +
+         xlab("Use of Open Source") + scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         ylab("Percent") +
+         geom_text(aes(label = paste0(n," (", per,")")),
+                   position = position_dodge2(width = 0.9, preserve = "single"),
+                   vjust = -0.5, size = 2) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage") +
+         theme(axis.text.x = element_text(size = 8), 
+                             legend.text=element_text(size = 6))  
+
+```
+### OS by gender
+
+```{r use_os_gender}
+
+data %>% select(Q6, gender = Q20)         %>%
+         group_by(Q6)                     %>% 
+         mutate(N = n())                  %>% 
+         group_by(Q6, gender)             %>% 
+         mutate(n = n())                  %>% 
+         ggplot(aes(x = reorder(Q6, -N), fill = gender)) + 
+         geom_bar(colour = "black") + 
+         theme_bw() +
+         xlab("Use of Open Source") + 
+         ylab("Numbers") +
+         geom_text(aes(x = Q6, label = n), position = position_stack(vjust = 0.5), 
+                                 stat = "count", size = 3) +
+         scale_fill_brewer(palette = "Set2", name = "Gender") +
+         theme(axis.text.x = element_text(size = 8),
+               legend.text=element_text(size = 6))  
+
+```
+
+### OS by % gender
+
+```{r use_os_gender_per}
+
+data %>% select(os = Q6, gender = Q21)             %>%
+         group_by(gender)                          %>% 
+         mutate(N = n())                           %>% 
+         group_by(os, gender)                      %>% 
+         mutate(n = n())                           %>% 
+         mutate(per = percent(n/N, accuracy = 1))  %>%
+         distinct(n, N, os, per, gender)           %>% 
+         ggplot(aes(x = os, y = n/N, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
+         theme_bw() +
+         xlab("Use of Open Source") + scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         ylab("Percent") +
+         geom_text(aes(label = paste0(n," (", per,")")),
+                   position = position_dodge2(width = 0.9, preserve = "single"),
+                   vjust = -0.5, size = 2) +
+         scale_fill_brewer(palette = "Set2", name = "Gender") +
+         theme(axis.text.x = element_text(size = 8), 
+                             legend.text=element_text(size = 6))  
+
+```
 ## Q6a Reason for using open source
 
 If you answered yes to the previous question, what are your main reasons
@@ -2522,7 +2595,8 @@ data %>% select(num_range("Q10_", 1:7), gender = Q21)   %>%
          geom_bar(colour = "black") +
          theme_bw() +
          xlab("Who do you share your software with?") + ylab("Numbers") +
-         geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 3) +
+         geom_text(aes(label = ..count..), stat = "count", 
+                   position = position_stack(0.5), size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
@@ -2563,7 +2637,7 @@ than 1.
 
 ```{r extendingSW_choices}
 
-data %>% select(id = URN, num_range("Q10_", 1:7))                       %>%
+data %>% select(id = URN, num_range("Q10_", 1:7))                     %>%
          pivot_longer(cols = num_range("Q10_", 1:7),
                       names_to = NULL,
                       values_to = "ds")                                %>%
