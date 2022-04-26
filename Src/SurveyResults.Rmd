@@ -2439,7 +2439,7 @@ data %>% select(num_range("Q7_", 1:7))              %>%
          theme_bw() +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("How Software is being maintained") + ylab("Numbers") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 2)
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3)
 ```
 
 ### Choice correlations
@@ -2483,6 +2483,141 @@ data %>% select(num_range("Q7_", 1:7), career = Q20)  %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 
 ```
+
+### Software maintainance by % career
+
+```{r sw_maintenace_career_per}
+
+data %>% select(num_range("Q7_", 1:7), career = Q20)  %>%
+         pivot_longer(cols = num_range("Q7_", 1:7),
+                      names_to = NULL,
+                      values_to = "swmaint")        %>%
+         filter(swmaint != 0)                       %>%
+         group_by(swmaint)                          %>% 
+         mutate(M = n())                            %>% 
+         filter(career != "Other" & career != "-")  %>% 
+         group_by(career)                           %>% 
+         mutate(N = n())                            %>% 
+         group_by(swmaint, career)                  %>% 
+         mutate(n = n())                            %>% 
+         mutate(per = percent(n/N, accuracy = 1))   %>% 
+         distinct(swmaint, career, per, n, N, M)    %>% 
+         ggplot(aes(x = reorder(swmaint,-M), y = n/N, fill = career)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"),
+                  colour = "black") +
+         theme_bw() + 
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("How Software is maintained") + ylab("Percent") +
+         geom_text(aes(label = per), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), 
+                   size = 3, vjust = -0.5) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+
+```
+
+### Software maintainance by gender
+
+```{r sw_maintenace_gender}
+
+data %>% select(num_range("Q7_", 1:7), gender = Q21)  %>%
+         pivot_longer(cols = num_range("Q7_", 1:7),
+                      names_to = NULL,
+                      values_to = "swmaint")        %>%
+         filter(swmaint != 0)                       %>%
+         group_by(swmaint, gender)                  %>% 
+         mutate(n = n())                            %>% 
+         ggplot(aes(x = reorder(swmaint,-n), fill = gender)) + 
+         geom_bar(colour = "black") +
+         theme_bw() +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("How Software is maintained") + ylab("Numbers") +
+         geom_text(aes(label = ..count..), 
+                   position = position_stack(0.5), stat = "count", size = 3) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+
+```
+
+### Software maintainance by % gender
+
+```{r sw_maintenace_gender_per}
+
+data %>% select(num_range("Q7_", 1:7), gender = Q21)  %>%
+         pivot_longer(cols = num_range("Q7_", 1:7),
+                      names_to = NULL,
+                      values_to = "swmaint")        %>%
+         filter(swmaint != 0)                       %>%
+         group_by(swmaint)                          %>% 
+         mutate(M = n())                            %>% 
+         filter(gender != "Other" & gender != "-")  %>% 
+         group_by(gender)                           %>% 
+         mutate(N = n())                            %>% 
+         group_by(swmaint, gender)                  %>% 
+         mutate(n = n())                            %>% 
+         mutate(per = percent(n/N, accuracy = 1))   %>% 
+         distinct(swmaint, gender, per, n, N, M)    %>% 
+         ggplot(aes(x = reorder(swmaint,-M), y = n/N, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"),
+                  colour = "black") +
+         theme_bw() + 
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("How Software is maintained") + ylab("Percent") +
+         geom_text(aes(label = per), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), 
+                   size = 3, vjust = -0.5) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+
+```
+
+### Software maintenance by discipline
+
+```{r swmaint_dist_test}
+
+data %>% select(num_range("Q7_", 1:7), num_range("Q19_", 1:22))          %>%
+         pivot_longer(cols = num_range("Q7_", 1:7),
+                      names_to = NULL,
+                      values_to = "swmaint")                             %>%
+         filter(swmaint != 0)                                            %>%
+         pivot_longer(cols = starts_with("Q19"),
+                      names_to = NULL,
+                      values_to ="discipline")                           %>%
+         filter(discipline != 0)                                         %>%
+         mutate(N = n())                                                 %>% 
+         group_by(discipline, swmaint)                                   %>%
+         mutate(n = n())                                                 %>% 
+         distinct(discipline, swmaint, n, N)                             %>% 
+         group_by(swmaint)                                               %>% 
+         summarise(Tot = sum(n))                                         %>% 
+         arrange(desc(Tot))
+```
+
+```{r swmaint_dist_per_tile}
+
+data %>% select(num_range("Q7_", 1:7), num_range("Q19_", 1:22))          %>%
+         pivot_longer(cols = num_range("Q7_", 1:7),
+                      names_to = NULL,
+                      values_to = "swmaint")        %>%
+         filter(swmaint != 0)                       %>%
+         pivot_longer(cols = starts_with("Q19"),
+                      names_to = NULL,
+                      values_to ="discipline")                           %>%
+         filter(discipline != 0)                                         %>%
+         mutate(N = n())                                                 %>% 
+         group_by(discipline, swmaint)                                   %>%
+         mutate(n = n())                                                 %>%
+         mutate(per = percent(n/N, accuracy = 1))                        %>% 
+         distinct(discipline, swmaint, n, N, per)                        %>% 
+         ggplot(aes(x = discipline, y = swmaint)) +
+         theme_bw() +
+         geom_tile(aes(fill = n)) +
+         theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0),
+               axis.text.y = element_text(size = 8), legend.position = "None") +
+         geom_text(aes(label = n), size = 3, colour = "white") +
+         ylab("How Software is supported/maintained") + xlab("Discipline") +
+         scale_fill_continuous(high = "#132B43", low = "#56B1F7")
+```
+
 ### Counting combined choices
 
 For each multiple choice replace spaces by "-"s and collapse all the
@@ -2543,14 +2678,20 @@ spreadsheets)
 ### Responses
 
 ```{r develop_sw}
-data %>% select("Q9")    %>%
-         group_by(Q9)    %>% 
-         mutate(n = n()) %>% 
-         ggplot(aes(x = reorder(Q9, -n))) + 
-         geom_bar(fill = "light blue", colour = "black") +
+
+data %>% select("Q9")                              %>%
+         mutate(Q9 = ifelse(!is.na(Q9), Q9, "-"))  %>% 
+         mutate(N = n())                           %>% 
+         group_by(Q9)                              %>% 
+         mutate(n = n())                           %>% 
+         mutate(per = percent(n/N, accuracy = 1))  %>%
+         distinct(Q9, N, n, per)                   %>% 
+         ggplot(aes(x = reorder(Q9, -n), y = n)) + 
+         geom_col(fill = "light blue", colour = "black") +
          theme_bw() +
          xlab("Do you develop software?") + ylab("Numbers") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3)
+         geom_text(aes(label = paste0(n," (", per,")")), vjust = -0.5, size = 3)
+
 ```
 
 ### Responses by career stage
@@ -2587,6 +2728,96 @@ data %>% select("Q9", career = Q20)    %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
+Removing "Other" and "-".
+
+```{r develop_sw_career_per2}
+
+data %>% select(Q9, career = Q20)                  %>%
+         mutate(Q9 = ifelse(!is.na(Q9), Q9, "-"))  %>% 
+         group_by(Q9)                              %>% 
+         mutate(M = n())                           %>% 
+         group_by(career)                          %>% 
+         filter(career != "Other" &
+                career != "-")                     %>% 
+         mutate(N = n())                           %>% 
+         group_by(Q9, career)                      %>% 
+         mutate(per = n()/N)                       %>%
+         distinct(Q9, career, per, M)              %>% 
+         ggplot(aes(x = reorder(Q9, -M), y = per, fill = career)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
+                  colour = "black") +
+         theme_bw() +
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         xlab("Do you develop software?") + ylab("Percent") +
+         geom_text(aes(label = percent(per, accuracy = 1)),
+                   position = position_dodge2(width = 0.9, preserve = "single"),  
+                   vjust = -0.5, size = 3) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
+### Responses by % gender 
+
+```{r develop_sw_gender_per}
+
+data %>% select(Q9, gender = Q21)    %>%
+         mutate(Q9 = ifelse(!is.na(Q9), Q9, "-"))  %>% 
+         group_by(gender)              %>% 
+         mutate(N = n())               %>% 
+         group_by(Q9, gender)          %>% 
+         mutate(per = n()/N)           %>%
+         distinct(Q9, gender, per)     %>% 
+         ggplot(aes(x = Q9, y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() +
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         xlab("Do you develop software?") + ylab("Percent") +
+         geom_text(aes(label = percent(per, accuracy = 1)),
+                   position = position_dodge2(width = 0.9, preserve = "single"),  
+                   vjust = -0.5, size = 2) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+### Develop software by discipline
+
+```{r swdev_dist_test}
+
+data %>% select(Q9, num_range("Q19_", 1:22))                             %>%
+         mutate(Q9 = ifelse(!is.na(Q9), Q9, "-"))                        %>% 
+         pivot_longer(cols = starts_with("Q19"),
+                      names_to = NULL,
+                      values_to ="discipline")                           %>%
+         filter(discipline != 0)                                         %>%
+         #distinct(discipline, Q9) %>% 
+         mutate(N = n())                                                 %>% 
+         group_by(discipline, Q9)                                        %>%
+         mutate(n = n())                                                 %>%
+         distinct(Q9, discipline, N, n)                                  %>% 
+         group_by(Q9)                                                    %>% 
+         summarise(Tot = sum(n))                                         %>% 
+         arrange(desc(Tot))
+```
+
+```{r swdev_dist_per_tile}
+
+data %>% select(Q9, num_range("Q19_", 1:22))                             %>%
+         mutate(Q9 = ifelse(!is.na(Q9), Q9, "-"))                        %>% 
+         pivot_longer(cols = starts_with("Q19"),
+                      names_to = NULL,
+                      values_to ="discipline")                           %>%
+         filter(discipline != 0)                                         %>%
+         mutate(N = n())                                                 %>% 
+         group_by(discipline, Q9)                                        %>%
+         mutate(n = n())                                                 %>%
+         mutate(per = percent(n/N, accuracy = 1))                        %>% 
+         ggplot(aes(x = discipline, y = Q9)) +
+         theme_bw() +
+         geom_tile(aes(fill = n)) +
+         theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0),
+               axis.text.y = element_text(size = 8), legend.position = "None") +
+         geom_text(aes(label = n), size = 3, colour = "white") +
+         ylab("Do you develop software?") + xlab("Discipline") +
+         scale_fill_continuous(high = "#132B43", low = "#56B1F7")
+```
 ### How you extend software
 
 If you answered yes to the above, could you briefly describe what
@@ -2641,6 +2872,7 @@ my_colors <- colorRampPalette(my_colors)(100)
 plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
 
 ```
+
 ### Extending software by career
 
 ```{r extending_career}
