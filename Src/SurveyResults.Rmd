@@ -960,7 +960,7 @@ data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
 Only showing instances that have more than 3 case at an institution otherwise the diagram
 becomes too busy and is difficult to see.
 
-```{r datause_institution}
+```{r combined_datause_institution}
 data %>% select(id = URN, num_range("Q2_",1:2), institution = CleanLocs)          %>%
          pivot_longer(cols = starts_with("Q2_"),
                       names_to = NULL,
@@ -1707,9 +1707,9 @@ data %>% select(URN, num_range("Q4_",1:26))                 %>%
          distinct(software, discipline, n)                         %>%
          arrange(desc(n))
 
-         group_by(software) %>% 
-         summarise(N = sum(n)) %>% 
-         arrange(desc(N))
+         # group_by(software) %>% 
+         # summarise(N = sum(n)) %>% 
+         # arrange(desc(N))
 ```
 
 ### Other software used
@@ -1878,7 +1878,7 @@ each career stage. Only software that has been nominated more than five times
 are shown otherwise the graph becomes very busy. Note that an individual may 
 have suggested more than one piece of software - this has not been normalised.
 
-```{r important_sw_bar_career_per2}
+```{r important_sw_bar_career_per3}
 
 bind_cols(data["Q20"], important_software)                        %>% 
                        select(starts_with("Q5"), career = "Q20")  %>%
@@ -3059,7 +3059,8 @@ data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
          xlab("Where skills are acquired") + ylab("Numbers") +
          geom_text(aes(label = ..count..), position = position_stack(vjust = 0.5), 
                    stat = "count", size = 3) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0),
+               legend.text=element_text(size = 6)) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
@@ -3072,12 +3073,14 @@ data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
                       names_to = "questions",
                       values_to = "skills")              %>%
          filter(skills != 0)                             %>%
+         group_by(skills)                                %>% 
+         mutate(M = n())                                 %>% 
          group_by(career)                                %>% 
          mutate(N = n())                                 %>% 
          group_by(career, skills)                        %>% 
          mutate(per = n()/N)                             %>% 
-         distinct(career, skills, per)                   %>% 
-         ggplot(aes(x = skills, y = per, fill = career)) + 
+         distinct(career, skills, per, M)                %>% 
+         ggplot(aes(x = reorder(skills, -M), y = per, fill = career)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"),
                   colour = "black") +
          theme_bw() +
@@ -3086,7 +3089,39 @@ data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
          geom_text(aes(label = percent(per, accuracy = 1)), 
                    position = position_dodge2(width = 0.9, preserve = "single"),
                    vjust = -0.5, size = 2) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0),
+               legend.text=element_text(size = 8)) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
+Removing "Other" and "-".
+
+```{r acquiring_skills_career_per2}
+
+data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
+         pivot_longer(cols = num_range("Q11_", 1:12),
+                      names_to = "questions",
+                      values_to = "skills")              %>%
+         filter(skills != 0)                             %>%
+         filter(career != "Other" & career != "-")       %>%
+         group_by(skills)                                %>% 
+         mutate(M = n())                                 %>% 
+         group_by(career)                                %>% 
+         mutate(N = n())                                 %>% 
+         group_by(career, skills)                        %>% 
+         mutate(per = n()/N)                             %>% 
+         distinct(career, skills, per, M)                %>% 
+         ggplot(aes(x = reorder(skills, -M), y = per, fill = career)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"),
+                  colour = "black") +
+         theme_bw() +
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         xlab("Where skills are being acquired") + ylab("Percent") +
+         geom_text(aes(label = percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"),
+                   vjust = -0.5, size = 2) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0),
+               legend.text=element_text(size = 8)) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
@@ -3120,17 +3155,19 @@ data %>% select(num_range("Q11_", 1:12), gender = Q21)   %>%
                       names_to = "questions",
                       values_to = "skills")              %>%
          filter(skills != 0)                             %>%
+         group_by(skills)                                %>% 
+         mutate(M = n())                                 %>% 
          group_by(gender)                                %>% 
          mutate(N = n())                                 %>% 
          group_by(gender, skills)                        %>% 
          mutate(per = n()/N)                             %>% 
-         distinct(gender, skills, per)                   %>% 
-         ggplot(aes(x = skills, y = per, fill = gender)) + 
+         distinct(gender, skills, per, M)                   %>% 
+         ggplot(aes(x = reorder(skills, -M), y = per, fill = gender)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"),
                   colour = "black") +
          theme_bw() +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         xlab("Where skills are acquired") + ylab("Percent") +
+         xlab("Where skills are being acquired") + ylab("Percent") +
          geom_text(aes(label = percent(per, accuracy = 1)), 
                    position = position_dodge2(width = 0.9, preserve = "single"),
                    vjust = -0.5, size = 2) +
