@@ -3253,12 +3253,12 @@ data %>% select(id = URN, starts_with("Q11_b_"), career = Q20) %>%
 
 ```
 
-Out of the `r nrow(data)` individuals that took the survey, `r nrow(a)`
-individuals have taken NCRM courses or, if we take the `Other` content
-this rises to `r nrow(b)` individuals that is
-`r percent(nrow(a)/nrow(data), accuracy = 0.1)` or
-`r percent(nrow(b)/nrow(data), accuracy = 0.1)` respectively
-have taken NCRM courses.
+We asked people if they had taken NCRM courses (question 11b) and asked people to check a list of the courses 
+they had taken from a sample of 22 current courses (at the time the survey was deployed - that is early 2022)  
+provided by the NCRM. What we can say though is that out of the `r nrow(data)` individual answers that we are 
+using from the survey, `r sum(a$N)` individuals have taken NCRM courses or, if we take the `Other` content category
+this rises to `r sum(b$N)` individuals that is `r percent(sum(a$N)/nrow(data), accuracy = 0.1)` or
+`r percent(sum(b$N)/nrow(data), accuracy = 0.1)` respectively have taken NCRM courses.
 
 #### List of NCRM courses taken
 
@@ -3280,14 +3280,14 @@ data %>% select(num_range("Q11_b_", 1:22)) %>%
 
 ```{r ncrm_courses_career}
 
-data %>% select(starts_with("Q11_b_"), career = Q20) %>%
+data %>% select(id = URN, starts_with("Q11_b_"), career = Q20) %>%
          pivot_longer(cols = starts_with("Q11_b_"),
                       names_to = NULL,
                       values_to = "ncrm")              %>%
          filter(ncrm != 0)                             %>%
+         distinct(id, ncrm, career)                    %>% 
          group_by(career)                              %>% 
          mutate(n = n())                               %>%
-         ungroup()                                     %>% 
          distinct(career, n)                           %>% 
          ggplot(aes(x = career, y = n, fill = career)) +
          geom_col(colour = "black") + theme_bw() +
@@ -3301,11 +3301,12 @@ data %>% select(starts_with("Q11_b_"), career = Q20) %>%
 
 ```{r ncrm_courses_gender}
 
-data %>% select(starts_with("Q11_b_"), gender = Q21) %>%
+data %>% select(id = URN, starts_with("Q11_b_"), gender = Q21) %>%
          pivot_longer(cols = starts_with("Q11_b_"),
                       names_to = NULL,
                       values_to = "ncrm")              %>%
          filter(ncrm != 0)                             %>%
+         distinct(id, ncrm, gender)                    %>% 
          group_by(gender)                              %>% 
          mutate(n = n())                               %>%
          ungroup()                                     %>% 
@@ -3317,6 +3318,7 @@ data %>% select(starts_with("Q11_b_"), gender = Q21) %>%
          xlab("Gender") + geom_text(aes(x = gender, label = n ), vjust = -0.5, size = 3)
 
 ```
+
 
 #### Number of NCRM courses by individuals
 
@@ -3330,8 +3332,10 @@ data %>% select(id = URN, starts_with("Q11_b_"), career = Q20) %>%
                       names_to = NULL,
                       values_to = "ncrm")              %>%
          filter(ncrm != 0)                             %>%
+         distinct(id, ncrm, career)                   %>% 
          group_by(id)                                  %>% 
          mutate(N = n())                               %>% # Number of courses taken by individuals
+         distinct(career, N) %>% 
          group_by(career, N)                           %>% 
          mutate(n = n())                               %>% # Number of individuals that have taken N courses
          ungroup()                                     %>% 
@@ -3363,15 +3367,18 @@ research software are sufficiently recognised or rewarded?
 
 ```{r recognition}
 
-data %>%  select(rew = "Q12") %>%
-          group_by(rew)       %>% 
-          mutate(n = n())     %>% 
-          ggplot(aes(x = reorder(rew, -n))) + 
-          geom_bar(fill = "light blue", colour = "black") +
+data %>%  select(rew = "Q12")                      %>%
+          mutate(N = n())                          %>% 
+          group_by(rew)                            %>% 
+          mutate(n = n())                          %>% 
+          mutate(per = percent(n/N, accuracy = 1)) %>% 
+          distinct(rew, n, N, per)                 %>% 
+          ggplot(aes(x = reorder(rew, -n), y = n)) + 
+          geom_col(fill = "light blue", colour = "black") +
           theme_bw() +
           xlab("Development/Maintenance of rsearch software rewarded/recognised") +
-          ylab("Numbers") +
-          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 2) +
+          ylab("Numbers") + ylim(0, 76) +
+          geom_text(aes(label = paste0(n," (", per,")")), vjust = -0.5, size = 3) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
 ```
@@ -4563,6 +4570,8 @@ data %>%  select(URN, num_range("Q19_", 1:22))          %>%
 ```
 
 ### Correlation between choices
+
+Overview of how choices have been used in combination.
 
 ```{r discipline_correlation}
 
