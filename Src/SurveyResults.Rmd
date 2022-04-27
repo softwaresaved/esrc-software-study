@@ -1658,7 +1658,7 @@ data %>% select(num_range("Q4_",1:26), num_range("Q19_", 1:22))              %>%
 
 ```{r software_discipline2}
 
-data %>% select(num_range("Q4_",1:26), num_range("Q19_", 1:22))              %>%
+data %>% select(URN, num_range("Q4_",1:26), num_range("Q19_", 1:22))         %>%
          pivot_longer(cols = starts_with("Q4"),
                       names_to = NULL,
                       values_to = "software")                                %>%
@@ -1666,6 +1666,7 @@ data %>% select(num_range("Q4_",1:26), num_range("Q19_", 1:22))              %>%
                        names_to = NULL,
                       values_to = "discipline")                              %>%
          filter(software != 0 & discipline != 0)                             %>%
+         distinct(URN, software, discipline)                                 %>% 
          group_by(software, discipline)                                      %>% 
          mutate(n = n())                                                     %>%   
          distinct(software, discipline, n)                                   %>% 
@@ -2572,17 +2573,19 @@ data %>% select(num_range("Q7_", 1:7), gender = Q21)  %>%
 
 ### Software maintenance by discipline
 
+
 ```{r swmaint_dist_test}
 
-data %>% select(num_range("Q7_", 1:7), num_range("Q19_", 1:22))          %>%
-         pivot_longer(cols = num_range("Q7_", 1:7),
-                      names_to = NULL,
-                      values_to = "swmaint")                             %>%
-         filter(swmaint != 0)                                            %>%
+data %>% select(URN, num_range("Q7_", 1:7), num_range("Q19_", 1:22))    %>%
          pivot_longer(cols = starts_with("Q19"),
                       names_to = NULL,
                       values_to ="discipline")                           %>%
          filter(discipline != 0)                                         %>%
+         pivot_longer(cols = num_range("Q7_", 1:7),
+                      names_to = NULL,
+                      values_to = "swmaint")                             %>%
+         filter(swmaint != 0)                                            %>%
+         distinct(URN, swmaint, discipline)                              %>% 
          mutate(N = n())                                                 %>% 
          group_by(discipline, swmaint)                                   %>%
          mutate(n = n())                                                 %>% 
@@ -4408,10 +4411,50 @@ funding %>% pivot_longer(cols = num_range("Q18_", 1:7),
             tally()                                      %>% 
             filter(n > 2)                                %>%
             ggplot(aes(x = reorder(funding, -n), y = n)) +
-            geom_col(colour = "black", fill = "light blue") +
+            geom_col(colour = "black", fill = "light blue") + ylim(0,115) +
             theme_bw() + xlab("Funding body") + ylab("Numbers") +
-            geom_text(aes(x = funding, label = n), vjust = -0.5, size = 2) +
+            geom_text(aes(x = funding, label = n), vjust = -0.5, size = 3) +
             theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+```
+
+### Funding correlation
+
+```{r funding_correlation}
+
+# pick out the data that we want
+funding %>% select(num_range("Q18_", 1:7)) -> q
+
+# add an id
+q$id <- 1:nrow(q)
+
+# manipulate the form of the data - only use data with more than 4 values
+q %>% pivot_longer(cols = num_range("Q18_", 1:7),
+                   names_to = NULL,
+                   values_to = "funding") %>% 
+            filter(!is.na(funding) & funding != "Retired") %>% 
+            group_by(funding) %>% 
+            mutate(n = n()) %>% 
+            filter(n > 4)   %>% 
+            select(-n)      %>%
+      mutate(val = ifelse(is.na(funding), 0L, 1L)) %>% 
+      filter(!is.na(funding) & funding != "Retired") %>% 
+      pivot_wider(names_from = funding,
+                  values_fill = 0,
+                  values_from = val) %>% 
+      select(-id) -> q
+
+# Remap embedded spaces to underscores
+names(q) <- gsub(" ","_", names(q))
+
+#q <- apply(q, 2, function(x) as.integer(x))
+
+# Colour map
+my_colors <- brewer.pal(5, "Spectral")
+my_colors <- colorRampPalette(my_colors)(100)
+
+# plot the correlation
+plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
+
 ```
 
 ### Funding distribution normalised
@@ -4484,7 +4527,7 @@ discipline is not listed. (Please check all that apply.)
 ```{r research_disc}
 data %>%  select(num_range("Q19_", 1:22))               %>%
           pivot_longer(cols = num_range("Q19_", 1:22),
-                       names_to = "questions",
+                       names_to = NULL,
                       values_to = "disciplines")        %>%
           filter(disciplines != 0)                      %>%
           mutate(N = n())                               %>% 
@@ -4497,6 +4540,50 @@ data %>%  select(num_range("Q19_", 1:22))               %>%
           xlab("Discipline") + ylab("Numbers") +
           geom_text(aes(label = paste0(n, " (",per,")")), stat = "count", vjust = -0.5, size = 2) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+```
+
+### Number of research disciplines selected
+
+```{r num_disciplines}
+
+data %>%  select(URN, num_range("Q19_", 1:22))          %>%
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = NULL,
+                      values_to = "disciplines")        %>%
+          filter(disciplines != 0)                      %>%
+          group_by(URN)                                 %>% 
+          mutate(n = n())                               %>%                           
+          distinct(URN, n)                              %>% 
+          ggplot(aes(x = n)) + 
+          geom_bar(fill = "light blue", colour ="black") + 
+          theme_bw() +
+          xlab("Number of research disciplines chosen by an individual") +
+          ylab("Number of people") +
+          geom_text(aes(label = ..count..), stat = "count", size = 3, vjust = -0.5)
+```
+
+### Correlation between choices
+
+```{r discipline_correlation}
+
+data %>%  select(id = URN, num_range("Q19_", 1:22))          %>%
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = NULL,
+                      values_to = "disciplines")             %>%
+          filter(disciplines != 0)                           %>% 
+          mutate(val = 1L)                                   %>% 
+          pivot_wider(names_from = disciplines,
+                      values_fill = 0,
+                      values_from = val)                    %>% 
+          select(-id) -> q
+
+# Colour map
+my_colors <- brewer.pal(5, "Spectral")
+my_colors <- colorRampPalette(my_colors)(100)
+
+# plot the correlation
+plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
+
 ```
 
 ### Discipline by career stage
