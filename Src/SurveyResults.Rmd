@@ -3995,6 +3995,32 @@ data %>% select(num_range("Q13_4_",1:5), career = Q20)     %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
+Removing "Other" and "-"
+
+```{r insufficient_incentives_career_per2}
+
+data %>% select(num_range("Q13_4_",1:5), career = Q20)     %>%
+         pivot_longer(cols = starts_with("Q13"),
+                      names_to = NULL,
+                      values_to = "understanding")                                      %>%
+         filter(understanding != 0)                                                     %>%
+         filter(!(career %in% c("Other", "-")))                                         %>% 
+         group_by(career)                                                               %>% 
+         mutate(N = n())                                                                %>% 
+         group_by(understanding, career)                                                %>% 
+         mutate(per = n()/N)                                                            %>% 
+         mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
+         distinct(understanding, career, per)                                           %>% 
+         ggplot(aes(x = understanding, y = per, fill = career)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
+                       position = position_dodge2(width = 0.9, preserve = "single"), size = 2, vjust = -0.5) +
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         theme_bw() + ylab("Percent") +
+         xlab("Insufficient incentive to learn how s/w is funded, managed and licensed") +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
 #### Responses by gender
 
 ```{r insufficient_incentives_gender}
@@ -4059,7 +4085,7 @@ data %>%  select(num_range("Q14_", 1:9))         %>%
   mutate(n = n())                                %>% 
   ggplot(aes(x = reorder(runon, -n))) +
   geom_bar(fill = "light blue", colour = "black") +
-  theme_bw() +
+  theme_bw() + ylim(0, 111) +
   xlab("Where software is run") + ylab("Numbers") +
   geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
@@ -4104,6 +4130,36 @@ data %>%  select(num_range("Q14_", 1:9), career = Q20)         %>%
   theme_bw() +
   xlab("Where software is run") + ylab("Numbers") +
   geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 2) +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+  scale_fill_brewer(palette = "Set1", name = "Career stage")
+
+```
+
+
+### Where software is run by % career stage
+
+```{r where_sw_run_career_per2}
+
+data %>%  select(num_range("Q14_", 1:9), career = Q20)         %>%
+  pivot_longer(cols = num_range("Q14_", 1:9),
+               names_to = NULL,
+               values_to = "runon")                            %>%
+  filter(runon != 0)                                           %>%
+  group_by(runon)                                              %>% 
+  mutate(M = n())                                              %>% 
+  filter(!(career %in% c("Other", "-")))                       %>% 
+  group_by(career)                                             %>% 
+  mutate(N = n())                                              %>% 
+  group_by(career, runon)                                      %>% 
+  mutate(n = n())                                              %>% 
+  mutate(per = percent(n/N, accuracy = 1))                     %>% 
+  distinct(M, N, n, per)                                       %>% 
+  ggplot(aes(x = reorder(runon, -M), y = n/N, fill  = career)) +
+  geom_col( position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+  theme_bw() + scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  xlab("Where software is run") + ylab("Percent") +
+  geom_text(aes(label = per), vjust = -0.5,
+            position = position_dodge2(width = 0.9, preserve = "single"), size = 3) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
   scale_fill_brewer(palette = "Set1", name = "Career stage")
 
@@ -4717,7 +4773,8 @@ data %>%  select(num_range("Q19_", 1:22), career = Q20) %>%
           geom_bar(colour = "black") +
           theme_bw() +
           xlab("Discipline") + ylab("Numbers") +
-          geom_text(aes(x = disciplines, label = n), position = position_stack(vjust = 0.5), 
+          geom_text(aes(x = disciplines, label = n), 
+                    position = position_stack(vjust = 0.5), 
                                  stat = "count", size = 2) +
           scale_fill_brewer(palette = "Set1", name = "Career stage") +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
