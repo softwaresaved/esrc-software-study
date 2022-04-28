@@ -468,6 +468,9 @@ for(i in seq_len(9)){
 # 1	Licensing
 # 2	Publishing
 
+licawa <- c("InstitutionLicensing", "InstitutionPublishing", "FunderLicensing", 
+            "FunderPublishing", "ProjectLicensing", "ProjectPublishing")
+
 data$Q15_1_1 <- gsub("1", "InstitutionLicensing", data$Q15_1_1)
 data$Q15_1_2 <- gsub("1", "InstitutionPublishing", data$Q15_1_2)
 
@@ -4239,17 +4242,21 @@ are aware of)?
 
 ```{r licensing}
 
-data %>% select(starts_with("Q15_"), -"Q15_a") %>%
-         pivot_longer(cols = everything(),
-                      names_to = "columns",
-                      values_to ="aware")      %>%
-         filter(aware != 0)                    %>%
-         group_by(aware)                       %>%
-         mutate(n = n())                       %>% 
-         ggplot(aes(x = reorder(aware, -n))) +
+N <- nrow(data)
+
+data %>% select(starts_with("Q15_"), -"Q15_a")                          %>%
+         pivot_longer(cols = starts_with("Q15_"),
+                      names_to = NULL,
+                      values_to ="aware")                               %>%
+         filter(aware != 0)                                             %>%
+         mutate(aware = factor(aware, ordered = TRUE, levels = licawa)) %>% 
+         group_by(aware)                                                %>%
+         mutate(n = n())                                                %>% 
+         mutate(per = percent(n/N, accuaracy = 1))                      %>% 
+         ggplot(aes(x = aware)) +
          geom_bar(fill = "light blue", colour = "black") +
-         theme_bw() +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
+         theme_bw() + ylim(0,76) +
+         geom_text(aes(y = n, label = paste0(n, " (", per, ")")),  vjust = -0.5, size = 3) +
          ylab("Numbers") + xlab("Aware of the policy for")  +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
@@ -4260,19 +4267,51 @@ data %>% select(starts_with("Q15_"), -"Q15_a") %>%
 
 ```{r licensing_career}
 
-data %>% select(starts_with("Q15_"), -"Q15_a", career = Q20) %>%
+data %>% select(starts_with("Q15_"), -"Q15_a", career = Q20)            %>%
          pivot_longer(cols = starts_with("Q15_"),
                       names_to = NULL,
-                      values_to ="aware")      %>%
-         filter(aware != 0)                    %>%
-         group_by(aware)                       %>%
-         mutate(n = n())                       %>% 
-         group_by(career, aware)               %>% 
-         ggplot(aes(x = reorder(aware, -n), fill = career)) +
+                      values_to ="aware")                               %>%
+         filter(aware != 0)                                             %>%
+         mutate(aware = factor(aware, ordered = TRUE, levels = licawa)) %>% 
+         group_by(aware)                                                %>%
+         mutate(n = n())                                                %>% 
+         group_by(career, aware)                                        %>% 
+         ggplot(aes(x = aware, fill = career)) +
          geom_bar(colour = "black") +
          theme_bw() +
          geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 3) +
          ylab("Numbers") + xlab("Aware of the policy for") +
+         scale_fill_brewer(palette = "Set1", name = "Career stage") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+```
+
+### Licensing policies awareness by % career stage
+
+```{r licensing_career_per}
+
+data %>% select(id = URN, starts_with("Q15_"), -"Q15_a", career = Q20)    %>%
+         pivot_longer(cols = starts_with("Q15_"),
+                      names_to = NULL,
+                      values_to ="aware")                                 %>%
+         filter(aware != 0)                                               %>%
+         distinct(id, aware, career)                                      %>% 
+         group_by(career)                                                 %>% 
+         filter(!(career %in% c("Other","-")))                            %>% 
+         mutate(N = n())                                                  %>% 
+         mutate(aware = factor(aware, ordered = TRUE, levels = licawa))   %>% 
+         group_by(aware)                                                  %>%
+         group_by(career, aware)                                          %>% 
+         mutate(n = n())                                                  %>% 
+         mutate(per = percent(n/N, accuracy = 1))                         %>% 
+         distinct(n, N, per, career, aware)                               %>% 
+         ggplot(aes(x = aware, y = n/N, fill = career)) +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() + 
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         geom_text(aes(label = per), vjust = -0.5,
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 3) +
+         ylab("Percent") + xlab("Aware of the policy for") +
          scale_fill_brewer(palette = "Set1", name = "Career stage") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
