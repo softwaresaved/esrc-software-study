@@ -4321,14 +4321,15 @@ data %>% select(id = URN, starts_with("Q15_"), -"Q15_a", career = Q20)    %>%
 
 ```{r licensing_gender}
 
-data %>% select(starts_with("Q15_"), -"Q15_a", gender = Q21) %>%
+data %>% select(starts_with("Q15_"), -"Q15_a", gender = Q21)              %>%
          pivot_longer(cols = starts_with("Q15_"),
                       names_to = NULL,
-                      values_to ="aware")      %>%
-         filter(aware != 0)                    %>%
-         group_by(aware)                       %>%
-         mutate(n = n())                       %>% 
-         group_by(gender, aware)               %>% 
+                      values_to ="aware")                                 %>%
+         filter(aware != 0)                                               %>%
+         mutate(aware = factor(aware, ordered = TRUE, levels = licawa))   %>% 
+         group_by(aware)                                                  %>%
+         mutate(n = n())                                                  %>% 
+         group_by(gender, aware)                                          %>% 
          ggplot(aes(x = reorder(aware, -n), fill = gender)) +
          geom_bar(colour = "black") +
          theme_bw() +
@@ -4350,6 +4351,7 @@ data %>% select(Institutions = CleanLocs, starts_with("Q15_"), -"Q15_a") %>%
                       names_to = "columns",
                       values_to ="aware")                                %>%
          filter(aware != 0)                                              %>%
+        mutate(aware = factor(aware, ordered = TRUE, levels = licawa))   %>% 
          group_by(Institutions)                                          %>% 
          mutate(N = n())                                                 %>% 
          group_by(aware, Institutions)                                   %>%
