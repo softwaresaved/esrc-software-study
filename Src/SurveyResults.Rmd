@@ -593,6 +593,9 @@ for(i in seq_len(5)){
 
 data$Q21 <-  factor(data$Q21, levels = c(gen, "-"), ordered = TRUE)
 
+# These values have low statistics so will be removed from some graphs.
+lowstatsgender <- c("-", "Not disclosed","Non-binary","Other")
+
 ## Q22 Ethnic group ----
 # 1	White: English, Welsh, Scottish, Northern Irish or British
 # 2	White: Irish
@@ -4535,7 +4538,37 @@ data %>%  select(num_range("Q16_", 1:13), gender = Q21) %>%
   theme_bw() +
   scale_y_continuous(labels = percent_format(accuracy = 1)) +
   xlab("Barriers to software use") + ylab("Percentage") +
-  geom_text(aes(label = percent(per, accuracy = 1)), position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 2) +
+  geom_text(aes(label = percent(per, accuracy = 1)), 
+            position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 2) +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
+  scale_fill_brewer(palette = "Set2", name = "Gender")
+
+```
+
+Remove the low stat components
+
+```{r barriers_gender_per2}
+
+data %>%  select(num_range("Q16_", 1:13), gender = Q21) %>%
+  pivot_longer(cols = num_range("Q16_", 1:13),
+               names_to = NULL,
+               values_to = "barriers")                  %>%
+  filter(barriers != 0)                                 %>%
+  group_by(barriers)                                    %>% 
+  mutate(M = n())                                       %>% 
+  group_by(gender)                                      %>%
+  filter(!(gender %in% lowstatsgender))                 %>% 
+  mutate(N = n())                                       %>% 
+  group_by(gender, barriers)                            %>%
+  mutate(per = n()/N)                                   %>% 
+  distinct(gender, barriers, per, M)                    %>% 
+  ggplot(aes(x = reorder(barriers, -M), y = per, fill  = gender)) +
+  geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+  theme_bw() +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  xlab("Barriers to software use") + ylab("Percentage") +
+  geom_text(aes(label = percent(per, accuracy = 0.1)), 
+            position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 2) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
   scale_fill_brewer(palette = "Set2", name = "Gender")
 
