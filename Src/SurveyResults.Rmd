@@ -4391,10 +4391,10 @@ data %>%  select(num_range("Q16_", 1:13))         %>%
   mutate(n = n())                                 %>% 
   ggplot(aes(x = reorder(barriers, -n))) +
   geom_bar(fill = "light blue", colour = "black") +
-  theme_bw() +
+  theme_bw() + ylim(0, 91) +
   xlab("Barriers to software use") + ylab("Numbers") +
-  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 2) +
-  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
+  theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0, size = 6))
 
 ```
 
@@ -4458,8 +4458,39 @@ data %>%  select(num_range("Q16_", 1:13), career = Q20) %>%
   theme_bw() +
   scale_y_continuous(labels = percent_format(accuracy = 1)) +
   xlab("Barriers to software use") + ylab("Percentage") +
-  geom_text(aes(label = percent(per, accuracy = 1)), position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 2) +
+  geom_text(aes(label = percent(per, accuracy = 1)), 
+            position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 2) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
+  scale_fill_brewer(palette = "Set1", name = "Career stage")
+
+```
+
+Removing "Other" and "-"
+
+```{r barriers_careeer_per2}
+
+data %>%  select(num_range("Q16_", 1:13), career = Q20) %>%
+  pivot_longer(cols = num_range("Q16_", 1:13),
+               names_to = NULL,
+               values_to = "barriers")                  %>%
+  filter(barriers != 0)                                 %>%
+  group_by(barriers)                                    %>% 
+  mutate(M = n())                                       %>% 
+  filter(!(career %in% c("Other", "-")))                %>% 
+  group_by(career)                                      %>%
+  mutate(N = n())                                       %>% 
+  group_by(career, barriers)                            %>%
+  mutate(per = n()/N)                                   %>% 
+  distinct(career, barriers, per, M)                   %>% 
+  ggplot(aes(x = reorder(barriers, -M), y = per, fill  = career)) +
+  geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+  theme_bw() +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  xlab("Barriers to software use") + ylab("Percentage") +
+  geom_text(aes(label = percent(per, accuracy = 1)), 
+            position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 2) +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 8),
+        legend.text = element_text(size = 6))  +
   scale_fill_brewer(palette = "Set1", name = "Career stage")
 
 ```
