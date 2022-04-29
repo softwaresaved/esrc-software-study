@@ -4698,12 +4698,14 @@ data %>%
 
 ## Q18 Funding
 
+Who has funded your research within the last 5 years?
+
 ### Funding distribution
 
 The list given in the listing below has been manipulated to provide some
 level of uniformity. Note that in this instance all contributions are
 counted equally, i.e. a respondent may have suggested more than one
-funding body - each of these is given a count of 1.
+funding body - each of these is given a count of 1 regardless of how many were provided.
 
 ```{r funding}
 
@@ -4790,7 +4792,7 @@ funding %>% mutate(nelements = rowSums(!is.na(.)))                             %
 ```{r funding_norm_career}
 
 bind_cols(funding, data["Q20"]) %>% select(num_range("Q18_", 1:7), career = Q20) %>% 
-            mutate(nelements = rowSums(!is.na(select(., -career))))                               %>% 
+            mutate(nelements = rowSums(!is.na(select(., -career))))              %>% 
             mutate(contrib = ifelse(nelements == 0, 0, round(1/nelements, 1)))   %>% 
             pivot_longer(cols = num_range("Q18_", 1:7),
                          names_to = NULL,
