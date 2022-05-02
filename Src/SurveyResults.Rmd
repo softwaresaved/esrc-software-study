@@ -2676,7 +2676,18 @@ record interviews, transcription software to transcribe the interviews,
 and qualitative coding software to bring documents, transcripts and
 photographs together for further analysis. If yes, please specify.
 
-```{r sw_wf, results = 'asis'}
+### List processed data
+
+```{r sw_wf1, results = 'asis'}
+
+listOther("Workflow")
+
+```
+
+
+### List original inputs
+
+```{r sw_wf2, results = 'asis'}
 
 listOther("Q8")
 
