@@ -103,6 +103,10 @@ importantds <- read_csv("../Data/q2a-mostimportantds.csv", show_col_types = FALS
 names(importantds) <-  gsub(" ", "_",names(importantds))
 data0 <- data0 %>% left_join(select(importantds, -Q2_a), by = "URN")
 
+# Workflows
+workflows <-  read_csv("../Data/q8-workflows.csv", show_col_types = FALSE)
+data0 <- data0 %>% left_join(select(workflows, -Q8), by = "URN")
+  
 # Remove three non-UK contributions
 uids <-  c("839822-839804-89766209", "839822-839804-90413512", "839822-839804-91099977")
 # Remove one of two entries from the same person
@@ -4259,7 +4263,8 @@ data %>% select(starts_with("Q15_"), -"Q15_a")                          %>%
          ggplot(aes(x = aware)) +
          geom_bar(fill = "light blue", colour = "black") +
          theme_bw() + ylim(0,76) +
-         geom_text(aes(y = n, label = paste0(n, " (", per, ")")),  vjust = -0.5, size = 3) +
+         geom_text(aes(y = n, label = paste0(n, " (", per, ")")),  
+                   vjust = -0.5, size = 3) +
          ylab("Numbers") + xlab("Aware of the policy for")  +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
