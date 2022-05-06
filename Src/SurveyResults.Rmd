@@ -1691,7 +1691,7 @@ data %>% select(URN, num_range("Q4_",1:26), num_range("Q19_", 1:22))         %>%
          ylab("Discipline") + xlab("Software used") + labs(fill = "Numbers")
 ```
 
-```{r software_discipline_test, results = 'asis'k}
+```{r software_discipline_test, results = 'asis'}
 
 data %>% select(URN, num_range("Q4_",1:26))                 %>%
          pivot_longer(cols = starts_with("Q4"),
@@ -1716,7 +1716,8 @@ data %>% select(URN, num_range("Q4_",1:26))                 %>%
          group_by(software, discipline)                            %>% 
          mutate(n = n())                                           %>%   
          distinct(software, discipline, n)                         %>%
-         arrange(desc(n))
+         arrange(desc(n))                                          %>% 
+         kbl(format="pipe", align = c("l","l", "r"), col.names = c("Software", "Discipline", "Count"))
 
          # group_by(software) %>% 
          # summarise(N = sum(n)) %>% 
@@ -1736,7 +1737,8 @@ aa  %>%  select(URN, num_range("OtherSw_", 1:13))            %>%
         filter(!is.na(othersw))                              %>% 
         group_by(othersw)                                    %>%
         tally()                                              %>% 
-        arrange(desc(n))
+        arrange(desc(n))                                     %>% 
+        kbl(format="pipe", align = c("l","r"), col.names = c("Other software used", "Numbers"))
 
 
 
@@ -4892,6 +4894,39 @@ data %>% select(num_range("Q19_", 1:22))          %>%
 
 The number of people that did not specify an academic discipline `r nrow(a)`.
 
+Look at cases greater than 1
+
+```{r num_disciplines_tabulate, results='asis'}
+
+data %>%  select(URN, num_range("Q19_", 1:22))                                %>%
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = NULL,
+                      values_to = "disciplines")                              %>%
+          filter(disciplines != 0)                                            %>%
+          group_by(URN)                                                       %>% 
+          mutate(n = n())                                                     %>% 
+          filter(n > 1)                                                       %>% 
+          group_by(URN)                                                       %>% 
+          mutate(choices = paste0(disciplines, collapse = ", "))              %>% 
+          distinct(URN, n, choices)                                           %>% 
+          ungroup()                                                           %>% 
+          select(n, choices)                                                  %>% 
+          group_by(n, choices)                                                %>% 
+          mutate(N = n())                                                     %>% 
+          ungroup()                                                           %>% 
+          distinct(N, choices)                                                %>% 
+          select(choices, N)                                                  %>% 
+          filter(N > 1)                                                       %>% 
+          arrange(desc(N))                                                    %>% 
+          kbl(format="pipe", align = c("l","r"), col.names = c("Combined disciplines", "Count"))
+
+          
+          # %>% # Code to check consistency with the grah above
+          # group_by(n) %>% 
+          # mutate(NN = sum(N)) %>%  distinct(n, NN) %>%  arrange(desc(n))
+
+```
+
 ### Correlation between choices
 
 Overview of how choices have been used in combination.
@@ -5168,7 +5203,7 @@ data %>% select(Institutions = CleanLocs, num_range("Q19_", 1:22))       %>%
          labs(size = "Discipline %") + 
          scale_size_continuous(labels = percent_format(accuracy = 1))
 ```
-As a tile diagram:
+As a tile diagram with actual numbers:
 
 ```{r awareness_dist_per_tile}
 
