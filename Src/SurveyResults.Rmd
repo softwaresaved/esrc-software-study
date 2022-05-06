@@ -5406,7 +5406,29 @@ data %>% select(gender = Q21, career = Q20)                     %>%
          theme_bw() + scale_y_continuous(labels = percent_format(accuracy = 1)) +
          geom_text(aes(label = percent(per, accuracy = 1)), 
                    position = position_dodge2(width = 0.9, preserve = "single"), size = 2, vjust = -0.5) +
-         xlab("Gender") + ylab("Numbers") +
+         xlab("Gender") + ylab("Percent") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
+Removing the low statistics gender and career stage components
+
+```{r gender_career_per2}
+
+data %>% select(gender = Q21, career = Q20)                     %>%
+         group_by(career)                                       %>% 
+         mutate(N = n())                                        %>%
+         filter(!(gender %in% lowstatsgender) & 
+                  !(career %in% c("-", "Other")))               %>% 
+         group_by(gender, career)                               %>% 
+         mutate(per = n()/N)                                    %>% 
+         distinct(gender, career, per)                          %>% 
+         ggplot(aes(x = gender, y = per, fill = career)) +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() + scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         geom_text(aes(label = percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 2, vjust = -0.5) +
+         xlab("Gender") + ylab("Percent") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
