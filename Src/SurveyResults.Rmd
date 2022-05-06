@@ -1691,7 +1691,7 @@ data %>% select(URN, num_range("Q4_",1:26), num_range("Q19_", 1:22))         %>%
          ylab("Discipline") + xlab("Software used") + labs(fill = "Numbers")
 ```
 
-```{r software_discipline_test}
+```{r software_discipline_test, results = 'asis'k}
 
 data %>% select(URN, num_range("Q4_",1:26))                 %>%
          pivot_longer(cols = starts_with("Q4"),
@@ -4858,9 +4858,9 @@ data %>%  select(num_range("Q19_", 1:22))               %>%
           mutate(per = percent(n/N, accuracy = 1))      %>% 
           ggplot(aes(x = reorder(disciplines, -n))) +
           geom_bar(fill = "light blue", colour = "black") +
-          theme_bw() +
+          theme_bw() + ylim(0, 44) +
           xlab("Discipline") + ylab("Numbers") +
-          geom_text(aes(label = paste0(n, " (",per,")")), stat = "count", vjust = -0.5, size = 2) +
+          geom_text(aes(label = paste0(n, " (",per,")")), stat = "count", vjust = -0.5, size = 3) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
 
@@ -4883,6 +4883,14 @@ data %>%  select(URN, num_range("Q19_", 1:22))          %>%
           ylab("Number of people") +
           geom_text(aes(label = ..count..), stat = "count", size = 3, vjust = -0.5)
 ```
+
+```{r row_all_zeros, results='asis'}
+
+data %>% select(num_range("Q19_", 1:22))          %>%  
+         filter(if_all(Q19_1:Q19_22, ~ . == 0))   -> a
+```
+
+The number of people that did not specify an academic discipline `r nrow(a)`.
 
 ### Correlation between choices
 
@@ -4961,6 +4969,34 @@ data %>%  select(num_range("Q19_", 1:22), career = "Q20") %>%
           scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
+Remove "Other" and "-"
+
+```{r research_disc_careers_per2}
+
+data %>%  select(num_range("Q19_", 1:22), career = "Q20") %>%
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = "questions",
+                       values_to = "disciplines")                 %>%
+          filter(disciplines != 0)                                %>%
+          group_by(career)                                        %>% 
+          filter(!(career %in% c("Other", "-")))                  %>% 
+          mutate(N = n())                                         %>% 
+          group_by(disciplines, career)                           %>%
+          mutate(n = n())                                         %>%
+          mutate(y = n/N)                                         %>%
+          mutate(per = percent(n/N, accuracy = 0.1))      %>%
+          distinct(disciplines, career, per, y)                   %>%
+          ggplot(aes(x = disciplines, y = y, fill = career)) +
+          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+          geom_text(aes(x = disciplines, y = y, label = percent(y, accuracy = 1)), 
+                        position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
+                        size = 2) +
+          theme_bw() + scale_y_continuous(labels = percent) +
+          xlab("Discipline") + ylab("Percentage") + labs(fill = "Career stage") +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+          scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
 ### Discipline by gender
 
 ```{r research_gender}
@@ -4987,7 +5023,7 @@ data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
 Percentages are in relation to a given gender.
 
 ```{r research_disc_gender_per}
-data %>%  select(num_range("Q19_", 1:22), gender = "Q20") %>%
+data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
           pivot_longer(cols = num_range("Q19_", 1:22),
                        names_to = "questions",
                        values_to = "disciplines")                 %>%
@@ -5010,6 +5046,32 @@ data %>%  select(num_range("Q19_", 1:22), gender = "Q20") %>%
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
+Remove the low statistic components.
+
+```{r research_disc_gender_per2}
+data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = "questions",
+                       values_to = "disciplines")                 %>%
+          filter(disciplines != 0)                                %>%
+          filter(!(gender %in% lowstatsgender))                   %>% 
+          group_by(gender)                                        %>% 
+          mutate(N = n())                                         %>% 
+          group_by(disciplines, gender)                           %>%
+          mutate(n = n())                                         %>%
+          mutate(y = n/N)                                         %>%
+          mutate(per = percent(n/N, accuracy = 0.1))      %>%
+          distinct(disciplines, gender, per, y)                   %>%
+          ggplot(aes(x = disciplines, y = y, fill = gender)) +
+          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+          geom_text(aes(x = disciplines, y = y, label = percent(y, accuracy = 1)), 
+                        position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
+                        size = 2) +
+          theme_bw() + scale_y_continuous(labels = percent) +
+          xlab("Discipline") + ylab("Percentage") + labs(fill = "Gender") +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
 ### Discipline by dissability
 
 ```{r research_disc_dissability}
