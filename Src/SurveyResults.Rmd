@@ -5411,6 +5411,15 @@ data %>% select(gender = Q21, career = Q20)                     %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
+### Other gender comments
+
+```{r othergender, results='asis'}
+
+listOther("Q21_a")
+
+```
+
+
 ## Q22 Ethnic group
 
 ### Ethnicity distribution
