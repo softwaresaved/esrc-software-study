@@ -5060,7 +5060,7 @@ data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
           group_by(disciplines, gender)                           %>%
           mutate(n = n())                                         %>%
           mutate(y = n/N)                                         %>%
-          mutate(per = percent(n/N, accuracy = 0.1))      %>%
+          mutate(per = percent(n/N, accuracy = 0.1))              %>%
           distinct(disciplines, gender, per, y)                   %>%
           ggplot(aes(x = disciplines, y = y, fill = gender)) +
           geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
@@ -5092,6 +5092,34 @@ data %>%  select(num_range("Q19_", 1:22), disability = Q23) %>%
                                  stat = "count", size = 2) +
           scale_fill_brewer(palette = "Set3", name = "Disability") +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+```
+
+### Discipline by % disability
+
+```{r research_disc_disability_per2}
+
+data %>%  select(num_range("Q19_", 1:22), dis = Q23)             %>%
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = "questions",
+                       values_to = "disciplines")                 %>%
+          filter(disciplines != 0)                                %>%
+          group_by(dis)                                           %>% 
+          filter(dis != "-")                                      %>% 
+          mutate(N = n())                                         %>% 
+          group_by(disciplines, dis)                              %>%
+          mutate(n = n())                                         %>%
+          mutate(y = n/N)                                         %>%
+          mutate(per = percent(n/N, accuracy = 0.1))              %>%
+          distinct(disciplines, dis, per, y)                      %>%
+          ggplot(aes(x = disciplines, y = y, fill = dis)) +
+          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+          geom_text(aes(x = disciplines, y = y, label = percent(y, accuracy = 1)), 
+                        position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
+                        size = 3) +
+          theme_bw() + scale_y_continuous(labels = percent) +
+          xlab("Academic discipline") + ylab("Percentage") + labs(fill = "Disability") +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set3", name = "Dissability")
 ```
 
 ### Discipline by institution
