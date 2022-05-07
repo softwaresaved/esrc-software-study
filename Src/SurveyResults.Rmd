@@ -5448,7 +5448,7 @@ listOther("Q21_a")
 
 ```{r ethnicity}
 
-data %>% select(ethnicity = "Q22")                %>%
+data %>% select(ethnicity =  Q22)                 %>%
          mutate(N = n())                          %>% 
          group_by(ethnicity)                      %>%
          mutate(n = n())                          %>%
@@ -5724,7 +5724,7 @@ data %>% select(dis = Q23, career = Q20) %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-As a tile diagram:
+As a tile diagram of the percentage of the whole population:
 
 ```{r disability_career_tile}
 
@@ -5765,6 +5765,27 @@ data %>% select(dis = Q23, career = Q20)    %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
+As a tile diagram with percentages in relation to each career stage population.
+
+```{r disability_career_tile2}
+
+data %>% select(dis = Q23, career = Q20)           %>% 
+         group_by(career)                          %>% 
+         mutate(N = n())                           %>% 
+         group_by(dis, career)                     %>% 
+         mutate(n = n())                           %>% 
+         mutate(per = percent(n/N, accuracy = 1))  %>% 
+         ggplot(aes(x = dis, y = career, fill = n)) +
+         geom_tile(colour = "black") +
+         theme_bw() +
+         xlab("Disability") + ylab("Career stage") +
+         geom_text(aes(label = n), colour = "black", size = 3) +
+         theme(legend.position = "None") +
+         geom_text(aes(label = paste0(n," (", per,")")), colour = "white", size = 3) +
+         #geom_text(aes(label = n), colour = "white", size = 3) +
+         scale_fill_continuous(high = "#132B43", low = "#56B1F7")
+
+```
 ### Disability by gender
 
 ```{r disability_gender}
@@ -5782,7 +5803,7 @@ data %>% select(dis = Q23, gender = Q21) %>%
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
-As a tile diagram:
+As a tile diagram with percentages as a fraction of the entire population:
 
 ```{r disability_gender_tile}
 
