@@ -732,6 +732,30 @@ data %>% select(num_range("Q2_", 1:2), career = Q20)                          %>
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
+Miss out low stat components
+
+```{r use_of_data_career_per2}
+
+data %>% select(num_range("Q2_", 1:2), career = Q20)                          %>%
+         pivot_longer(cols = num_range("Q2_", 1:2), 
+                      names_to = NULL,
+                      values_to = "datause")                                  %>%
+         filter(datause != 0)                                                 %>%
+         group_by(career)                                                     %>% 
+         filter(!(career %in% c("-","Other")))                                %>% 
+         mutate(N = n())                                                      %>% 
+         group_by(datause, career)                                            %>% 
+         mutate(per = n()/N)                                                  %>%
+         distinct(datause, career, per)                                       %>% 
+         ggplot(aes(x = datause, y = per, fill = career)) +
+         geom_col(colour = "black", position = position_dodge2(width = 0.9, preserve = "single")) +
+         theme_bw() +
+         scale_y_continuous(labels = percent) +
+         xlab("Use of data") + ylab("Percent") +
+         geom_text(aes(x = datause, label = percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 2) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
 ### Use of data by gender
 
 ```{r use_of_data_gender_num}
@@ -757,6 +781,28 @@ data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>
                       names_to = NULL, values_to = "datause")                 %>%
          filter(datause != 0)                                                 %>%
          group_by(gender)                                                     %>% 
+         mutate(N = n())                                                      %>% 
+         group_by(datause, gender)                                            %>%
+         mutate(per = n()/N)                                                  %>% 
+         distinct(datause, gender, per)                                       %>% 
+         ggplot(aes(x = datause, y = per, fill = gender)) +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() + scale_y_continuous(labels = percent_format(accuarcy = 1)) +
+         xlab("Use of data") + ylab("Percentage") +
+         geom_text(aes(x = datause, label = percent(per, accuracy = 1 )), vjust = -0.5,
+                position = position_dodge2(width = 0.9, preserve = "single"), colour = "black", size = 2) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+Remove low stat components
+
+```{r use_of_data_gender_per2}
+data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>%
+         pivot_longer(cols = num_range("Q2_", 1:2), 
+                      names_to = NULL, values_to = "datause")                 %>%
+         filter(datause != 0)                                                 %>%
+         group_by(gender)                                                     %>% 
+         filter(!(gender %in% lowstatsgender))                                %>% 
          mutate(N = n())                                                      %>% 
          group_by(datause, gender)                                            %>%
          mutate(per = n()/N)                                                  %>% 
@@ -959,12 +1005,45 @@ data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
          theme_bw() +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          xlab("Data use") + ylab("Percent") +
-         geom_text(aes(label = paste0(n," (",per,")")), 
+         geom_text(aes(label = per), 
                    position = position_dodge2(width = 0.9, preserve = "single"), 
                    vjust = -0.5, size = 2.5) +
          scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
+
+### Combined by gender
+
+```{r datause_choices_gender_per2}
+
+data %>% select(id = URN, num_range("Q2_",1:2), gender = Q21)          %>%
+         pivot_longer(cols = starts_with("Q2_"),
+                      names_to = NULL,
+                      values_to = "ds")                                %>%
+         filter(ds != 0)                                               %>% 
+         group_by(id)                                                  %>% 
+         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
+         distinct(id, choices, gender)                                 %>%
+         group_by(gender)                                              %>% 
+         mutate(N = n())                                               %>% 
+         ungroup()                                                     %>% 
+         select(-id)                                                   %>% 
+         group_by(choices, gender)                                     %>%
+         mutate(n = n())                                               %>% 
+         mutate(per = percent(n/N, accuracy = 1))                      %>% 
+         filter(!(gender %in% lowstatsgender))                         %>% 
+         distinct(choices, gender, per, n, N)                          %>% 
+         ggplot(aes(x = choices, y = n/N, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
+         theme_bw() +
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         xlab("Data use") + ylab("Percent") +
+         geom_text(aes(label = per), position = position_dodge2(width = 0.9, preserve = "single"), 
+                   vjust = -0.5, size = 2.5) +
+         scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
 ### Combined data use by institution
 
 Only showing instances that have more than 3 case at an institution otherwise the diagram
@@ -980,7 +1059,8 @@ data %>% select(id = URN, num_range("Q2_",1:2), institution = CleanLocs)        
          mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
          distinct(id, choices, institution)                            %>%
          ungroup()                                                     %>% 
-         select(-id)                                                   %>% 
+         select(-id)                                                   %>%
+         mutate(institution = ifelse(is.na(institution), "-", institution)) %>% 
          group_by(institution)                                         %>% 
          filter(n() > 3)                                               %>% 
          group_by(choices, institution)                                %>%
@@ -991,7 +1071,7 @@ data %>% select(id = URN, num_range("Q2_",1:2), institution = CleanLocs)        
          theme_bw() +
          xlab("Data use") + ylab("Institutions") +
          theme(axis.text.y = element_text(size = 8), legend.position = "None") +
-         geom_text(aes(label = n), size = 2, colour = "white") +
+         geom_text(aes(label = n), size = 3, colour = "white") +
          scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
          scale_fill_continuous(high = "#132B43", low = "#56B1F7")
 ```
@@ -1058,7 +1138,7 @@ data %>% select(URN, num_range("Q2_",1:2))                                   %>%
          theme_bw() +
          xlab("Data use") + ylab("Disciplines") +
          theme(axis.text.y = element_text(size = 8), legend.position = "None") +
-         geom_text(aes(label = n), size = 2, colour = "white") +
+         geom_text(aes(label = n), size = 3, colour = "white") +
          scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
          scale_fill_continuous(high = "#132B43", low = "#56B1F7")
 ```
