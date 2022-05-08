@@ -1243,7 +1243,7 @@ q <- apply(q, 2, function(x) as.integer(x))
 my_colors <- brewer.pal(5, "Spectral")
 my_colors <- colorRampPalette(my_colors)(100)
 
-plotcorr(cor(q), col=my_colors[cor(q)*50+50],cex.lab = 0.5*par("cex.lab"))
+plotcorr(cor(q), col=my_colors[cor(q)*50+50],cex.lab = 0.6*par("cex.lab"))
 
 ```
 ### Reusing existing data by career
@@ -1304,21 +1304,23 @@ data %>% select(num_range("Q2_b_",1:6), career = Q20)      %>%
                       names_to = NULL,
                       values_to = "ds")                    %>%
          filter(ds != 0)                                   %>%
+         group_by(ds)                                      %>% 
+         mutate(M = n())                                   %>% 
          group_by(career)                                  %>% 
          mutate(N = n())                                   %>% 
          filter(career != "Other" & career != "-")         %>% 
          group_by(ds, career)                              %>% 
          mutate(n = n())                                   %>% 
          mutate(per = n/ N)                                %>% 
-         distinct(ds, career, per, n)                      %>% 
-         ggplot(aes(x = ds, y = per, fill = career)) + 
+         distinct(ds, career, per, n, M)                   %>% 
+         ggplot(aes(x = reorder(ds, -M), y = per, fill = career)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
                   colour = "black") +
          theme_bw() + ylab("Percent") +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          geom_text(aes(label = percent(per, accuracy = 1)), 
                    position = position_dodge2(width = 0.9, preserve = "single"), 
-                   vjust = -0.35, size = 2)  +
+                   vjust = -0.35, size = 3)  +
          xlab("Data sources") + 
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 8),
                legend.text=element_text(size = 6)) +
@@ -1367,6 +1369,35 @@ data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          geom_text(aes(label = percent(per, accuracy = 1)), 
                    position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.35, size = 2)  +
+         xlab("Data sources") + 
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0, size = 8),
+               legend.text=element_text(size = 6)) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+Removing low stat components
+
+```{r data_sources_gender_per2}
+
+data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
+         pivot_longer(cols = starts_with("Q2_b_"),
+                      names_to = NULL,
+                      values_to = "ds")                    %>%
+         filter(ds != 0)                                   %>%
+         group_by(ds)                                      %>% 
+         mutate(M = n())                                   %>% 
+         group_by(gender)                                  %>% 
+         mutate(N = n())                                   %>% 
+         filter(!(gender %in% lowstatsgender))             %>% 
+         group_by(ds, gender)                              %>% 
+         mutate(per = n()/N)                               %>% 
+         distinct(ds, gender, per, M)                      %>% 
+         ggplot(aes(x = reorder(ds, -M), y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() + ylab("Percent") +
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         geom_text(aes(label = percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.35, size = 3)  +
          xlab("Data sources") + 
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0, size = 8),
                legend.text=element_text(size = 6)) +
