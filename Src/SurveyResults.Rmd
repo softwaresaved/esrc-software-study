@@ -2606,15 +2606,15 @@ Without "Other" and "-"
 ```{r reasons4NotOS_career_per2}
 
 data %>% select(starts_with("Q6_b"), career = Q20)  %>%
+         group_by(career)                           %>% 
+         mutate(N = n())                            %>% 
          pivot_longer(cols = starts_with("Q6_b"),
                       names_to = NULL,
                       values_to = "UseOS")          %>%
          filter(UseOS != 0)                         %>%
          group_by(UseOS)                            %>% 
          mutate(M = n())                            %>% 
-         group_by(career)                           %>% 
          filter(career != "Other" & career != "-")  %>% 
-         mutate(N = n())                            %>% 
          group_by(UseOS, career)                    %>% 
          mutate(per = n()/N)                        %>% 
          distinct(UseOS, career, per, M)            %>% 
@@ -2672,6 +2672,32 @@ data %>% select(starts_with("Q6_b"), gender = Q21)  %>%
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          geom_text(aes(label = percent(per, accuracy = 1)), vjust = -0.5,
                    position = position_dodge2(width = 0.9, preserve = "single"), size = 2) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("Reasons for not using Open Source") + ylab("Percent") +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+```{r reasons4NotOS_gender_per2}
+
+data %>% select(starts_with("Q6_b"), gender = Q21) %>%
+         filter(!(gender %in% lowstatsgender))     %>% 
+         group_by(gender)                          %>% 
+         mutate(N = n())                           %>% 
+         pivot_longer(cols = starts_with("Q6_b"),
+                      names_to = NULL,
+                      values_to = "UseOS")         %>%
+         filter(UseOS != 0)                        %>%
+         group_by(UseOS)                           %>% 
+         mutate(M = n())                           %>% 
+         group_by(UseOS, gender)                   %>% 
+         mutate(per = n()/N)                       %>% 
+         distinct(UseOS, gender, per, M)           %>% 
+         ggplot(aes(x = reorder(UseOS, -M), y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
+         theme_bw() +
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         geom_text(aes(label = percent(per, accuracy = 1)), vjust = -0.5,
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("Reasons for not using Open Source") + ylab("Percent") +
          scale_fill_brewer(palette = "Set2", name = "Gender")
