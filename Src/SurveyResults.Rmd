@@ -1581,13 +1581,15 @@ data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
                      names_to = NULL,
                      values_to = "DataSharing")                            %>%
         filter(DataSharing != 0)                                           %>%
+        group_by(DataSharing)                                              %>%
+        mutate(M = n())                                                    %>% 
         group_by(career)                                                   %>% 
         mutate(N = n())                                                    %>%
         filter(career != "Other" & career != "-")                          %>% 
         group_by(DataSharing, career)                                      %>% 
         mutate(per = n()/N)                                                %>% 
-        distinct(career, DataSharing, per)                                 %>% 
-        ggplot(aes(x = DataSharing, y= per,fill = career)) +
+        distinct(career, DataSharing, per, M)                              %>% 
+        ggplot(aes(x = reorder(DataSharing, -M), y= per,fill = career)) +
         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
                  colour = "black") + 
         theme_bw() + 
