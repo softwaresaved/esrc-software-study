@@ -1691,7 +1691,7 @@ plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
 
 ```{r sw_used_career}
 
-data %>% select(num_range("Q4_",1:26), career = "Q20")                       %>%
+data %>% select(num_range("Q4_",1:26), career = Q20)                        %>%
          pivot_longer(cols = starts_with("Q4"),
                       names_to = NULL,
                       values_to = "software")                                %>%
@@ -1785,6 +1785,66 @@ data %>% select(num_range("Q4_",1:26), career = "Q20")                       %>%
                legend.text=element_text(size = 8)) +
          ylab("Percentage") + xlab("Software used") +
          scale_fill_brewer(palette = "Set1", name = "Career stage") 
+```
+
+Removing low stat components and only showing entries with more than 5 entries.
+
+```{r sw_used_career_per3}
+
+data %>% select(num_range("Q4_",1:26), career = "Q20")                       %>%
+         pivot_longer(cols = starts_with("Q4"), 
+                      names_to = NULL,
+                      values_to = "software")                                %>%
+         group_by(software)                                                  %>% 
+         mutate(M = n())                                                     %>% 
+         group_by(career)                                                    %>% 
+         filter(!(career %in% c("-", "Other")))                              %>% 
+         mutate(N = n())                                                     %>% 
+         filter(software != 0 & M > 5)                                       %>%
+         group_by(software,career)                                           %>%
+         mutate(per = n()/N)                                                 %>% 
+         distinct(software, career, per, M)                                  %>% 
+         ggplot(aes(x = reorder(software, -M), y = per, fill = career)) +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
+                  colour = "black") +
+         theme_bw() +
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0, size = 8),
+               legend.text=element_text(size = 8)) +
+         ylab("Percentage") + xlab("Software used") +
+         scale_fill_brewer(palette = "Set1", name = "Career stage") 
+```
+
+### Software by gender
+
+Removing low stat components and only showing entries with more than 20 entries.
+
+```{r sw_used_gender_per}
+
+data %>% select(num_range("Q4_",1:26), gender = Q21)                         %>%
+         group_by(gender)                                                    %>% 
+         mutate(N = n())                                                     %>%
+         pivot_longer(cols = starts_with("Q4"), 
+                      names_to = NULL,
+                      values_to = "software")                                %>%
+         group_by(software)                                                  %>% 
+         mutate(M = n())                                                     %>% 
+         filter(!(gender %in% lowstatsgender))                               %>% 
+         filter(software != 0 & M > 10)                                      %>%
+         group_by(software,gender)                                           %>%
+         mutate(per = n()/N)                                                 %>% 
+         distinct(software, gender, per, M)                                  %>% 
+         ggplot(aes(x = reorder(software, -M), y = per, fill = gender)) +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
+                  colour = "black") +
+         theme_bw() +
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.83)) +
+         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0, size = 8),
+               legend.text=element_text(size = 8)) +
+         geom_text(aes(label = percent(per, accuracy = 1)), position = position_dodge2(width = 0.9, preserve = "single"), 
+                   size = 3, vjust = -0.5) +
+         ylab("Percent") + xlab("Software used") + 
+         scale_fill_brewer(palette = "Set2", name = "Gender") 
 ```
 
 ### Software used by discipline
@@ -1961,19 +2021,20 @@ bind_cols(data["Q20"], important_software)                        %>%
 
 ### Software used by % career stage
 
-Only show software that has more than 2 votes.
+Only show software that has more than 2 entries.
 
 ```{r important_sw_bar_career_per}
 
 bind_cols(data["Q20"], important_software)                        %>% 
-                       select(starts_with("Q5"), career = "Q20")  %>%
+                       select(starts_with("Q5"), career = Q20)    %>%
+                         mutate(N = n())                          %>%
                        pivot_longer(cols =  starts_with("Q5"),
-                                    names_to = "name",
+                                    names_to = NULL,
                                     values_to = "software")       %>%
                        filter(!is.na(software))                   %>%
                        group_by(software)                         %>% 
-                       mutate(N = n())                            %>%
-                       filter(N > 2)                              %>% 
+                       mutate(M = n())                            %>%
+                       filter(M > 2)                              %>% 
                        group_by(career, software)                 %>%
                        mutate(n = n())                            %>%
                        mutate(per = n/N)                          %>% 
@@ -2000,15 +2061,16 @@ Removing "Other" and "-".
 ```{r important_sw_bar_career_per2}
 
 bind_cols(data["Q20"], important_software)                        %>% 
-                       select(starts_with("Q5"), career = "Q20")  %>%
+                       select(starts_with("Q5"), career = Q20)    %>%
+                       mutate(N = n())                            %>%
                        pivot_longer(cols =  starts_with("Q5"),
-                                    names_to = "name",
+                                    names_to = NULL,
                                     values_to = "software")       %>%
                        filter(!is.na(software))                   %>%
-                       group_by(software)                         %>% 
-                        filter(career != "Other" & career != "-")  %>% 
-                       mutate(N = n())                            %>%
-                       filter(N > 2)                              %>% 
+                       group_by(software)                         %>%
+                       mutate(M = n())                            %>% 
+                       filter(career != "Other" & career != "-")  %>% 
+                       filter(M > 2)                              %>% 
                        group_by(career, software)                 %>%
                        mutate(n = n())                            %>%
                        mutate(per = n/N)                          %>% 
