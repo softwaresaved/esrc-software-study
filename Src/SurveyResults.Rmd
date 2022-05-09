@@ -2201,7 +2201,7 @@ data %>% select(Q6, career = "Q20")       %>%
 
 ```{r use_os_caree_per}
 
-data %>% select(os = Q6, career = "Q20")           %>%
+data %>% select(os = Q6, career = Q20)             %>%
          group_by(career)                          %>% 
          filter(career != "Other" & career != "-") %>% 
          mutate(N = n())                           %>% 
@@ -2209,14 +2209,14 @@ data %>% select(os = Q6, career = "Q20")           %>%
          mutate(n = n())                           %>% 
          mutate(per = percent(n/N, accuracy = 1))  %>%
          distinct(n, N, os, per, career)           %>% 
-         ggplot(aes(x = os, y = n/N, fill = career)) + 
+         ggplot(aes(x = reorder(os, -n), y = n/N, fill = career)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
          theme_bw() +
          xlab("Use of Open Source") + scale_y_continuous(labels = percent_format(accuracy = 1)) +
          ylab("Percent") +
          geom_text(aes(label = paste0(n," (", per,")")),
                    position = position_dodge2(width = 0.9, preserve = "single"),
-                   vjust = -0.5, size = 2) +
+                   vjust = -0.5, size = 3) +
          scale_fill_brewer(palette = "Set1", name = "Career stage") +
          theme(axis.text.x = element_text(size = 8), 
                              legend.text=element_text(size = 6))  
@@ -2226,7 +2226,7 @@ data %>% select(os = Q6, career = "Q20")           %>%
 
 ```{r use_os_gender}
 
-data %>% select(Q6, gender = Q20)         %>%
+data %>% select(Q6, gender = Q21)         %>%
          group_by(Q6)                     %>% 
          mutate(N = n())                  %>% 
          group_by(Q6, gender)             %>% 
@@ -2268,6 +2268,33 @@ data %>% select(os = Q6, gender = Q21)             %>%
                              legend.text=element_text(size = 6))  
 
 ```
+
+```{r use_os_gender_per2}
+
+data %>% select(os = Q6, gender = Q21)             %>%
+         group_by(os)                              %>% 
+         mutate(M = n())                           %>% 
+         filter(!(gender %in% lowstatsgender))     %>% 
+         group_by(gender)                          %>% 
+         mutate(N = n())                           %>% 
+         group_by(os, gender)                      %>% 
+         mutate(n = n())                           %>% 
+         mutate(per = percent(n/N, accuracy = 1))  %>%
+         distinct(n, N, os, per, gender, M)        %>% 
+         ggplot(aes(x = reorder(os, -M), y = n/N, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
+         theme_bw() +
+         xlab("Use of Open Source") + scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         ylab("Percent") +
+         geom_text(aes(label = paste0(n," (", per,")")),
+                   position = position_dodge2(width = 0.9, preserve = "single"),
+                   vjust = -0.5, size = 3) +
+         scale_fill_brewer(palette = "Set2", name = "Gender") +
+         theme(axis.text.x = element_text(size = 8), 
+                             legend.text=element_text(size = 6))  
+
+```
+
 ## Q6a Reason for using open source
 
 If you answered yes to the previous question, what are your main reasons
