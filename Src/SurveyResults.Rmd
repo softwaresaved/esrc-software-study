@@ -1595,13 +1595,46 @@ data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
         theme_bw() + 
         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), 
               legend.text=element_text(size = 6)) +
-        xlab("Data sharing habits") + ylab("Numbers") +
+        xlab("Data sharing habits") + ylab("Percent") +
         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.7)) +
         geom_text(aes(x = DataSharing, label = percent(per, accuracy = 1)), vjust = -0.5,
                       position = position_dodge2(width = 0.9, preserve = "single"), 
                       colour = "black", size = 2.5) + 
         scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
+
+### Sharing by gender
+
+```{r sharing_data_gender_per2}
+
+data %>% select(num_range("Q3_", 1:7), gender = Q21)                       %>%
+        pivot_longer(cols = starts_with("Q3_"), 
+                     names_to = NULL,
+                     values_to = "DataSharing")                            %>%
+        filter(DataSharing != 0)                                           %>%
+        group_by(DataSharing)                                              %>%
+        mutate(M = n())                                                    %>% 
+        group_by(gender)                                                   %>% 
+        mutate(N = n())                                                    %>%
+        filter(!(gender %in% lowstatsgender))                              %>% 
+        group_by(DataSharing, gender)                                      %>% 
+        mutate(per = n()/N)                                                %>% 
+        distinct(gender, DataSharing, per, M)                              %>% 
+        ggplot(aes(x = reorder(DataSharing, -M), y= per,fill = gender)) +
+        geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
+                 colour = "black") + 
+        theme_bw() + 
+        theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), 
+              legend.text=element_text(size = 6)) +
+        xlab("Data sharing habits") + ylab("Percent") +
+        scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.7)) +
+        geom_text(aes(x = DataSharing, label = percent(per, accuracy = 1)), vjust = -0.5,
+                      position = position_dodge2(width = 0.9, preserve = "single"), 
+                      colour = "black", size = 2.5) + 
+        scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+
 ### Other ways of sharing data
 
 ```{r other_sharing_data, results = 'asis'}
