@@ -3067,7 +3067,7 @@ data %>% select("Q9", career = Q20)    %>%
 ### Responses by % career stage
 
 ```{r develop_sw_career_per}
-data %>% select("Q9", career = Q20)    %>%
+data %>% select(Q9, career = Q20)      %>%
          group_by(career)              %>% 
          mutate(N = n())               %>% 
          group_by(Q9, career)          %>% 
@@ -3130,6 +3130,29 @@ data %>% select(Q9, gender = Q21)    %>%
          geom_text(aes(label = percent(per, accuracy = 1)),
                    position = position_dodge2(width = 0.9, preserve = "single"),  
                    vjust = -0.5, size = 2) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+```{r develop_sw_gender_per2}
+
+data %>% select(Q9, gender = Q21)                  %>%
+         group_by(Q9)                              %>%
+         mutate(M = n())                           %>% 
+         mutate(Q9 = ifelse(!is.na(Q9), Q9, "-"))  %>% 
+         filter(!(gender %in% lowstatsgender))     %>% 
+         group_by(gender)                          %>% 
+         mutate(N = n())                           %>% 
+         group_by(Q9, gender)                      %>% 
+         mutate(per = n()/N)                       %>%
+         distinct(Q9, gender, per, M)              %>% 
+         ggplot(aes(x = reorder(Q9, -M), y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() +
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         xlab("Do you develop software?") + ylab("Percent") +
+         geom_text(aes(label = percent(per, accuracy = 1)),
+                   position = position_dodge2(width = 0.9, preserve = "single"),  
+                   vjust = -0.5, size = 3) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
@@ -5700,6 +5723,43 @@ data %>% select(gender = Q21, career = Q20)             %>%
          scale_fill_continuous(high = "#132B43", low = "#56B1F7") + 
          theme(legend.position = "none") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+```
+
+
+```{r gender_career_points}
+
+data %>% select(gender = Q21, career = Q20)             %>%
+         filter(!(career %in% c("-","Other") | 
+                  gender %in% lowstatsgender))          %>% 
+         group_by(gender, career)                       %>%
+         mutate(n = n())                                %>% 
+         ggplot(aes(x = career, y = gender, fill = gender, size = n)) +
+         geom_point() + 
+         theme_bw() +
+         ylab("Gender") + xlab("Career stage") +
+         theme(legend.position = "none") +
+         geom_text(aes(label = n), vjust = -2, size = 3) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+```
+
+```{r gender_career_corr, results='asis'}
+
+data %>% select(gender = Q21, career = Q20)             %>%
+         filter(!(career %in% c("-","Other") | 
+                  gender %in% lowstatsgender))          %>% 
+         group_by(gender, career)                       %>%
+         tally() -> a
+
+a$stage <-  c(1:4,1:4)
+
+# Correlation between women and career stage
+cat("Correlation between career stage and number of women ", cor(x = a$stage[a$gender == "Woman"], y = a$n[a$gender == "Woman"]),".\n")
+
+# Correlation between women and career stage
+cat("Correlation between career stage and number of men ", cor(x = a$stage[a$gender == "Man"], y = a$n[a$gender == "Man"]),".\n")
+
 
 ```
 
