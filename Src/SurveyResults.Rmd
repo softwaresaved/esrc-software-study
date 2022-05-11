@@ -3401,6 +3401,24 @@ data %>% select(num_range("Q11_", 1:12))                 %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
 
+```{r acquiring_skills_per}
+data %>% select(num_range("Q11_", 1:12))                 %>%
+         mutate(N = n())                                 %>% 
+         pivot_longer(cols = num_range("Q11_", 1:12),
+                      names_to = "questions",
+                      values_to = "skills")              %>%
+         filter(skills != 0)                             %>%
+         group_by(skills)                                %>% 
+         mutate(n = n())                                 %>% 
+         mutate(per = percent(n/N, accuracy = 1))        %>% 
+         ggplot(aes(x = reorder(skills, -n))) + 
+         geom_bar(fill = "light blue", colour = "black") +
+         theme_bw() +
+         xlab("Where skills are acquired") + ylab("Numbers") + ylim(0, 129) +
+         geom_text(aes(y = n, label = paste0(n, " (", per,")")), vjust = -0.5, size = 3) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+```
+
 ### Choice correlations
 
 My interpretation of this graph is that obtuse angles are negatively correlated, 
@@ -3447,14 +3465,14 @@ data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
 ```{r acquiring_skills_career_per}
 
 data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
+         group_by(career)                                %>% 
+         mutate(N = n())                                 %>% 
          pivot_longer(cols = num_range("Q11_", 1:12),
                       names_to = "questions",
                       values_to = "skills")              %>%
          filter(skills != 0)                             %>%
          group_by(skills)                                %>% 
          mutate(M = n())                                 %>% 
-         group_by(career)                                %>% 
-         mutate(N = n())                                 %>% 
          group_by(career, skills)                        %>% 
          mutate(per = n()/N)                             %>% 
          distinct(career, skills, per, M)                %>% 
@@ -3477,6 +3495,8 @@ Removing "Other" and "-".
 ```{r acquiring_skills_career_per2}
 
 data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
+         group_by(career)                                %>% 
+         mutate(N = n())                                 %>% 
          pivot_longer(cols = num_range("Q11_", 1:12),
                       names_to = "questions",
                       values_to = "skills")              %>%
@@ -3484,8 +3504,6 @@ data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
          filter(career != "Other" & career != "-")       %>%
          group_by(skills)                                %>% 
          mutate(M = n())                                 %>% 
-         group_by(career)                                %>% 
-         mutate(N = n())                                 %>% 
          group_by(career, skills)                        %>% 
          mutate(per = n()/N)                             %>% 
          distinct(career, skills, per, M)                %>% 
@@ -3497,7 +3515,7 @@ data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
          xlab("Where skills are being acquired") + ylab("Percent") +
          geom_text(aes(label = percent(per, accuracy = 1)), 
                    position = position_dodge2(width = 0.9, preserve = "single"),
-                   vjust = -0.5, size = 2) +
+                   vjust = -0.5, size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0),
                legend.text=element_text(size = 8)) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
@@ -3529,14 +3547,14 @@ data %>% select(num_range("Q11_", 1:12), gender = Q21)   %>%
 ```{r acquiring_skills_gender_per}
 
 data %>% select(num_range("Q11_", 1:12), gender = Q21)   %>%
+         group_by(gender)                                %>% 
+         mutate(N = n())                                 %>% 
          pivot_longer(cols = num_range("Q11_", 1:12),
                       names_to = "questions",
                       values_to = "skills")              %>%
          filter(skills != 0)                             %>%
          group_by(skills)                                %>% 
          mutate(M = n())                                 %>% 
-         group_by(gender)                                %>% 
-         mutate(N = n())                                 %>% 
          group_by(gender, skills)                        %>% 
          mutate(per = n()/N)                             %>% 
          distinct(gender, skills, per, M)                   %>% 
@@ -3549,6 +3567,34 @@ data %>% select(num_range("Q11_", 1:12), gender = Q21)   %>%
          geom_text(aes(label = percent(per, accuracy = 1)), 
                    position = position_dodge2(width = 0.9, preserve = "single"),
                    vjust = -0.5, size = 2) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+```{r acquiring_skills_gender_per2}
+
+data %>% select(num_range("Q11_", 1:12), gender = Q21)   %>%
+         group_by(gender)                                %>% 
+         mutate(N = n())                                 %>% 
+         filter(!(gender %in% lowstatsgender))           %>% 
+         pivot_longer(cols = num_range("Q11_", 1:12),
+                      names_to = "questions",
+                      values_to = "skills")              %>%
+         filter(skills != 0)                             %>%
+         group_by(skills)                                %>% 
+         mutate(M = n())                                 %>% 
+         group_by(gender, skills)                        %>% 
+         mutate(per = n()/N)                             %>% 
+         distinct(gender, skills, per, M)                   %>% 
+         ggplot(aes(x = reorder(skills, -M), y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"),
+                  colour = "black") +
+         theme_bw() +
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         xlab("Where skills are being acquired") + ylab("Percent") +
+         geom_text(aes(label = percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"),
+                   vjust = -0.5, size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
