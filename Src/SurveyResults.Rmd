@@ -3166,14 +3166,14 @@ data %>% select(Q9, num_range("Q19_", 1:22))                             %>%
                       names_to = NULL,
                       values_to ="discipline")                           %>%
          filter(discipline != 0)                                         %>%
-         #distinct(discipline, Q9) %>% 
-         mutate(N = n())                                                 %>% 
          group_by(discipline, Q9)                                        %>%
          mutate(n = n())                                                 %>%
-         distinct(Q9, discipline, N, n)                                  %>% 
+         distinct(Q9, discipline, n)                                     %>% 
          group_by(Q9)                                                    %>% 
          summarise(Tot = sum(n))                                         %>% 
-         arrange(desc(Tot))
+         arrange(desc(Tot))                                              %>% 
+         kbl(format="pipe", align = c("l","r"), col.names = c("Answer type", "Numbers"))
+
 ```
 
 ```{r swdev_dist_per_tile}
@@ -3184,7 +3184,6 @@ data %>% select(Q9, num_range("Q19_", 1:22))                             %>%
                       names_to = NULL,
                       values_to ="discipline")                           %>%
          filter(discipline != 0)                                         %>%
-         mutate(N = n())                                                 %>% 
          group_by(discipline, Q9)                                        %>%
          mutate(n = n())                                                 %>%
          mutate(per = percent(n/N, accuracy = 1))                        %>% 
