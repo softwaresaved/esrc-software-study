@@ -3837,7 +3837,7 @@ research software are sufficiently recognised or rewarded?
 
 ```{r recognition}
 
-data %>%  select(rew = "Q12")                      %>%
+data %>%  select(rew = Q12)                        %>%
           mutate(N = n())                          %>% 
           group_by(rew)                            %>% 
           mutate(n = n())                          %>% 
@@ -3857,9 +3857,9 @@ data %>%  select(rew = "Q12")                      %>%
 
 ```{r recognition_careerStage}
 
-data %>%  select(rew = Q12, career =Q20) %>%
-          group_by(rew)       %>% 
-          mutate(n = n())     %>% 
+data %>%  select(rew = Q12, career = Q20) %>%
+          group_by(rew)                   %>% 
+          mutate(n = n())                 %>% 
           ggplot(aes(x = reorder(rew, -n), fill = career)) + 
           geom_bar(colour = "black") +
           theme_bw() +
@@ -3920,7 +3920,7 @@ data %>%  select(rew = Q12, career =Q20)        %>%
           scale_y_continuous(labels = percent_format(accuracy = 1)) +
           geom_text(aes(label = percent(per, accuracy = 1)), 
                     position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
-                    size = 2) +
+                    size = 3) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
           scale_fill_brewer(palette = "Set1", name = "Career stage")
 
@@ -3972,6 +3972,30 @@ data %>%  select(rew = Q12, gender =Q21) %>%
 
 ```
 
+```{r recognition_gender_per2}
+
+data %>%  select(rew = Q12, gender = Q21)        %>%
+          group_by(rew)                          %>% 
+          mutate(M = n())                        %>% 
+          filter(!(gender %in% lowstatsgender))  %>% 
+          group_by(gender)                       %>% 
+          mutate(N = n())                        %>% 
+          group_by(rew, gender)                  %>% 
+          mutate(per = n()/N)                    %>% 
+          distinct(rew, gender, per, M)          %>% 
+          ggplot(aes(x = reorder(rew, -M), y = per, fill = gender)) + 
+          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+          theme_bw() +
+          xlab("Development/Maintenance of rsearch software rewarded/recognised") +
+          ylab("Percentage") +
+          scale_y_continuous(labels = percent_format(accuracy = 1)) +
+          geom_text(aes(label = percent(per, accuracy = 1)), 
+                    position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
+                    size = 3) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+          scale_fill_brewer(palette = "Set2", name = "Gender")
+
+```
 ### Rationale
 
 If you answered yes or no can you briefly state your reasons for
