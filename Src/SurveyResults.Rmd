@@ -5780,6 +5780,28 @@ data %>% select(gender = Q21, career = Q20)                     %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
 
+### Gender by career stage percent
+
+```{r gender_career_per}
+
+data %>% select(gender = Q21, career = Q20)                     %>%
+         filter(!(gender %in% lowstatsgender |
+                  career %in% c("-", "Other")))                 %>% 
+         group_by(career)                                       %>% 
+         mutate(N = n())                                        %>% 
+         group_by(gender, career)                               %>% 
+         mutate(n = n())                                        %>% 
+         mutate(per = percent(n/N, accuracy = 1))               %>% 
+         distinct(career, gender, n, N, per)                    %>% 
+         ggplot(aes(x = career, y = n/N, fill = gender)) +
+         geom_col(colour = "black") +
+         theme_bw() + scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         geom_text(aes(label = per), position = position_stack(vjust = 0.5), size = 3, colour = "black") +
+         xlab("Career stage") + ylab("percent") + labs(fill = "Gender") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
 ### Gender vs Career stage
 
 A different representation of career vs gender.
