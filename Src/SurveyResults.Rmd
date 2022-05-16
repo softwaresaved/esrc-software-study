@@ -4670,6 +4670,7 @@ somewhere between institutional and the national Tier 1 service.
 ```{r where_sw_run}
 
 data %>%  select(num_range("Q14_", 1:9))         %>%
+  mutate(N = n())                                %>% 
   pivot_longer(cols = num_range("Q14_", 1:9),
                names_to = "questions",
                values_to = "runon")              %>%
@@ -4680,7 +4681,7 @@ data %>%  select(num_range("Q14_", 1:9))         %>%
   geom_bar(fill = "light blue", colour = "black") +
   theme_bw() + ylim(0, 111) +
   xlab("Where software is run") + ylab("Numbers") +
-  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
+  geom_text(aes(y = n,label = paste0(n," (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 3) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
 
