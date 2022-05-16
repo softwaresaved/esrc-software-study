@@ -4296,12 +4296,12 @@ data %>% select(num_range("Q13_2_",1:5), gender = Q21)     %>%
 ```{r aware_policies_gender_per}
 
 data %>% select(num_range("Q13_2_",1:5), gender = Q21)     %>%
+         group_by(gender)                                                               %>% 
+         mutate(N = n())                                                                %>% 
          pivot_longer(cols = starts_with("Q13"),
                       names_to = NULL,
                       values_to = "understanding")                                      %>%
          filter(understanding != 0)                                                     %>%
-         group_by(gender)                                                               %>% 
-         mutate(N = n())                                                                %>% 
          group_by(understanding, gender)                                                %>% 
          mutate(per = n()/N)                                                            %>% 
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
@@ -4310,6 +4310,30 @@ data %>% select(num_range("Q13_2_",1:5), gender = Q21)     %>%
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
                    position = position_dodge2(width = 0.9, preserve = "single"), size = 2, vjust = -0.5) +
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         theme_bw() + ylab("Percent") +
+         xlab("Aware of how institution/funder's policies on how s/w is funded, managed and licensed") +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+```{r aware_policies_gender_per2}
+
+data %>% select(num_range("Q13_2_",1:5), gender = Q21)                                  %>%
+         filter(!(gender %in% lowstatsgender))                                          %>% 
+         group_by(gender)                                                               %>% 
+         mutate(N = n())                                                                %>% 
+         pivot_longer(cols = starts_with("Q13"),
+                      names_to = NULL,
+                      values_to = "understanding")                                      %>%
+         filter(understanding != 0)                                                     %>%
+         group_by(understanding, gender)                                                %>% 
+         mutate(per = n()/N)                                                            %>% 
+         mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
+         distinct(understanding, gender, per)                                           %>% 
+         ggplot(aes(x = understanding, y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 3, vjust = -0.5) +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          theme_bw() + ylab("Percent") +
          xlab("Aware of how institution/funder's policies on how s/w is funded, managed and licensed") +
@@ -4627,7 +4651,7 @@ data %>% select(num_range("Q13_4_",1:5), gender = Q21)                          
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
                    position = position_dodge2(width = 0.9, preserve = "single"), 
-                   size = 2, vjust = -0.5) +
+                   size = 3, vjust = -0.5) +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          theme_bw() + ylab("Percent") +
          xlab("Insufficient incentive to learn how s/w is funded, managed and licensed") +
