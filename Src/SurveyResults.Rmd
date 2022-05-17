@@ -4735,6 +4735,8 @@ data %>%  select(num_range("Q14_", 1:9), career = Q20)         %>%
 ```{r where_sw_run_career_per2}
 
 data %>%  select(num_range("Q14_", 1:9), career = Q20)         %>%
+  group_by(career)                                             %>% 
+  mutate(N = n())                                              %>% 
   pivot_longer(cols = num_range("Q14_", 1:9),
                names_to = NULL,
                values_to = "runon")                            %>%
@@ -4742,8 +4744,6 @@ data %>%  select(num_range("Q14_", 1:9), career = Q20)         %>%
   group_by(runon)                                              %>% 
   mutate(M = n())                                              %>% 
   filter(!(career %in% c("Other", "-")))                       %>% 
-  group_by(career)                                             %>% 
-  mutate(N = n())                                              %>% 
   group_by(career, runon)                                      %>% 
   mutate(n = n())                                              %>% 
   mutate(per = percent(n/N, accuracy = 1))                     %>% 
@@ -4781,6 +4781,35 @@ data %>%  select(num_range("Q14_", 1:9), gender = Q21)         %>%
   scale_fill_brewer(palette = "Set2", name = "Gender")
 
 ```
+### Where software is run by % gender
+
+```{r where_sw_run_gender_per}
+
+data %>%  select(num_range("Q14_", 1:9), gender = Q21)         %>%
+  group_by(gender)                                             %>% 
+  mutate(N = n())                                              %>% 
+  pivot_longer(cols = num_range("Q14_", 1:9),
+               names_to = NULL,
+               values_to = "runon")                            %>%
+  filter(runon != 0)                                           %>%
+  group_by(runon)                                              %>% 
+  mutate(M = n())                                              %>% 
+  filter(!(gender %in% lowstatsgender))                        %>% 
+  group_by(gender, runon)                                      %>% 
+  mutate(n = n())                                              %>% 
+  mutate(per = percent(n/N, accuracy = 1))                     %>% 
+  distinct(M, N, n, per)                                       %>% 
+  ggplot(aes(x = reorder(runon, -M), y = n/N, fill  = gender)) +
+  geom_col( position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+  theme_bw() + scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.76)) +
+  xlab("Where software is run") + ylab("Percent") +
+  geom_text(aes(label = per), vjust = -0.5,
+            position = position_dodge2(width = 0.9, preserve = "single"), size = 3) +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+  scale_fill_brewer(palette = "Set2", name = "Gender")
+
+```
+
 
 ### Counting combined choices
 
@@ -4818,7 +4847,7 @@ listOther("Q14_a")
 
 ```
 
-## Q15 Licensing policy
+## Q15 Licensing and publishing policies
 
 A licensing policy provides instruction or guidance on what software
 licenses are preferred for the release of software.
@@ -4833,9 +4862,8 @@ are aware of)?
 
 ```{r licensing}
 
-N <- nrow(data)
-
 data %>% select(starts_with("Q15_"), -"Q15_a")                          %>%
+         mutate(N = n())                                                %>% 
          pivot_longer(cols = starts_with("Q15_"),
                       names_to = NULL,
                       values_to ="aware")                               %>%
@@ -4843,8 +4871,8 @@ data %>% select(starts_with("Q15_"), -"Q15_a")                          %>%
          mutate(aware = factor(aware, ordered = TRUE, levels = licawa)) %>% 
          group_by(aware)                                                %>%
          mutate(n = n())                                                %>% 
-         mutate(per = percent(n/N, accuaracy = 1))                      %>% 
-         ggplot(aes(x = aware)) +
+         mutate(per = percent(n/N, accuracy = 1))                      %>% 
+         ggplot(aes(x = aware)) + 
          geom_bar(fill = "light blue", colour = "black") +
          theme_bw() + ylim(0,76) +
          geom_text(aes(y = n, label = paste0(n, " (", per, ")")),  
@@ -4865,9 +4893,8 @@ data %>% select(starts_with("Q15_"), -"Q15_a", career = Q20)            %>%
                       values_to ="aware")                               %>%
          filter(aware != 0)                                             %>%
          mutate(aware = factor(aware, ordered = TRUE, levels = licawa)) %>% 
-         group_by(aware)                                                %>%
-         mutate(n = n())                                                %>% 
          group_by(career, aware)                                        %>% 
+         mutate(n = n())                                                %>% 
          ggplot(aes(x = aware, fill = career)) +
          geom_bar(colour = "black") +
          theme_bw() +
@@ -4882,17 +4909,17 @@ data %>% select(starts_with("Q15_"), -"Q15_a", career = Q20)            %>%
 
 ```{r licensing_career_per}
 
-data %>% select(id = URN, starts_with("Q15_"), -"Q15_a", career = Q20)    %>%
+data %>% select(id = URN, starts_with("Q15_"), -"Q15_a", career = Q20)     %>%
+         group_by(career)                                                  %>%
+         mutate(N = n())                                                  %>% 
+         group_by(career)                                                 %>% 
          pivot_longer(cols = starts_with("Q15_"),
                       names_to = NULL,
                       values_to ="aware")                                 %>%
          filter(aware != 0)                                               %>%
-         distinct(id, aware, career)                                      %>% 
-         group_by(career)                                                 %>% 
+         distinct(id, aware, career,N)                                    %>% 
          filter(!(career %in% c("Other","-")))                            %>% 
-         mutate(N = n())                                                  %>% 
          mutate(aware = factor(aware, ordered = TRUE, levels = licawa))   %>% 
-         group_by(aware)                                                  %>%
          group_by(career, aware)                                          %>% 
          mutate(n = n())                                                  %>% 
          mutate(per = percent(n/N, accuracy = 1))                         %>% 
@@ -4919,14 +4946,44 @@ data %>% select(starts_with("Q15_"), -"Q15_a", gender = Q21)              %>%
                       values_to ="aware")                                 %>%
          filter(aware != 0)                                               %>%
          mutate(aware = factor(aware, ordered = TRUE, levels = licawa))   %>% 
-         group_by(aware)                                                  %>%
-         mutate(n = n())                                                  %>% 
          group_by(gender, aware)                                          %>% 
+         mutate(n = n())                                                  %>% 
          ggplot(aes(x = reorder(aware, -n), fill = gender)) +
          geom_bar(colour = "black") +
          theme_bw() +
          geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 3) +
          ylab("Numbers") + xlab("Aware of the policy for") +
+         scale_fill_brewer(palette = "Set2", name = "Gender") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+```
+
+### Licensing policies awareness by % career stage
+
+```{r licensing_gender_per}
+
+data %>% select(id = URN, starts_with("Q15_"), -"Q15_a", gender = Q21)    %>%
+         group_by(gender)                                                  %>%
+         mutate(N = n())                                                  %>% 
+         group_by(gender)                                                 %>% 
+         pivot_longer(cols = starts_with("Q15_"),
+                      names_to = NULL,
+                      values_to ="aware")                                 %>%
+         filter(aware != 0)                                               %>%
+         distinct(id, aware, gender,N)                                    %>% 
+         filter(!(gender %in% lowstatsgender))                            %>% 
+         mutate(aware = factor(aware, ordered = TRUE, levels = licawa))   %>% 
+         group_by(gender, aware)                                          %>% 
+         mutate(n = n())                                                  %>% 
+         mutate(per = percent(n/N, accuracy = 1))                         %>% 
+         distinct(n, N, per, gender, aware)                               %>% 
+         ggplot(aes(x = aware, y = n/N, fill = gender)) +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() + 
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         geom_text(aes(label = per), vjust = -0.5,
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 3) +
+         ylab("Percent") + xlab("Aware of the policy for") +
          scale_fill_brewer(palette = "Set2", name = "Gender") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
@@ -4965,7 +5022,7 @@ listOther("Q15_a")
 
 ```
 
-## Q16 Barriers to use
+## Q16 Barriers to software use
 
 What barriers have you experienced to the use of software in your
 research? (Check all that apply.)
