@@ -4912,7 +4912,6 @@ data %>% select(starts_with("Q15_"), -"Q15_a", career = Q20)            %>%
 data %>% select(id = URN, starts_with("Q15_"), -"Q15_a", career = Q20)     %>%
          group_by(career)                                                  %>%
          mutate(N = n())                                                  %>% 
-         group_by(career)                                                 %>% 
          pivot_longer(cols = starts_with("Q15_"),
                       names_to = NULL,
                       values_to ="aware")                                 %>%
@@ -4996,13 +4995,14 @@ Percentages are given as a percentage from an institution.
 ```{r awareness_inst}
 
 data %>% select(Institutions = CleanLocs, starts_with("Q15_"), -"Q15_a") %>%
+         group_by(Institutions)                                          %>% 
+         mutate(N = n())                                                 %>%
          pivot_longer(cols = starts_with("Q15"),
                       names_to = "columns",
                       values_to ="aware")                                %>%
          filter(aware != 0)                                              %>%
-        mutate(aware = factor(aware, ordered = TRUE, levels = licawa))   %>% 
-         group_by(Institutions)                                          %>% 
-         mutate(N = n())                                                 %>% 
+         mutate(aware = factor(aware, ordered = TRUE, levels = licawa))  %>% 
+ 
          group_by(aware, Institutions)                                   %>%
          mutate(n = n())                                                 %>%
          ggplot(aes(x = aware, y = Institutions, size = n/N)) +
