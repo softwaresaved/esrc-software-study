@@ -669,13 +669,13 @@ esrcdat %>% filter(Status == "Active")                                          
             select(Start = StartDate, End = EndDate, Category = ProjectCategory)               %>% 
             filter(!is.na(Start) & !is.na(End))                                                %>% 
             group_by(Category)                                                                 %>% 
-            mutate(length = as.numeric(difftime(End, Start,units = "weeks"), units = "weeks")) %>%
+            mutate(length = as.numeric(difftime(End, Start,units = "days"), units = "days")) %>%
             summarise(Mean = round(mean(length)), StD = round(sd(length)), 
-                      Min = round(min(length)), Max = round(max(length)))                      %>%
+                      Max = round(max(length)), Min = round(min(length)))                      %>%
            arrange(desc(Mean))                                                                 %>% 
             kbl(format="pipe", align = c("l",rep("r",4)), 
-                col.names = c("Grant Category", "Mean (weeks)", 
-                                "Standar deviation (weeks)","Minimum (weeks)", "Maximum (weeks)")) 
+                col.names = c("Grant Category", "Mean (days)", 
+                                "Standar deviation (days)", "Maximum (days)","Minimum (days)")) 
   
 ```
 As a log1p (ln(x + 1)) plot:

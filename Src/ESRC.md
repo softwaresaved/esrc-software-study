@@ -355,12 +355,12 @@ The maximum funding period corresponds to 4,382 days.
 
 Looking at the statistics for active projects:
 
-| Grant Category | Mean (weeks) | Standar deviation (weeks) | Minimum (weeks) | Maximum (weeks) |
-|:---------------|-------------:|--------------------------:|----------------:|----------------:|
-| Training Grant |          388 |                       170 |             182 |             626 |
-| Studentship    |          209 |                        48 |              40 |             522 |
-| Research Grant |          146 |                        68 |              13 |             557 |
-| Fellowship     |           71 |                        33 |              13 |             226 |
+| Grant Category | Mean (days) | Standar deviation (days) | Maximum (days) | Minimum (days) |
+|:---------------|------------:|-------------------------:|---------------:|---------------:|
+| Training Grant |        2714 |                     1188 |           4382 |           1277 |
+| Studentship    |        1466 |                      339 |           3652 |            280 |
+| Research Grant |        1025 |                      478 |           3896 |             88 |
+| Fellowship     |         500 |                      230 |           1581 |             91 |
 
 As a log1p (ln(x + 1)) plot:
 
