@@ -186,7 +186,8 @@ will be applied later).
     money but they also give the most awards so on average they do not
     give the highest award.
 -   The MRC have been given the third highest amount but, other than
-    UKRI, they give the second highest average award.
+    UKRI, they give the second highest average award but they have the
+    longest set of records.
 -   Of interest to this particular study the ESRC comes in fifth in the
     total amount awarded and they give the fourth highest number of
     awards so their average over the research councils comes third.
@@ -269,12 +270,12 @@ be considered from this point onwards reduces the number of records from
 No explicit expenditure data seems to be provided for *Studentships*.
 Data is sorted by the average award.
 
-| Project Catgeory | Number of Awards | Total Awarded (£) | Average Award (£) |
-|:-----------------|-----------------:|------------------:|------------------:|
-| Research Grant   |            5,166 |     2,548,848,403 |         493389.16 |
-| Training Grant   |              403 |       574,573,855 |        1425741.58 |
-| Fellowship       |            1,156 |       125,637,540 |         108682.99 |
-| Studentship      |            3,649 |                 0 |              0.00 |
+| Project Categeory | Number of Awards | Total Awarded (£) | Average Award (£) |
+|:------------------|-----------------:|------------------:|------------------:|
+| Training Grant    |              403 |       574,573,855 |       1,425,741.6 |
+| Research Grant    |            5,166 |     2,548,848,403 |         493,389.2 |
+| Fellowship        |            1,156 |       125,637,540 |         108,683.0 |
+| Studentship       |            3,649 |                 0 |               0.0 |
 
 The same diagram with each year shown as a percentage:
 
@@ -306,6 +307,15 @@ The award length distribution of the award lengths binned into 28-day
 periods is shown below.
 
 <img src="ESRC_files/figure-gfm/award_lengths-1.png" title="Histogram of the length distribution for all projects." alt="Histogram of the length distribution for all projects."  />
+
+The average award length:
+
+| Grant Category | Mean (weeks) | Standar deviation (weeks) | Minimum (weeks) | Maximum (weeks) |
+|:---------------|-------------:|--------------------------:|----------------:|----------------:|
+| Studentship    |          204 |                        52 |               4 |             522 |
+| Training Grant |          185 |                       132 |               0 |             626 |
+| Research Grant |          123 |                        64 |               0 |             557 |
+| Fellowship     |           72 |                        42 |               4 |             287 |
 
 The same info with a y log1p (ln(x + 1)) scale.
 

@@ -452,12 +452,12 @@ No explicit expenditure data seems to be provided for *Studentships*. Data is so
 ```{r esrc_categories, echo = FALSE, alt.fig ="Expenditure over time showing project categories."}
 
 # Look at the project categories
-esrcdat %>% select(ProjectCategory, AwardPounds)                              %>% 
-            group_by(ProjectCategory)                                         %>% 
-            summarise(Number = n(), TotalAward = sum(AwardPounds))            %>% 
-            mutate(AverageAward = sprintf("%.2f",round(TotalAward/Number,2))) %>% 
-            arrange(desc(AverageAward))                                       %>% 
-            mutate(across(where(is.numeric), ~ format(., big.mark = ",")))    %>% 
+esrcdat %>% select(ProjectCategory, AwardPounds)                                          %>% 
+            group_by(ProjectCategory)                                                     %>% 
+            summarise(Number = n(), TotalAward = sum(AwardPounds))                        %>% 
+            mutate(AverageAward = as.numeric(sprintf("%.2f",round(TotalAward/Number,2)))) %>% 
+            arrange(desc(AverageAward))                                                   %>% 
+            mutate(across(where(is.numeric), ~ format(., big.mark = ",")))                %>% 
             kbl(format="pipe", align = c("l",rep("r",3)), 
                 col.names = c("Project Categeory", "Number of Awards", 
                                 "Total Awarded (£)","Average Award (£)")) 
@@ -572,7 +572,24 @@ esrcdat %>% select(StartDate, EndDate, ProjectCategory)                         
             ylab("Number of Awards") + xlab("Award Length (weeks)") +
             labs(fill = "Project Category") + theme_bw()
 ```
+ 
+The average award length:
+ 
+```{r average_award_length, echo=FALSE, fig.alt="The average length of an award."}
 
+esrcdat %>% select(Start = StartDate, End = EndDate, Category = ProjectCategory)               %>% 
+            filter(!is.na(Start) & !is.na(End))                                                %>% 
+            group_by(Category)                                                                 %>% 
+            mutate(length = as.numeric(difftime(End, Start,units = "weeks"), units = "weeks")) %>%
+            summarise(Mean = round(mean(length)), StD = round(sd(length)), 
+                      Min = round(min(length)), Max = round(max(length)))                      %>%
+           arrange(desc(Mean))                                                                 %>% 
+            kbl(format="pipe", align = c("l",rep("r",4)), 
+                col.names = c("Grant Category", "Mean (weeks)", 
+                                "Standar deviation (weeks)","Minimum (weeks)", "Maximum (weeks)")) 
+  
+```
+ 
 The same info with a y log1p (ln(x + 1)) scale.
 
 ```{r award_lengths_log, echo = FALSE, fig.alt = "Histogram of the length distribution for all projects."}
