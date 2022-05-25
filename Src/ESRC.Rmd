@@ -753,6 +753,7 @@ The expenditure of the awards over the whole time period by region ordered by th
 ```{r esrc_byRegions, echo = FALSE}
 
 esrcdat %>% select(Region, AwardPounds)                                       %>% 
+            filter(!is.na(Region))                                            %>% 
             group_by(Region)                                                  %>% 
             summarise(Number = n(), TotalAward = sum(AwardPounds))            %>% 
             mutate(AverageAward = sprintf("%.2f",round(TotalAward/Number,2))) %>% 
@@ -770,6 +771,7 @@ We can generate the table for projects that are currently active ordered by the 
 
 esrcdat %>% filter(Status == "Active")                                        %>% 
             select(Region, AwardPounds)                                       %>% 
+            filter(!is.na(Region))                                            %>% 
             group_by(Region)                                                  %>% 
             summarise(Number = n(), TotalAward = sum(AwardPounds))            %>% 
             mutate(AverageAward = sprintf("%.2f",round(TotalAward/Number,2))) %>% 
@@ -814,7 +816,7 @@ esrcdat %>% filter(Status == "Active")                                          
             mutate(across(where(is.numeric), ~ format(., big.mark = ",")))      %>% 
             slice_head(n = 25)                                                  %>% 
             kbl(format="pipe", align = c("l",rep("r",3)),
-                col.names = c("Org", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
+                col.names = c("Organisation", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
 ```
 The same table ordered by the number of awards:
 
@@ -829,7 +831,7 @@ esrcdat %>% filter(Status == "Active")                                          
             mutate(across(where(is.numeric), ~ format(., big.mark = ",")))      %>% 
             slice_head(n = 25)                                                  %>% 
             kbl(format="pipe", align = c("l",rep("r",3)),
-                col.names = c("Org", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
+                col.names = c("Organisation", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
 ```
 
 ## Department awards

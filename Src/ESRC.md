@@ -419,7 +419,6 @@ ordered by the total award given is shown in the table below.
 | Northern Ireland         |              143 |        51,429,447 |         359646.48 |
 | Outside UK               |               82 |        41,002,086 |         500025.44 |
 | North East               |               39 |         4,620,877 |         118484.03 |
-| NA                       |                2 |           527,623 |         263811.50 |
 
 ### Regional distributions of awards for active projects only
 
@@ -442,7 +441,6 @@ by the total award given is shown in the table below.
 | Yorkshire and The Humber |              120 |        19,329,286 |         161077.38 |
 | Outside UK               |               26 |        17,845,281 |         686356.96 |
 | North East               |               13 |         1,843,525 |         141809.62 |
-| NA                       |                1 |           100,372 |         100372.00 |
 
 ## Funding by lead organisation
 
@@ -484,7 +482,7 @@ award.
 This only shows the top 25 organisations with active projects by the
 average value of the award.
 
-| Org                                  | Number of Awards | Total Awarded (£) | Average Award (£) |
+| Organisation                         | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:-------------------------------------|-----------------:|------------------:|------------------:|
 | Harvard University                   |                1 |            99,739 |          99739.00 |
 | Canterbury Christ Church University  |                1 |            99,731 |          99731.00 |
@@ -514,7 +512,7 @@ average value of the award.
 
 The same table ordered by the number of awards:
 
-| Org                                  | Number of Awards | Total Awarded (£) | Average Award (£) |
+| Organisation                         | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:-------------------------------------|-----------------:|------------------:|------------------:|
 | University College London            |              299 |       194,907,944 |         651866.03 |
 | University of Oxford                 |              234 |        83,325,112 |         356090.22 |
