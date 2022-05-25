@@ -270,7 +270,7 @@ to start looking at the data from 2008 (this will be applied later).
 ### Summary
 
 * Over the time covered by the data, EPSRC has been allocated the most money but they also give the most awards so on average they do not give the highest award.
-* The MRC have been given the third highest amount but, other than UKRI, they give the second highest average award.
+* The MRC have been given the third highest amount but, other than UKRI, they give the second highest average award but they have the longest set of records.
 * Of interest to this particular study the ESRC comes in fifth in the total amount awarded and they give the fourth highest number of awards so their average over the research councils comes third.
 * At a later point only data from 2008 and onwards will be considered.
 
@@ -459,7 +459,7 @@ esrcdat %>% select(ProjectCategory, AwardPounds)                              %>
             arrange(desc(AverageAward))                                       %>% 
             mutate(across(where(is.numeric), ~ format(., big.mark = ",")))    %>% 
             kbl(format="pipe", align = c("l",rep("r",3)), 
-                col.names = c("Project Catgeory", "Number of Awards", 
+                col.names = c("Project Categeory", "Number of Awards", 
                                 "Total Awarded (£)","Average Award (£)")) 
 ```
 
