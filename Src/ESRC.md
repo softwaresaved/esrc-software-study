@@ -328,23 +328,23 @@ all projects.
 
 The top 15 active projects by award level:
 
-|                               Lead Org |       Category | Total awarded (£) |                                                           Project title |
-|---------------------------------------:|---------------:|------------------:|------------------------------------------------------------------------:|
-|                    University of Essex | Research Grant |        49,115,852 | Understanding Society: The UK Household Longitudinal Survey Waves 13-15 |
-|              University College London | Research Grant |        36,267,415 |                Centre for Longitudinal Studies, Resource Centre 2015-20 |
-|                    University of Essex | Research Grant |        31,987,749 |                                      Understanding Society Waves 6 to 8 |
-|                    University of Essex | Research Grant |        31,322,728 |                                             UK Data Service (2017-2022) |
-|                    University of Essex | Research Grant |        30,212,001 |  Understanding Society: The UK Household Longitudinal Study: Waves 9-11 |
-|                University of Edinburgh | Training Grant |        27,538,201 |                       Scottish ESRC Doctoral Training Centre DTC 2011 - |
-|               University of Manchester | Research Grant |        26,621,454 |                                              The Productivity Institute |
-|                University of Liverpool | Training Grant |        24,932,784 |                       North West ESRC Doctoral Training Centre DTG 2011 |
-|                University of Sheffield | Training Grant |        21,107,576 |                       White Rose ESRC Doctoral Training Centre DTG 2011 |
-|                   University of Oxford | Training Grant |        19,130,626 |             University of Oxford ESRC Doctoral Training Centre DTG 2011 |
-|                    Coventry University | Research Grant |        18,759,063 |              GCRF South-South Migration, Inequality and Development Hub |
-|                   University of Oxford | Research Grant |        18,531,197 |              GCRF Accelerating Achievement for Africa’s Adolescents Hub |
-|              University College London | Training Grant |        18,280,789 |           UCL, Bloomsbury and East London Doctoral Training Partnership |
-| World Conservation Monitoring Ctr WCMC | Research Grant |        18,239,311 |                         GCRF Trade, Development and the Environment Hub |
-|                University of Liverpool | Training Grant |        17,857,544 |       North West Social Science Doctoral Training Partnership (NWSSDTP) |
+|                      Lead Organisation |       Category | Total awarded (£) |                                                           Project title | Length (weeks |
+|---------------------------------------:|---------------:|------------------:|------------------------------------------------------------------------:|--------------:|
+|                    University of Essex | Research Grant |        49,115,852 | Understanding Society: The UK Household Longitudinal Survey Waves 13-15 |           387 |
+|              University College London | Research Grant |        36,267,415 |                Centre for Longitudinal Studies, Resource Centre 2015-20 |           417 |
+|                    University of Essex | Research Grant |        31,987,749 |                                      Understanding Society Waves 6 to 8 |           448 |
+|                    University of Essex | Research Grant |        31,322,728 |                                             UK Data Service (2017-2022) |           339 |
+|                    University of Essex | Research Grant |        30,212,001 |  Understanding Society: The UK Household Longitudinal Study: Waves 9-11 |           417 |
+|                University of Edinburgh | Training Grant |        27,538,201 |                       Scottish ESRC Doctoral Training Centre DTC 2011 - |           522 |
+|               University of Manchester | Research Grant |        26,621,454 |                                              The Productivity Institute |           261 |
+|                University of Liverpool | Training Grant |        24,932,784 |                       North West ESRC Doctoral Training Centre DTG 2011 |           574 |
+|                University of Sheffield | Training Grant |        21,107,576 |                       White Rose ESRC Doctoral Training Centre DTG 2011 |           574 |
+|                   University of Oxford | Training Grant |        19,130,626 |             University of Oxford ESRC Doctoral Training Centre DTG 2011 |           574 |
+|                    Coventry University | Research Grant |        18,759,063 |              GCRF South-South Migration, Inequality and Development Hub |           274 |
+|                   University of Oxford | Research Grant |        18,531,197 |              GCRF Accelerating Achievement for Africa’s Adolescents Hub |           272 |
+|              University College London | Training Grant |        18,280,789 |           UCL, Bloomsbury and East London Doctoral Training Partnership |           522 |
+| World Conservation Monitoring Ctr WCMC | Research Grant |        18,239,311 |                         GCRF Trade, Development and the Environment Hub |           272 |
+|                University of Liverpool | Training Grant |        17,857,544 |       North West Social Science Doctoral Training Partnership (NWSSDTP) |           522 |
 
 ### Award length distribution for active projects only
 

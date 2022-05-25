@@ -630,12 +630,16 @@ The top 15 active projects by award level:
 
 esrcdat %>% filter(Status == "Active" & AwardPounds > 10e6)                  %>% 
             arrange(desc(AwardPounds))                                       %>% 
-            select(LeadROName, ProjectCategory, AwardPounds, Title)          %>% 
+            select(LeadROName, ProjectCategory, AwardPounds, Title, 
+                   Start = StartDate, End = EndDate)                         %>% 
             mutate(across(where(is.numeric), ~ format(., big.mark = ",")))   %>% 
+            mutate(length = as.numeric(round(difftime(End, Start,units = "weeks")), 
+                                       units = "weeks"))                     %>%
+            select(-Start, -End)                                             %>% 
             slice_head(n = 15)                                               %>% 
-            kbl(format="pipe", align = rep("r",4), 
-                col.names = c("Lead Org", "Category", 
-                                "Total awarded (£)","Project title")) 
+            kbl(format="pipe", align = rep("r",5), 
+                col.names = c("Lead Organisation", "Category", 
+                                "Total awarded (£)","Project title","Length (weeks)")) 
 
 
 ```
