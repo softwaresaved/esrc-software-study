@@ -122,7 +122,7 @@ gtrdat %>% filter(!is.na(AwardPounds))                                   %>%
            geom_col(colour="black",fill="red") +
            xlab("Funding organisation") + 
            ylab("Expenditure (million £s)") +
-           theme_bw() + scale_y_log10()
+           theme_bw() #+ scale_y_log10()
           
 ```
 
@@ -235,13 +235,13 @@ gtrdat %>% filter(!is.na(AwardPounds)  & !is.na(StartDate))              %>%
            group_by(year, FundingOrgName)                                %>% 
            summarise(TotalExpenditure = round(sum(AwardPounds)/1e6), 
                      .groups = "keep")                                   %>% 
-           filter(!is.na(TotalExpenditure) & TotalExpenditure > 0)       %>% 
+           filter(!is.na(TotalExpenditure), TotalExpenditure > 0)        %>%
+           distinct(year, TotalExpenditure, FundingOrgName)              %>% 
            ggplot(aes(x = year, y = TotalExpenditure, fill = FundingOrgName)) + 
            geom_col(colour="black", na.rm = TRUE) +
            xlab("Year") + labs(fill = "Funding Org") +
            ylab("Expenditure (in million of pounds)") +
-           theme_bw() + scale_y_log10()
-          
+           theme_bw() 
 ```
 
 The same information by percent expenditure for each year.
@@ -290,7 +290,7 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))              %>%
            geom_col(colour="black",fill="red") +
            xlab("Funding Organisation") + 
            ylab("Expenditure (in million of pounds)") +
-           theme_bw() + scale_y_log10()
+           theme_bw() #+ scale_y_log10()
           
 ```
 
@@ -408,7 +408,7 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds) &
            geom_col(colour="black", na.rm = TRUE) +
            xlab("Year") + labs(fill = "Funding Org") +
            ylab("Expenditure (million of £s)") +
-           theme_bw() + scale_y_log10()
+           theme_bw() 
           
 ```
 
@@ -478,7 +478,7 @@ esrcdat %>% select(ProjectCategory, AwardPounds, StartDate)                %>%
             geom_col(colour="black") +
             xlab("Year") + labs(fill = "Project Category") +
             ylab("Expenditure (million £s)") +
-            theme_bw() + scale_y_log10()
+            theme_bw() 
 ```
 
 
@@ -533,7 +533,7 @@ esrcdat %>% filter(Status == "Active")                                     %>%
             xlab("Year") + labs(fill = "Project Category") + 
             scale_x_continuous(breaks= scales::pretty_breaks()) +
             ylab("Expenditure (million £s)") +
-            theme_bw() + scale_y_log10()
+            theme_bw() #+ scale_y_log10()
 ```
 
 
@@ -602,7 +602,7 @@ esrcdat %>% select(StartDate, EndDate, ProjectCategory, AwardPounds) %>%
             #mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
             ggplot(aes(x = as.numeric(grant_length), y = AwardPounds, colour = ProjectCategory)) + 
             geom_point(alpha = 0.25) + 
-            ylab("Awards (£)") + xlab("Award Length (weeks)") + scale_y_log10() +
+            ylab("Awards (£)") + xlab("Award Length (weeks)") +# scale_y_log10() +
             facet_wrap(vars(ProjectCategory)) +
             labs(fill = "Project Category") + theme_bw()
 ```
@@ -701,7 +701,7 @@ esrcdat %>% filter(Status == "Active")                                          
             #mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
             ggplot(aes(x = as.numeric(grant_length), y = AwardPounds, colour = ProjectCategory)) + 
             geom_point(alpha = 0.25) + 
-            ylab("Awards (£)") + xlab("Award Length (days)") + scale_y_log10() +
+            ylab("Awards (£)") + xlab("Award Length (days)") + #scale_y_log10() +
             facet_wrap(vars(ProjectCategory)) +
             labs(colour = "Project Category") + theme_bw()
 ```

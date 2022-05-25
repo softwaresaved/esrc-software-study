@@ -1,47 +1,67 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 15/03/22.
+**Last updated**: 25/05/22.
 
--   [Introduction](#introduction)
--   [Overall expenditure](#overall-expenditure)
-    -   [Expenditure for all UKRI
-        projects](#expenditure-for-all-ukri-projects)
-        -   [Summary](#summary)
-    -   [Expenditure for active UKRI projects
-        only](#expenditure-for-active-ukri-projects-only)
--   [ESRC data](#esrc-data)
-    -   [Project category awards](#project-category-awards)
-        -   [All projects category
-            awards](#all-projects-category-awards)
-        -   [Active projects category awards
-            only](#active-projects-category-awards-only)
-    -   [Award length distribution](#award-length-distribution)
-        -   [Award length distribution for all
-            projects](#award-length-distribution-for-all-projects)
-        -   [Award length distribution for active projects
-            only](#award-length-distribution-for-active-projects-only)
-    -   [Regional distribution of
-        awards](#regional-distribution-of-awards)
-        -   [Region distributions of awards for all
-            projects](#region-distributions-of-awards-for-all-projects)
-        -   [Regional distributions of awards for active projects
-            only](#regional-distributions-of-awards-for-active-projects-only)
-    -   [Funding by lead organisation](#funding-by-lead-organisation)
-        -   [Funding by lead organisation for all
-            projects](#funding-by-lead-organisation-for-all-projects)
-        -   [Funding by lead organisation for active projects
-            only](#funding-by-lead-organisation-for-active-projects-only)
-    -   [Department awards](#department-awards)
-        -   [Department awards for all
-            projects](#department-awards-for-all-projects)
-        -   [Department awards for active projects
-            only](#department-awards-for-active-projects-only)
-    -   [Doctoral Training
-        Partnerships](#doctoral-training-partnerships)
-        -   [Active Partnerships](#active-partnerships)
-    -   [Award Titles](#award-titles)
-    -   [Classification by category](#classification-by-category)
+-   <a href="#introduction" id="toc-introduction">Introduction</a>
+-   <a href="#overall-expenditure" id="toc-overall-expenditure">Overall
+    expenditure</a>
+    -   <a href="#expenditure-for-all-ukri-projects"
+        id="toc-expenditure-for-all-ukri-projects">Expenditure for all UKRI
+        projects</a>
+        -   <a href="#summary" id="toc-summary">Summary</a>
+    -   <a href="#expenditure-for-active-ukri-projects-only"
+        id="toc-expenditure-for-active-ukri-projects-only">Expenditure for
+        active UKRI projects only</a>
+-   <a href="#esrc-data" id="toc-esrc-data">ESRC data</a>
+    -   <a href="#project-category-awards"
+        id="toc-project-category-awards">Project category awards</a>
+        -   <a href="#all-projects-category-awards"
+            id="toc-all-projects-category-awards">All projects category awards</a>
+        -   <a href="#active-projects-category-awards-only"
+            id="toc-active-projects-category-awards-only">Active projects category
+            awards only</a>
+    -   <a href="#award-length-distribution"
+        id="toc-award-length-distribution">Award length distribution</a>
+        -   <a href="#award-length-distribution-for-all-projects"
+            id="toc-award-length-distribution-for-all-projects">Award length
+            distribution for all projects</a>
+        -   <a href="#award-length-distribution-for-active-projects-only"
+            id="toc-award-length-distribution-for-active-projects-only">Award length
+            distribution for active projects only</a>
+    -   <a href="#regional-distribution-of-awards"
+        id="toc-regional-distribution-of-awards">Regional distribution of
+        awards</a>
+        -   <a href="#region-distributions-of-awards-for-all-projects"
+            id="toc-region-distributions-of-awards-for-all-projects">Region
+            distributions of awards for all projects</a>
+        -   <a href="#regional-distributions-of-awards-for-active-projects-only"
+            id="toc-regional-distributions-of-awards-for-active-projects-only">Regional
+            distributions of awards for active projects only</a>
+    -   <a href="#funding-by-lead-organisation"
+        id="toc-funding-by-lead-organisation">Funding by lead organisation</a>
+        -   <a href="#funding-by-lead-organisation-for-all-projects"
+            id="toc-funding-by-lead-organisation-for-all-projects">Funding by lead
+            organisation for all projects</a>
+        -   <a href="#funding-by-lead-organisation-for-active-projects-only"
+            id="toc-funding-by-lead-organisation-for-active-projects-only">Funding
+            by lead organisation for active projects only</a>
+    -   <a href="#department-awards" id="toc-department-awards">Department
+        awards</a>
+        -   <a href="#department-awards-for-all-projects"
+            id="toc-department-awards-for-all-projects">Department awards for all
+            projects</a>
+        -   <a href="#department-awards-for-active-projects-only"
+            id="toc-department-awards-for-active-projects-only">Department awards
+            for active projects only</a>
+    -   <a href="#doctoral-training-partnerships"
+        id="toc-doctoral-training-partnerships">Doctoral Training
+        Partnerships</a>
+        -   <a href="#active-partnerships" id="toc-active-partnerships">Active
+            Partnerships</a>
+    -   <a href="#award-titles" id="toc-award-titles">Award Titles</a>
+    -   <a href="#classification-by-category"
+        id="toc-classification-by-category">Classification by category</a>
 
 # Introduction
 
@@ -323,7 +343,7 @@ The maximum funding period corresponds to 4,382 days.
 
 <img src="ESRC_files/figure-gfm/award_lengths_active-1.png" title="Histogram of the length distribution for active projects only." alt="Histogram of the length distribution for active projects only."  />
 
-As a log plot:
+As a log1p (ln(x + 1)) plot:
 
 <img src="ESRC_files/figure-gfm/award_lengths_active_log-1.png" title="Histogram as a log plot of the length distribution for active projects only." alt="Histogram as a log plot of the length distribution for active projects only."  />
 
