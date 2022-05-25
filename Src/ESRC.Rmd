@@ -661,6 +661,23 @@ esrcdat %>% filter(Status == "Active")                                          
             labs(fill = "Project Category") + theme_bw()
 ```
 
+Looking at the statistics for active projects:
+
+```{r average_award_length_active, echo=FALSE, fig.alt="The average length of an award for active projects."}
+
+esrcdat %>% filter(Status == "Active")                                                         %>% 
+            select(Start = StartDate, End = EndDate, Category = ProjectCategory)               %>% 
+            filter(!is.na(Start) & !is.na(End))                                                %>% 
+            group_by(Category)                                                                 %>% 
+            mutate(length = as.numeric(difftime(End, Start,units = "weeks"), units = "weeks")) %>%
+            summarise(Mean = round(mean(length)), StD = round(sd(length)), 
+                      Min = round(min(length)), Max = round(max(length)))                      %>%
+           arrange(desc(Mean))                                                                 %>% 
+            kbl(format="pipe", align = c("l",rep("r",4)), 
+                col.names = c("Grant Category", "Mean (weeks)", 
+                                "Standar deviation (weeks)","Minimum (weeks)", "Maximum (weeks)")) 
+  
+```
 As a log1p (ln(x + 1)) plot:
 
 ```{r award_lengths_active_log, echo = FALSE, fig.alt = "Histogram as a log plot of the length distribution for active projects only."}
