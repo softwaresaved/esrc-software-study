@@ -3,7 +3,7 @@ Economic and Social Research Council (ESRC) Data
 **Author**: Mario Antonioletti.<br/>
 **Last updated**: 26/05/22.
 
--   <a href="#introduction-" id="toc-introduction-">Introduction —</a>
+-   <a href="#introduction" id="toc-introduction">Introduction</a>
 -   <a href="#overall-expenditure" id="toc-overall-expenditure">Overall
     expenditure</a>
     -   <a href="#expenditure-for-all-ukri-projects"
@@ -63,7 +63,7 @@ Economic and Social Research Council (ESRC) Data
     -   <a href="#classification-by-category"
         id="toc-classification-by-category">Classification by category</a>
 
-# Introduction —
+# Introduction
 
 The aim of this document is to provide an overview of the awards
 provided by the [United Kingdom Research and
