@@ -455,7 +455,7 @@ No explicit expenditure data seems to be provided for *Studentships*. Data is so
 esrcdat %>% select(ProjectCategory, AwardPounds)                                          %>% 
             group_by(ProjectCategory)                                                     %>% 
             summarise(Number = n(), TotalAward = sum(AwardPounds))                        %>% 
-            mutate(AverageAward = as.numeric(sprintf("%.2f",round(TotalAward/Number,2)))) %>% 
+            mutate(AverageAward = round(TotalAward/Number))                               %>% 
             arrange(desc(AverageAward))                                                   %>% 
             mutate(across(where(is.numeric), ~ format(., big.mark = ",")))                %>% 
             kbl(format="pipe", align = c("l",rep("r",3)), 
@@ -509,7 +509,7 @@ esrcdat %>% filter(Status == "Active")                                         %
             select(ProjectCategory, AwardPounds)                               %>% 
             group_by(ProjectCategory)                                          %>% 
             summarise(Number = n(), TotalAward = sum(AwardPounds))             %>% 
-            mutate(AverageAward = sprintf("%.2f",round(TotalAward/Number,2)))  %>% 
+            mutate(AverageAward = round(TotalAward/Number))                    %>% 
             arrange(desc(AverageAward))                                        %>% 
             mutate(across(where(is.numeric), ~ format(., big.mark = ",")))     %>% 
             kbl(format="pipe", align = c("l",rep("r",3)), 
@@ -756,7 +756,7 @@ esrcdat %>% select(Region, AwardPounds)                                       %>
             filter(!is.na(Region))                                            %>% 
             group_by(Region)                                                  %>% 
             summarise(Number = n(), TotalAward = sum(AwardPounds))            %>% 
-            mutate(AverageAward = sprintf("%.2f",round(TotalAward/Number,2))) %>% 
+            mutate(AverageAward = round(TotalAward/Number))                   %>% 
             arrange(desc(TotalAward))                                         %>% 
             mutate(across(where(is.numeric), ~ format(., big.mark = ",")))    %>% 
             kbl(format="pipe", align = c("l",rep("r",3)),
@@ -774,7 +774,7 @@ esrcdat %>% filter(Status == "Active")                                        %>
             filter(!is.na(Region))                                            %>% 
             group_by(Region)                                                  %>% 
             summarise(Number = n(), TotalAward = sum(AwardPounds))            %>% 
-            mutate(AverageAward = sprintf("%.2f",round(TotalAward/Number,2))) %>% 
+            mutate(AverageAward = round(TotalAward/Number))                   %>% 
             arrange(desc(TotalAward))                                         %>% 
             mutate(across(where(is.numeric), ~ format(., big.mark = ",")))    %>% 
             kbl(format="pipe", align = c("l",rep("r",3)),
@@ -793,10 +793,10 @@ This only shows the top 25 organisations by the average value of the award.
 esrcdat %>% select(LeadROName, AwardPounds)                                     %>% 
             group_by(LeadROName)                                                %>% 
             summarise(Number = n(), TotalAward = sum(AwardPounds,na.rm = TRUE)) %>% 
-            mutate(AvgAward = sprintf("%.2f",round(TotalAward/Number,2)))       %>% 
+            mutate(AvgAward = round(TotalAward/Number))                         %>% 
             arrange(desc(AvgAward))                                             %>% 
             mutate(across(where(is.numeric), ~ format(., big.mark = ",")))      %>% 
-            slice_head(n = 25)                                                  %>% 
+            slice_head(n = 24)                                                  %>% 
             kbl(format="pipe", align = c("l",rep("r",3)),
                 col.names = c("Organisation", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
 ```
@@ -811,7 +811,7 @@ esrcdat %>% filter(Status == "Active")                                          
             select(LeadROName, AwardPounds)                                     %>% 
             group_by(LeadROName)                                                %>% 
             summarise(Number = n(), TotalAward = sum(AwardPounds,na.rm = TRUE)) %>% 
-            mutate(AvgAward = sprintf("%.2f",round(TotalAward/Number,2)))       %>% 
+            mutate(AvgAward = round(TotalAward/Number))                         %>% 
             arrange(desc(AvgAward))                                             %>% 
             mutate(across(where(is.numeric), ~ format(., big.mark = ",")))      %>% 
             slice_head(n = 25)                                                  %>% 
@@ -826,7 +826,7 @@ esrcdat %>% filter(Status == "Active")                                          
             select(LeadROName, AwardPounds)                                     %>% 
             group_by(LeadROName)                                                %>% 
             summarise(Number = n(), TotalAward = sum(AwardPounds,na.rm = TRUE)) %>% 
-            mutate(AvgAward = sprintf("%.2f",round(TotalAward/Number,2)))       %>% 
+            mutate(AvgAward = round(TotalAward/Number))                         %>% 
             arrange(desc(Number))                                               %>% 
             mutate(across(where(is.numeric), ~ format(., big.mark = ",")))      %>% 
             slice_head(n = 25)                                                  %>% 

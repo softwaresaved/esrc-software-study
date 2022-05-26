@@ -1,9 +1,9 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 25/05/22.
+**Last updated**: 26/05/22.
 
--   <a href="#introduction" id="toc-introduction">Introduction</a>
+-   <a href="#introduction-" id="toc-introduction-">Introduction —</a>
 -   <a href="#overall-expenditure" id="toc-overall-expenditure">Overall
     expenditure</a>
     -   <a href="#expenditure-for-all-ukri-projects"
@@ -63,7 +63,7 @@ Economic and Social Research Council (ESRC) Data
     -   <a href="#classification-by-category"
         id="toc-classification-by-category">Classification by category</a>
 
-# Introduction
+# Introduction —
 
 The aim of this document is to provide an overview of the awards
 provided by the [United Kingdom Research and
@@ -272,10 +272,10 @@ Data is sorted by the average award.
 
 | Project Categeory | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:------------------|-----------------:|------------------:|------------------:|
-| Training Grant    |              403 |       574,573,855 |       1,425,741.6 |
-| Research Grant    |            5,166 |     2,548,848,403 |         493,389.2 |
-| Fellowship        |            1,156 |       125,637,540 |         108,683.0 |
-| Studentship       |            3,649 |                 0 |               0.0 |
+| Training Grant    |              403 |       574,573,855 |         1,425,742 |
+| Research Grant    |            5,166 |     2,548,848,403 |           493,389 |
+| Fellowship        |            1,156 |       125,637,540 |           108,683 |
+| Studentship       |            3,649 |                 0 |                 0 |
 
 The same diagram with each year shown as a percentage:
 
@@ -290,10 +290,10 @@ This information corresponds to projects that are classified as
 
 | Project Catgeory | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:-----------------|-----------------:|------------------:|------------------:|
-| Research Grant   |            1,262 |     1,253,900,235 |         993581.80 |
-| Training Grant   |               65 |       479,756,418 |        7380867.97 |
-| Fellowship       |              280 |        32,734,529 |         116909.03 |
-| Studentship      |            3,337 |                 0 |              0.00 |
+| Training Grant   |               65 |       479,756,418 |         7,380,868 |
+| Research Grant   |            1,262 |     1,253,900,235 |           993,582 |
+| Fellowship       |              280 |        32,734,529 |           116,909 |
+| Studentship      |            3,337 |                 0 |                 0 |
 
 ![](ESRC_files/figure-gfm/esrc_categoriesByYearAct-1.png)<!-- -->
 
@@ -405,20 +405,20 @@ ordered by the total award given is shown in the table below.
 
 | Region                   | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:-------------------------|-----------------:|------------------:|------------------:|
-| Unknown                  |            3,511 |     1,040,994,020 |         296495.02 |
-| London                   |            1,504 |       433,340,480 |         288125.32 |
-| South East               |            1,481 |       399,540,289 |         269777.37 |
-| East of England          |              183 |       335,868,903 |        1835349.20 |
-| Scotland                 |            1,025 |       304,558,712 |         297130.45 |
-| North West               |              694 |       189,191,900 |         272610.81 |
-| South West               |              493 |       133,789,672 |         271378.65 |
-| West Midlands            |              354 |       110,179,317 |         311241.01 |
-| East Midlands            |              383 |        82,964,712 |         216618.05 |
-| Wales                    |              189 |        69,380,128 |         367090.62 |
-| Yorkshire and The Humber |              291 |        51,671,632 |         177565.75 |
-| Northern Ireland         |              143 |        51,429,447 |         359646.48 |
-| Outside UK               |               82 |        41,002,086 |         500025.44 |
-| North East               |               39 |         4,620,877 |         118484.03 |
+| Unknown                  |            3,511 |     1,040,994,020 |           296,495 |
+| London                   |            1,504 |       433,340,480 |           288,125 |
+| South East               |            1,481 |       399,540,289 |           269,777 |
+| East of England          |              183 |       335,868,903 |         1,835,349 |
+| Scotland                 |            1,025 |       304,558,712 |           297,130 |
+| North West               |              694 |       189,191,900 |           272,611 |
+| South West               |              493 |       133,789,672 |           271,379 |
+| West Midlands            |              354 |       110,179,317 |           311,241 |
+| East Midlands            |              383 |        82,964,712 |           216,618 |
+| Wales                    |              189 |        69,380,128 |           367,091 |
+| Yorkshire and The Humber |              291 |        51,671,632 |           177,566 |
+| Northern Ireland         |              143 |        51,429,447 |           359,646 |
+| Outside UK               |               82 |        41,002,086 |           500,025 |
+| North East               |               39 |         4,620,877 |           118,484 |
 
 ### Regional distributions of awards for active projects only
 
@@ -427,20 +427,20 @@ by the total award given is shown in the table below.
 
 | Region                   | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:-------------------------|-----------------:|------------------:|------------------:|
-| Unknown                  |            1,817 |       596,141,468 |         328091.07 |
-| East of England          |               76 |       221,920,343 |        2920004.51 |
-| London                   |              698 |       202,710,650 |         290416.40 |
-| South East               |              686 |       191,757,717 |         279530.20 |
-| Scotland                 |              464 |       168,722,647 |         363626.39 |
-| North West               |              314 |        98,176,988 |         312665.57 |
-| South West               |              245 |        77,239,538 |         315263.42 |
-| West Midlands            |              140 |        66,614,179 |         475815.56 |
-| Wales                    |              111 |        42,259,224 |         380713.73 |
-| East Midlands            |              176 |        38,895,480 |         220997.05 |
-| Northern Ireland         |               57 |        22,834,484 |         400604.98 |
-| Yorkshire and The Humber |              120 |        19,329,286 |         161077.38 |
-| Outside UK               |               26 |        17,845,281 |         686356.96 |
-| North East               |               13 |         1,843,525 |         141809.62 |
+| Unknown                  |            1,817 |       596,141,468 |           328,091 |
+| East of England          |               76 |       221,920,343 |         2,920,005 |
+| London                   |              698 |       202,710,650 |           290,416 |
+| South East               |              686 |       191,757,717 |           279,530 |
+| Scotland                 |              464 |       168,722,647 |           363,626 |
+| North West               |              314 |        98,176,988 |           312,666 |
+| South West               |              245 |        77,239,538 |           315,263 |
+| West Midlands            |              140 |        66,614,179 |           475,816 |
+| Wales                    |              111 |        42,259,224 |           380,714 |
+| East Midlands            |              176 |        38,895,480 |           220,997 |
+| Northern Ireland         |               57 |        22,834,484 |           400,605 |
+| Yorkshire and The Humber |              120 |        19,329,286 |           161,077 |
+| Outside UK               |               26 |        17,845,281 |           686,357 |
+| North East               |               13 |         1,843,525 |           141,810 |
 
 ## Funding by lead organisation
 
@@ -451,94 +451,93 @@ award.
 
 | Organisation                            | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:----------------------------------------|-----------------:|------------------:|------------------:|
-| University of Huddersfield              |                9 |           884,820 |          98313.33 |
-| University of the West of England       |               45 |         4,406,789 |          97928.64 |
-| University of Copenhagen                |                1 |            97,614 |          97614.00 |
-| NERC British Geological Survey          |                1 |             9,753 |           9753.00 |
-| University of the West of Scotland      |                5 |           473,006 |          94601.20 |
-| University of Cape Town                 |                6 |         5,670,678 |         945113.00 |
-| Manchester Metropolitan University      |               64 |         5,840,048 |          91250.75 |
-| Canterbury Christ Church University     |                2 |           181,236 |          90618.00 |
-| Office for National Statistics          |                2 |        17,898,948 |        8949474.00 |
-| University of the Highlands and Islands |                3 |           264,465 |          88155.00 |
-| Quadram Institute Bioscience            |                1 |            87,062 |          87062.00 |
-| Johns Hopkins University                |                1 |           865,561 |         865561.00 |
-| Glasgow Caledonian University           |                7 |           598,297 |          85471.00 |
-| British Academy of Management           |                1 |            84,870 |          84870.00 |
-| University of Wales Trinity St David    |                1 |           804,117 |         804117.00 |
-| University of Hertfordshire             |               11 |           863,696 |          78517.82 |
-| Bournemouth University                  |               11 |           845,749 |          76886.27 |
-| University of Michigan                  |                3 |         2,240,913 |         746971.00 |
-| University of East London               |               22 |         1,639,407 |          74518.50 |
-| University of the Arts London           |                4 |           297,934 |          74483.50 |
-| Birmingham City University              |                7 |           511,904 |          73129.14 |
-| National Institute of Public Health     |                1 |           722,163 |         722163.00 |
-| University of Bolton                    |                1 |            70,844 |          70844.00 |
-| SAHFOS                                  |                1 |               700 |            700.00 |
-| Aberystwyth University                  |               32 |         2,223,075 |          69471.09 |
+| World Conservation Monitoring Ctr WCMC  |                2 |        22,456,789 |        11,228,394 |
+| Office for National Statistics          |                2 |        17,898,948 |         8,949,474 |
+| Ministry of Justice                     |                1 |         3,412,732 |         3,412,732 |
+| Liverpool School of Tropical Medicine   |                4 |        12,482,546 |         3,120,636 |
+| International Institute for Env and Dev |                4 |         9,359,410 |         2,339,852 |
+| Northern Ireland Stat Res Agency NISRA  |                2 |         3,979,826 |         1,989,913 |
+| University of Essex                     |              163 |       308,044,623 |         1,889,844 |
+| The Scottish Government                 |                3 |         5,468,844 |         1,822,948 |
+| University of Pretoria                  |                2 |         2,581,756 |         1,290,878 |
+| Rhodes University                       |                2 |         2,561,566 |         1,280,783 |
+| Coventry University                     |               19 |        22,978,127 |         1,209,375 |
+| Leonard Cheshire Disability             |                2 |         2,161,816 |         1,080,908 |
+| Addis Ababa University                  |                3 |         3,131,845 |         1,043,948 |
+| University of Cape Town                 |                6 |         5,670,678 |           945,113 |
+| Johns Hopkins University                |                1 |           865,561 |           865,561 |
+| University of Wales Trinity St David    |                1 |           804,117 |           804,117 |
+| University of Michigan                  |                3 |         2,240,913 |           746,971 |
+| National Institute of Public Health     |                1 |           722,163 |           722,163 |
+| Institute for Fiscal Studies            |               68 |        46,927,139 |           690,105 |
+| University of the Free State            |                1 |           670,903 |           670,903 |
+| Institute of Development Studies        |               33 |        21,359,197 |           647,248 |
+| University of Nairobi                   |                1 |           614,772 |           614,772 |
+| University of Lagos                     |                2 |         1,229,275 |           614,638 |
+| University of the Witwatersrand         |                2 |         1,223,884 |           611,942 |
 
 ### Funding by lead organisation for active projects only
 
 This only shows the top 25 organisations with active projects by the
 average value of the award.
 
-| Organisation                         | Number of Awards | Total Awarded (£) | Average Award (£) |
-|:-------------------------------------|-----------------:|------------------:|------------------:|
-| Harvard University                   |                1 |            99,739 |          99739.00 |
-| Canterbury Christ Church University  |                1 |            99,731 |          99731.00 |
-| University of the Arts London        |                2 |           197,701 |          98850.50 |
-| Birmingham City University           |                3 |           290,043 |          96681.00 |
-| Manchester Metropolitan University   |               38 |         3,604,310 |          94850.26 |
-| University of Derby                  |                2 |           187,847 |          93923.50 |
-| University of East London            |               10 |            93,668 |           9366.80 |
-| University of California, Berkeley   |                1 |            93,460 |          93460.00 |
-| University of Surrey                 |               25 |        22,930,331 |         917213.24 |
-| University of Brighton               |               38 |           342,106 |           9002.79 |
-| Institute of Development Studies     |               13 |        11,640,314 |         895408.77 |
-| Office for National Statistics       |                2 |        17,898,948 |        8949474.00 |
-| Brunel University                    |               14 |         1,234,276 |          88162.57 |
-| Institute for Fiscal Studies         |               19 |        16,400,339 |         863175.74 |
-| University of St Andrews             |               26 |         2,149,900 |          82688.46 |
-| University of Cape Town              |                4 |         3,264,723 |         816180.75 |
-| University of Wales Trinity St David |                1 |           804,117 |         804117.00 |
-| Open University                      |               37 |         2,950,128 |          79733.19 |
-| University of Bradford               |                4 |           313,743 |          78435.75 |
-| Cranfield University                 |                4 |         2,993,439 |         748359.75 |
-| University of Plymouth               |                8 |           597,548 |          74693.50 |
-| Goldsmiths College                   |               22 |         1,587,713 |          72168.77 |
-| Washington University in St Louis    |                1 |           713,698 |         713698.00 |
-| University of Michigan               |                1 |           697,241 |         697241.00 |
-| University of Salford                |                2 |         1,384,158 |         692079.00 |
+| Organisation                            | Number of Awards | Total Awarded (£) | Average Award (£) |
+|:----------------------------------------|-----------------:|------------------:|------------------:|
+| Liverpool School of Tropical Medicine   |                1 |        12,156,514 |        12,156,514 |
+| World Conservation Monitoring Ctr WCMC  |                2 |        22,456,789 |        11,228,394 |
+| Office for National Statistics          |                2 |        17,898,948 |         8,949,474 |
+| International Institute for Env and Dev |                2 |         8,252,550 |         4,126,275 |
+| Ministry of Justice                     |                1 |         3,412,732 |         3,412,732 |
+| Coventry University                     |                7 |        21,819,585 |         3,117,084 |
+| University of Essex                     |               69 |       196,169,721 |         2,843,039 |
+| Northern Ireland Stat Res Agency NISRA  |                1 |         1,329,836 |         1,329,836 |
+| The Scottish Government                 |                2 |         2,606,844 |         1,303,422 |
+| University of Pretoria                  |                2 |         2,581,756 |         1,290,878 |
+| Rhodes University                       |                2 |         2,561,566 |         1,280,783 |
+| Addis Ababa University                  |                3 |         3,131,845 |         1,043,948 |
+| University of Surrey                    |               25 |        22,930,331 |           917,213 |
+| Institute of Development Studies        |               13 |        11,640,314 |           895,409 |
+| Institute for Fiscal Studies            |               19 |        16,400,339 |           863,176 |
+| University of Cape Town                 |                4 |         3,264,723 |           816,181 |
+| University of Wales Trinity St David    |                1 |           804,117 |           804,117 |
+| Cranfield University                    |                4 |         2,993,439 |           748,360 |
+| Washington University in St Louis       |                1 |           713,698 |           713,698 |
+| University of Michigan                  |                1 |           697,241 |           697,241 |
+| University of Salford                   |                2 |         1,384,158 |           692,079 |
+| University of the Free State            |                1 |           670,903 |           670,903 |
+| University of Edinburgh                 |              139 |        92,166,008 |           663,065 |
+| University College London               |              299 |       194,907,944 |           651,866 |
+| De Montfort University                  |                3 |         1,869,576 |           623,192 |
 
 The same table ordered by the number of awards:
 
 | Organisation                         | Number of Awards | Total Awarded (£) | Average Award (£) |
 |:-------------------------------------|-----------------:|------------------:|------------------:|
-| University College London            |              299 |       194,907,944 |         651866.03 |
-| University of Oxford                 |              234 |        83,325,112 |         356090.22 |
-| London School of Economics & Pol Sci |              224 |        78,281,421 |         349470.63 |
-| Cardiff University                   |              221 |        57,730,832 |         261225.48 |
-| King’s College London                |              216 |        57,064,736 |         264188.59 |
-| University of Cambridge              |              210 |        43,301,780 |         206198.95 |
-| University of Manchester             |              163 |        53,837,183 |         330289.47 |
-| University of Sheffield              |              162 |        63,279,551 |         390614.51 |
-| University of Leeds                  |              140 |        27,757,429 |         198267.35 |
-| University of Southampton            |              140 |        50,057,303 |         357552.16 |
-| University of Edinburgh              |              139 |        92,166,008 |         663064.81 |
-| University of Bristol                |              134 |        64,005,811 |         477655.31 |
-| University of Birmingham             |              133 |        18,524,190 |         139279.62 |
-| University of Exeter                 |              128 |        17,303,084 |         135180.34 |
-| University of Glasgow                |              126 |        42,004,979 |         333372.85 |
-| Durham University                    |              121 |        31,044,809 |         256568.67 |
-| University of Liverpool              |              113 |        54,090,187 |         478674.22 |
-| Newcastle University                 |              110 |        24,667,367 |         224248.79 |
-| Lancaster University                 |              106 |        26,024,426 |         245513.45 |
-| University of Warwick                |               99 |        39,237,211 |         396335.46 |
-| University of Nottingham             |               90 |        17,019,837 |         189109.30 |
-| Queen Mary, University of London     |               85 |        10,693,466 |         125805.48 |
-| University of York                   |               84 |        17,345,460 |         206493.57 |
-| University of Bath                   |               80 |         9,464,088 |         118301.10 |
-| University of Sussex                 |               70 |        38,201,879 |         545741.13 |
+| University College London            |              299 |       194,907,944 |           651,866 |
+| University of Oxford                 |              234 |        83,325,112 |           356,090 |
+| London School of Economics & Pol Sci |              224 |        78,281,421 |           349,471 |
+| Cardiff University                   |              221 |        57,730,832 |           261,225 |
+| King’s College London                |              216 |        57,064,736 |           264,189 |
+| University of Cambridge              |              210 |        43,301,780 |           206,199 |
+| University of Manchester             |              163 |        53,837,183 |           330,289 |
+| University of Sheffield              |              162 |        63,279,551 |           390,615 |
+| University of Leeds                  |              140 |        27,757,429 |           198,267 |
+| University of Southampton            |              140 |        50,057,303 |           357,552 |
+| University of Edinburgh              |              139 |        92,166,008 |           663,065 |
+| University of Bristol                |              134 |        64,005,811 |           477,655 |
+| University of Birmingham             |              133 |        18,524,190 |           139,280 |
+| University of Exeter                 |              128 |        17,303,084 |           135,180 |
+| University of Glasgow                |              126 |        42,004,979 |           333,373 |
+| Durham University                    |              121 |        31,044,809 |           256,569 |
+| University of Liverpool              |              113 |        54,090,187 |           478,674 |
+| Newcastle University                 |              110 |        24,667,367 |           224,249 |
+| Lancaster University                 |              106 |        26,024,426 |           245,513 |
+| University of Warwick                |               99 |        39,237,211 |           396,335 |
+| University of Nottingham             |               90 |        17,019,837 |           189,109 |
+| Queen Mary, University of London     |               85 |        10,693,466 |           125,805 |
+| University of York                   |               84 |        17,345,460 |           206,494 |
+| University of Bath                   |               80 |         9,464,088 |           118,301 |
+| University of Sussex                 |               70 |        38,201,879 |           545,741 |
 
 ## Department awards
 
