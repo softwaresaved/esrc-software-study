@@ -2913,6 +2913,38 @@ data %>% select(num_range("Q7_", 1:7), gender = Q21) %>%
 
 ```
 
+```{r sw_maintenace_gender_per2_career}
+
+data %>% select(num_range("Q7_", 1:7), career = Q20, gender = Q21) %>%
+         filter(!(career %in% c("-", "Other")))                    %>% 
+         filter(!(gender %in% lowstatsgender))                     %>% 
+         group_by(gender)                                          %>% 
+         mutate(N = n())                                           %>% 
+         pivot_longer(cols = num_range("Q7_", 1:7),
+                      names_to = NULL,
+                      values_to = "swmaint")                       %>%
+         filter(swmaint != 0)                                      %>%
+         group_by(swmaint)                                         %>% 
+         mutate(M = n())                                           %>% 
+         filter(gender != "Other" & gender != "-")                 %>% 
+         group_by(swmaint, gender, career)                         %>% 
+         mutate(n = n())                                           %>% 
+         mutate(per = percent(n/N, accuracy = 1))                  %>% 
+         distinct(swmaint, gender, career, per, n, N, M)           %>% 
+         ggplot(aes(x = reorder(swmaint,-M), y = n/N, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"),
+                  colour = "black") +
+         theme_bw() + 
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.29)) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("How Software is maintained") + ylab("Percent") +
+         geom_text(aes(label = per), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), 
+                   size = 2, vjust = -0.5) + 
+         scale_fill_brewer(palette = "Set2", name = "Gender") +
+         facet_wrap(~ career)
+
+```
 ### Software maintenance by discipline
 
 
