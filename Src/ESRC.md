@@ -26,9 +26,9 @@ Economic and Social Research Council (ESRC) Data
         -   <a href="#award-length-distribution-for-all-projects"
             id="toc-award-length-distribution-for-all-projects">Award length
             distribution for all projects</a>
-        -   <a href="#award-length-distribution-for-active-projects-only"
-            id="toc-award-length-distribution-for-active-projects-only">Award length
-            distribution for active projects only</a>
+        -   <a href="#active-projects-award-length-distribution"
+            id="toc-active-projects-award-length-distribution">Active projects award
+            length distribution</a>
     -   <a href="#regional-distribution-of-awards"
         id="toc-regional-distribution-of-awards">Regional distribution of
         awards</a>
@@ -346,7 +346,7 @@ The top 15 active projects by award level:
 | World Conservation Monitoring Ctr WCMC | Research Grant |        18,239,311 |                         GCRF Trade, Development and the Environment Hub |            272 |
 |                University of Liverpool | Training Grant |        17,857,544 |       North West Social Science Doctoral Training Partnership (NWSSDTP) |            522 |
 
-### Award length distribution for active projects only
+### Active projects award length distribution
 
 The same information as provided above but only for *Active* projects.
 The maximum funding period corresponds to 4,382 days.

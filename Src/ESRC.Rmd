@@ -644,7 +644,7 @@ esrcdat %>% filter(Status == "Active" & AwardPounds > 10e6)                  %>%
 
 ```
 
-### Award length distribution for active projects only
+### Active projects award length distribution
 
 The same information as provided above but only for *Active* projects. The maximum funding period corresponds to `r format(as.numeric(max(difftime(esrcdat[["EndDate"]][esrcdat$Status == "Active"], esrcdat[["StartDate"]][esrcdat$Status == "Active"], units = "days"))), big.mark = ",")` days.
 
