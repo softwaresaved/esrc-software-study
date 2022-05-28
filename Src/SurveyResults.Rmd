@@ -794,16 +794,16 @@ data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
-Remove low stat components
+Remove the low statistic components
 
 ```{r use_of_data_gender_per2}
 data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>%
+         group_by(gender)                                                     %>% 
+         mutate(N = n())                                                      %>% 
          pivot_longer(cols = num_range("Q2_", 1:2), 
                       names_to = NULL, values_to = "datause")                 %>%
          filter(datause != 0)                                                 %>%
-         group_by(gender)                                                     %>% 
          filter(!(gender %in% lowstatsgender))                                %>% 
-         mutate(N = n())                                                      %>% 
          group_by(datause, gender)                                            %>%
          mutate(per = n()/N)                                                  %>% 
          distinct(datause, gender, per)                                       %>% 
@@ -824,11 +824,11 @@ than 2 entries are shown.
 ```{r datause_institution}
 
 data %>% select(num_range("Q2_", 1:2), institution = CleanLocs)              %>%
+         group_by(institution)                                               %>% 
+         mutate(N = n())                                                     %>% 
          pivot_longer(cols = num_range("Q2_", 1:2), 
                       names_to = NULL, values_to = "datause")                %>%
          filter(datause != 0 & !is.na(institution))                          %>% 
-         group_by(institution)                                               %>% 
-         mutate(N = n())                                                     %>% 
          filter(N > 2)                                                       %>% 
          group_by(datause, institution)                                      %>% 
          mutate(per = n()/N)                                                 %>% 
@@ -1017,15 +1017,15 @@ data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
 ```{r datause_choices_gender_per2}
 
 data %>% select(id = URN, num_range("Q2_",1:2), gender = Q21)          %>%
+         group_by(gender)                                              %>% 
+         mutate(N = n())                                               %>% 
          pivot_longer(cols = starts_with("Q2_"),
                       names_to = NULL,
                       values_to = "ds")                                %>%
          filter(ds != 0)                                               %>% 
          group_by(id)                                                  %>% 
          mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         distinct(id, choices, gender)                                 %>%
-         group_by(gender)                                              %>% 
-         mutate(N = n())                                               %>% 
+         distinct(id, choices, gender, N)                              %>%
          ungroup()                                                     %>% 
          select(-id)                                                   %>% 
          group_by(choices, gender)                                     %>%
@@ -1039,9 +1039,41 @@ data %>% select(id = URN, num_range("Q2_",1:2), gender = Q21)          %>%
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          xlab("Data use") + ylab("Percent") +
          geom_text(aes(label = per), position = position_dodge2(width = 0.9, preserve = "single"), 
-                   vjust = -0.5, size = 2.5) +
+                   vjust = -0.5, size = 3) +
          scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+```{r datause_choices_gender_career}
+
+data %>% select(id = URN, num_range("Q2_",1:2), career = Q20, gender = Q21)  %>%
+         filter(!(career %in% c("-","Other")))                               %>% 
+         group_by(gender)                                                    %>% 
+         mutate(N = n())                                                     %>% 
+         pivot_longer(cols = starts_with("Q2_"),
+                      names_to = NULL,
+                      values_to = "ds")                                      %>%
+         filter(ds != 0)                                                     %>% 
+         group_by(id)                                                        %>% 
+         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))         %>% 
+         distinct(id, choices, gender, N, career)                            %>%
+         ungroup()                                                           %>% 
+         select(-id)                                                         %>% 
+         group_by(choices, gender, career)                                   %>%
+         mutate(n = n())                                                     %>% 
+         mutate(per = percent(n/N, accuracy = 1))                            %>% 
+         filter(!(gender %in% lowstatsgender))                               %>% 
+         distinct(choices, gender, per, n, N)                                %>% 
+         ggplot(aes(x = choices, y = n/N, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
+         theme_bw() +
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0,0.3)) +
+         xlab("Data use") + ylab("Percent") +
+         geom_text(aes(label = per), position = position_dodge2(width = 0.9, preserve = "single"), 
+                   vjust = -0.5, size = 3) +
+         scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
+         scale_fill_brewer(palette = "Set2", name = "Gender") +
+         facet_wrap(~ career)
 ```
 
 ### Combined data use by institution
@@ -1128,8 +1160,8 @@ data %>% select(URN, num_range("Q2_",1:2))                                   %>%
           filter(disciplines != 0)                                           %>%
          ungroup()                                                           %>% 
          select(-URN)                                                        %>% 
-         #group_by(disciplines)                                             %>% 
-         #filter(n() > 3)                                                   %>% 
+         #group_by(disciplines)                                              %>% 
+         #filter(n() > 3)                                                    %>% 
          group_by(choices, disciplines)                                      %>%
          mutate(n = n())                                                     %>% 
          distinct(choices, disciplines, n)                                   %>% 
@@ -1148,7 +1180,7 @@ data %>% select(URN, num_range("Q2_",1:2))                                   %>%
 
 What are your most important data source(s)?
 
-### Plot important data sources
+### Important data sources
 
 This is a simplified version of the input provided by the respondents.
 
@@ -1169,6 +1201,111 @@ data %>% select(num_range("ImportantDS_", 1:7))                %>%
          geom_text(aes(label = n), vjust = -0.5, size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 8)) +
          xlab("Data sources") + ylab("Numbers")
+
+```
+
+### Important data sources by career
+
+
+```{r importantDS_career}
+
+data %>% select(num_range("ImportantDS_", 1:7), career = Q20)  %>% 
+         filter(!(career %in% c("-", "Other")))                %>% 
+         pivot_longer(cols = num_range("ImportantDS_", 1:7),
+                      names_to = NULL,
+                      values_to = "importantDS")               %>%
+         filter(!is.na(importantDS))                           %>%
+         group_by(importantDS, career)                         %>% 
+         mutate(n = n())                                       %>% 
+         distinct(importantDS, n, career)                      %>% 
+         filter(n > 2)                                         %>% 
+         ggplot(aes(x = reorder(importantDS, -n), y = n, fill = career)) +
+         geom_col( colour = "black") +
+         theme_bw() + ylim(0, 36.5) +
+         geom_text(aes(label = n), position = position_stack(0.5),  size = 3) +
+         theme(axis.text.x = element_text(angle = -45, hjust=0, size = 8)) +
+         xlab("Data sources") + ylab("Numbers") +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+
+```
+### Important data sources by % career
+
+```{r importantDS_career_per}
+
+data %>% select(num_range("ImportantDS_", 1:7), career = Q20)  %>% 
+         filter(!(career %in% c("-", "Other")))                 %>% 
+         group_by(career)                                      %>% 
+         mutate(N = n())                                       %>% 
+         pivot_longer(cols = num_range("ImportantDS_", 1:7),
+                      names_to = NULL,
+                      values_to = "importantDS")               %>%
+         filter(!is.na(importantDS))                           %>%
+         group_by(importantDS, career)                         %>% 
+         mutate(n = n())                                       %>% 
+         distinct(importantDS, n, career, N)                   %>%
+         mutate(per = percent(n/N, accuracy = 1))              %>% 
+         filter(n > 2)                                         %>% 
+         ggplot(aes(x = reorder(importantDS, -n), y = n/N, fill = career)) +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() +  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         geom_text(aes(label = per), position = position_dodge2(width = 1.0, preserve = "single"), 
+                   vjust = -0.5, size = 3) +
+         theme(axis.text.x = element_text(angle = -45, hjust=0, size = 8)) +
+         xlab("Data sources") + ylab("Percent") +
+         scale_fill_brewer(palette = "Set1", name = "Career stage")
+
+```
+
+
+### Important data sources by gender
+
+```{r importantDS_gender}
+
+data %>% select(num_range("ImportantDS_", 1:7), gender = Q21)  %>% 
+         filter(!(gender %in% lowstatsgender))                %>% 
+         pivot_longer(cols = num_range("ImportantDS_", 1:7),
+                      names_to = NULL,
+                      values_to = "importantDS")               %>%
+         filter(!is.na(importantDS))                           %>%
+         group_by(importantDS, gender)                         %>% 
+         mutate(n = n())                                       %>% 
+         distinct(importantDS, n, gender)                      %>% 
+         filter(n > 2)                                         %>% 
+         ggplot(aes(x = reorder(importantDS, -n), y = n, fill = gender)) +
+         geom_col( colour = "black") +
+         theme_bw() + ylim(0, 36.5) +
+         geom_text(aes(label = n), position = position_stack(0.5),  size = 3) +
+         theme(axis.text.x = element_text(angle = -45, hjust=0, size = 8)) +
+         xlab("Data sources") + ylab("Numbers") +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+
+```
+
+### Important data sources by % gender
+
+```{r importantDS_gender_per}
+
+data %>% select(num_range("ImportantDS_", 1:7), gender = Q21)  %>% 
+         filter(!(gender %in% lowstatsgender))                 %>% 
+         group_by(gender)                                      %>% 
+         mutate(N = n())                                       %>% 
+         pivot_longer(cols = num_range("ImportantDS_", 1:7),
+                      names_to = NULL,
+                      values_to = "importantDS")               %>%
+         filter(!is.na(importantDS))                           %>%
+         group_by(importantDS, gender)                         %>% 
+         mutate(n = n())                                       %>% 
+         distinct(importantDS, n, gender, N)                   %>%
+         mutate(per = percent(n/N, accuracy = 1))              %>% 
+         filter(n > 2)                                         %>% 
+         ggplot(aes(x = reorder(importantDS, -n), y = n/N, fill = gender)) +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() +  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         geom_text(aes(label = per), position = position_dodge2(width = 0.9, preserve = "single"), 
+                   vjust = -0.5, size = 3) +
+         theme(axis.text.x = element_text(angle = -45, hjust=0, size = 8)) +
+         xlab("Data sources") + ylab("Percent") +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
 
 ```
 
@@ -3692,7 +3829,8 @@ data %>% select(id = URN, num_range("Q11_b_", 1:22), career = Q20) %>%
          ungroup()                                     %>%
          distinct(career, N) -> a
 
-# This takes into account the "Other" category
+# This takes into account the "Other" category - previous code section only looks
+# at 1 too 22, this one also includes i for (other)
 data %>% select(id = URN, starts_with("Q11_b_"), career = Q20) %>%
          pivot_longer(cols = starts_with("Q11_b_"),
                       names_to = NULL,
