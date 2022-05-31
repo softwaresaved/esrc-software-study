@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 26/05/22.
+**Last updated**: 31/05/22.
 
 -   <a href="#introduction" id="toc-introduction">Introduction</a>
 -   <a href="#overall-expenditure" id="toc-overall-expenditure">Overall
@@ -538,6 +538,20 @@ The same table ordered by the number of awards:
 | University of York                   |               84 |        17,345,460 |           206,494 |
 | University of Bath                   |               80 |         9,464,088 |           118,301 |
 | University of Sussex                 |               70 |        38,201,879 |           545,741 |
+
+Plotting by the number of awards and institution.
+
+![](ESRC_files/figure-gfm/ActiveAwardByOrgByNum_graph-1.png)<!-- -->
+
+Plotting by the total amount of awards and institution but keeping the
+number of awards order.
+
+![](ESRC_files/figure-gfm/ActiveAwardByOrgByTotAward_graph-1.png)<!-- -->
+
+Plotting by the average size of awards and institution but keeping the
+number of awards order.
+
+![](ESRC_files/figure-gfm/ActiveAwardByOrgByAvgAward_graph-1.png)<!-- -->
 
 ## Department awards
 
