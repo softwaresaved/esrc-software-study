@@ -678,7 +678,9 @@ Plotting by the number of awards ordered by the number of awards.
 
 ### Active Partnerships
 
-Currently active doctoral partnerships ordered by the start date.
+Currently active doctoral partnerships identified by the words “Doctoral
+Training” being in the title (case insensitive) ordered by the start
+date.
 
 | Lead Organisation                    | Department                              | Start    | End      |  Award (£) |
 |:-------------------------------------|:----------------------------------------|:---------|:---------|-----------:|

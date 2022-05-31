@@ -1095,7 +1095,8 @@ esrcdat %>% filter(Status == "Active")                                    %>%
 
 ### Active Partnerships
 
-Currently active doctoral partnerships ordered by the start date.
+Currently active doctoral partnerships identified by the words "Doctoral Training" being 
+in the title (case insensitive) ordered by the start date.
 
 ```{r active_DTPs, echo = FALSE}
 
