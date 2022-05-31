@@ -25,6 +25,8 @@ library(kableExtra)
 library(tidytext)
 library(RColorBrewer)
 library(leaflet)
+library(viridis)
+library(scales)
 
 # Do not use scientific notation
 options(scipen=999)
@@ -678,6 +680,7 @@ esrcdat %>% filter(Status == "Active")                                          
                                 "Standar deviation (days)", "Maximum (days)","Minimum (days)")) 
   
 ```
+
 As a log1p (ln(x + 1)) plot:
 
 ```{r award_lengths_active_log, echo = FALSE, fig.alt = "Histogram as a log plot of the length distribution for active projects only."}
@@ -832,6 +835,57 @@ esrcdat %>% filter(Status == "Active")                                          
             slice_head(n = 25)                                                  %>% 
             kbl(format="pipe", align = c("l",rep("r",3)),
                 col.names = c("Organisation", "Number of Awards", "Total Awarded (£)","Average Award (£)")) 
+```
+
+Plotting by the number of awards and institution.
+
+```{r ActiveAwardByOrgByNum_graph, echo = FALSE}
+
+esrcdat %>% filter(Status == "Active")                                          %>% 
+            select(LeadROName, AwardPounds)                                     %>% 
+            group_by(LeadROName)                                                %>% 
+            summarise(Number = n(), TotalAward = sum(AwardPounds,na.rm = TRUE)) %>% 
+            mutate(AvgAward = round(TotalAward/Number))                         %>% 
+            arrange(desc(Number))                                               %>% 
+            slice_head(n = 25)                                                  %>% 
+            ggplot(aes(x = reorder(LeadROName, -Number), y = Number, fill = Number)) + 
+            geom_col(colour = "black") +
+            theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
+            ylab("Number of Awards") + xlab("Organisation") + scale_fill_viridis()
+```
+
+Plotting by the total amount of awards and institution but keeping the number of awards order.
+
+```{r ActiveAwardByOrgByTotAward_graph, echo = FALSE}
+
+esrcdat %>% filter(Status == "Active")                                          %>% 
+            select(LeadROName, AwardPounds)                                     %>% 
+            group_by(LeadROName)                                                %>% 
+            summarise(Number = n(), TotalAward = sum(AwardPounds,na.rm = TRUE)) %>% 
+            mutate(AvgAward = round(TotalAward/Number))                         %>% 
+            arrange(desc(Number))                                               %>% 
+            slice_head(n = 25)                                                  %>% 
+            ggplot(aes(x = reorder(LeadROName, -Number), y = TotalAward, fill = TotalAward)) + 
+            geom_col(colour = "black") + scale_y_continuous(labels = comma) +
+            theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
+            ylab("Total Awards (£)") + xlab("Organisation") + scale_fill_viridis(option="magma")
+```
+
+Plotting by the average size of awards and institution but keeping the number of awards order.
+
+```{r ActiveAwardByOrgByAvgAward_graph, echo = FALSE}
+
+esrcdat %>% filter(Status == "Active")                                          %>% 
+            select(LeadROName, AwardPounds)                                     %>% 
+            group_by(LeadROName)                                                %>% 
+            summarise(Number = n(), TotalAward = sum(AwardPounds,na.rm = TRUE)) %>% 
+            mutate(AvgAward = round(TotalAward/Number))                         %>% 
+            arrange(desc(Number))                                               %>% 
+            slice_head(n = 25)                                                  %>% 
+            ggplot(aes(x = reorder(LeadROName, -Number), y = AvgAward, fill = AvgAward)) + 
+            geom_col(colour = "black") + scale_y_continuous(labels = comma) +
+            theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
+            ylab("Average Award (£)") + xlab("Organisation") + scale_fill_viridis(option="inferno")
 ```
 
 ## Department awards
