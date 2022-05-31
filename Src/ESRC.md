@@ -718,8 +718,13 @@ Currently active doctoral partnerships ordered by the start date.
 | University of Warwick                | Sociology                               | 01/10/17 | 30/09/27 | 12,497,302 |
 | University of Sheffield              | Geography                               | 01/10/17 | 30/09/27 | 15,429,313 |
 | University of Southampton            | Sch of Economic, Social & Political Sci | 01/10/17 | 30/09/27 | 14,988,643 |
-| University of the West of England    | Faculty of Health and Life Sciences     | 01/10/20 | 01/10/24 |          0 |
 | University College London            | Epidemiology and Public Health          | 01/10/20 | 30/09/26 |  1,453,720 |
+
+We can do a time line plot. From this we can see that certain
+organisations get different trenches of funding before the original
+award has expired.
+
+![](ESRC_files/figure-gfm/active_DTPs_graph-1.png)<!-- -->
 
 ## Award Titles
 

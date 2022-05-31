@@ -1102,11 +1102,29 @@ Currently active doctoral partnerships ordered by the start date.
 esrcdat %>% filter(Status == "Active")                                      %>%  
             filter(grepl("Doctoral Training",Title, ignore.case = TRUE))    %>% 
             select(LeadROName, Department, StartDate, EndDate, AwardPounds) %>%
+            filter(AwardPounds > 0)                                         %>% 
             arrange(StartDate)                                              %>% 
             mutate(across(where(is.Date), ~ format(., "%d/%m/%y")))         %>% 
             mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
             kable(format="pipe", align= c("l","l","l","l","r"), 
                   col.names = c("Lead Organisation", "Department","Start", "End","Award (£)")) 
+```
+We can do a time line plot. From this we can see that certain organisations get different trenches of funding
+before the original award has expired.
+
+```{r active_DTPs_graph, echo = FALSE}
+
+esrcdat %>% filter(Status == "Active")                                      %>%  
+            filter(grepl("Doctoral Training",Title, ignore.case = TRUE))    %>% 
+            select(LeadROName, Department, StartDate, EndDate, AwardPounds) %>%
+            mutate(DepOrg = paste(Department,",",LeadROName))               %>% 
+            ggplot(aes(y = DepOrg, by = DepOrg, colour = AwardPounds)) +
+            geom_segment(aes(x = StartDate, xend = EndDate, yend = DepOrg)) +
+            geom_point(aes(x = StartDate, y = DepOrg)) +
+            geom_point(aes(x = EndDate, y = DepOrg)) +
+            theme_bw() + xlab("Duration") + ylab("Dep & Organisation") + 
+            scale_colour_viridis(option="magma", labels = comma) + labs(colour = "Award (£)") +
+            theme(axis.text.y = element_text(size = 6)) 
 ```
 
 ## Award Titles
