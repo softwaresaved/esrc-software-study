@@ -935,10 +935,8 @@ There are `r length(unique(esrcdat[["Department"]]))` unique departments. The ta
 
 ```{r departments, echo = FALSE}
 
-# Total number of ESRC projects to calculate percentages.
-N <- nrow(esrcdat)
-
 esrcdat %>% select(CleanDep, AwardPounds)                             %>% 
+            mutate(N = n())                                           %>% 
             group_by(CleanDep)                                        %>% 
             mutate(n = n())                                           %>% 
             mutate(n, Percent=round(n/N*100,2), 
@@ -952,17 +950,74 @@ esrcdat %>% select(CleanDep, AwardPounds)                             %>%
 ```
 
 
+Plotting by the number of awards 
+
+```{r departments_byNumGraph, echo = FALSE}
+
+esrcdat %>% select(CleanDep, AwardPounds)                             %>% 
+            mutate(N = n())                                           %>% 
+            group_by(CleanDep)                                        %>% 
+            mutate(n = n())                                           %>% 
+            mutate(n, Percent=round(n/N*100,2), 
+                      Total = format(sum(AwardPounds),big.mark =",")) %>% 
+            distinct(CleanDep, n, Percent, Total)                     %>% 
+            arrange(desc(n))                                          %>% 
+            filter(n >= 30)                                           %>% 
+            ggplot(aes(x = reorder(CleanDep, -n), y = n, fill = n)) + 
+            geom_col(colour = "black") + #scale_y_continuous(labels = comma) +
+            theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
+            ylab("Number of Awards") + xlab("Deparment") + scale_fill_viridis(option="magma")
+
+```
+
+Plotting by the number of awards ordered by the number of awards.
+
+```{r departments_byTotGraph, echo = FALSE}
+
+esrcdat %>% select(CleanDep, AwardPounds)                                 %>% 
+            mutate(N = n())                                               %>% 
+            group_by(CleanDep)                                            %>% 
+            mutate(n = n())                                               %>% 
+            mutate(n, Percent=round(n/N*100,2), Total = sum(AwardPounds)) %>% 
+            distinct(CleanDep, n, Percent, Total)                         %>% 
+            arrange(desc(n))                                              %>% 
+            filter(n >= 30)                                               %>% 
+            ggplot(aes(x = reorder(CleanDep, -n), y = Total, fill = Total)) + 
+            geom_col(colour = "black") + scale_y_continuous(labels = comma) +
+            theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
+            ylab("Total Awards (£)") + xlab("Deparment") + scale_fill_viridis(option="magma")
+
+```
+
+Plotting by the number of awards ordered by the number of awards.
+
+```{r departments_byAvgGraph, echo = FALSE}
+
+esrcdat %>% select(CleanDep, AwardPounds)                                 %>% 
+            mutate(N = n())                                               %>% 
+            group_by(CleanDep)                                            %>% 
+            mutate(n = n())                                               %>% 
+            mutate(n, Percent=round(n/N*100,2), Total = sum(AwardPounds)) %>%
+            mutate(AvgAward = round(Total/n))                             %>% 
+            distinct(CleanDep, n, Percent, Total, AvgAward)               %>% 
+            arrange(desc(n))                                              %>% 
+            filter(n >= 30)                                               %>% 
+            ggplot(aes(x = reorder(CleanDep, -n), y = AvgAward, fill = AvgAward)) + 
+            geom_col(colour = "black") + scale_y_continuous(labels = comma) +
+            theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
+            ylab("Average Awards (£)") + xlab("Deparment") + scale_fill_viridis(option="magma")
+
+```
+
 ### Department awards for active projects only
 
 There are `r length(unique(esrcdat[["Department"]][esrcdat$Status == "Active"]))` unique departments for active projects (`r length(unique(esrcdat[["Department"]]))` for all projects). The table below only shows cases that have 30 or more occurrences in active projects.
 
 ```{r active_departments, echo = FALSE}
 
-# Total number of active projects only to calculate percentages.
-N <- nrow(esrcdat[esrcdat$Status =="Active",])
-
 esrcdat %>% filter(Status == "Active")                                %>% 
             select(CleanDep, AwardPounds)                             %>% 
+            mutate(N = n())                                           %>% 
             group_by(CleanDep)                                        %>% 
             mutate(n = n())                                           %>% 
             mutate(n, Percent=round(n/N*100,2), 
@@ -972,6 +1027,68 @@ esrcdat %>% filter(Status == "Active")                                %>%
             filter(n >= 30)                                           %>% 
             kbl(format="pipe", align = c("l","r","r","r"),
                 col.names = c("Department", "Number", "Percent", "Total Awarded (£)")) 
+```
+
+Plotting by the number of awards 
+
+```{r departments_ActbyNumGraph, echo = FALSE}
+
+esrcdat %>% filter(Status == "Active")                                %>% 
+            select(CleanDep, AwardPounds)                             %>% 
+            mutate(N = n())                                           %>% 
+            group_by(CleanDep)                                        %>% 
+            mutate(n = n())                                           %>% 
+            mutate(n, Percent=round(n/N*100,2), 
+                      Total = format(sum(AwardPounds),big.mark =",")) %>% 
+            distinct(CleanDep, n, Percent, Total)                     %>% 
+            arrange(desc(n))                                          %>% 
+            filter(n >= 30)                                           %>% 
+            ggplot(aes(x = reorder(CleanDep, -n), y = n, fill = n)) + 
+            geom_col(colour = "black") + #scale_y_continuous(labels = comma) +
+            theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
+            ylab("Number of Awards") + xlab("Deparment") + scale_fill_viridis(option="magma")
+
+```
+
+Plotting by the number of awards ordered by the number of awards.
+
+```{r departments_ActbyTotGraph, echo = FALSE}
+
+esrcdat %>% filter(Status == "Active")                                    %>% 
+            select(CleanDep, AwardPounds)                                 %>% 
+            mutate(N = n())                                               %>% 
+            group_by(CleanDep)                                            %>% 
+            mutate(n = n())                                               %>% 
+            mutate(n, Percent=round(n/N*100,2), Total = sum(AwardPounds)) %>% 
+            distinct(CleanDep, n, Percent, Total)                         %>% 
+            arrange(desc(n))                                              %>% 
+            filter(n >= 30)                                               %>% 
+            ggplot(aes(x = reorder(CleanDep, -n), y = Total, fill = Total)) + 
+            geom_col(colour = "black") + scale_y_continuous(labels = comma) +
+            theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
+            ylab("Total Awards (£)") + xlab("Deparment") + scale_fill_viridis(option="magma")
+
+```
+
+Plotting by the number of awards ordered by the number of awards.
+
+```{r departments_ActbyAvgGraph, echo = FALSE}
+
+esrcdat %>% filter(Status == "Active")                                    %>% 
+            select(CleanDep, AwardPounds)                                 %>% 
+            mutate(N = n())                                               %>% 
+            group_by(CleanDep)                                            %>% 
+            mutate(n = n())                                               %>% 
+            mutate(n, Percent=round(n/N*100,2), Total = sum(AwardPounds)) %>%
+            mutate(AvgAward = round(Total/n))                             %>% 
+            distinct(CleanDep, n, Percent, Total, AvgAward)               %>% 
+            arrange(desc(n))                                              %>% 
+            filter(n >= 30)                                               %>% 
+            ggplot(aes(x = reorder(CleanDep, -n), y = AvgAward, fill = AvgAward)) + 
+            geom_col(colour = "black") + scale_y_continuous(labels = comma) +
+            theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
+            ylab("Average Awards (£)") + xlab("Deparment") + scale_fill_viridis(option="magma")
+
 ```
 
 ## Doctoral Training Partnerships

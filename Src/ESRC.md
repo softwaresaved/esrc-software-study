@@ -615,6 +615,18 @@ to Business School and so on.
 | Politics & International Relation      |     30 |    0.29 |         8,072,909 |
 | Geographical Science                   |     30 |    0.29 |         2,788,901 |
 
+Plotting by the number of awards
+
+![](ESRC_files/figure-gfm/departments_byNumGraph-1.png)<!-- -->
+
+Plotting by the number of awards ordered by the number of awards.
+
+![](ESRC_files/figure-gfm/departments_byTotGraph-1.png)<!-- -->
+
+Plotting by the number of awards ordered by the number of awards.
+
+![](ESRC_files/figure-gfm/departments_byAvgGraph-1.png)<!-- -->
+
 ### Department awards for active projects only
 
 There are 662 unique departments for active projects (1119 for all
@@ -649,6 +661,18 @@ occurrences in active projects.
 | International Development            |     34 |    0.69 |         4,556,432 |
 | Politics and International Relations |     31 |    0.63 |         1,725,275 |
 | Politics and International Studies   |     30 |    0.61 |        15,045,532 |
+
+Plotting by the number of awards
+
+![](ESRC_files/figure-gfm/departments_ActbyNumGraph-1.png)<!-- -->
+
+Plotting by the number of awards ordered by the number of awards.
+
+![](ESRC_files/figure-gfm/departments_ActbyTotGraph-1.png)<!-- -->
+
+Plotting by the number of awards ordered by the number of awards.
+
+![](ESRC_files/figure-gfm/departments_ActbyAvgGraph-1.png)<!-- -->
 
 ## Doctoral Training Partnerships
 
