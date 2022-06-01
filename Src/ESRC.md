@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 31/05/22.
+**Last updated**: 01/06/22.
 
 -   <a href="#introduction" id="toc-introduction">Introduction</a>
 -   <a href="#overall-expenditure" id="toc-overall-expenditure">Overall
@@ -732,9 +732,8 @@ award has expired.
 
 ## Classification by category
 
-Classify the department of the Principal Investigator (assuming that the
-department will be linked to the subject of the award) using the
-following base categories:
+We want to be able to classify projects under the following base
+categories:
 
 -   Area Studies
 -   Demography
@@ -757,17 +756,20 @@ following base categories:
 -   Tools, technologies & methods
 -   Other
 
-The categories are derived from decomposition of previous ESRC
+These categories are derived from decomposition of previous ESRC
 expenditure reports at [ESRC application and success rate data and
 analysis](https://www.ukri.org/publications/esrc-application-and-success-rate-data-and-analysis/).
-The GtR subject classification for projects has been mapped to the above
-scheme and where a project subject is not provided an “Unclassified”
-type is used.
 
-There are 73 subject types and 21 categories described above plus the
-`Uncategorised` type for the cases where this information has not been
-provided. The GtR subjects for ESRC projects have been mapped to
-categories according to:
+The GtR allows each project to be classified under one or more research
+subjects. This data does not come with the data snapshots but can be
+obtained by other means. This has been mapped to the above categories
+using the mapping provided below. Where a project subject is not
+provided an “Unclassified” type is used.
+
+There are 73 research subject types and 21 categories described above
+plus the `Uncategorised` type for the cases where this information has
+not been provided. The GtR subjects for ESRC projects have been mapped
+to categories according to:
 
 -   **Area Studies**: Area Studies
 -   **Demography**: Demography, Demography & human geography
@@ -808,9 +810,9 @@ categories according to:
     detectors, Materials Processing
 -   **Uncategorised**: NA
 
-A project might be assigned more than one subject, where this is the
-case if the project has been assigned with n subjects then each will
-contribute 1/n to the classification count and wil be assigned a
+A project might be assigned more than one research subject, where this
+is the case if the project has been assigned with n subjects then each
+will contribute 1/n to the classification count and will be assigned a
 contribution of Award_amount/n to each subject. Taking this into account
 for each project, this gives a breakdown of the number of awards and
 amount awarded as:
@@ -993,6 +995,18 @@ active projects:
 | Linguistics                                | 31.6             | 3        | 11,638,437  | 1       |
 | Area Studies                               | 18.8             | 2        | 8,353,914   | 1       |
 | History                                    | 19.3             | 2        | 6,413,233   | 1       |
+
+Plot the number of contributions against research subject.
+
+![](ESRC_files/figure-gfm/categoriesContrib_graph-1.png)<!-- -->
+
+Plot the total awards against research subject.
+
+![](ESRC_files/figure-gfm/categoriesAward_graph-1.png)<!-- -->
+
+Plot the average award against research subject.
+
+![](ESRC_files/figure-gfm/categoriesAvgAward_graph-1.png)<!-- -->
 
 ![](ESRC_files/figure-gfm/AwardPiePlot-1.png)<!-- -->
 

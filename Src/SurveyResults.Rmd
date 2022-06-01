@@ -1182,7 +1182,8 @@ What are your most important data source(s)?
 
 ### Important data sources
 
-This is a simplified version of the input provided by the respondents.
+This is a simplified version of the input provided by the respondents. It only 
+shows entries with more than two values.
 
 ```{r importantDS}
 
@@ -1262,7 +1263,7 @@ data %>% select(num_range("ImportantDS_", 1:7), career = Q20)  %>%
 ```{r importantDS_gender}
 
 data %>% select(num_range("ImportantDS_", 1:7), gender = Q21)  %>% 
-         filter(!(gender %in% lowstatsgender))                %>% 
+         filter(!(gender %in% lowstatsgender))                 %>% 
          pivot_longer(cols = num_range("ImportantDS_", 1:7),
                       names_to = NULL,
                       values_to = "importantDS")               %>%
@@ -1309,9 +1310,38 @@ data %>% select(num_range("ImportantDS_", 1:7), gender = Q21)  %>%
 
 ```
 
+### Important data sources by % gender and career stage
+
+```{r importantDS_gender_per_career}
+
+data %>% select(num_range("ImportantDS_", 1:7), career = Q20, gender = Q21)  %>% 
+         filter(!(gender %in% lowstatsgender))                               %>% 
+         group_by(gender)                                                    %>% 
+         mutate(N = n())                                                     %>% 
+         pivot_longer(cols = num_range("ImportantDS_", 1:7),
+                      names_to = NULL,
+                      values_to = "importantDS")                             %>%
+         filter(!is.na(importantDS))                                         %>%
+         group_by(importantDS, gender, career)                               %>% 
+         mutate(n = n())                                                     %>% 
+         distinct(importantDS, n, gender, N, career)                         %>%
+         mutate(per = percent(n/N, accuracy = 1))                            %>% 
+         filter(n > 2)                                                       %>% 
+         ggplot(aes(x = reorder(importantDS, -n), y = n/N, fill = gender)) +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() +  scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.14)) +
+         geom_text(aes(label = per), position = position_dodge2(width = 0.9, preserve = "single"), 
+                   vjust = -0.5, size = 3) +
+         theme(axis.text.x = element_text(angle = -45, hjust=0, size = 8)) +
+         xlab("Data sources") + ylab("Percent") +
+         scale_fill_brewer(palette = "Set2", name = "Gender") +
+         facet_wrap(~ career)
+
+```
+
 ### List resources
 
-Responses by career stage.
+Number of responses by career stage.
 
 ```{r important_srcs_resp_career}
 
