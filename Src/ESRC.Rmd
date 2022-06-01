@@ -965,7 +965,8 @@ esrcdat %>% select(CleanDep, AwardPounds)                             %>%
             filter(n >= 30)                                           %>% 
             ggplot(aes(x = reorder(CleanDep, -n), y = n, fill = n)) + 
             geom_col(colour = "black") + #scale_y_continuous(labels = comma) +
-            theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
+            theme_bw() + 
+            theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
             ylab("Number of Awards") + xlab("Deparment") + scale_fill_viridis(option="magma")
 
 ```
@@ -1132,8 +1133,7 @@ esrcdat %>% filter(Status == "Active")                                      %>%
 
 ## Classification by category
 
-Classify the department of the Principal Investigator (assuming that the 
-department will be linked to the subject of the award) using the following base 
+We want to be able to classify projects under the following base 
 categories:
 
 * Area Studies
@@ -1157,9 +1157,11 @@ categories:
 * Tools, technologies & methods
 * Other
 
-The categories are derived from decomposition of previous ESRC expenditure reports at 
-[ESRC application and success rate data and analysis](https://www.ukri.org/publications/esrc-application-and-success-rate-data-and-analysis/). The GtR subject classification for projects has been mapped to the above scheme
-and where a project subject is not provided an "Unclassified" type is used.
+These categories are derived from decomposition of previous ESRC expenditure reports at 
+[ESRC application and success rate data and analysis](https://www.ukri.org/publications/esrc-application-and-success-rate-data-and-analysis/). 
+
+The GtR allows each project to be classified under one or more research subjects. This data does not come with the data snapshots but can be obtained by other means.
+This has been mapped to the above categories using the mapping provided below. Where a project subject is not provided an "Unclassified" type is used.
 
 ```{r Read_subjects, echo = FALSE}
 
@@ -1206,7 +1208,7 @@ subjects <- subjects                                %>%
             mutate(fracContrib = round(1/Nsub, 3))  %>% 
             rename(subject = text, encodedSubject = encodedText)
 
-# Join with the esrc data
+# Join with the ESRC data
 esrc_subjects <- esrcdat %>%
                  left_join(subjects, by = c("ProjectReference" = "grantReference")) %>%
                  select( -percentage, -status, -grantCategory)
@@ -1332,7 +1334,7 @@ if(any(esrc_subjects$category == "-")) {
 
 ```
 
-There are 73 subject types and 21 categories described above plus the `Uncategorised` type for the cases where this information has not been provided. The GtR subjects for ESRC projects have been mapped to categories according to:
+There are 73 research subject types and 21 categories described above plus the `Uncategorised` type for the cases where this information has not been provided. The GtR subjects for ESRC projects have been mapped to categories according to:
 
 * **Area Studies**: Area Studies
 * **Demography**: Demography, Demography & human geography
@@ -1371,9 +1373,9 @@ There are 73 subject types and 21 categories described above plus the `Uncategor
        Instrument. sensor & detectors, Materials Processing
 * **Uncategorised**: NA
 
-A project might be assigned more than one subject, where this is the case if the
+A project might be assigned more than one research subject, where this is the case if the
 project has been assigned with n subjects then each will contribute 1/n to the 
-classification count and wil be assigned a contribution of Award_amount/n to each
+classification count and will be assigned a contribution of Award_amount/n to each
 subject. Taking this into account for each project, this gives a breakdown of the 
 number of awards and amount awarded as:
 
@@ -1495,6 +1497,57 @@ esrc_subjects %>% filter(category != "Other" & category != "Uncategorised" &
                   col.names = c("Category", "Number of awards","Number %", 
                                 "Award (£)", "Award %"))  
 ```
+
+Plot the number of contributions against research subject.
+
+```{r categoriesContrib_graph, echo = FALSE}
+
+esrc_subjects %>% filter(category != "Other", category != "Uncategorised", Status == "Active")  %>% 
+                  select(category, AwardPounds, fracContrib)                                    %>%
+                  group_by(category)                                                            %>% 
+                  summarise(Contribution = round(sum(fracContrib),1), 
+                            Amount = sum(fracContrib * AwardPounds))                            %>% 
+                  ggplot(aes(x = reorder(category, -Contribution), y = Contribution, fill = Contribution)) + 
+                  geom_col(colour = "black") + theme_bw() +
+                  scale_fill_viridis(option="magma") +
+                  ylab("Contribution") + xlab("Research subject") +
+                  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8), legend.position = "None")
+```
+
+Plot the total awards against research subject.
+
+```{r categoriesAward_graph, echo = FALSE}
+
+esrc_subjects %>% filter(category != "Other", category != "Uncategorised", Status == "Active")  %>% 
+                  select(category, AwardPounds, fracContrib)                                    %>%
+                  group_by(category)                                                            %>% 
+                  summarise(Contribution = round(sum(fracContrib),1), 
+                            Amount = sum(fracContrib * AwardPounds))                            %>% 
+                  ggplot(aes(x = reorder(category, -Contribution), y = Amount, fill = Amount)) + 
+                  geom_col(colour = "black") + theme_bw() +
+                  scale_y_continuous(labels = comma) +
+                  scale_fill_viridis(option="magma") +
+                  ylab("Total Awards (£)") + xlab("Research subject") +
+                  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8), legend.position = "None")
+```
+
+Plot the average award against research subject.
+
+```{r categoriesAvgAward_graph, echo = FALSE}
+
+esrc_subjects %>% filter(category != "Other", category != "Uncategorised", Status == "Active")  %>% 
+                  select(category, AwardPounds, fracContrib)                                    %>%
+                  group_by(category)                                                            %>% 
+                  summarise(Contribution = round(sum(fracContrib),1), 
+                            AvgAmount = sum(fracContrib * AwardPounds)/sum(fracContrib))        %>% 
+                  ggplot(aes(x = reorder(category, -Contribution), y = AvgAmount, fill = AvgAmount)) + 
+                  geom_col(colour = "black") + theme_bw() +
+                  scale_y_continuous(labels = comma) +
+                  scale_fill_viridis(option="magma") +
+                  ylab("Average Awards (£)") + xlab("Research subject") +
+                  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8), legend.position = "None")
+```
+
 ```{r AwardPiePlot, echo = FALSE}
 
 
