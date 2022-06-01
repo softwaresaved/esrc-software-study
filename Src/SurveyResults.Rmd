@@ -32,6 +32,7 @@ library(webshot, quietly = TRUE)
 library(tibble)
 library(scales)
 library(ellipse, warn.conflicts = FALSE)
+library(viridis)
 
 
 ```
@@ -2462,6 +2463,34 @@ data %>% select(os = Q6, gender = Q21)             %>%
 
 ```
 
+```{r use_os_gender_per2_career}
+
+data %>% select(os = Q6, career = Q20, gender = Q21)    %>%
+         filter(!(career %in% c("Other", "-")))      %>% 
+         group_by(os)                              %>% 
+         mutate(M = n())                           %>% 
+         filter(!(gender %in% lowstatsgender))     %>% 
+         group_by(gender)                          %>% 
+         mutate(N = n())                           %>% 
+         group_by(os, gender,career)                      %>% 
+         mutate(n = n())                           %>% 
+         mutate(per = percent(n/N, accuracy = 1))  %>%
+         distinct(n, N, os, per, gender, career, M)        %>% 
+         ggplot(aes(x = reorder(os, -M), y = n/N, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
+         theme_bw() +
+         xlab("Use of Open Source") + scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         ylab("Percent") +
+         geom_text(aes(label = paste0(n," (", per,")")),
+                   position = position_dodge2(width = 0.9, preserve = "single"),
+                   vjust = -0.5, size = 3) +
+         scale_fill_brewer(palette = "Set2", name = "Gender") +
+         theme(axis.text.x = element_text(size = 8), 
+                             legend.text=element_text(size = 6))  + 
+         facet_wrap(~career)
+
+```
+
 ## Q6a Reason for using open source
 
 If you answered yes to the previous question, what are your main reasons
@@ -2472,23 +2501,24 @@ for using open source software?
 ```{r reason4os}
 
 data %>% select(starts_with("Q6_a"))              %>%
+         mutate(N = n())                          %>% 
          pivot_longer(cols = starts_with("Q6_a"),
                       names_to = NULL,
                       values_to = "UseOS")        %>%
          filter(UseOS != 0)                       %>%
-         mutate(N = n())                          %>% 
          group_by(UseOS)                          %>% 
          mutate(n = n())                          %>% 
          mutate(per = percent(n/N, accuracy = 1)) %>% 
          distinct(UseOS, per, n, N)               %>% 
-         ggplot(aes(x = reorder(UseOS, -n), y = n)) + 
-         geom_col(fill = "light blue", colour = "black") + 
-         theme_bw() +
+         ggplot(aes(x = reorder(UseOS, -n), y = n, fill = n)) + 
+         geom_col(colour = "black") + 
+         theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +         
          geom_text(aes(label = n), vjust = -0.5, size = 3) +
-         #geom_text(aes(label = paste0(n," (",per,")")), vjust = -0.5, size = 3) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.position = "None") +
          xlab("Reasons for using Open Source") + ylab("Numbers")
 ```
+ 
+ 
 ### Choice correlations
 
 My interpretation of this graph is that obtuse angles are negatively correlated, 
@@ -2648,6 +2678,33 @@ data %>% select(starts_with("Q6_a"), gender = Q21)   %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("Reasons for using Open Source") + ylab("Percentage") +
          scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+```{r reason4os_gender_car_per2}
+
+data %>% select(starts_with("Q6_a"), career = Q20, gender = Q21)   %>%
+         filter(!(career %in% c("-","Other"))) %>% 
+         pivot_longer(cols = starts_with("Q6_a"),
+                      names_to = NULL,
+                      values_to = "UseOS")           %>%
+         filter(UseOS != 0)                          %>%
+         group_by(UseOS)                             %>% 
+         mutate(M = n())                             %>% 
+         filter(!(gender %in% lowstatsgender))       %>% 
+         group_by(gender)                            %>% 
+         mutate(N = n())                             %>% 
+         group_by(UseOS, gender, career)                     %>% 
+         mutate(per = n()/N)                         %>%
+         distinct(UseOS, gender, per, M, career)             %>% 
+         ggplot(aes(x = reorder(UseOS, -M), y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
+         theme_bw() +
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0,.12)) +
+         geom_text(aes(label = percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 3) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("Reasons for using Open Source") + ylab("Percentage") +
+         scale_fill_brewer(palette = "Set2", name = "Gender") + facet_wrap(~career)
 ```
 
 ### Counting combined choices
@@ -6280,7 +6337,7 @@ data %>% select(ethnicity = "Q22", career = "Q20", gender = "Q21") %>%
 
 ### Gender distribution segmented by percentage by career stage
 
-```{r gender_career_per}
+```{r gender_career_per2}
 
 data %>% select(gender = Q21, career = Q20)                     %>%
          group_by(career)                                       %>% 
@@ -6300,7 +6357,7 @@ data %>% select(gender = Q21, career = Q20)                     %>%
 
 Removing the low statistics gender and career stage components
 
-```{r gender_career_per2}
+```{r gender_career_per3}
 
 data %>% select(gender = Q21, career = Q20)                     %>%
          group_by(career)                                       %>% 
