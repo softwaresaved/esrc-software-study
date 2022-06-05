@@ -679,17 +679,26 @@ all that apply)
 
 ```{r use_of_data}
 
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, num_range("Q2_", 1:2))                                  %>% 
+           pivot_longer(cols = num_range("Q2_", 1:2), 
+                      names_to = NULL,
+                      values_to = "datause")                                  %>%
+         filter(datause != 0)                                                 %>%
+         summarise(lab = paste0("Use of data (N=", n_distinct(URN),")")) -> my
+
 data %>% select(num_range("Q2_", 1:2)) %>%
          pivot_longer(cols = num_range("Q2_", 1:2), 
                       names_to = NULL,
                       values_to = "datause")                                  %>%
          filter(datause != 0)                                                 %>%
-         ggplot(aes(x = datause)) +
-         geom_bar(fill = "light blue", colour = "black") +
-         theme_bw() +
-         xlab("Use of data") + ylab("Numbers") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
+         group_by(datause)                                                    %>% 
+         mutate(n = n())                                                      %>% 
+         ggplot(aes(x = datause, fill = n)) +
+         geom_bar(colour = "black") +
+         theme_bw() + theme(legend.position = "None") +
+         xlab(my$lab) + ylab("Numbers") + scale_fill_distiller(palette = "Blues", direction = 1) +
+         geom_text(aes(y = n, label = n), vjust = -0.5, size = 3) 
 ```
 
 ### Use of data by career stage
@@ -777,6 +786,7 @@ data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>
 ### Use of data by % of gender population
 
 ```{r use_of_data_gender_per}
+
 data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>%
          pivot_longer(cols = num_range("Q2_", 1:2), 
                       names_to = NULL, values_to = "datause")                 %>%
@@ -798,6 +808,7 @@ data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>
 Remove the low statistic components
 
 ```{r use_of_data_gender_per2}
+
 data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>%
          group_by(gender)                                                     %>% 
          mutate(N = n())                                                      %>% 
@@ -897,6 +908,14 @@ Can produce a plot of the above table. N = 163.
 
 ```{r datause_choices_plot}
 
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, num_range("Q2_", 1:2))                           %>% 
+         pivot_longer(cols = starts_with("Q2_"),
+                      names_to = NULL,
+                      values_to = "ds")                                %>%
+         filter(ds != 0)                                               %>%  
+         summarise(lab = paste0("Use of data (N=", n_distinct(URN),")")) -> my
+
 data %>% select(id = URN, num_range("Q2_",1:2))                        %>%
          pivot_longer(cols = starts_with("Q2_"),
                       names_to = NULL,
@@ -912,10 +931,10 @@ data %>% select(id = URN, num_range("Q2_",1:2))                        %>%
          mutate(n = n())                                               %>%
          mutate(per = percent(n/N, accuracy = 1))                      %>% 
          distinct(n, N, choices, per)                                  %>% 
-         ggplot(aes(x = choices, y = n)) + 
-         geom_col(fill = "light blue", colour = "black") + theme_bw() +
-         xlab("Data use") + ylab("Numbers") +
-         geom_text(aes(label = paste0(n," (",per,")")), vjust = -0.5, size = 3) +
+         ggplot(aes(x = choices, y = n, fill = n)) + 
+         geom_col(colour = "black") + theme_bw() +
+         xlab(my$lab) + ylab("Numbers") + scale_fill_distiller(palette = "Blues", direction = 1) +
+         geom_text(aes(label = paste0(n," (",per,")")), vjust = -0.5, size = 3) + theme(legend.position = "None") +
          scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse"))
 ```
 
@@ -1188,6 +1207,14 @@ shows entries with more than two values.
 
 ```{r importantDS}
 
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, num_range("ImportantDS_", 1:7))  %>% 
+         pivot_longer(cols = num_range("ImportantDS_", 1:7),
+                      names_to = NULL,
+                      values_to = "importantDS")               %>%
+         filter(!is.na(importantDS))                           %>%
+         summarise(lab = paste0("Data sources (N=", n_distinct(URN),")")) -> my
+
 data %>% select(num_range("ImportantDS_", 1:7))                %>% 
          pivot_longer(cols = num_range("ImportantDS_", 1:7),
                       names_to = NULL,
@@ -1197,12 +1224,12 @@ data %>% select(num_range("ImportantDS_", 1:7))                %>%
          mutate(n = n())                                       %>% 
          distinct(importantDS, n)                              %>% 
          filter(n > 2)                                         %>% 
-         ggplot(aes(x = reorder(importantDS, -n), y = n)) +
-         geom_col(fill="light blue", colour = "black") +
-         theme_bw() + ylim(0, 36.5) +
-         geom_text(aes(label = n), vjust = -0.5, size = 3) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 8)) +
-         xlab("Data sources") + ylab("Numbers")
+         ggplot(aes(x = reorder(importantDS, -n), y = n, fill = n)) +
+         geom_col(colour = "black") +
+         theme_bw() + ylim(0, 36.5) + scale_fill_distiller(palette = "Blues", direction = 1) +
+         geom_text(aes(label = n), vjust = -0.5, size = 3) + 
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 8), legend.position = "None") +
+         xlab(my$lab) + ylab("Numbers")
 
 ```
 
@@ -1374,23 +1401,29 @@ If you re-use existing data, where do you find these?
 
 ```{r data_sources}
 
-N <- nrow(data)
-
-data %>% select(num_range("Q2_b_",1:6))           %>%
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, num_range("Q2_b_",1:6))  %>% 
          pivot_longer(cols = num_range("Q2_b_",1:6),
                       names_to = NULL,
                       values_to = "ds")           %>%
          filter(ds != 0)                          %>%
-        # mutate(N = n())                          %>% 
-         group_by(ds)                             %>% 
-         mutate(n = n())                          %>% 
-         mutate(per = percent(n/N, accuracy = 1)) %>% 
-         ggplot(aes(x = reorder(ds, -n), fill = ds)) + 
-         geom_bar(fill = "light blue", colour = "black") +
-         theme_bw() + ylab("Numbers") +
+         summarise(lab = paste0("Data sources (N=", n_distinct(URN),")")) -> my
+
+data %>% select(URN, num_range("Q2_b_",1:6))            %>%
+         pivot_longer(cols = num_range("Q2_b_",1:6),
+                      names_to = NULL,
+                      values_to = "ds")                 %>%
+         filter(ds != 0)                                %>%
+         mutate(N = n_distinct(URN))                    %>% 
+         group_by(ds)                                   %>% 
+         mutate(n = n())                                %>% 
+         mutate(per = percent(n/N, accuracy = 1))       %>% 
+         ggplot(aes(x = reorder(ds, -n), fill = n)) + 
+         geom_bar(colour = "black") +
+         theme_bw() + ylab("Numbers") + scale_fill_distiller(palette = "Blues", direction = 1) +
          geom_text(aes(label = paste0(n," (", per, ")")), 
                    stat = "count", vjust = -0.35, size = 3)  +
-         xlab("Data sources") + ylim(0, 75) +
+         xlab(my$lab) + ylim(0, 75) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 8)) +
          theme(legend.position = "none")
 ```
@@ -1572,6 +1605,34 @@ data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
+```{r data_sources_gender_per3}
+
+data %>% select(num_range("Q2_b_",1:6), career = Q20, gender = Q21)      %>%
+         filter(!(career %in% c("-", "Other")))                          %>% 
+         pivot_longer(cols = starts_with("Q2_b_"),
+                      names_to = NULL,
+                      values_to = "ds")                                  %>%
+         filter(ds != 0)                                                 %>%
+         group_by(ds)                                                    %>% 
+         mutate(M = n())                                                 %>% 
+         group_by(gender)                                                %>% 
+         mutate(N = n())                                                 %>% 
+         filter(!(gender %in% lowstatsgender))                           %>% 
+         group_by(ds, gender)                                            %>% 
+         mutate(per = n()/N)                                             %>% 
+         distinct(ds, gender, per, M, career)                             %>% 
+         ggplot(aes(x = reorder(ds, -M), y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() + ylab("Percent") +
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.35)) +
+         geom_text(aes(label = percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.35, size = 3)  +
+         xlab("Data sources") + 
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0, size = 8),
+               legend.text=element_text(size = 6)) + facet_wrap(~ career) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
 ### Reusing existing data by Institution
 
 Only showing institutions that have more than 2 total entries to make
@@ -1655,21 +1716,29 @@ How do you share your data?
 
 ```{r sharing_data}
 
-data %>% select(num_range("Q3_", 1:7))                                %>%
-         mutate(N = n())                                              %>% 
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, num_range("Q3_", 1:7))                           %>% 
          pivot_longer(cols = num_range("Q3_", 1:7),
                       names_to = NULL,
                       values_to = "DataSharing")                      %>%
          filter(DataSharing != 0)                                     %>%
+         summarise(lab = paste0("Data sharing habits (N=", n_distinct(URN),")")) -> my
+
+data %>% select(URN, num_range("Q3_", 1:7))                           %>%
+         pivot_longer(cols = num_range("Q3_", 1:7),
+                      names_to = NULL,
+                      values_to = "DataSharing")                      %>%
+         filter(DataSharing != 0)                                     %>%
+         mutate(N = n_distinct(URN))                                  %>% 
          group_by(DataSharing)                                        %>% 
          mutate(n = n())                                              %>% 
          mutate(per = percent(n/N, accuracy = 1))                     %>% 
          distinct(n, per, DataSharing)                                %>% 
-         ggplot(aes(x = reorder(DataSharing, -n), y = n, fill = DataSharing)) +
-         geom_col(fill = "light blue", colour = "black") + 
-         theme_bw() +
+         ggplot(aes(x = reorder(DataSharing, -n), y = n, fill = n)) +
+         geom_col(colour = "black") + 
+         theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         xlab("Data sharing habits") + ylab("Numbers") + ylim(0,83) +
+         xlab(my$lab) + ylab("Numbers") + ylim(0,83) +
          geom_text(aes(label = paste0(n, " (", per,")")), vjust = -0.5, size = 3) +
          theme(legend.position = "none") 
 ```
@@ -1819,6 +1888,14 @@ What software do you use in your research?
 
 ```{r sw_used}
 
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, num_range("Q4_",1:26))  %>% 
+         pivot_longer(cols = num_range("Q4_",1:26),
+                      names_to = NULL,
+                      values_to = "software")                       %>%
+         filter(software != 0)                                      %>%
+         summarise(lab = paste0("Software used (N=", n_distinct(URN),")")) -> my
+
 data %>% select(num_range("Q4_",1:26))                              %>%
          pivot_longer(cols = num_range("Q4_",1:26),
                       names_to = NULL,
@@ -1826,11 +1903,11 @@ data %>% select(num_range("Q4_",1:26))                              %>%
          filter(software != 0)                                      %>%
          group_by(software)                                         %>% 
          mutate(n = n())                                            %>%   
-         ggplot(aes(x = reorder(software,-n))) +
-         geom_bar(colour = "black", fill = "light blue") +
-         theme_bw() + ylim(0, 132) +
+         ggplot(aes(x = reorder(software,-n), fill = n)) +
+         geom_bar(colour = "black") +
+         theme_bw() + ylim(0, 132) + scale_fill_distiller(palette = "Blues", direction = 1) +
          theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
-         ylab("Numbers") + xlab("Software used") +
+         ylab("Numbers") + xlab(my$lab) +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          theme(axis.text.x = element_text(size = 8), legend.position = "none")
 ```
@@ -2150,21 +2227,30 @@ Only values with more than 2 entries are shown.
 
 ```{r important_sw_bar}
 
+# Calculate an x label with the folks that filled in this question.
+important_software  %>% select(URN, starts_with("Q5"))  %>% 
+                       pivot_longer(cols =  starts_with("Q5"),
+                                    names_to = "name",
+                                    values_to = "software")  %>%
+                       filter(!is.na(software))              %>%
+         summarise(lab = paste0("Most important software (N=", n_distinct(URN),")")) -> my
+
+
 important_software %>% select(starts_with("Q5"))             %>%
-                       pivot_longer(cols =  everything(),
+                       pivot_longer(cols =  starts_with("Q5"),
                                     names_to = "name",
                                     values_to = "software")  %>%
                        filter(!is.na(software))              %>%
                        group_by(software)                    %>%
                        tally()                               %>%
                        filter(n > 2)                         %>%
-                       ggplot(aes(x = reorder(software, -n), y = n)) +
-                       geom_col(fill = "light blue", colour = "black") + 
+                       ggplot(aes(x = reorder(software, -n), y = n, fill = n)) +
+                       geom_col(colour = "black") + scale_fill_distiller(palette = "Blues", direction = 1) +
                        theme_bw() +
                        theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
                        geom_text(aes(x = software, label = n), vjust = -0.5, size = 3) +
-                       ylab("Numbers") + xlab("Most important software") + ylim(0,57) +
-                       theme(axis.text.x = element_text(size = 8))  
+                       ylab("Numbers") + xlab(my$lab) + ylim(0,57) +
+                       theme(axis.text.x = element_text(size = 8), legend.position = "None")  
 
 ```
 
@@ -2331,14 +2417,18 @@ Do you use open source software?
 
 ```{r use_os}
 
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, Q6)  %>% 
+         summarise(lab = paste0("Use of Open Source (N=", n_distinct(URN),")")) -> my
+
 data %>% select(Q6)       %>%
          group_by(Q6)     %>% 
          mutate(n = n())  %>% 
-         ggplot(aes(x = reorder(Q6, -n))) + 
-         geom_bar(fill = "light blue", colour = "black") + 
+         ggplot(aes(x = reorder(Q6, -n), fill = n)) + 
+         geom_bar(colour = "black") + 
          theme_bw() +
-         xlab("Use of Open Source") + 
-         ylab("Numbers") + ylim(0, 110) +
+         xlab(my$lab) + scale_fill_distiller(palette = "Blues", direction = 1) +
+         ylab("Numbers") + ylim(0, 110) + theme(legend.position = "None") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) 
 
 ```
@@ -2501,7 +2591,7 @@ for using open source software?
 
 ```{r reason4os}
 
-# Calculate an xlabel with the folks that filled in this question.
+# Calculate an x label with the folks that filled in this question.
 data %>% select(URN, starts_with("Q6_a"))  %>% 
          summarise(lab = paste0("Used of OS (N=", n_distinct(URN),")")) -> my
 
@@ -2750,19 +2840,27 @@ for not using open source software?
 
 ```{r reasons4NotOS}
 
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, starts_with("Q6_b"))  %>% 
+         pivot_longer(cols = starts_with("Q6_b"),
+                      names_to = NULL,
+                      values_to = "UseOS")  %>%
+         filter(UseOS != 0)                 %>%
+         summarise(lab = paste0("Reasons for not using Open Source (N=", n_distinct(URN),")")) -> my
+
 data %>% select(starts_with("Q6_b"))        %>%
-         pivot_longer(cols = everything(),
+         pivot_longer(cols = starts_with("Q6_b"),
                       names_to = NULL,
                       values_to = "UseOS")  %>%
          filter(UseOS != 0)                 %>%
          group_by(UseOS)                    %>% 
          mutate(n = n())                    %>% 
-         ggplot(aes(x = reorder(UseOS, -n))) + 
-         geom_bar(fill = "light blue", colour = "black") + 
-         theme_bw() +
+         ggplot(aes(x = reorder(UseOS, -n), fill = n)) + 
+         geom_bar(colour = "black") + 
+         theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         xlab("Reasons for not using Open Source") + ylab("Numbers")
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.position = "None") +
+         xlab(my$lab) + ylab("Numbers")
 ```
 
 ### Choice correlations
@@ -2969,6 +3067,14 @@ How is the software you use currently being supported and maintained?
 
 ```{r sw_maintenace}
 
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, num_range("Q7_", 1:7))  %>% 
+         pivot_longer(cols = num_range("Q7_", 1:7),
+                      names_to = NULL,
+                      values_to = "swmaint")        %>%
+         filter(swmaint != 0)                       %>%
+         summarise(lab = paste0("How Software is being maintained (N=", n_distinct(URN),")")) -> my
+
 data %>% select(num_range("Q7_", 1:7))              %>%
          pivot_longer(cols = num_range("Q7_", 1:7),
                       names_to = NULL,
@@ -2976,11 +3082,11 @@ data %>% select(num_range("Q7_", 1:7))              %>%
          filter(swmaint != 0)                       %>%
          group_by(swmaint)                          %>% 
          mutate(n = n())                            %>% 
-         ggplot(aes(x = reorder(swmaint,-n))) + 
-         geom_bar(fill = "light blue", colour = "black") +
-         theme_bw() +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         xlab("How Software is being maintained") + ylab("Numbers") +
+         ggplot(aes(x = reorder(swmaint,-n), fill = n)) + 
+         geom_bar(colour = "black") +
+         theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.position = "None") +
+         xlab(my$lab) + ylab("Numbers") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3)
 ```
 
@@ -3297,17 +3403,21 @@ spreadsheets)
 
 ```{r develop_sw}
 
-data %>% select("Q9")                              %>%
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, Q9)  %>% 
+         summarise(lab = paste0("Do you develop software? (N=", n_distinct(URN),")")) -> my
+
+data %>% select(Q9)                              %>%
          mutate(Q9 = ifelse(!is.na(Q9), Q9, "-"))  %>% 
          mutate(N = n())                           %>% 
          group_by(Q9)                              %>% 
          mutate(n = n())                           %>% 
          mutate(per = percent(n/N, accuracy = 1))  %>%
          distinct(Q9, N, n, per)                   %>% 
-         ggplot(aes(x = reorder(Q9, -n), y = n)) + 
-         geom_col(fill = "light blue", colour = "black") +
-         theme_bw() +
-         xlab("Do you develop software?") + ylab("Numbers") +
+         ggplot(aes(x = reorder(Q9, -n), y = n, fill = n)) + 
+         geom_col(colour = "black") +
+         theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
+         xlab(my$lab) + ylab("Numbers") + theme(legend.position = "None") +
          geom_text(aes(label = paste0(n," (", per,")")), vjust = -0.5, size = 3)
 
 ```
@@ -3478,6 +3588,14 @@ codes and formulae in spreadsheets), do you (check all that apply)
 
 ```{r extending}
 
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, num_range("Q10_", 1:7))  %>% 
+         pivot_longer(cols = num_range("Q10_", 1:7),
+                      names_to = NULL,
+                      values_to = "swuse")              %>%
+         filter(swuse != 0)                             %>%
+         summarise(lab = paste0("Who do you share your software with? (N=", n_distinct(URN),")")) -> my
+
 data %>% select(num_range("Q10_", 1:7))                 %>%
          pivot_longer(cols = num_range("Q10_", 1:7),
                       names_to = NULL,
@@ -3485,12 +3603,12 @@ data %>% select(num_range("Q10_", 1:7))                 %>%
          filter(swuse != 0)                             %>%
          group_by(swuse)                                %>%
          mutate(n = n())                                %>% 
-         ggplot(aes(x = reorder(swuse, -n))) + 
-         geom_bar(fill = "light blue", colour = "black") +
+         ggplot(aes(x = reorder(swuse, -n), fill = n)) + 
+         geom_bar(colour = "black") + scale_fill_distiller(palette = "Blues", direction = 1) +
          theme_bw() +
-         xlab("Who do you share your software with?") + ylab("Numbers") +
+         xlab(my$lab) + ylab("Numbers") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.position = "None")
 ```
 
 ### Choice correlations
@@ -3648,6 +3766,15 @@ research? (Please check all that apply.)
 ### How skills are acquired
 
 ```{r acquiring_skills}
+
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, num_range("Q11_", 1:12))  %>% 
+         pivot_longer(cols = num_range("Q11_", 1:12),
+                      names_to = "questions",
+                      values_to = "skills")              %>%
+         filter(skills != 0)                             %>%
+         summarise(lab = paste0("Where skills are acquired (N=", n_distinct(URN),")")) -> my
+
 data %>% select(num_range("Q11_", 1:12))                 %>%
          pivot_longer(cols = num_range("Q11_", 1:12),
                       names_to = "questions",
@@ -3655,12 +3782,12 @@ data %>% select(num_range("Q11_", 1:12))                 %>%
          filter(skills != 0)                             %>%
          group_by(skills)                                %>% 
          mutate(n = n())                                 %>% 
-         ggplot(aes(x = reorder(skills, -n))) + 
-         geom_bar(fill = "light blue", colour = "black") +
-         theme_bw() +
-         xlab("Where skills are acquired") + ylab("Numbers") +
+         ggplot(aes(x = reorder(skills, -n), fill = n)) + 
+         geom_bar(colour = "black") +
+         theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
+         xlab(my$lab) + ylab("Numbers") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.position = "None")
 ```
 
 ```{r acquiring_skills_per}
@@ -4100,19 +4227,24 @@ research software are sufficiently recognised or rewarded?
 
 ```{r recognition}
 
-data %>%  select(rew = Q12)                        %>%
-          mutate(N = n())                          %>% 
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, Q12)  %>% 
+         summarise(lab = paste0("Development/Maintenance of rsearch software rewarded/recognised (N=",
+                                n_distinct(URN),")")) -> my
+
+data %>%  select(URN, rew = Q12)                   %>%
+          mutate(N = n_distinct(URN))              %>% 
           group_by(rew)                            %>% 
           mutate(n = n())                          %>% 
           mutate(per = percent(n/N, accuracy = 1)) %>% 
           distinct(rew, n, N, per)                 %>% 
-          ggplot(aes(x = reorder(rew, -n), y = n)) + 
-          geom_col(fill = "light blue", colour = "black") +
+          ggplot(aes(x = reorder(rew, -n), y = n, fill = n)) + 
+          geom_col(colour = "black") +
           theme_bw() +
-          xlab("Development/Maintenance of rsearch software rewarded/recognised") +
+          xlab(my$lab) + scale_fill_distiller(palette = "Blues", direction = 1) +
           ylab("Numbers") + ylim(0, 76) +
           geom_text(aes(label = paste0(n," (", per,")")), vjust = -0.5, size = 3) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.position = "None")
 
 ```
 
@@ -4284,18 +4416,29 @@ I am aware of how the software I use is funded, managed and licensed
 
 ```{r aware_sw}
 
-data %>% select(num_range("Q13_1_",1:5))            %>%
-         pivot_longer(cols = everything(),
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, num_range("Q13_1_",1:5))  %>% 
+           pivot_longer(cols = num_range("Q13_1_",1:5),
                       names_to = NULL,
                       values_to = "understanding")  %>%
          filter(understanding != 0)                 %>%
+         summarise(lab = paste0("Aware of how s/w I use is funded, managed and licensed (N=",
+                                n_distinct(URN),")")) -> my
+
+data %>% select(num_range("Q13_1_",1:5))            %>%
+         pivot_longer(cols = num_range("Q13_1_",1:5),
+                      names_to = NULL,
+                      values_to = "understanding")  %>%
+         filter(understanding != 0)                 %>%
+         group_by(understanding)                    %>% 
+         mutate(n = n())                            %>% 
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
-         ggplot(aes(x = understanding)) + 
-         geom_bar(colour = "black", fill = "light blue") +
+         ggplot(aes(x = understanding, fill = n)) + 
+         geom_bar(colour = "black") + scale_fill_distiller(palette = "Blues", direction = 1) +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          theme_bw() + ylab("Numbers") +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         xlab("Aware of how s/w I use is funded, managed and licensed")
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.position = "None") +
+         xlab(my$lab)
 ```
 
 #### Responses by career stage
@@ -4452,17 +4595,29 @@ licensed are clear to me
 
 ```{r aware_policies}
 
-data %>% select(num_range("Q13_2_",1:5))            %>%
-         pivot_longer(cols = everything(),
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, num_range("Q13_2_",1:5))  %>% 
+         pivot_longer(cols = num_range("Q13_2_",1:5),
                       names_to = "questions",
                       values_to = "understanding")  %>%
          filter(understanding != 0)                 %>%
+         summarise(lab = paste0("Aware of how s/w I use is funded, managed and licensed (N=",
+                                n_distinct(URN),")")) -> my
+
+data %>% select(num_range("Q13_2_",1:5))            %>%
+         pivot_longer(cols = num_range("Q13_2_",1:5),
+                      names_to = "questions",
+                      values_to = "understanding")  %>%
+         filter(understanding != 0)                 %>%
+         group_by(understanding)                    %>% 
+         mutate(n = n())                            %>% 
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
-         ggplot(aes(x = understanding)) + 
-         geom_bar(colour = "black", fill = "light blue") +
+         ggplot(aes(x = understanding, fill = n)) + 
+         geom_bar(colour = "black") + 
+        scale_fill_distiller(palette = "Blues", direction = 1) +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         theme_bw() + ylab("Numbers") +
-         xlab("Aware of how institution/funder's policies on how s/w is funded, managed and licensed")
+         theme_bw() + ylab("Numbers") + theme(legend.position = "None") +
+         xlab(my$lab)
 ```
 
 #### Responses by career stage
@@ -4612,17 +4767,29 @@ licensing by the economic and social sciences research community
 
 ```{r insufficient_attention}
 
-data %>% select(num_range("Q13_3_",1:5))            %>%
-         pivot_longer(cols = everything(),
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, num_range("Q13_3_",1:5))  %>% 
+         pivot_longer(cols = num_range("Q13_3_",1:5),
                       names_to = "questions",
                       values_to = "understanding")  %>%
          filter(understanding != 0)                 %>%
+         summarise(lab = 
+              paste0("Insufficient awareness on how s/w is funded, managed and licensed by the community (N=",
+                     n_distinct(URN),")")) -> my
+
+data %>% select(num_range("Q13_3_",1:5))            %>%
+         pivot_longer(cols = num_range("Q13_3_",1:5),
+                      names_to = "questions",
+                      values_to = "understanding")  %>%
+         filter(understanding != 0)                 %>%
+         group_by(understanding)                    %>% 
+         mutate(n = n())                            %>% 
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
-         ggplot(aes(x = understanding)) + 
-         geom_bar(colour = "black", fill = "light blue") +
+         ggplot(aes(x = understanding, fill = n)) + 
+         geom_bar(colour = "black") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         theme_bw() + ylab("Numbers") +
-         xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community")
+         theme_bw() + ylab("Numbers") + scale_fill_distiller(palette = "Blues", direction = 1) +
+         xlab(my$lab) + theme(legend.position = "None")
 ```
 
 #### Responses by career stage
@@ -4770,17 +4937,30 @@ funded, managed and licensed
 
 ```{r insufficient_incentives}
 
-data %>% select(num_range("Q13_4_",1:5))            %>%
-         pivot_longer(cols = everything(),
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, num_range("Q13_4_",1:5))  %>% 
+         pivot_longer(cols = num_range("Q13_4_",1:5),
                       names_to = "questions",
                       values_to = "understanding")  %>%
          filter(understanding != 0)                 %>%
+         summarise(lab = 
+                     paste0("Insufficient incentive learn how s/w is funded, managed and licensed (N=",
+                            n_distinct(URN),")")) -> my
+
+data %>% select(num_range("Q13_4_",1:5))            %>%
+         pivot_longer(cols = num_range("Q13_4_",1:5),
+                      names_to = "questions",
+                      values_to = "understanding")  %>%
+         filter(understanding != 0)                 %>%
+         group_by(understanding)                    %>% 
+         mutate(n = n())                            %>% 
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
-         ggplot(aes(x = understanding)) + 
-         geom_bar(colour = "black", fill = "light blue") +
+         ggplot(aes(x = understanding, fill = n)) + 
+         geom_bar(colour = "black") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         theme_bw() + ylab("Numbers") +
-         xlab("Insufficient incentive learn how s/w is funded, managed and licensed")
+         scale_fill_distiller(palette = "Blues", direction = 1) +
+         theme_bw() + ylab("Numbers") + theme(legend.position = "None") +
+         xlab(my$lab)
 ```
 
 #### Responses by career stage
@@ -4932,20 +5112,28 @@ somewhere between institutional and the national Tier 1 service.
 
 ```{r where_sw_run}
 
-data %>%  select(num_range("Q14_", 1:9))         %>%
-  mutate(N = n())                                %>% 
-  pivot_longer(cols = num_range("Q14_", 1:9),
-               names_to = "questions",
-               values_to = "runon")              %>%
-  filter(runon != 0)                             %>%
-  group_by(runon)                                %>% 
-  mutate(n = n())                                %>% 
-  ggplot(aes(x = reorder(runon, -n))) +
-  geom_bar(fill = "light blue", colour = "black") +
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, num_range("Q14_", 1:9))  %>% 
+         pivot_longer(cols = num_range("Q14_", 1:9),
+                      names_to = "questions",
+                      values_to = "runon")              %>%
+         filter(runon != 0)                             %>%
+         summarise(lab = paste0("Where software is run (N=", n_distinct(URN),")")) -> my
+
+data %>%  select(URN, num_range("Q14_", 1:9))         %>%
+          pivot_longer(cols = num_range("Q14_", 1:9),
+                       names_to = "questions",
+                       values_to = "runon")              %>%
+          filter(runon != 0)                             %>%
+          mutate(N = n_distinct(URN))                    %>% 
+          group_by(runon)                                %>% 
+          mutate(n = n())                                %>% 
+  ggplot(aes(x = reorder(runon, -n), fill = n)) +
+  geom_bar(colour = "black") +
   theme_bw() + ylim(0, 111) +
-  xlab("Where software is run") + ylab("Numbers") +
+  xlab(my$lab) + ylab("Numbers") + scale_fill_distiller(palette = "Blues", direction = 1) +
   geom_text(aes(y = n,label = paste0(n," (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 3) +
-  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 8), legend.position = "None")
 ```
 
 ### Choice correlations
@@ -5125,24 +5313,32 @@ are aware of)?
 
 ```{r licensing}
 
-data %>% select(starts_with("Q15_"), -"Q15_a")                          %>%
-         mutate(N = n())                                                %>% 
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, starts_with("Q15_"), -"Q15_a")  %>% 
          pivot_longer(cols = starts_with("Q15_"),
                       names_to = NULL,
                       values_to ="aware")                               %>%
          filter(aware != 0)                                             %>%
+         summarise(lab = paste0("Aware of the policy for (N=", n_distinct(URN),")")) -> my
+
+data %>% select(URN, starts_with("Q15_"), -"Q15_a")                     %>%
+         pivot_longer(cols = starts_with("Q15_"),
+                      names_to = NULL,
+                      values_to ="aware")                               %>%
+         filter(aware != 0)                                             %>%
+         mutate(N = n())                                                %>% 
          mutate(aware = factor(aware, ordered = TRUE, levels = licawa)) %>% 
          group_by(aware)                                                %>%
-         mutate(n = n())                                                %>% 
-         mutate(per = percent(n/N, accuracy = 1))                      %>% 
-         ggplot(aes(x = aware)) + 
-         geom_bar(fill = "light blue", colour = "black") +
-         theme_bw() + ylim(0,76) +
+         mutate(n = n_distinct(URN))                                    %>% 
+         mutate(per = percent(n/N, accuracy = 1))                       %>% 
+         ggplot(aes(x = aware, fill = n)) + 
+         geom_bar(colour = "black") +
+         theme_bw() + ylim(0,76) + scale_fill_distiller(palette = "Blues", direction = 1) +
          geom_text(aes(y = n, label = paste0(n, " (", per, ")")),  
                    vjust = -0.5, size = 3) +
-         ylab("Numbers") + xlab("Aware of the policy for")  +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
-
+         ylab("Numbers") + xlab(my$lab)  +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), 
+               legend.position = "None") 
 ```
 
 
@@ -5294,6 +5490,15 @@ research? (Check all that apply.)
 
 ```{r barriers}
 
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, num_range("Q16_", 1:13))           %>% 
+         pivot_longer(cols = num_range("Q16_", 1:13),
+                      names_to = "questions",
+                      values_to = "barriers")            %>%
+         filter(barriers != 0)                           %>%
+         summarise(lab = paste0("Barriers to software use (N=", n_distinct(URN),")")) -> my
+
+
 data %>%  select(num_range("Q16_", 1:13))         %>%
   pivot_longer(cols = num_range("Q16_", 1:13),
                names_to = "questions",
@@ -5301,12 +5506,13 @@ data %>%  select(num_range("Q16_", 1:13))         %>%
   filter(barriers != 0)                           %>%
   group_by(barriers)                              %>%
   mutate(n = n())                                 %>% 
-  ggplot(aes(x = reorder(barriers, -n))) +
-  geom_bar(fill = "light blue", colour = "black") +
+  ggplot(aes(x = reorder(barriers, -n), fill = n)) +
+  geom_bar(colour = "black") +
   theme_bw() + ylim(0, 91) +
-  xlab("Barriers to software use") + ylab("Numbers") +
+  xlab(my$lab) + ylab("Numbers") + scale_fill_distiller(palette = "Blues", direction = 1) +
   geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-  theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0, size = 6))
+  theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0, size = 6),
+        legend.position = "None")
 
 ```
 
@@ -5618,6 +5824,14 @@ funding body - each of these is given a count of 1 regardless of how many were p
 
 ```{r funding}
 
+# Calculate an x label with the folks that filled in this question.
+funding %>% select(URN, num_range("Q18_", 1:7))  %>% 
+            pivot_longer(cols = num_range("Q18_", 1:7),
+                         names_to = NULL,
+                         values_to =  "funding")         %>% 
+            filter(!is.na(funding))                      %>%
+            summarise(lab = paste0("Funding body (N=", n_distinct(URN),")")) -> my
+
 funding %>% pivot_longer(cols = num_range("Q18_", 1:7),
                          names_to = NULL,
                          values_to =  "funding")         %>% 
@@ -5625,11 +5839,13 @@ funding %>% pivot_longer(cols = num_range("Q18_", 1:7),
             group_by(funding)                            %>% 
             tally()                                      %>% 
             filter(n > 2)                                %>%
-            ggplot(aes(x = reorder(funding, -n), y = n)) +
-            geom_col(colour = "black", fill = "light blue") + ylim(0,115) +
-            theme_bw() + xlab("Funding body") + ylab("Numbers") +
+            ggplot(aes(x = reorder(funding, -n), y = n, fill = n)) +
+            geom_col(colour = "black") + ylim(0,115) +
+            theme_bw() + xlab(my$lab) + ylab("Numbers") +
+            scale_fill_distiller(palette = "Blues", direction = 1) +
             geom_text(aes(x = funding, label = n), vjust = -0.5, size = 3) +
-            theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+            theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0),
+                  legend.position = "None")
 ```
 
 ### Funding correlation
