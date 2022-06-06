@@ -1601,7 +1601,7 @@ The GtR [says](https://gtr.ukri.org/resources/data.html):
 > published on GtR. The ones that are searchable and downloadable are Research Topics, Health Category and UKRI 
 > Programmes. A full list of these classifications and their categories can be found here.
 
-```{r read_topics}
+```{r read_topics, echo = FALSE}
 
 # Define the topic column types
 topics_cols <- cols(
@@ -1630,7 +1630,7 @@ topics <- topics                                  %>%
 
 ```
 
-```{r topics2categories}
+```{r topics2categories, echo = FALSE}
 
 # Join with the ESRC data
 esrc_topics <- esrcdat %>%
