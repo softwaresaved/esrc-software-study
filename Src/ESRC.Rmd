@@ -1510,7 +1510,7 @@ esrc_subjects %>% filter(category != "Other", category != "Uncategorised", Statu
                   ggplot(aes(x = reorder(category, -Contribution), y = Contribution, fill = Contribution)) + 
                   geom_col(colour = "black") + theme_bw() +
                   scale_fill_viridis(option="magma") +
-                  ylab("Contribution") + xlab("Research subject") +
+                  ylab("Contribution") + xlab("Categories") +
                   theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8), legend.position = "None")
 ```
 
@@ -1527,7 +1527,7 @@ esrc_subjects %>% filter(category != "Other", category != "Uncategorised", Statu
                   geom_col(colour = "black") + theme_bw() +
                   scale_y_continuous(labels = comma) +
                   scale_fill_viridis(option="magma") +
-                  ylab("Total Awards (£)") + xlab("Research subject") +
+                  ylab("Total Awards (£)") + xlab("Categories") +
                   theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8), legend.position = "None")
 ```
 
@@ -1544,7 +1544,7 @@ esrc_subjects %>% filter(category != "Other", category != "Uncategorised", Statu
                   geom_col(colour = "black") + theme_bw() +
                   scale_y_continuous(labels = comma) +
                   scale_fill_viridis(option="magma") +
-                  ylab("Average Awards (£)") + xlab("Research subject") +
+                  ylab("Average Awards (£)") + xlab("Categories") +
                   theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8), legend.position = "None")
 ```
 
@@ -1831,7 +1831,7 @@ esrc_topics %>% filter(category != "Other", category != "Uncategorised", Status 
                   ggplot(aes(x = reorder(category, -Contribution), y = Contribution, fill = Contribution)) + 
                   geom_col(colour = "black") + theme_bw() +
                   scale_fill_viridis(option="magma") +
-                  ylab("Contribution") + xlab("Category") +
+                  ylab("Contribution") + xlab("Categories") +
                   theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8), legend.position = "None")
 ```
 
@@ -1848,7 +1848,7 @@ esrc_topics %>% filter(category != "Other", category != "Uncategorised", Status 
                   geom_col(colour = "black") + theme_bw() +
                   scale_y_continuous(labels = comma) +
                   scale_fill_viridis(option="magma") +
-                  ylab("Total Awards (£)") + xlab("Category") +
+                  ylab("Total Awards (£)") + xlab("Categories") +
                   theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8), legend.position = "None")
 ```
 
