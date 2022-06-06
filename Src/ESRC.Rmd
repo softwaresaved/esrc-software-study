@@ -1163,7 +1163,7 @@ These categories are derived from decomposition of previous ESRC expenditure rep
 The GtR allows each project to be classified under one or more research subjects. This data does not come with the data snapshots but can be obtained by other means.
 This has been mapped to the above categories using the mapping provided below. Where a project subject is not provided an "Unclassified" type is used.
 
-```{r Read_subjects, echo = FALSE}
+```{r read_subjects, echo = FALSE}
 
 # Categories to use
 categories <- c("Area Studies",
@@ -1624,8 +1624,8 @@ topics$decodedText <- gsub("\\+", " ", URLdecode(topics$encodedText))
 # Add a number of topics assigned and a fraction contribution column to the data
 topics <- topics                                  %>%
           group_by(grantReference)                %>%
-          mutate(Nsub = n())                      %>%
-          mutate(fracContrib = round(1/Nsub, 3))  %>%
+          mutate(Ntop = n())                      %>%
+          mutate(fracContrib = round(1/Ntop, 3))  %>%
           rename(topic = text, encodedTopic = encodedText)
 
 ```
@@ -1637,8 +1637,8 @@ esrc_topics <- esrcdat %>%
                left_join(topics, by = c("ProjectReference" = "grantReference")) %>%
                select(-percentage, -status, -grantCategory)
 
-# Provide values for Nsub (1) and the fracContrib (1) when there is no subject
-esrc_topics$Nsub[is.na(esrc_topics$topic)] <- 1
+# Provide values for Ntop (1) and the fracContrib (1) when there is no subject
+esrc_topics$Ntop[is.na(esrc_topics$topic)] <- 1
 esrc_topics$fracContrib[is.na(esrc_topics$topic)] <- 1
 
 # Create new column
