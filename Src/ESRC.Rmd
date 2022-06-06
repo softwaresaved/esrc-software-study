@@ -1131,7 +1131,7 @@ esrcdat %>% filter(Status == "Active")                                      %>%
 
 ## Award Titles
 
-## Classification by category
+## Classification by category using research subjects
 
 We want to be able to classify projects under the following base 
 categories:
@@ -1586,6 +1586,289 @@ esrc_subjects %>% filter(category != "Other" & category != "Uncategorised" &
                   scale_y_continuous(labels = scales::percent) +
                   theme_bw() + labs(x = "", y = "By % of the number of awards")
 ```
+
+## Classification by category using research topics
+
+Unlike the 71 unique research subjects there are 399 unique [research topics](https://gtr.ukri.org/resources/classificationlists.html) but it gives as
+a different way of classifying awards into the categories mentioned above. As there
+are a lot more topics to assign you will have to examine the code to see the detail.
+This would be a zeroth order approximation to the matching with categries.
+
+The GtR [says](https://gtr.ukri.org/resources/data.html):
+
+> Classifications: The ability to search for classifications has been provided to give an insight into grants that are > from similar areas that may be of interest to the user. Care should be taken if using these classifications for 
+> comparative analysis purposes as the source, coverage and level of usage of the classifications varies significantly > across the GtR funders. It is not possible to search and download all the classification categories that are being 
+> published on GtR. The ones that are searchable and downloadable are Research Topics, Health Category and UKRI 
+> Programmes. A full list of these classifications and their categories can be found here.
+
+```{r read_topics}
+
+# Define the topic column types
+topics_cols <- cols(
+  id = col_character(),
+  text = col_character(),
+  encodedText = col_character(),
+  percentage = col_character(),
+  status = col_character(),
+  grantReference = col_character(),
+  grantCategory = col_character()
+)
+
+# Read the data
+# also from: https://gtr.ukri.org/resources/classificationlists.html
+topics <- read_csv(file = "../Data/topics.csv", col_types = topics_cols)
+
+# Create a new column
+topics$decodedText <- gsub("\\+", " ", URLdecode(topics$encodedText))
+
+# Add a number of topics assigned and a fraction contribution column to the data
+topics <- topics                                  %>%
+          group_by(grantReference)                %>%
+          mutate(Nsub = n())                      %>%
+          mutate(fracContrib = round(1/Nsub, 3))  %>%
+          rename(topic = text, encodedTopic = encodedText)
+
+```
+
+```{r topics2categories}
+
+# Join with the ESRC data
+esrc_topics <- esrcdat %>%
+               left_join(topics, by = c("ProjectReference" = "grantReference")) %>%
+               select(-percentage, -status, -grantCategory)
+
+# Provide values for Nsub (1) and the fracContrib (1) when there is no subject
+esrc_topics$Nsub[is.na(esrc_topics$topic)] <- 1
+esrc_topics$fracContrib[is.na(esrc_topics$topic)] <- 1
+
+# Create new column
+esrc_topics$category <- rep("-",nrow(esrc_topics))
+
+# Set an uncategorised label
+esrc_topics$category[is.na(esrc_topics$topic)] <- "Uncategorised"
+
+# Function to select the right entries and reduce typing - only assign topics that have not been assigned yet
+sel <- function(parseString){
+  return(grepl(parseString, esrc_topics$topic, ignore.case = TRUE) &
+         (esrc_topics$category == "-") )
+}
+
+# assign the categories based on the topics
+esrc_topics$category[sel("area")] <- "Area Studies"
+# This also takes Demography and human geography, the latter being another category
+esrc_topics$category[sel("demography|popul|geront")] <- "Demography"
+esrc_topics$category[sel("development studies|devel")] <- "Development studies"
+esrc_topics$category[sel("economics|econo|employ|admin")] <- "Economics"
+esrc_topics$category[sel("education")] <-  "Education"
+esrc_topics$category[sel("environmental planning|environ|rural|ecology|wind|ocean|water|crop|animal|tox|weather|hydro|solar|carbon|lives|exper|plant|scale|waste|earth")] <- "Environmental planning"
+esrc_topics$category[sel("history")] <- "History"
+esrc_topics$category[sel("\\bgeography|urban|carto|spatial|geohaz")] <- "Human Geography"
+esrc_topics$category[sel("law|crimin|legal|ethics")] <- "Law & legal studies"
+esrc_topics$category[sel("languages|linguistics|phonetic|^language|lingui|epist|semant|lex|syntax|translation|morph")] <- "Linguistics"
+esrc_topics$category[sel("management|business|r&d|finance|leader|entrep|industrial|organ")] <- "Management & business studies"
+esrc_topics$category[sel("pol\\.")] <- "Political science. & international studies"
+esrc_topics$category[sel("politic|international")] <- "Political science. & international studies"
+esrc_topics$category[sel("america|africa|asiatic|european|middle|peace|colonial|conflict|war|religion|intern|elections|govern|rights")] <- "Political science. & international studies"
+esrc_topics$category[sel("women")] <- "Political science. & international studies"
+esrc_topics$category[sel("psychology|psych")] <- "Psychology"
+esrc_topics$category[sel("^science")] <- "Science and Technology Studies"
+esrc_topics$category[sel("anthropology|ethnic")] <- "Social anthropology"
+esrc_topics$category[sel("policy")] <- "Social policy"
+esrc_topics$category[sel("\\bwork")] <- "Social work"
+esrc_topics$category[sel("sociology|social")] <- "Sociology"
+esrc_topics$category[sel("tools|instrument|measurement|method|statistics|secur|ict|numerical|comput|math|intelli|emerg|robot")] <- "Tools, technologies & methods"
+# Things that do not seem to fit any of the above categories
+esrc_topics$category[sel(paste0("rcuk|astro|dance|music|gene|museum|art\\b|cultural|digital|compos|",
+                                  "theology|science(s)?$|engineering$|drama|network|secular|acoust|aest|",
+                                  "philo|arch|^omic|bio|info|class|child|sport|tourism|computing|arts|strat|innov|",
+                                  "atmos|design|vis|med|^cat|mar|ener|health|sound|literature|immun|choreo|",
+                                  "manu|materi|clim|poll|terr|civ|food|sex|disease|agric|survey|journa|project|",
+                                  "photo|budd|surf|complex|micro|publish|celtic|genomic|writing|musc|cells|prot|",
+                                  "drug|control|optical|theat|safe|faith|organelles|metabol|meteo|library|mineral|islam")
+)] <- "Other"
+
+#unique(esrc_topics$topic[sel("strat")])
+
+# Check all have been assigned
+if(any(esrc_topics$category == "-")) {
+  warning("There are some unassigned categories (",
+          length(unique(esrc_topics$topic[esrc_topics$category == "-"])),") :",
+          paste(unique(esrc_topics$topic[esrc_topics$category == "-"]), sep = ", "))
+}
+
+```
+
+
+Like with research subjects a project might be assigned more than one research topic, 
+as previously done if a project has been assigned with n topics then each will contribute 1/n to the 
+classification count and will be assigned a contribution of Award_amount/n to each
+category Taking this into account for each project, this gives a breakdown of the 
+number of awards and amount awarded as:
+
+```{r categories_from_topics1, echo = FALSE}
+
+# Generate stats for the categories
+esrc_topics %>% select(category, AwardPounds, fracContrib)                      %>% 
+                  group_by(category)                                              %>% 
+                  summarise(Contribution = round(sum(fracContrib),1), 
+                            Amount = sum(fracContrib*AwardPounds))                %>%
+                  mutate(totContrib = sum(Contribution), totAmount = sum(Amount)) %>% 
+                  mutate(percContrib = round(Contribution/totContrib,2)*100,
+                         perAward = round(Amount/totAmount,2) * 100)              %>%
+                    
+                  select(-totContrib, -totAmount)                                 %>% 
+                  relocate(percContrib, .after = Contribution)                    %>% 
+                  relocate(perAward, .after = Amount)                             %>% 
+                  mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
+                  arrange(desc(Amount))                                           %>% 
+                  kable(format="pipe", align= rep("l",5), 
+                  col.names = c("Category", "Number of awards","Number %", "Award (£)",
+                                "Award %"))    
+```
+
+The `Other` category dominates by award amount though the `Uncategorised` dominate by numbers. Looking at the `Other` category in more detail:
+
+```{r categories_topics2, echo = FALSE}
+
+esrc_topics %>% filter(category == "Other")                                     %>% 
+                select(topic, AwardPounds, fracContrib)                       %>%
+                group_by(topic)                                               %>% 
+                summarise(Contribution= round(sum(fracContrib),1), 
+                          Amount = sum(fracContrib * AwardPounds))              %>% 
+                mutate(totContrib = sum(Contribution), totAmount = sum(Amount)) %>% 
+                mutate(percContrib = round(Contribution/totContrib,2)*100,
+                         perAward = round(Amount/totAmount,2) * 100)              %>%
+                select(-totContrib, -totAmount)                                 %>% 
+                relocate(percContrib, .after = Contribution)                    %>% 
+                relocate(perAward, .after = Amount)                             %>% 
+                mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
+                arrange(desc(Amount)) %>% 
+                kable(format="pipe", align= rep("l", 5), 
+                col.names = c("Subject", "Number of awards","Number %", 
+                              "Award (£)", "Award %"))  
+```
+
+There are some large items near the top. Also, a lot of these items would not usually fall under the ESRC area.
+
+If we only focus on currently active projects we get:
+
+```{r categories_topics3, echo = FALSE}
+
+esrc_topics %>% filter(Status == "Active")                                        %>% 
+                  select(category, AwardPounds, fracContrib)                      %>% 
+                  group_by(category)                                              %>% 
+                  summarise(Contribution = round(sum(fracContrib),1), 
+                            Amount = sum(fracContrib*AwardPounds))                %>%
+                  mutate(totContrib = sum(Contribution), totAmount = sum(Amount)) %>% 
+                  mutate(percContrib = round(Contribution/totContrib,2)*100,
+                         perAward = round(Amount/totAmount,2) * 100)              %>%
+                  select(-totContrib, -totAmount)                                 %>% 
+                  relocate(percContrib, .after = Contribution)                    %>% 
+                  relocate(perAward, .after = Amount)                             %>% 
+                  mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
+                  arrange(desc(Amount))                                           %>% 
+                  kable(format="pipe", align= rep("l",5), 
+                  col.names = c("Category", "Number of awards","Number %", "Award (£)",
+                                "Award %"))   
+```
+
+and again looking to see how the `Other` category breakdown for active projects only:
+
+```{r categories_topics4, echo = FALSE}
+
+esrc_topics %>% filter(category == "Other" & Status == "Active")                  %>% 
+                  select(topic, AwardPounds, fracContrib)                         %>%
+                  group_by(topic)                                                 %>% 
+                  summarise(Contribution= round(sum(fracContrib),1), 
+                            Amount = sum(fracContrib * AwardPounds))              %>% 
+                  mutate(totContrib = sum(Contribution), totAmount = sum(Amount)) %>% 
+                  mutate(percContrib = round(Contribution/totContrib,2)*100,
+                         perAward = round(Amount/totAmount,2) * 100)              %>%
+                  select(-totContrib, -totAmount)                                 %>% 
+                  relocate(percContrib, .after = Contribution)                    %>% 
+                  relocate(perAward, .after = Amount)                             %>% 
+                  mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
+                  arrange(desc(Amount)) %>% 
+                  kable(format="pipe", align= rep("l", 5), 
+                  col.names = c("Subject", "Number of awards","Number %", 
+                                "Award (£)", "Award %"))   
+
+```
+
+Ignoring the `Other` and `Uncategorised` categories and considering only active
+projects:
+
+```{r categories_topics5, echo = FALSE}
+
+esrc_topics %>% filter(category != "Other" & category != "Uncategorised" & 
+                         Status == "Active")                                    %>% 
+                select(category, AwardPounds, fracContrib)                      %>%
+                group_by(category)                                              %>% 
+                summarise(Contribution= round(sum(fracContrib),1), 
+                            Amount = sum(fracContrib * AwardPounds))            %>% 
+                mutate(totContrib = sum(Contribution), totAmount = sum(Amount)) %>% 
+                mutate(percContrib = round(Contribution/totContrib,2)*100,
+                         perAward = round(Amount/totAmount,2) * 100)            %>%
+                select(-totContrib, -totAmount)                                 %>% 
+                relocate(percContrib, .after = Contribution)                    %>% 
+                relocate(perAward, .after = Amount)                             %>% 
+                mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
+                arrange(desc(Amount)) %>% 
+                kable(format="pipe", align= rep("l", 5), 
+                  col.names = c("Category", "Number of awards","Number %", 
+                                "Award (£)", "Award %"))  
+```
+
+Plot the number of contributions against research topic.
+
+```{r categoriesContrib_graph_topic, echo = FALSE}
+
+esrc_topics %>% filter(category != "Other", category != "Uncategorised", Status == "Active")    %>% 
+                  select(category, AwardPounds, fracContrib)                                    %>%
+                  group_by(category)                                                            %>% 
+                  summarise(Contribution = round(sum(fracContrib),1), 
+                            Amount = sum(fracContrib * AwardPounds))                            %>% 
+                  ggplot(aes(x = reorder(category, -Contribution), y = Contribution, fill = Contribution)) + 
+                  geom_col(colour = "black") + theme_bw() +
+                  scale_fill_viridis(option="magma") +
+                  ylab("Contribution") + xlab("Category") +
+                  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8), legend.position = "None")
+```
+
+Plot the total awards against research subject.
+
+```{r categoriesAward_graph_topics, echo = FALSE}
+
+esrc_topics %>% filter(category != "Other", category != "Uncategorised", Status == "Active")    %>% 
+                  select(category, AwardPounds, fracContrib)                                    %>%
+                  group_by(category)                                                            %>% 
+                  summarise(Contribution = round(sum(fracContrib),1), 
+                            Amount = sum(fracContrib * AwardPounds))                            %>% 
+                  ggplot(aes(x = reorder(category, -Contribution), y = Amount, fill = Amount)) + 
+                  geom_col(colour = "black") + theme_bw() +
+                  scale_y_continuous(labels = comma) +
+                  scale_fill_viridis(option="magma") +
+                  ylab("Total Awards (£)") + xlab("Category") +
+                  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8), legend.position = "None")
+```
+
+Plot the average award against research subject.
+
+```{r categoriesAvgAward_graph_topics, echo = FALSE}
+
+esrc_topics %>% filter(category != "Other", category != "Uncategorised", Status == "Active")   %>% 
+                  select(category, AwardPounds, fracContrib)                                    %>%
+                  group_by(category)                                                            %>% 
+                  summarise(Contribution = round(sum(fracContrib),1), 
+                            AvgAmount = sum(fracContrib * AwardPounds)/sum(fracContrib))        %>% 
+                  ggplot(aes(x = reorder(category, -Contribution), y = AvgAmount, fill = AvgAmount)) + 
+                  geom_col(colour = "black") + theme_bw() +
+                  scale_y_continuous(labels = comma) +
+                  scale_fill_viridis(option="magma") +
+                  ylab("Average Awards (£)") + xlab("Categories") +
+                  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8), legend.position = "None")
+```
+
 # ToDo Items
 
 

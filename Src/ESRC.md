@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 01/06/22.
+**Last updated**: 06/06/22.
 
 -   <a href="#introduction" id="toc-introduction">Introduction</a>
 -   <a href="#overall-expenditure" id="toc-overall-expenditure">Overall
@@ -60,8 +60,13 @@ Economic and Social Research Council (ESRC) Data
         -   <a href="#active-partnerships" id="toc-active-partnerships">Active
             Partnerships</a>
     -   <a href="#award-titles" id="toc-award-titles">Award Titles</a>
-    -   <a href="#classification-by-category"
-        id="toc-classification-by-category">Classification by category</a>
+    -   <a href="#classification-by-category-using-research-subjects"
+        id="toc-classification-by-category-using-research-subjects">Classification
+        by category using research subjects</a>
+    -   <a href="#classification-by-category-using-research-topics"
+        id="toc-classification-by-category-using-research-topics">Classification
+        by category using research topics</a>
+-   <a href="#todo-items" id="toc-todo-items">ToDo Items</a>
 
 # Introduction
 
@@ -730,7 +735,7 @@ award has expired.
 
 ## Award Titles
 
-## Classification by category
+## Classification by category using research subjects
 
 We want to be able to classify projects under the following base
 categories:
@@ -1010,8 +1015,473 @@ Plot the average award against research subject.
 
 ![](ESRC_files/figure-gfm/AwardPiePlot-1.png)<!-- -->
 
-![](ESRC_files/figure-gfm/NumberOfAwardsPiePlot-1.png)<!-- --> \# ToDo
-Items
+![](ESRC_files/figure-gfm/NumberOfAwardsPiePlot-1.png)<!-- -->
+
+## Classification by category using research topics
+
+Unlike the 71 unique research subjects there are 399 unique [research
+topics](https://gtr.ukri.org/resources/classificationlists.html) but it
+gives as a different way of classifying awards into the categories
+mentioned above. As there are a lot more topics to assign you will have
+to examine the code to see the detail. This would be a zeroth order
+approximation to the matching with categries.
+
+The GtR [says](https://gtr.ukri.org/resources/data.html):
+
+> Classifications: The ability to search for classifications has been
+> provided to give an insight into grants that are \> from similar areas
+> that may be of interest to the user. Care should be taken if using
+> these classifications for comparative analysis purposes as the source,
+> coverage and level of usage of the classifications varies
+> significantly \> across the GtR funders. It is not possible to search
+> and download all the classification categories that are being
+> published on GtR. The ones that are searchable and downloadable are
+> Research Topics, Health Category and UKRI Programmes. A full list of
+> these classifications and their categories can be found here.
+
+``` r
+# Define the topic column types
+topics_cols <- cols(
+  id = col_character(),
+  text = col_character(),
+  encodedText = col_character(),
+  percentage = col_character(),
+  status = col_character(),
+  grantReference = col_character(),
+  grantCategory = col_character()
+)
+
+# Read the data
+# also from: https://gtr.ukri.org/resources/classificationlists.html
+topics <- read_csv(file = "../Data/topics.csv", col_types = topics_cols)
+
+# Create a new column
+topics$decodedText <- gsub("\\+", " ", URLdecode(topics$encodedText))
+
+# Add a number of topics assigned and a fraction contribution column to the data
+topics <- topics                                  %>%
+          group_by(grantReference)                %>%
+          mutate(Nsub = n())                      %>%
+          mutate(fracContrib = round(1/Nsub, 3))  %>%
+          rename(topic = text, encodedTopic = encodedText)
+```
+
+``` r
+# Join with the ESRC data
+esrc_topics <- esrcdat %>%
+               left_join(topics, by = c("ProjectReference" = "grantReference")) %>%
+               select(-percentage, -status, -grantCategory)
+
+# Provide values for Nsub (1) and the fracContrib (1) when there is no subject
+esrc_topics$Nsub[is.na(esrc_topics$topic)] <- 1
+esrc_topics$fracContrib[is.na(esrc_topics$topic)] <- 1
+
+# Create new column
+esrc_topics$category <- rep("-",nrow(esrc_topics))
+
+# Set an uncategorised label
+esrc_topics$category[is.na(esrc_topics$topic)] <- "Uncategorised"
+
+# Function to select the right entries and reduce typing - only assign topics that have not been assigned yet
+sel <- function(parseString){
+  return(grepl(parseString, esrc_topics$topic, ignore.case = TRUE) &
+         (esrc_topics$category == "-") )
+}
+
+# assign the categories based on the topics
+esrc_topics$category[sel("area")] <- "Area Studies"
+# This also takes Demography and human geography, the latter being another category
+esrc_topics$category[sel("demography|popul|geront")] <- "Demography"
+esrc_topics$category[sel("development studies|devel")] <- "Development studies"
+esrc_topics$category[sel("economics|econo|employ|admin")] <- "Economics"
+esrc_topics$category[sel("education")] <-  "Education"
+esrc_topics$category[sel("environmental planning|environ|rural|ecology|wind|ocean|water|crop|animal|tox|weather|hydro|solar|carbon|lives|exper|plant|scale|waste|earth")] <- "Environmental planning"
+esrc_topics$category[sel("history")] <- "History"
+esrc_topics$category[sel("\\bgeography|urban|carto|spatial|geohaz")] <- "Human Geography"
+esrc_topics$category[sel("law|crimin|legal|ethics")] <- "Law & legal studies"
+esrc_topics$category[sel("languages|linguistics|phonetic|^language|lingui|epist|semant|lex|syntax|translation|morph")] <- "Linguistics"
+esrc_topics$category[sel("management|business|r&d|finance|leader|entrep|industrial|organ")] <- "Management & business studies"
+esrc_topics$category[sel("pol\\.")] <- "Political science. & international studies"
+esrc_topics$category[sel("politic|international")] <- "Political science. & international studies"
+esrc_topics$category[sel("america|africa|asiatic|european|middle|peace|colonial|conflict|war|religion|intern|elections|govern|rights")] <- "Political science. & international studies"
+esrc_topics$category[sel("women")] <- "Political science. & international studies"
+esrc_topics$category[sel("psychology|psych")] <- "Psychology"
+esrc_topics$category[sel("^science")] <- "Science and Technology Studies"
+esrc_topics$category[sel("anthropology|ethnic")] <- "Social anthropology"
+esrc_topics$category[sel("policy")] <- "Social policy"
+esrc_topics$category[sel("\\bwork")] <- "Social work"
+esrc_topics$category[sel("sociology|social")] <- "Sociology"
+esrc_topics$category[sel("tools|instrument|measurement|method|statistics|secur|ict|numerical|comput|math|intelli|emerg|robot")] <- "Tools, technologies & methods"
+# Things that do not seem to fit any of the above categories
+esrc_topics$category[sel(paste0("rcuk|astro|dance|music|gene|museum|art\\b|cultural|digital|compos|",
+                                  "theology|science(s)?$|engineering$|drama|network|secular|acoust|aest|",
+                                  "philo|arch|^omic|bio|info|class|child|sport|tourism|computing|arts|strat|innov|",
+                                  "atmos|design|vis|med|^cat|mar|ener|health|sound|literature|immun|choreo|",
+                                  "manu|materi|clim|poll|terr|civ|food|sex|disease|agric|survey|journa|project|",
+                                  "photo|budd|surf|complex|micro|publish|celtic|genomic|writing|musc|cells|prot|",
+                                  "drug|control|optical|theat|safe|faith|organelles|metabol|meteo|library|mineral|islam")
+)] <- "Other"
+
+#unique(esrc_topics$topic[sel("strat")])
+
+# Check all have been assigned
+if(any(esrc_topics$category == "-")) {
+  warning("There are some unassigned categories (",
+          length(unique(esrc_topics$topic[esrc_topics$category == "-"])),") :",
+          paste(unique(esrc_topics$topic[esrc_topics$category == "-"]), sep = ", "))
+}
+```
+
+Like with research subjects a project might be assigned more than one
+research topic, as previously done if a project has been assigned with n
+topics then each will contribute 1/n to the classification count and
+will be assigned a contribution of Award_amount/n to each category
+Taking this into account for each project, this gives a breakdown of the
+number of awards and amount awarded as:
+
+| Category                                   | Number of awards | Number % | Award (£)   | Award % |
+|:-------------------------------------------|:-----------------|:---------|:------------|:--------|
+| Other                                      | 4,751.8          | 46       | 921,555,293 | 28      |
+| Economics                                  | 623.3            | 6        | 369,121,298 | 11      |
+| Sociology                                  | 574.2            | 6        | 258,482,444 | 8       |
+| Psychology                                 | 684.5            | 7        | 198,722,802 | 6       |
+| Social policy                              | 375.8            | 4        | 194,707,004 | 6       |
+| Political science. & international studies | 605.5            | 6        | 177,659,697 | 5       |
+| Development studies                        | 249.1            | 2        | 160,167,131 | 5       |
+| Education                                  | 358.4            | 3        | 151,290,227 | 5       |
+| Human Geography                            | 373.7            | 4        | 138,566,197 | 4       |
+| Management & business studies              | 358.8            | 3        | 116,601,273 | 4       |
+| Environmental planning                     | 243.1            | 2        | 109,243,745 | 3       |
+| Demography                                 | 109.0            | 1        | 103,605,676 | 3       |
+| Law & legal studies                        | 254.5            | 2        | 73,651,173  | 2       |
+| Linguistics                                | 173.6            | 2        | 52,289,250  | 2       |
+| Social anthropology                        | 154.3            | 1        | 47,376,835  | 1       |
+| Tools, technologies & methods              | 90.9             | 1        | 44,415,252  | 1       |
+| Uncategorised                              | 54.0             | 1        | 41,980,644  | 1       |
+| Science and Technology Studies             | 127.2            | 1        | 39,836,949  | 1       |
+| Area Studies                               | 136.1            | 1        | 30,291,410  | 1       |
+| Social work                                | 51.4             | 0        | 11,769,752  | 0       |
+| History                                    | 23.9             | 0        | 7,491,934   | 0       |
+
+The `Other` category dominates by award amount though the
+`Uncategorised` dominate by numbers. Looking at the `Other` category in
+more detail:
+
+| Subject                        | Number of awards | Number % | Award (£)      | Award % |
+|:-------------------------------|:-----------------|:---------|:---------------|:--------|
+| Unclassified                   | 4,277.0          | 90       | 661,431,925.00 | 72      |
+| Mental Health                  | 33.4             | 1        | 27,714,002.97  | 3       |
+| Biomedical sciences            | 3.9              | 0        | 22,828,828.03  | 2       |
+| Children and Families          | 26.2             | 1        | 17,040,876.50  | 2       |
+| Med Soc/Soc Health & Illness   | 43.3             | 1        | 16,504,981.17  | 2       |
+| Innovation                     | 20.2             | 0        | 15,524,338.66  | 2       |
+| Information & Knowledge Mgmt   | 11.0             | 0        | 13,196,390.07  | 1       |
+| Medical science & disease      | 31.3             | 1        | 12,544,465.24  | 1       |
+| Global Health and Medicine     | 15.8             | 0        | 12,266,863.58  | 1       |
+| Climate & Climate Change       | 14.0             | 0        | 9,915,426.38   | 1       |
+| Dev Informatics & Technology   | 4.1              | 0        | 8,529,210.88   | 1       |
+| Biomedical neuroscience        | 13.9             | 0        | 7,416,596.63   | 1       |
+| Stratification                 | 18.3             | 0        | 6,879,595.18   | 1       |
+| Epigenetics                    | 5.4              | 0        | 6,394,452.26   | 1       |
+| Community Art inc A & H        | 5.6              | 0        | 5,525,467.40   | 1       |
+| Cultural Studies               | 16.5             | 0        | 5,342,471.32   | 1       |
+| Bioinformatics                 | 3.4              | 0        | 5,046,044.76   | 1       |
+| Agricultural systems           | 7.9              | 0        | 4,791,784.82   | 1       |
+| Research approaches            | 10.7             | 0        | 3,959,015.53   | 0       |
+| Media & Communication Studies  | 13.2             | 0        | 3,927,819.63   | 0       |
+| Diet & health                  | 9.3              | 0        | 3,325,246.11   | 0       |
+| Rel, Material & Cog Anthrop    | 6.3              | 0        | 3,286,865.25   | 0       |
+| Design Processes               | 6.8              | 0        | 3,186,990.19   | 0       |
+| Analytical Science             | 0.9              | 0        | 2,698,450.60   | 0       |
+| Kinship Health & relatedness   | 11.4             | 0        | 2,634,870.19   | 0       |
+| Survey & Monitoring            | 4.6              | 0        | 2,484,997.04   | 0       |
+| New Media/Web-Based Studies    | 11.0             | 0        | 2,305,923.49   | 0       |
+| Reproductive and sexual health | 4.6              | 0        | 1,974,633.30   | 0       |
+| Sustainable Energy Networks    | 3.9              | 0        | 1,924,626.74   | 0       |
+| Product Design                 | 5.1              | 0        | 1,920,842.18   | 0       |
+| Media Studies                  | 7.1              | 0        | 1,734,082.03   | 0       |
+| Architecture HTP               | 2.6              | 0        | 1,628,427.90   | 0       |
+| Pollution                      | 2.5              | 0        | 1,422,322.67   | 0       |
+| Manufact. Enterprise Ops& Mgmt | 7.1              | 0        | 1,304,574.89   | 0       |
+| Microbiology                   | 1.5              | 0        | 1,218,548.23   | 0       |
+| Energy Efficiency              | 4.1              | 0        | 899,652.29     | 0       |
+| Systems neuroscience           | 2.6              | 0        | 833,556.55     | 0       |
+| Islam                          | 1.9              | 0        | 797,287.47     | 0       |
+| Marketing                      | 4.4              | 0        | 788,332.64     | 0       |
+| Sport and Exercise             | 2.5              | 0        | 780,883.70     | 0       |
+| Food processing                | 2.0              | 0        | 749,638.41     | 0       |
+| Design HTP                     | 1.2              | 0        | 604,640.47     | 0       |
+| Hosp, Leisure & tourism manage | 3.6              | 0        | 596,878.03     | 0       |
+| Multimedia                     | 1.6              | 0        | 501,087.40     | 0       |
+| Project Studies                | 1.9              | 0        | 499,727.72     | 0       |
+| Cultural Studies & Pop Culture | 2.5              | 0        | 478,053.82     | 0       |
+| Drama & Theatre - Other        | 0.6              | 0        | 448,072.80     | 0       |
+| Structural Engineering         | 0.8              | 0        | 439,579.04     | 0       |
+| Inter-faith Relations          | 1.7              | 0        | 438,513.50     | 0       |
+| Genomics                       | 0.8              | 0        | 435,318.51     | 0       |
+| Design Engineering             | 2.6              | 0        | 421,447.83     | 0       |
+| Boundary Layer Meteorology     | 0.2              | 0        | 402,282.25     | 0       |
+| Medical Imaging                | 1.8              | 0        | 400,611.55     | 0       |
+| Digital Signal Processing      | 1.2              | 0        | 395,443.55     | 0       |
+| Music & Society                | 1.9              | 0        | 355,332.72     | 0       |
+| Gene action & regulation       | 1.6              | 0        | 352,062.65     | 0       |
+| Digital Art & Design           | 1.9              | 0        | 350,086.27     | 0       |
+| Gender & Sexuality             | 0.6              | 0        | 349,660.59     | 0       |
+| Bioenergy                      | 1.2              | 0        | 323,253.05     | 0       |
+| eScience                       | 1.2              | 0        | 299,838.66     | 0       |
+| Performance & Live Art         | 1.0              | 0        | 298,827.85     | 0       |
+| Comparative Literature         | 0.6              | 0        | 295,616.87     | 0       |
+| Celtic Studies                 | 0.2              | 0        | 288,176.60     | 0       |
+| Museum & Gallery Studies       | 2.6              | 0        | 287,483.30     | 0       |
+| Gender & Sexuality Studies     | 1.2              | 0        | 285,019.00     | 0       |
+| Film-based media (H, T & P)    | 1.0              | 0        | 274,793.40     | 0       |
+| Applied Arts HTP               | 1.5              | 0        | 261,554.72     | 0       |
+| Immunology                     | 0.3              | 0        | 261,081.66     | 0       |
+| Theatre & Society              | 1.6              | 0        | 237,703.50     | 0       |
+| Networks & Distributed Systems | 1.8              | 0        | 235,440.12     | 0       |
+| Sustainable Energy Vectors     | 0.8              | 0        | 221,227.14     | 0       |
+| Soil science                   | 0.4              | 0        | 214,212.40     | 0       |
+| Journalism                     | 1.5              | 0        | 208,450.39     | 0       |
+| Food structure/composition     | 0.4              | 0        | 198,729.30     | 0       |
+| Energy - Nuclear               | 1.0              | 0        | 189,079.00     | 0       |
+| Landscape Architecture         | 1.8              | 0        | 187,530.74     | 0       |
+| Photography HTP                | 0.8              | 0        | 186,656.65     | 0       |
+| Energy Storage                 | 0.4              | 0        | 175,257.80     | 0       |
+| Assess/Remediate Contamination | 0.2              | 0        | 173,266.20     | 0       |
+| Mining & Minerals Extraction   | 0.2              | 0        | 173,266.20     | 0       |
+| Drug Formulation & Delivery    | 0.6              | 0        | 165,582.19     | 0       |
+| Cells                          | 0.3              | 0        | 163,968.20     | 0       |
+| Tissue engineering             | 0.3              | 0        | 163,968.20     | 0       |
+| Ground Engineering             | 1.0              | 0        | 152,219.00     | 0       |
+| Civil Engineering Materials    | 0.4              | 0        | 147,576.80     | 0       |
+| Lifewriting                    | 0.5              | 0        | 146,455.09     | 0       |
+| English Language & Literature  | 1.6              | 0        | 145,271.71     | 0       |
+| Art Theory & Aesthetics        | 1.4              | 0        | 145,176.40     | 0       |
+| Musculoskeletal system         | 0.5              | 0        | 140,130.50     | 0       |
+| Biomechanics & Rehabilitation  | 2.4              | 0        | 138,807.44     | 0       |
+| Creative Writing               | 0.6              | 0        | 130,747.87     | 0       |
+| Buddhism                       | 0.4              | 0        | 130,633.65     | 0       |
+| Energy - Conventional          | 0.7              | 0        | 126,407.40     | 0       |
+| Materials Processing           | 0.2              | 0        | 122,907.40     | 0       |
+| Land - Atmosphere Interactions | 0.2              | 0        | 115,780.60     | 0       |
+| Food microbiology              | 0.9              | 0        | 114,688.20     | 0       |
+| Stem cell biology              | 0.2              | 0        | 101,618.20     | 0       |
+| Philosophy Of Mind             | 0.6              | 0        | 101,522.40     | 0       |
+| Information Sci. & Retrieval   | 0.4              | 0        | 97,306.75      | 0       |
+| Metabolomics / Metabonomics    | 0.4              | 0        | 88,579.15      | 0       |
+| Materials Synthesis & Growth   | 0.7              | 0        | 86,234.35      | 0       |
+| Acoustics                      | 0.3              | 0        | 80,598.32      | 0       |
+| Power Sys Man, Prot & Control  | 0.2              | 0        | 76,054.25      | 0       |
+| Functional genomics            | 0.2              | 0        | 75,978.40      | 0       |
+| Proteomics                     | 0.2              | 0        | 75,978.40      | 0       |
+| Atheism/Secularism             | 0.4              | 0        | 68,466.97      | 0       |
+| Fine Art HTP                   | 0.9              | 0        | 68,298.05      | 0       |
+| Library Studies                | 0.2              | 0        | 64,978.75      | 0       |
+| Choreography                   | 0.4              | 0        | 60,961.60      | 0       |
+| Dance Performance              | 0.4              | 0        | 60,961.60      | 0       |
+| Digital Arts HTP               | 0.5              | 0        | 55,776.29      | 0       |
+| Aesthetics                     | 0.5              | 0        | 55,670.66      | 0       |
+| Theoretical biology            | 0.5              | 0        | 54,076.43      | 0       |
+| Publishing                     | 0.3              | 0        | 53,834.44      | 0       |
+| Music & Acoustic Technology    | 0.4              | 0        | 42,102.00      | 0       |
+| Musical Performance            | 0.4              | 0        | 42,102.00      | 0       |
+| Classical Music                | 0.6              | 0        | 40,553.60      | 0       |
+| Surfaces & Interfaces          | 0.3              | 0        | 39,987.64      | 0       |
+| Astron. & Space Sci. Technol.  | 0.2              | 0        | 38,559.00      | 0       |
+| Extra-Galactic Astron.&Cosmol. | 0.2              | 0        | 38,559.00      | 0       |
+| Galactic & Interstellar Astron | 0.2              | 0        | 38,559.00      | 0       |
+| Gamma Ray Astronomy            | 0.2              | 0        | 38,559.00      | 0       |
+| Bioelectronic Devices          | 0.7              | 0        | 33,321.98      | 0       |
+| Traditional Music              | 0.3              | 0        | 33,112.52      | 0       |
+| Biogeochemical Cycles          | 0.2              | 0        | 30,487.60      | 0       |
+| Dramaturgy                     | 0.2              | 0        | 23,802.00      | 0       |
+| Materials testing & eng.       | 0.2              | 0        | 20,638.00      | 0       |
+| Archives                       | 0.2              | 0        | 19,664.20      | 0       |
+| Installation & Sound Art HTP   | 0.2              | 0        | 18,258.80      | 0       |
+| Archaeology of Literate Soc.   | 0.2              | 0        | 14,945.00      | 0       |
+| Composition                    | 0.2              | 0        | 10,038.60      | 0       |
+| Archaeological Theory          | 0.2              | 0        | 6,012.20       | 0       |
+| Biomaterials                   | 0.2              | 0        | 6,012.20       | 0       |
+| Materials Characterisation     | 0.2              | 0        | 5,427.80       | 0       |
+| Optical Devices & Subsystems   | 0.2              | 0        | 5,427.80       | 0       |
+| Literary & Cultural Theory     | 0.2              | 0        | 5,376.60       | 0       |
+
+There are some large items near the top. Also, a lot of these items
+would not usually fall under the ESRC area.
+
+If we only focus on currently active projects we get:
+
+| Category                                   | Number of awards | Number % | Award (£)   | Award % |
+|:-------------------------------------------|:-----------------|:---------|:------------|:--------|
+| Other                                      | 3,673.1          | 74       | 687,246,037 | 39      |
+| Economics                                  | 146.3            | 3        | 165,514,088 | 9       |
+| Development studies                        | 97.8             | 2        | 112,119,807 | 6       |
+| Social policy                              | 96.9             | 2        | 107,708,641 | 6       |
+| Sociology                                  | 58.8             | 1        | 79,071,714  | 4       |
+| Political science. & international studies | 145.2            | 3        | 74,622,405  | 4       |
+| Human Geography                            | 97.6             | 2        | 71,909,045  | 4       |
+| Education                                  | 90.8             | 2        | 71,247,708  | 4       |
+| Demography                                 | 29.6             | 1        | 70,097,791  | 4       |
+| Environmental planning                     | 81.8             | 2        | 59,086,588  | 3       |
+| Psychology                                 | 116.8            | 2        | 57,367,675  | 3       |
+| Management & business studies              | 70.3             | 1        | 53,222,713  | 3       |
+| Law & legal studies                        | 80.3             | 2        | 38,431,634  | 2       |
+| Uncategorised                              | 2.0              | 0        | 36,002,161  | 2       |
+| Tools, technologies & methods              | 41.8             | 1        | 28,183,776  | 2       |
+| Social anthropology                        | 35.7             | 1        | 17,740,044  | 1       |
+| Linguistics                                | 35.4             | 1        | 13,808,546  | 1       |
+| Science and Technology Studies             | 22.9             | 0        | 13,149,808  | 1       |
+| Social work                                | 9.4              | 0        | 4,809,200   | 0       |
+| History                                    | 7.4              | 0        | 2,603,237   | 0       |
+| Area Studies                               | 4.0              | 0        | 2,336,274   | 0       |
+
+and again looking to see how the `Other` category breakdown for active
+projects only:
+
+| Subject                        | Number of awards | Number % | Award (£)      | Award % |
+|:-------------------------------|:-----------------|:---------|:---------------|:--------|
+| Unclassified                   | 3,478.0          | 95       | 523,234,670.00 | 76      |
+| Biomedical sciences            | 1.5              | 0        | 21,238,524.69  | 3       |
+| Mental Health                  | 14.8             | 0        | 17,435,214.87  | 3       |
+| Children and Families          | 12.3             | 0        | 12,012,258.81  | 2       |
+| Innovation                     | 6.5              | 0        | 11,225,924.27  | 2       |
+| Global Health and Medicine     | 7.5              | 0        | 10,602,112.10  | 2       |
+| Information & Knowledge Mgmt   | 2.7              | 0        | 8,628,563.89   | 1       |
+| Med Soc/Soc Health & Illness   | 20.5             | 1        | 7,274,379.10   | 1       |
+| Medical science & disease      | 10.7             | 0        | 6,766,584.49   | 1       |
+| Climate & Climate Change       | 5.0              | 0        | 6,720,019.94   | 1       |
+| Community Art inc A & H        | 2.8              | 0        | 4,977,431.35   | 1       |
+| Dev Informatics & Technology   | 0.8              | 0        | 4,719,836.80   | 1       |
+| Biomedical neuroscience        | 6.3              | 0        | 4,048,125.58   | 1       |
+| Cultural Studies               | 9.7              | 0        | 3,733,247.34   | 1       |
+| Agricultural systems           | 2.8              | 0        | 3,598,961.94   | 1       |
+| Stratification                 | 7.2              | 0        | 3,210,087.16   | 0       |
+| Rel, Material & Cog Anthrop    | 4.3              | 0        | 2,994,432.26   | 0       |
+| Analytical Science             | 0.7              | 0        | 2,686,572.60   | 0       |
+| Media & Communication Studies  | 5.9              | 0        | 2,660,638.85   | 0       |
+| Design Processes               | 3.1              | 0        | 1,965,512.47   | 0       |
+| Research approaches            | 2.8              | 0        | 1,863,664.55   | 0       |
+| Kinship Health & relatedness   | 6.6              | 0        | 1,604,859.42   | 0       |
+| Reproductive and sexual health | 2.3              | 0        | 1,468,902.83   | 0       |
+| Diet & health                  | 3.6              | 0        | 1,397,104.56   | 0       |
+| Architecture HTP               | 1.0              | 0        | 1,359,157.95   | 0       |
+| Sustainable Energy Networks    | 1.6              | 0        | 1,233,320.04   | 0       |
+| Pollution                      | 1.0              | 0        | 1,190,486.09   | 0       |
+| Product Design                 | 3.4              | 0        | 1,171,489.75   | 0       |
+| Microbiology                   | 0.8              | 0        | 1,058,236.00   | 0       |
+| New Media/Web-Based Studies    | 2.8              | 0        | 959,591.99     | 0       |
+| Manufact. Enterprise Ops& Mgmt | 3.1              | 0        | 848,402.64     | 0       |
+| Media Studies                  | 3.0              | 0        | 815,269.11     | 0       |
+| Bioinformatics                 | 1.1              | 0        | 741,695.04     | 0       |
+| Sport and Exercise             | 1.8              | 0        | 694,804.10     | 0       |
+| Food processing                | 1.2              | 0        | 629,772.41     | 0       |
+| Islam                          | 1.1              | 0        | 580,027.25     | 0       |
+| Energy Efficiency              | 1.2              | 0        | 497,773.56     | 0       |
+| Drama & Theatre - Other        | 0.6              | 0        | 448,072.80     | 0       |
+| Hosp, Leisure & tourism manage | 0.9              | 0        | 427,304.95     | 0       |
+| Structural Engineering         | 0.5              | 0        | 423,635.00     | 0       |
+| Boundary Layer Meteorology     | 0.2              | 0        | 402,282.25     | 0       |
+| Design HTP                     | 0.4              | 0        | 390,921.00     | 0       |
+| Gender & Sexuality             | 0.6              | 0        | 349,660.59     | 0       |
+| Project Studies                | 0.3              | 0        | 333,593.74     | 0       |
+| Performance & Live Art         | 0.9              | 0        | 295,812.25     | 0       |
+| Digital Signal Processing      | 0.6              | 0        | 280,372.40     | 0       |
+| Music & Society                | 1.1              | 0        | 274,374.72     | 0       |
+| Systems neuroscience           | 0.3              | 0        | 264,462.61     | 0       |
+| Immunology                     | 0.3              | 0        | 261,081.66     | 0       |
+| Survey & Monitoring            | 0.9              | 0        | 239,868.91     | 0       |
+| Soil science                   | 0.2              | 0        | 184,154.80     | 0       |
+| Cultural Studies & Pop Culture | 0.9              | 0        | 179,971.35     | 0       |
+| Energy - Nuclear               | 0.5              | 0        | 176,290.50     | 0       |
+| Film-based media (H, T & P)    | 0.6              | 0        | 176,107.00     | 0       |
+| Comparative Literature         | 0.2              | 0        | 174,744.80     | 0       |
+| Applied Arts HTP               | 0.9              | 0        | 174,314.52     | 0       |
+| Assess/Remediate Contamination | 0.2              | 0        | 173,266.20     | 0       |
+| Mining & Minerals Extraction   | 0.2              | 0        | 173,266.20     | 0       |
+| Drug Formulation & Delivery    | 0.6              | 0        | 165,582.19     | 0       |
+| Cells                          | 0.3              | 0        | 163,968.20     | 0       |
+| Tissue engineering             | 0.3              | 0        | 163,968.20     | 0       |
+| Bioenergy                      | 0.2              | 0        | 153,693.00     | 0       |
+| Museum & Gallery Studies       | 1.5              | 0        | 148,769.15     | 0       |
+| Marketing                      | 0.4              | 0        | 142,740.95     | 0       |
+| Photography HTP                | 0.4              | 0        | 141,664.65     | 0       |
+| Inter-faith Relations          | 0.2              | 0        | 138,700.60     | 0       |
+| Medical Imaging                | 0.7              | 0        | 138,516.70     | 0       |
+| Journalism                     | 0.5              | 0        | 137,960.37     | 0       |
+| Food structure/composition     | 0.2              | 0        | 122,917.80     | 0       |
+| Civil Engineering Materials    | 0.2              | 0        | 122,907.40     | 0       |
+| Energy Storage                 | 0.2              | 0        | 122,907.40     | 0       |
+| Materials Processing           | 0.2              | 0        | 122,907.40     | 0       |
+| Biomechanics & Rehabilitation  | 2.2              | 0        | 108,318.84     | 0       |
+| Stem cell biology              | 0.2              | 0        | 101,618.20     | 0       |
+| Landscape Architecture         | 1.0              | 0        | 97,342.90      | 0       |
+| Theatre & Society              | 0.4              | 0        | 93,739.50      | 0       |
+| Genomics                       | 0.4              | 0        | 88,579.15      | 0       |
+| Metabolomics / Metabonomics    | 0.4              | 0        | 88,579.15      | 0       |
+| Design Engineering             | 0.9              | 0        | 85,997.05      | 0       |
+| Acoustics                      | 0.3              | 0        | 80,598.32      | 0       |
+| Power Sys Man, Prot & Control  | 0.2              | 0        | 76,054.25      | 0       |
+| Functional genomics            | 0.2              | 0        | 75,978.40      | 0       |
+| Proteomics                     | 0.2              | 0        | 75,978.40      | 0       |
+| Gender & Sexuality Studies     | 0.4              | 0        | 61,982.80      | 0       |
+| Networks & Distributed Systems | 0.2              | 0        | 60,648.75      | 0       |
+| Digital Arts HTP               | 0.5              | 0        | 55,776.29      | 0       |
+| Sustainable Energy Vectors     | 0.5              | 0        | 54,535.00      | 0       |
+| Art Theory & Aesthetics        | 0.7              | 0        | 50,318.60      | 0       |
+| Digital Art & Design           | 0.6              | 0        | 40,425.69      | 0       |
+| Philosophy Of Mind             | 0.4              | 0        | 40,186.00      | 0       |
+| Aesthetics                     | 0.3              | 0        | 36,174.46      | 0       |
+| Fine Art HTP                   | 0.7              | 0        | 33,453.25      | 0       |
+| Bioelectronic Devices          | 0.7              | 0        | 33,321.98      | 0       |
+| Traditional Music              | 0.3              | 0        | 33,112.52      | 0       |
+| Multimedia                     | 0.5              | 0        | 24,554.00      | 0       |
+| Dramaturgy                     | 0.2              | 0        | 23,802.00      | 0       |
+| Materials testing & eng.       | 0.2              | 0        | 20,638.00      | 0       |
+| Epigenetics                    | 0.2              | 0        | 19,939.80      | 0       |
+| Composition                    | 0.2              | 0        | 10,038.60      | 0       |
+| Classical Music                | 0.2              | 0        | 10,006.40      | 0       |
+| Creative Writing               | 0.2              | 0        | 9,990.20       | 0       |
+| Buddhism                       | 0.2              | 0        | 9,897.40       | 0       |
+| English Language & Literature  | 0.2              | 0        | 6,033.40       | 0       |
+
+Ignoring the `Other` and `Uncategorised` categories and considering only
+active projects:
+
+| Category                                   | Number of awards | Number % | Award (£)   | Award % |
+|:-------------------------------------------|:-----------------|:---------|:------------|:--------|
+| Economics                                  | 146.3            | 12       | 165,514,088 | 16      |
+| Development studies                        | 97.8             | 8        | 112,119,807 | 11      |
+| Social policy                              | 96.9             | 8        | 107,708,641 | 10      |
+| Sociology                                  | 58.8             | 5        | 79,071,714  | 8       |
+| Political science. & international studies | 145.2            | 11       | 74,622,405  | 7       |
+| Human Geography                            | 97.6             | 8        | 71,909,045  | 7       |
+| Education                                  | 90.8             | 7        | 71,247,708  | 7       |
+| Demography                                 | 29.6             | 2        | 70,097,791  | 7       |
+| Environmental planning                     | 81.8             | 6        | 59,086,588  | 6       |
+| Psychology                                 | 116.8            | 9        | 57,367,675  | 6       |
+| Management & business studies              | 70.3             | 6        | 53,222,713  | 5       |
+| Law & legal studies                        | 80.3             | 6        | 38,431,634  | 4       |
+| Tools, technologies & methods              | 41.8             | 3        | 28,183,776  | 3       |
+| Social anthropology                        | 35.7             | 3        | 17,740,044  | 2       |
+| Linguistics                                | 35.4             | 3        | 13,808,546  | 1       |
+| Science and Technology Studies             | 22.9             | 2        | 13,149,808  | 1       |
+| Social work                                | 9.4              | 1        | 4,809,200   | 0       |
+| History                                    | 7.4              | 1        | 2,603,237   | 0       |
+| Area Studies                               | 4.0              | 0        | 2,336,274   | 0       |
+
+Plot the number of contributions against research topic.
+
+![](ESRC_files/figure-gfm/categoriesContrib_graph_topic-1.png)<!-- -->
+
+Plot the total awards against research subject.
+
+![](ESRC_files/figure-gfm/categoriesAward_graph_topics-1.png)<!-- -->
+
+Plot the average award against research subject.
+
+![](ESRC_files/figure-gfm/categoriesAvgAward_graph_topics-1.png)<!-- -->
+
+# ToDo Items
 
 -   [ ] Reconcile DTPs from what was scraped from the [ESRC
     DTP](https://esrc.ukri.org/skills-and-careers/doctoral-training/doctoral-training-partnerships/doctoral-training-partnership-dtp-contacts/)
