@@ -1592,14 +1592,14 @@ esrc_subjects %>% filter(category != "Other" & category != "Uncategorised" &
 Unlike the 71 unique research subjects there are 399 unique [research topics](https://gtr.ukri.org/resources/classificationlists.html) but it gives as
 a different way of classifying awards into the categories mentioned above. As there
 are a lot more topics to assign you will have to examine the code to see the detail.
-This would be a zeroth order approximation to the matching with categries.
+This would be a zeroth order approximation to the matching with categories.
 
 The GtR [says](https://gtr.ukri.org/resources/data.html):
 
-> Classifications: The ability to search for classifications has been provided to give an insight into grants that are > from similar areas that may be of interest to the user. Care should be taken if using these classifications for 
-> comparative analysis purposes as the source, coverage and level of usage of the classifications varies significantly > across the GtR funders. It is not possible to search and download all the classification categories that are being 
-> published on GtR. The ones that are searchable and downloadable are Research Topics, Health Category and UKRI 
-> Programmes. A full list of these classifications and their categories can be found here.
+> Classifications: The ability to search for classifications has been provided to give an insight into grants that are   from similar areas that may be of interest to the user. Care should be taken if using these classifications for 
+  comparative analysis purposes as the source, coverage and level of usage of the classifications varies significantly   across the GtR funders. It is not possible to search and download all the classification categories that are being 
+  published on GtR. The ones that are searchable and downloadable are Research Topics, Health Category and UKRI 
+ Programmes. A full list of these classifications and their categories can be found here.
 
 ```{r read_topics, echo = FALSE}
 
@@ -1699,11 +1699,11 @@ if(any(esrc_topics$category == "-")) {
 ```
 
 
-Like with research subjects a project might be assigned more than one research topic, 
-as previously done if a project has been assigned with n topics then each will contribute 1/n to the 
-classification count and will be assigned a contribution of Award_amount/n to each
-category Taking this into account for each project, this gives a breakdown of the 
-number of awards and amount awarded as:
+As with research subjects a project might be assigned more than one research topics, 
+as previously done if a project is associated with n research topics then each of these 
+will contribute 1/n to the classification count and will be assigned a contribution of Award_amount/n to each
+category. Taking this into account for each project, this gives a breakdown of the 
+number of awards and amount awarded as ordered by the total awarded to each category:
 
 ```{r categories_from_topics1, echo = FALSE}
 
@@ -1725,19 +1725,25 @@ esrc_topics %>% select(category, AwardPounds, fracContrib)                      
                   col.names = c("Category", "Number of awards","Number %", "Award (£)",
                                 "Award %"))    
 ```
+The order here is broadly similar to that produced by the research topics though there are some note-able
+differences. For instance, the "Uncategorised" items are much less and there some differences in the ordering
+- for the research subject categorisation "Education" was followed by "Development studies" while for research
+topics the order is the other way round.
+
+
 
 The `Other` category dominates by award amount though the `Uncategorised` dominate by numbers. Looking at the `Other` category in more detail:
 
 ```{r categories_topics2, echo = FALSE}
 
 esrc_topics %>% filter(category == "Other")                                     %>% 
-                select(topic, AwardPounds, fracContrib)                       %>%
-                group_by(topic)                                               %>% 
+                select(topic, AwardPounds, fracContrib)                         %>%
+                group_by(topic)                                                 %>% 
                 summarise(Contribution= round(sum(fracContrib),1), 
                           Amount = sum(fracContrib * AwardPounds))              %>% 
                 mutate(totContrib = sum(Contribution), totAmount = sum(Amount)) %>% 
                 mutate(percContrib = round(Contribution/totContrib,2)*100,
-                         perAward = round(Amount/totAmount,2) * 100)              %>%
+                         perAward = round(Amount/totAmount,2) * 100)            %>%
                 select(-totContrib, -totAmount)                                 %>% 
                 relocate(percContrib, .after = Contribution)                    %>% 
                 relocate(perAward, .after = Amount)                             %>% 
