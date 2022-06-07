@@ -1383,7 +1383,6 @@ number of awards and amount awarded as:
 
 # Generate stats for the categories
 esrc_subjects %>% select(category, AwardPounds, fracContrib)                      %>% 
-
                   group_by(category)                                              %>% 
                   summarise(Contribution = round(sum(fracContrib),1), 
                             Amount = sum(fracContrib*AwardPounds))                %>%
@@ -1702,7 +1701,36 @@ if(any(esrc_topics$category == "-")) {
 As with research subjects a project might be assigned more than one research topics, 
 as previously done if a project is associated with n research topics then each of these 
 will contribute 1/n to the classification count and will be assigned a contribution of Award_amount/n to each
-category. Taking this into account for each project, this gives a breakdown of the 
+category. We can compare the number of research subjects/topics assigned to each project in the graph below.
+
+```{r cmp_subs_tos, echo = FALSE}
+esrc_subjects %>% select(Nsub)       %>% 
+                  group_by(Nsub)     %>% 
+                  tally(name ="Ns") -> subjs
+
+esrc_topics %>% select(Ntop)     %>% 
+                group_by(Ntop)   %>% 
+                tally(name = "Nt") -> tops
+
+# Normalise over-counting - a subject with 2 subject will appear twice so divide 
+# by 2 and so on.
+for(i in 1:7){
+  tops[i, 2] <- tops[i, 2]/i
+  subjs[i, 2] <- subjs[i, 2]/i
+}
+
+# Plot the result
+subjs %>% left_join(tops, by = c("Nsub" = "Ntop")) %>% 
+          ggplot(aes(x = Nsub)) + 
+          geom_col(aes(y = Ns, fill = "red"), alpha = 0.5, colour = "black") +
+          geom_col(aes(y = Nt, fill = "blue"), alpha = 0.5, colour = "black") + 
+          theme_bw() + scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red")) +
+          scale_y_log10(labels = comma) + labs(fill = "Research") +
+          ylab("Number of entries") + xlab("Number of research subjects/topics per projects")
+```
+
+
+Taking this into account for each project, this gives a breakdown of the 
 number of awards and amount awarded as ordered by the total awarded to each category:
 
 ```{r categories_from_topics1, echo = FALSE}
@@ -1725,12 +1753,86 @@ esrc_topics %>% select(category, AwardPounds, fracContrib)                      
                   col.names = c("Category", "Number of awards","Number %", "Award (£)",
                                 "Award %"))    
 ```
-The order here is broadly similar to that produced by the research topics though there are some note-able
+
+
+```{r compare_sub_top, echo = FALSE}
+esrc_subjects %>% select(category, AwardPounds, fracContrib)                      %>% 
+                  group_by(category)                                              %>% 
+                  summarise(Contribution = round(sum(fracContrib),1), 
+                            Amount = sum(fracContrib*AwardPounds))                %>%
+                  mutate(totContrib = sum(Contribution), totAmount = sum(Amount)) %>% 
+                  mutate(percContrib = round(Contribution/totContrib,2)*100,
+                         perAward = round(Amount/totAmount,2) * 100)              %>%
+                  select(-totContrib, -totAmount)                                 %>% 
+                  relocate(percContrib, .after = Contribution)                    %>% 
+                  relocate(perAward, .after = Amount)                             %>% 
+                  # mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
+                  arrange(desc(Amount)) -> subjects_sum
+
+esrc_topics %>% select(category, AwardPounds, fracContrib)                      %>% 
+                  group_by(category)                                              %>% 
+                  summarise(Contribution = round(sum(fracContrib),1), 
+                            Amount = sum(fracContrib*AwardPounds))                %>%
+                  mutate(totContrib = sum(Contribution), totAmount = sum(Amount)) %>% 
+                  mutate(percContrib = round(Contribution/totContrib,2)*100,
+                         perAward = round(Amount/totAmount,2) * 100)              %>%
+                    
+                  select(-totContrib, -totAmount)                                 %>% 
+                  relocate(percContrib, .after = Contribution)                    %>% 
+                  relocate(perAward, .after = Amount)                             %>% 
+                  # mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
+                  arrange(desc(Amount)) -> topics_sum
+
+subjects_sum$id <- 1:nrow(subjects_sum)
+topics_sum$id <- 1:nrow(topics_sum)
+
+subjects_sum %>% left_join(topics_sum, by = "category", suffix = c(".subject", ".topic")) -> combined
+
+```
+
+The order of projects categorised by research topics here are broadly similar to that produced by the research 
+subjects though there are some note-able
 differences. For instance, the "Uncategorised" items are much less and there some differences in the ordering
 - for the research subject categorisation "Education" was followed by "Development studies" while for research
-topics the order is the other way round.
+topics the order is the other way round. The graph below shows the difference in the order of the Topics in
+relation to the Subject ordering. The fact that the very first value differs causes a knock on effect (the
+order is done by the total amount awarded per category).
 
+```{r compare_order, echo = FALSE}
+combined %>% ggplot(aes(x = reorder(category, id.subject))) + 
+             geom_line(aes(y = id.subject, group = 1)) + geom_point(aes(y = id.subject, colour = "red")) + 
+             geom_line(aes(y = id.topic, group = 2)) + geom_point(aes(y = id.topic, colour = "blue")) + 
+             theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
+             xlab("Category") + ylab("Order id") + labs(colour = "Research") +
+             scale_color_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
+```
+The award amounts are broadly similar. There are many less uncategorised items using the research topics though
+there are a lot more others which are items that do not fit into chosen categories. There are smaller differences
+in Sociology, Development studies, Human geography and in other cases too.
 
+```{r compare_award, echo=FALSE}
+combined %>% ggplot(aes(x = reorder(category, id.subject))) + 
+             geom_col(aes(y = Amount.subject, fill = "red"), colour = "black", alpha = 0.25) + 
+             geom_col(aes(y = Amount.topic, fill = "blue"), colour = "black", alpha = 0.25) +  
+             scale_y_continuous(labels = comma) +
+             theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
+             xlab("Category") + ylab("Award (£)") + labs(fill = "Research") +
+             scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
+```
+
+In terms of the award numbers scaled by multiple subject/topic classifications there are some differences but I think
+these mainly lie in the Uncategorised and Other categories. There are also some differences in Development studies,
+Demography, Human geography, Science and Technology and Area Studies.
+
+```{r compare_number, echo=FALSE}
+combined %>% ggplot(aes(x = reorder(category, id.subject))) + 
+             geom_col(aes(y = Contribution.subject, fill = "red"), colour = "black", alpha = 0.25) + 
+             geom_col(aes(y = Contribution.topic, fill = "blue"), colour = "black", alpha = 0.25) +  
+             scale_y_log10(labels = comma) +
+             theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
+             xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
+             scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
+```
 
 The `Other` category dominates by award amount though the `Uncategorised` dominate by numbers. Looking at the `Other` category in more detail:
 

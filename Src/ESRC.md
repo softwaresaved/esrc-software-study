@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 06/06/22.
+**Last updated**: 07/06/22.
 
 -   <a href="#introduction" id="toc-introduction">Introduction</a>
 -   <a href="#overall-expenditure" id="toc-overall-expenditure">Overall
@@ -1043,9 +1043,14 @@ As with research subjects a project might be assigned more than one
 research topics, as previously done if a project is associated with n
 research topics then each of these will contribute 1/n to the
 classification count and will be assigned a contribution of
-Award_amount/n to each category. Taking this into account for each
-project, this gives a breakdown of the number of awards and amount
-awarded as ordered by the total awarded to each category:
+Award_amount/n to each category. We can compare the number of research
+subjects/topics assigned to each project in the graph below.
+
+![](ESRC_files/figure-gfm/cmp_subs_tos-1.png)<!-- -->
+
+Taking this into account for each project, this gives a breakdown of the
+number of awards and amount awarded as ordered by the total awarded to
+each category:
 
 | Category                                   | Number of awards | Number % | Award (£)   | Award % |
 |:-------------------------------------------|:-----------------|:---------|:------------|:--------|
@@ -1071,12 +1076,32 @@ awarded as ordered by the total awarded to each category:
 | Social work                                | 51.4             | 0        | 11,769,752  | 0       |
 | History                                    | 23.9             | 0        | 7,491,934   | 0       |
 
-The order here is broadly similar to that produced by the research
-topics though there are some note-able differences. For instance, the
-“Uncategorised” items are much less and there some differences in the
-ordering - for the research subject categorisation “Education” was
-followed by “Development studies” while for research topics the order is
-the other way round.
+The order of projects categorised by research topics here are broadly
+similar to that produced by the research subjects though there are some
+note-able differences. For instance, the “Uncategorised” items are much
+less and there some differences in the ordering - for the research
+subject categorisation “Education” was followed by “Development studies”
+while for research topics the order is the other way round. The graph
+below shows the difference in the order of the Topics in relation to the
+Subject ordering. The fact that the very first value differs causes a
+knock on effect (the order is done by the total amount awarded per
+category).
+
+![](ESRC_files/figure-gfm/compare_order-1.png)<!-- --> The award amounts
+are broadly similar. There are many less uncategorised items using the
+research topics though there are a lot more others which are items that
+do not fit into chosen categories. There are smaller differences in
+Sociology, Development studies, Human geography and in other cases too.
+
+![](ESRC_files/figure-gfm/compare_award-1.png)<!-- -->
+
+In terms of the award numbers scaled by multiple subject/topic
+classifications there are some differences but I think these mainly lie
+in the Uncategorised and Other categories. There are also some
+differences in Development studies, Demography, Human geography, Science
+and Technology and Area Studies.
+
+![](ESRC_files/figure-gfm/compare_number-1.png)<!-- -->
 
 The `Other` category dominates by award amount though the
 `Uncategorised` dominate by numbers. Looking at the `Other` category in
