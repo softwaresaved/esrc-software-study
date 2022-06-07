@@ -9,7 +9,6 @@ Economic and Social Research Council (ESRC) Data
     -   <a href="#expenditure-for-all-ukri-projects"
         id="toc-expenditure-for-all-ukri-projects">Expenditure for all UKRI
         projects</a>
-        -   <a href="#summary" id="toc-summary">Summary</a>
     -   <a href="#expenditure-for-active-ukri-projects-only"
         id="toc-expenditure-for-active-ukri-projects-only">Expenditure for
         active UKRI projects only</a>
@@ -168,6 +167,22 @@ The distribution of awards by research council.
 
 <img src="ESRC_files/figure-gfm/AwardDistrPerFundCouncil-1.png" title="Distribution of award size by research council." alt="Distribution of award size by research council."  />
 
+The overall stats for the award amount agree with the diagram above (not
+normally distributed).
+
+| Funding org |          Total |    Mean | Standard Dev |    Median | Mode      |
+|:------------|---------------:|--------:|-------------:|----------:|:----------|
+| AHRC        |  1,261,472,322 | 172,215 |      417,128 |    56,268 | 14,013    |
+| BBSRC       |  4,732,082,523 | 386,419 |      783,527 |   300,620 | 95,042    |
+| EPSRC       | 15,261,747,133 | 757,858 |    2,556,970 |   302,998 | 90,000    |
+| ESRC        |  3,501,153,022 | 442,121 |    1,702,051 |   130,045 | 100,000   |
+| Innovate UK | 11,939,854,589 | 479,224 |    5,357,990 |    95,816 | 5,000     |
+| MRC         |  6,267,924,420 | 759,564 |    1,099,714 |   432,424 | 290,658   |
+| NC3Rs       |     73,384,156 | 182,548 |      130,336 |   101,837 | 90,000    |
+| NERC        |  3,350,291,272 | 362,703 |    1,905,917 |   178,348 | 88,292    |
+| STFC        |  2,364,288,736 | 461,865 |      964,691 |   150,664 | 10,000    |
+| UKRI        |    391,911,795 | 997,231 |      308,931 | 1,069,796 | 1,196,146 |
+
 The graph with the values for each research council normalised:
 
 <img src="ESRC_files/figure-gfm/AwardDistrPerFundCouncilScaled-1.png" title="Distribution of award size by research council with the graphs scaled." alt="Distribution of award size by research council with the graphs scaled."  />
@@ -184,19 +199,6 @@ The same information by percent expenditure for each year.
 Although there seems to be historical data for the MRC, ESRC and STFC it
 seems to make more sense to start looking at the data from 2008 (this
 will be applied later).
-
-### Summary
-
--   Over the time covered by the data, EPSRC has been allocated the most
-    money but they also give the most awards so on average they do not
-    give the highest award.
--   The MRC have been given the third highest amount but, other than
-    UKRI, they give the second highest average award but they have the
-    longest set of records.
--   Of interest to this particular study the ESRC comes in fifth in the
-    total amount awarded and they give the fourth highest number of
-    awards so their average over the research councils comes third.
--   At a later point only data from 2008 and onwards will be considered.
 
 ## Expenditure for active UKRI projects only
 
@@ -248,6 +250,22 @@ average award:
 The distribution of awards by research council for active projects.
 
 <img src="ESRC_files/figure-gfm/ActiveAwardDistrPerFundCouncil-1.png" title="Distribution of award size by research council for active projects." alt="Distribution of award size by research council for active projects."  />
+
+with the stats for the above again showing in agreement with the graphs
+above that the distribution is not normal.
+
+| Funding org |         Total |      Mean | Standard Dev |    Median | Mode      |
+|:------------|--------------:|----------:|-------------:|----------:|:----------|
+| AHRC        |   443,171,889 |   365,051 |      843,084 |   176,362 | 5,040     |
+| BBSRC       | 1,366,783,223 |   624,672 |    1,571,541 |   406,369 | 100,279   |
+| EPSRC       | 6,303,746,217 | 1,385,439 |    3,568,116 |   519,026 | 300,000   |
+| ESRC        | 1,766,391,182 | 1,099,186 |    3,320,943 |   253,981 | 100,000   |
+| Innovate UK | 4,790,776,011 | 1,392,263 |   12,517,574 |   209,554 | 50,000    |
+| MRC         | 1,745,442,053 |   969,690 |    1,187,336 |   588,872 | 292,355   |
+| NC3Rs       |    20,698,414 |   155,627 |      121,866 |    94,402 | 90,000    |
+| NERC        | 1,443,216,024 |   731,112 |    3,878,590 |   341,740 | 89,114    |
+| STFC        |   740,988,391 |   572,192 |      973,439 |   242,684 | 78,040    |
+| UKRI        |   382,101,075 | 1,000,265 |      310,717 | 1,074,176 | 1,196,146 |
 
 With the densities normalised for each research council:
 

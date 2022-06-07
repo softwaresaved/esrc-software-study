@@ -124,7 +124,7 @@ gtrdat %>% filter(!is.na(AwardPounds))                                   %>%
            geom_col(colour="black",fill="red") +
            xlab("Funding organisation") + 
            ylab("Expenditure (million £s)") +
-           theme_bw() #+ scale_y_log10()
+           theme_bw()
           
 ```
 
@@ -148,14 +148,14 @@ The number of awards given by each council over the whole data period:
 
 ```{r NumberOfAwards_ByOrg, echo = FALSE, fig.alt = "Number of awards across each UKRI councils from the available data."}
 
-gtrdat %>% filter(!is.na(AwardPounds))                                   %>% 
-           select(FundingOrgName, AwardPounds)                           %>% 
-           group_by(FundingOrgName)                                      %>% 
-           mutate(N = n())                                               %>% 
-           ggplot(aes(x = FundingOrgName, y = N/1e6)) + 
-           geom_col(colour="red") +
+gtrdat %>%select(FundingOrgName)                           %>% 
+           group_by(FundingOrgName)                         %>% 
+           mutate(N = n())                                  %>% 
+           distinct(FundingOrgName, N)                      %>% 
+           ggplot(aes(x = FundingOrgName, y = N)) + 
+           geom_col(fill = "red", colour = "black") +
            xlab("Funding organisation") + 
-           ylab("Number of awards (millions)") +
+           ylab("Number of awards") +
            theme_bw() 
           
 ```
@@ -173,6 +173,7 @@ gtrdat %>% filter(!is.na(AwardPounds))                                       %>%
                     as.numeric(round(TotalExpenditure/TotalAwards)))         %>% 
            ggplot(aes(x = FundingOrgName, y = AvgAward)) + 
            geom_col(fill="red", colour = "black") +
+           scale_y_continuous(labels = comma) +
            xlab("Funding organisation") + 
            ylab("Average award given (£)") +
            theme_bw() 
@@ -207,8 +208,31 @@ gtrdat %>% filter(!is.na(AwardPounds) & AwardPounds > 0)                        
            geom_density(alpha = 0.1, na.rm = TRUE) +
            xlab("Size of award (£)") + 
            ylab("Distribution of awards") +
-           scale_x_log10() + labs(fill = "Funding Org") +
+           scale_x_log10(labels = comma) + labs(fill = "Funding Org") + 
            theme_bw() 
+```
+
+The overall stats  for the award amount agree with the diagram above (not normally distributed).
+
+```{r stats_summary, echo = FALSE}
+# From https://rpubs.com/Mentors_Ubiqum/using_mode
+mymode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+gtrdat %>% filter(!is.na(AwardPounds) & AwardPounds > 0)          %>% 
+           select(FundingOrgName, AwardPounds)                    %>% 
+           group_by(FundingOrgName)                               %>% 
+           summarise(Tot = sum(AwardPounds), 
+                     Mean = round(mean(AwardPounds)), 
+                     StandDev = round(sd(AwardPounds)),
+                     Median = round(median(AwardPounds)), 
+                     Mode = mymode(AwardPounds))                 %>% 
+           mutate(across(where(is.numeric), 
+                         ~ format(., big.mark = ",")))           %>% 
+           kbl(format="pipe", align = c("l",rep("r", 4)), 
+               col.names = c("Funding org", "Total", "Mean", "Standard Dev", "Median", "Mode"))  
 ```
 
 The graph with the values for each research council normalised:
@@ -223,7 +247,7 @@ gtrdat %>% filter(!is.na(AwardPounds) & AwardPounds > 0)                        
            geom_density(alpha = 0.08, na.rm = TRUE) +
            xlab("Size of award (£)") + 
            ylab("Distribution of awards") +
-           scale_x_log10() + labs(fill = "Funding Org") +
+           scale_x_log10(labels = comma) + labs(fill = "Funding Org") +
            theme_bw() 
 ```
 
@@ -269,13 +293,6 @@ gtrdat %>% filter(!is.na(AwardPounds)  & !is.na(StartDate))              %>%
 Although there seems to be historical data for the MRC, ESRC and STFC it seems to make more sense
 to start looking at the data from 2008 (this will be applied later).
 
-### Summary
-
-* Over the time covered by the data, EPSRC has been allocated the most money but they also give the most awards so on average they do not give the highest award.
-* The MRC have been given the third highest amount but, other than UKRI, they give the second highest average award but they have the longest set of records.
-* Of interest to this particular study the ESRC comes in fifth in the total amount awarded and they give the fourth highest number of awards so their average over the research councils comes third.
-* At a later point only data from 2008 and onwards will be considered.
-
 ## Expenditure for active UKRI projects only 
 
 The graph below only contains values for currently active projects, i.e. whose end date extends beyond
@@ -292,7 +309,7 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))              %>%
            geom_col(colour="black",fill="red") +
            xlab("Funding Organisation") + 
            ylab("Expenditure (in million of pounds)") +
-           theme_bw() #+ scale_y_log10()
+           theme_bw() 
           
 ```
 
@@ -316,14 +333,16 @@ The number of awards given by each council for active projects:
 
 ```{r ActiveNumberOfAwards_ByOrg, echo = FALSE, fig.alt = "Number of awards across each UKRI councils for active projects from the available data."}
 
-gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))              %>% 
-           select(FundingOrgName, AwardPounds)                           %>% 
-           group_by(FundingOrgName)                                      %>% 
-           mutate(N = n())                                               %>% 
-           ggplot(aes(x = FundingOrgName, y = N/1e6)) + 
-           geom_col(colour="red") +
+gtrdat %>% filter(Status == "Active")                %>% 
+           select(FundingOrgName)                    %>% 
+           group_by(FundingOrgName)                  %>% 
+           mutate(N = n())                           %>% 
+           distinct(FundingOrgName, N)               %>% 
+           ggplot(aes(x = FundingOrgName, y = N)) + 
+           geom_col(fill="red", colour = "black") +
+           scale_y_continuous(labels = comma) +
            xlab("Funding organisation") + 
-           ylab("Number of awards (millions)") +
+           ylab("Number of awards") +
            theme_bw() 
           
 ```
@@ -340,6 +359,7 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds))                  %>%
            mutate(AvgAward = 
                     as.numeric(round(TotalExpenditure/TotalAwards)))         %>% 
            ggplot(aes(x = FundingOrgName, y = AvgAward)) + 
+           scale_y_continuous(labels = comma) +
            geom_col(fill="red", colour = "black") +
            xlab("Funding organisation") + 
            ylab("Average award given (£)") +
@@ -375,8 +395,32 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds) & AwardPounds > 0)   
            geom_density( alpha = 0.1, na.rm = TRUE) +
            xlab("Size of award (£)") + 
            ylab("Distribution of awards") +
-           scale_x_log10() + labs(fill = "Funding Org") +
+           scale_x_log10(labels = comma) + labs(fill = "Funding Org") +
            theme_bw() 
+```
+
+with the stats for the above again showing in agreement with the graphs above that the distribution is not normal.
+
+```{r stats_summary_active, echo = FALSE}
+# From https://rpubs.com/Mentors_Ubiqum/using_mode
+mymode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+gtrdat %>% filter(Status == "Active" &
+                  !is.na(AwardPounds) & AwardPounds > 0)          %>% 
+           select(FundingOrgName, AwardPounds)                    %>% 
+           group_by(FundingOrgName)                               %>% 
+           summarise(Tot = sum(AwardPounds), 
+                     Mean = round(mean(AwardPounds)), 
+                     StandDev = round(sd(AwardPounds)),
+                     Median = round(median(AwardPounds)), 
+                     Mode = mymode(AwardPounds))                 %>% 
+           mutate(across(where(is.numeric), 
+                         ~ format(., big.mark = ",")))           %>% 
+           kbl(format="pipe", align = c("l",rep("r", 4)), 
+               col.names = c("Funding org", "Total", "Mean", "Standard Dev", "Median", "Mode"))  
 ```
 
 With the densities normalised for each research council:
@@ -389,7 +433,7 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds) & AwardPounds > 0)   
            geom_density( alpha = 0.1, na.rm = TRUE) +
            xlab("Size of award (£)") + 
            ylab("Distribution of awards") +
-           scale_x_log10() + labs(fill = "Funding Org") +
+           scale_x_log10(labels = comma) + labs(fill = "Funding Org") +
            theme_bw() 
 ```
 
@@ -408,6 +452,7 @@ gtrdat %>% filter(Status == "Active" & !is.na(AwardPounds) &
            filter(!is.na(TotalExpenditure) & TotalExpenditure > 0)       %>% 
            ggplot(aes(x = year, y = TotalExpenditure, fill = FundingOrgName)) + 
            geom_col(colour="black", na.rm = TRUE) +
+           scale_y_continuous(labels = comma) +
            xlab("Year") + labs(fill = "Funding Org") +
            ylab("Expenditure (million of £s)") +
            theme_bw() 
