@@ -686,7 +686,7 @@ esrcdat %>% select(StartDate, EndDate, ProjectCategory, AwardPounds) %>%
             ggplot(aes(x = as.numeric(grant_length), y = AwardPounds, colour = ProjectCategory)) + 
             geom_point(alpha = 0.25) + 
             ylab("Awards (£)") + xlab("Award Length (weeks)") +# scale_y_log10() +
-            facet_wrap(vars(ProjectCategory)) +
+            facet_wrap(vars(ProjectCategory)) + scale_y_continuous(labels = comma) +
             labs(fill = "Project Category") + theme_bw()
 ```
 
