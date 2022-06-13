@@ -667,7 +667,7 @@ esrcdat %>% select(StartDate, EndDate, ProjectCategory)                         
             mutate(n = n())                                                     %>% 
             distinct(ProjectCategory, grant_length, n)                          %>% 
             arrange(desc(n))                                                    %>% 
-              kbl(format="pipe", align = c("l","r","r"), 
+            kbl(format="pipe", align = c("l","r","r"), 
                 col.names = c("Project category", "Grant length", 
                                 "Number of awards")) 
 
@@ -745,7 +745,7 @@ esrcdat %>% filter(Status == "Active")                                          
   
 ```
 
-As a log1p (ln(x + 1)) plot:
+Plot of the distribution:
 
 ```{r award_lengths_active_log, echo = FALSE, fig.alt = "Histogram as a log plot of the length distribution for active projects only."}
 
@@ -758,7 +758,23 @@ esrcdat %>% filter(Status == "Active")                                          
             geom_histogram(binwidth = 28, colour="black", na.rm = TRUE) + 
             ylab("Number of Awards") + xlab("Award Length (days)") +
             labs(fill = "Project Category") + theme_bw() +
-            scale_y_continuous(trans = "log1p")
+            scale_y_continuous()
+```
+
+The main peaks happen at 1460 days (4 years), 1095 days (3 years) and 364 days (1 year) respectively.
+
+```{r plot_active_grantLength, echo = FALSE}
+esrcdat %>% filter(Status == "Active")                                          %>% 
+            select(StartDate, EndDate, ProjectCategory)                         %>% 
+            filter(!is.na(StartDate) & !is.na(EndDate))                         %>% 
+            mutate(grant_length = difftime(EndDate, StartDate,units = "days"))  %>%
+            group_by(grant_length)                                              %>% 
+            mutate(n = n())                                                     %>% 
+            distinct(ProjectCategory, grant_length, n)                          %>% 
+            arrange(desc(n))                                                    %>% 
+            kbl(format="pipe", align = c("l","r","r"), 
+                col.names = c("Project category", "Grant length", 
+                                "Number of awards")) 
 ```
 
 Where the longest awards lie in term of days by project category is tabulated below.
