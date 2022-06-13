@@ -637,21 +637,40 @@ esrcdat %>% select(Start = StartDate, End = EndDate, Category = ProjectCategory)
   
 ```
  
-The same info with a y log1p (ln(x + 1)) scale.
+The same info but as days - we have peaks at 1460 days (4 years), 364 days (year) and 1095 days ( 3 years).
 
 ```{r award_lengths_log, echo = FALSE, fig.alt = "Histogram of the length distribution for all projects."}
 
 # The as.numeric() is a workaround for https://github.com/tidyverse/ggplot2/issues/1377
 esrcdat %>% select(StartDate, EndDate, ProjectCategory)                           %>% 
             filter(!is.na(StartDate) & !is.na(EndDate) )                          %>% 
-            mutate(grant_length = difftime(EndDate, StartDate,units = "weeks"))   %>% 
-            filter(grant_length >= 1) %>% 
+            mutate(grant_length = difftime(EndDate, StartDate,units = "days"))    %>% 
+            filter(grant_length >= 1)                                             %>% 
             ggplot(aes(x = as.numeric(grant_length), fill = ProjectCategory)) + 
             geom_histogram(binwidth = 28, colour="black", na.rm = TRUE) + 
-            ylab("Number of Awards") + xlab("Award Length (weeks)") +
-            labs(fill = "Project Category") + theme_bw() + 
+            ylab("Number of Awards") + xlab("Award Length (days)") +
+            labs(fill = "Project Category") + theme_bw() #+ 
             #scale_y_log10(oob = scales::oob_censor_any)
-            scale_y_continuous(trans = "log1p", oob = scales::oob_squish_any)
+            #scale_y_continuous(labels = comma, trans = "log1p", oob = scales::oob_squish_any)
+```
+
+Here is the information tabulated by category and the grant length.
+
+```{r tabulate_lengths, echo = FALSE}
+
+esrcdat %>% select(StartDate, EndDate, ProjectCategory)                         %>% 
+            filter(!is.na(StartDate) & !is.na(EndDate) )                        %>% 
+            mutate(grant_length = difftime(EndDate, StartDate,units = "days"))  %>% 
+            filter(grant_length >= 1)                                           %>% 
+            group_by(grant_length, ProjectCategory)                             %>% 
+            #group_by(grant_length)                                              %>% 
+            mutate(n = n())                                                     %>% 
+            distinct(ProjectCategory, grant_length, n)                          %>% 
+            arrange(desc(n))                                                    %>% 
+              kbl(format="pipe", align = c("l","r","r"), 
+                col.names = c("Project category", "Grant length", 
+                                "Number of awards")) 
+
 ```
 
 Look at the award given by the length of project by project category for all projects.

@@ -340,9 +340,1715 @@ The average award length:
 | Research Grant |          123 |                        64 |               0 |             557 |
 | Fellowship     |           72 |                        42 |               4 |             287 |
 
-The same info with a y log1p (ln(x + 1)) scale.
+The same info but as days - we have peaks at 1460 days (4 years), 364
+days (year) and 1095 days ( 3 years).
 
 <img src="ESRC_files/figure-gfm/award_lengths_log-1.png" title="Histogram of the length distribution for all projects." alt="Histogram of the length distribution for all projects."  />
+
+Here is the information tabulated by category and the grant length.
+
+| Project category | Grant length | Number of awards |
+|:-----------------|-------------:|-----------------:|
+| Studentship      |    1460 days |              749 |
+| Fellowship       |     364 days |              406 |
+| Research Grant   |    1095 days |              385 |
+| Studentship      |    1095 days |              345 |
+| Research Grant   |     364 days |              340 |
+| Research Grant   |     729 days |              305 |
+| Studentship      |    1277 days |              200 |
+| Research Grant   |    1460 days |              171 |
+| Research Grant   |    1094 days |              170 |
+| Studentship      |    1094 days |              159 |
+| Research Grant   |     730 days |              150 |
+| Research Grant   |     545 days |              112 |
+| Fellowship       |     365 days |               99 |
+| Research Grant   |    1276 days |               87 |
+| Research Grant   |     546 days |               86 |
+| Studentship      |    1552 days |               85 |
+| Studentship      |    1187 days |               84 |
+| Research Grant   |     548 days |               80 |
+| Research Grant   |    1825 days |               76 |
+| Studentship      |    1464 days |               74 |
+| Research Grant   |    1277 days |               72 |
+| Research Grant   |     365 days |               65 |
+| Research Grant   |     547 days |               64 |
+| Studentship      |    1461 days |               62 |
+| Research Grant   |     911 days |               62 |
+| Training Grant   |     913 days |               59 |
+| Studentship      |    1186 days |               56 |
+| Research Grant   |     912 days |               53 |
+| Studentship      |    1642 days |               52 |
+| Training Grant   |    1278 days |               50 |
+| Studentship      |    1368 days |               50 |
+| Fellowship       |     730 days |               46 |
+| Research Grant   |     456 days |               45 |
+| Fellowship       |     729 days |               42 |
+| Research Grant   |     425 days |               42 |
+| Studentship      |    1463 days |               42 |
+| Fellowship       |    1095 days |               40 |
+| Research Grant   |     913 days |               39 |
+| Studentship      |    1825 days |               39 |
+| Research Grant   |     152 days |               38 |
+| Research Grant   |    1278 days |               38 |
+| Research Grant   |     455 days |               37 |
+| Research Grant   |     395 days |               37 |
+| Studentship      |    1551 days |               36 |
+| Research Grant   |     637 days |               35 |
+| Studentship      |    1468 days |               33 |
+| Research Grant   |     486 days |               31 |
+| Research Grant   |     821 days |               30 |
+| Training Grant   |     182 days |               30 |
+| Research Grant   |     668 days |               30 |
+| Studentship      |    1276 days |               29 |
+| Research Grant   |     638 days |               29 |
+| Training Grant   |     548 days |               28 |
+| Research Grant   |    1368 days |               28 |
+| Studentship      |    2190 days |               28 |
+| Studentship      |    1521 days |               27 |
+| Training Grant   |    1460 days |               27 |
+| Studentship      |    1471 days |               27 |
+| Research Grant   |    1826 days |               26 |
+| Research Grant   |    1003 days |               26 |
+| Fellowship       |     456 days |               25 |
+| Research Grant   |    1187 days |               25 |
+| Research Grant   |     820 days |               25 |
+| Research Grant   |    1279 days |               24 |
+| Studentship      |    1583 days |               24 |
+| Studentship      |    1096 days |               24 |
+| Research Grant   |     910 days |               24 |
+| Research Grant   |     211 days |               24 |
+| Studentship      |    1097 days |               24 |
+| Research Grant   |     517 days |               24 |
+| Research Grant   |     272 days |               24 |
+| Research Grant   |     669 days |               23 |
+| Studentship      |    1099 days |               22 |
+| Research Grant   |     607 days |               22 |
+| Studentship      |    1733 days |               21 |
+| Research Grant   |    1186 days |               21 |
+| Research Grant   |    1185 days |               21 |
+| Studentship      |    1218 days |               21 |
+| Research Grant   |     608 days |               20 |
+| Research Grant   |    1216 days |               20 |
+| Research Grant   |     426 days |               20 |
+| Research Grant   |     180 days |               20 |
+| Research Grant   |     760 days |               19 |
+| Research Grant   |    1307 days |               19 |
+| Research Grant   |     457 days |               18 |
+| Studentship      |    2921 days |               18 |
+| Research Grant   |     577 days |               18 |
+| Research Grant   |     454 days |               18 |
+| Research Grant   |     303 days |               17 |
+| Research Grant   |     334 days |               17 |
+| Research Grant   |     790 days |               17 |
+| Research Grant   |     576 days |               17 |
+| Research Grant   |     759 days |               17 |
+| Fellowship       |    1094 days |               17 |
+| Research Grant   |     852 days |               17 |
+| Studentship      |    1470 days |               17 |
+| Research Grant   |    1033 days |               17 |
+| Studentship      |    1611 days |               16 |
+| Research Grant   |     183 days |               16 |
+| Research Grant   |    1248 days |               16 |
+| Research Grant   |     242 days |               16 |
+| Studentship      |    1467 days |               16 |
+| Research Grant   |     822 days |               16 |
+| Studentship      |    1307 days |               16 |
+| Research Grant   |     699 days |               15 |
+| Research Grant   |    1217 days |               15 |
+| Research Grant   |     850 days |               15 |
+| Training Grant   |    1643 days |               15 |
+| Studentship      |    1477 days |               15 |
+| Training Grant   |    1095 days |               15 |
+| Research Grant   |    1399 days |               15 |
+| Research Grant   |    1125 days |               15 |
+| Research Grant   |     942 days |               14 |
+| Research Grant   |    1552 days |               14 |
+| Studentship      |    1558 days |               14 |
+| Research Grant   |     639 days |               14 |
+| Fellowship       |     545 days |               14 |
+| Studentship      |    1826 days |               14 |
+| Research Grant   |     394 days |               14 |
+| Training Grant   |    3651 days |               14 |
+| Research Grant   |     851 days |               14 |
+| Research Grant   |     333 days |               14 |
+| Research Grant   |     914 days |               14 |
+| Fellowship       |     546 days |               14 |
+| Fellowship       |      91 days |               14 |
+| Research Grant   |     274 days |               13 |
+| Research Grant   |    1156 days |               13 |
+| Research Grant   |     487 days |               13 |
+| Research Grant   |    1126 days |               13 |
+| Studentship      |    1246 days |               13 |
+| Studentship      |    1399 days |               13 |
+| Studentship      |    1641 days |               13 |
+| Research Grant   |     484 days |               13 |
+| Research Grant   |    1642 days |               13 |
+| Research Grant   |    1917 days |               13 |
+| Studentship      |    1338 days |               13 |
+| Research Grant   |     606 days |               12 |
+| Studentship      |    2191 days |               12 |
+| Research Grant   |    1215 days |               12 |
+| Studentship      |    1430 days |               12 |
+| Research Grant   |    1369 days |               12 |
+| Research Grant   |    1154 days |               12 |
+| Research Grant   |      30 days |               12 |
+| Studentship      |    1491 days |               12 |
+| Research Grant   |    1643 days |               12 |
+| Fellowship       |     547 days |               12 |
+| Studentship      |    1156 days |               11 |
+| Training Grant   |    1277 days |               11 |
+| Research Grant   |     181 days |               11 |
+| Fellowship       |     425 days |               11 |
+| Research Grant   |    1338 days |               11 |
+| Research Grant   |     761 days |               11 |
+| Research Grant   |     182 days |               11 |
+| Research Grant   |    1034 days |               11 |
+| Research Grant   |    1002 days |               11 |
+| Research Grant   |    1246 days |               11 |
+| Research Grant   |     974 days |               10 |
+| Studentship      |    1475 days |               10 |
+| Research Grant   |     973 days |               10 |
+| Research Grant   |     882 days |               10 |
+| Training Grant   |    4019 days |               10 |
+| Studentship      |    1185 days |               10 |
+| Research Grant   |     670 days |               10 |
+| Research Grant   |     241 days |               10 |
+| Research Grant   |     819 days |               10 |
+| Research Grant   |     791 days |               10 |
+| Research Grant   |     273 days |                9 |
+| Research Grant   |     943 days |                9 |
+| Research Grant   |     698 days |                9 |
+| Research Grant   |     549 days |                9 |
+| Research Grant   |    1218 days |                9 |
+| Fellowship       |     182 days |                9 |
+| Studentship      |     364 days |                9 |
+| Research Grant   |     423 days |                9 |
+| Research Grant   |     789 days |                9 |
+| Research Grant   |    1096 days |                9 |
+| Research Grant   |     609 days |                9 |
+| Fellowship       |     121 days |                9 |
+| Research Grant   |     453 days |                9 |
+| Studentship      |    1643 days |                9 |
+| Fellowship       |     395 days |                9 |
+| Research Grant   |     578 days |                9 |
+| Studentship      |    1672 days |                9 |
+| Research Grant   |    1005 days |                9 |
+| Studentship      |    1435 days |                9 |
+| Studentship      |    1474 days |                9 |
+| Research Grant   |     485 days |                9 |
+| Studentship      |    1217 days |                9 |
+| Research Grant   |    1582 days |                9 |
+| Studentship      |    1476 days |                9 |
+| Studentship      |    1278 days |                8 |
+| Research Grant   |     515 days |                8 |
+| Studentship      |     638 days |                8 |
+| Research Grant   |    1247 days |                8 |
+| Studentship      |    2556 days |                8 |
+| Research Grant   |     244 days |                8 |
+| Training Grant   |    1005 days |                8 |
+| Research Grant   |    1641 days |                8 |
+| Research Grant   |    1519 days |                8 |
+| Fellowship       |     183 days |                8 |
+| Research Grant   |     849 days |                8 |
+| Studentship      |    1465 days |                8 |
+| Fellowship       |     455 days |                8 |
+| Studentship      |    1104 days |                7 |
+| Studentship      |    1281 days |                7 |
+| Research Grant   |    1275 days |                7 |
+| Studentship      |    2373 days |                7 |
+| Research Grant   |    1370 days |                7 |
+| Research Grant   |    2190 days |                7 |
+| Research Grant   |     518 days |                7 |
+| Research Grant   |    1309 days |                7 |
+| Studentship      |    1101 days |                7 |
+| Studentship      |    1734 days |                7 |
+| Research Grant   |    1337 days |                7 |
+| Fellowship       |     334 days |                7 |
+| Studentship      |    1466 days |                7 |
+| Research Grant   |     424 days |                7 |
+| Studentship      |    1582 days |                7 |
+| Studentship      |    1644 days |                7 |
+| Research Grant   |    1764 days |                7 |
+| Studentship      |    1764 days |                7 |
+| Studentship      |    1559 days |                7 |
+| Fellowship       |     486 days |                7 |
+| Studentship      |     729 days |                7 |
+| Research Grant   |     941 days |                7 |
+| Research Grant   |     514 days |                7 |
+| Training Grant   |     730 days |                7 |
+| Research Grant   |    2191 days |                7 |
+| Research Grant   |     853 days |                7 |
+| Research Grant   |     881 days |                7 |
+| Research Grant   |    1371 days |                6 |
+| Fellowship       |     426 days |                6 |
+| Fellowship       |     821 days |                6 |
+| Studentship      |    1472 days |                6 |
+| Studentship      |    1459 days |                6 |
+| Fellowship       |     122 days |                6 |
+| Research Grant   |     516 days |                6 |
+| Studentship      |    1283 days |                6 |
+| Studentship      |    1597 days |                6 |
+| Fellowship       |      60 days |                6 |
+| Research Grant   |     305 days |                6 |
+| Research Grant   |     667 days |                6 |
+| Research Grant   |    1340 days |                6 |
+| Studentship      |    1648 days |                6 |
+| Research Grant   |     393 days |                6 |
+| Research Grant   |    2007 days |                6 |
+| Fellowship       |     457 days |                6 |
+| Studentship      |    1098 days |                6 |
+| Studentship      |    1442 days |                6 |
+| Research Grant   |    1155 days |                6 |
+| Research Grant   |     213 days |                6 |
+| Research Grant   |    1065 days |                6 |
+| Research Grant   |     972 days |                6 |
+| Research Grant   |     595 days |                6 |
+| Fellowship       |     454 days |                6 |
+| Research Grant   |    1064 days |                6 |
+| Research Grant   |    1035 days |                6 |
+| Fellowship       |     607 days |                6 |
+| Studentship      |    1856 days |                6 |
+| Research Grant   |    1429 days |                6 |
+| Research Grant   |    1491 days |                6 |
+| Research Grant   |     121 days |                6 |
+| Studentship      |    1653 days |                6 |
+| Studentship      |    1126 days |                5 |
+| Research Grant   |     151 days |                5 |
+| Studentship      |     730 days |                5 |
+| Training Grant   |    3654 days |                5 |
+| Research Grant   |    1551 days |                5 |
+| Research Grant   |     883 days |                5 |
+| Studentship      |    1550 days |                5 |
+| Studentship      |    2555 days |                5 |
+| Research Grant   |    2008 days |                5 |
+| Research Grant   |    2099 days |                5 |
+| Research Grant   |    1398 days |                5 |
+| Research Grant   |     396 days |                5 |
+| Studentship      |    1374 days |                5 |
+| Fellowship       |     272 days |                5 |
+| Fellowship       |    1460 days |                5 |
+| Fellowship       |     911 days |                5 |
+| Studentship      |    1673 days |                5 |
+| Fellowship       |     576 days |                5 |
+| Studentship      |    1164 days |                5 |
+| Studentship      |    1656 days |                5 |
+| Research Grant   |     879 days |                5 |
+| Research Grant   |    1184 days |                5 |
+| Research Grant   |    1916 days |                5 |
+| Research Grant   |     122 days |                5 |
+| Fellowship       |     180 days |                5 |
+| Training Grant   |    1551 days |                5 |
+| Studentship      |    1917 days |                5 |
+| Fellowship       |     487 days |                5 |
+| Research Grant   |    1461 days |                5 |
+| Research Grant   |     700 days |                5 |
+| Research Grant   |    1613 days |                4 |
+| Studentship      |     425 days |                4 |
+| Studentship      |    2007 days |                4 |
+| Research Grant   |    1432 days |                4 |
+| Studentship      |     365 days |                4 |
+| Studentship      |    1190 days |                4 |
+| Research Grant   |     697 days |                4 |
+| Fellowship       |    1277 days |                4 |
+| Research Grant   |      88 days |                4 |
+| Research Grant   |     728 days |                4 |
+| Research Grant   |    1063 days |                4 |
+| Research Grant   |    1734 days |                4 |
+| Studentship      |    1456 days |                4 |
+| Research Grant   |     559 days |                4 |
+| Studentship      |    1549 days |                4 |
+| Studentship      |    1482 days |                4 |
+| Studentship      |    1556 days |                4 |
+| Studentship      |    1528 days |                4 |
+| Fellowship       |     181 days |                4 |
+| Studentship      |    1670 days |                4 |
+| Training Grant   |    1826 days |                4 |
+| Fellowship       |     394 days |                4 |
+| Research Grant   |    1490 days |                4 |
+| Research Grant   |    1856 days |                4 |
+| Research Grant   |    1004 days |                4 |
+| Studentship      |    1194 days |                4 |
+| Research Grant   |     150 days |                4 |
+| Research Grant   |     532 days |                4 |
+| Research Grant   |     640 days |                4 |
+| Research Grant   |    1430 days |                4 |
+| Studentship      |    1102 days |                4 |
+| Fellowship       |     913 days |                4 |
+| Studentship      |    1490 days |                4 |
+| Research Grant   |     744 days |                4 |
+| Research Grant   |     880 days |                4 |
+| Studentship      |    1581 days |                4 |
+| Fellowship       |     152 days |                4 |
+| Studentship      |    1557 days |                4 |
+| Studentship      |    1505 days |                4 |
+| Studentship      |    1703 days |                4 |
+| Studentship      |    1650 days |                4 |
+| Fellowship       |    1216 days |                4 |
+| Research Grant   |     443 days |                4 |
+| Studentship      |    1795 days |                4 |
+| Studentship      |    1286 days |                4 |
+| Studentship      |    1478 days |                4 |
+| Training Grant   |    2009 days |                4 |
+| Studentship      |    1567 days |                4 |
+| Research Grant   |      91 days |                4 |
+| Research Grant   |     427 days |                4 |
+| Research Grant   |     335 days |                4 |
+| Research Grant   |     302 days |                4 |
+| Fellowship       |     424 days |                4 |
+| Research Grant   |     336 days |                4 |
+| Fellowship       |     242 days |                4 |
+| Studentship      |    1828 days |                4 |
+| Fellowship       |     274 days |                4 |
+| Research Grant   |    1644 days |                4 |
+| Studentship      |    1106 days |                4 |
+| Research Grant   |    1310 days |                3 |
+| Research Grant   |     758 days |                3 |
+| Studentship      |    1651 days |                3 |
+| Research Grant   |     786 days |                3 |
+| Research Grant   |    1124 days |                3 |
+| Training Grant   |     274 days |                3 |
+| Studentship      |    1527 days |                3 |
+| Research Grant   |     837 days |                3 |
+| Studentship      |    1322 days |                3 |
+| Fellowship       |    1003 days |                3 |
+| Research Grant   |    1339 days |                3 |
+| Research Grant   |     212 days |                3 |
+| Research Grant   |    1459 days |                3 |
+| Studentship      |    1379 days |                3 |
+| Studentship      |    1553 days |                3 |
+| Research Grant   |    1400 days |                3 |
+| Studentship      |    1577 days |                3 |
+| Research Grant   |    1157 days |                3 |
+| Research Grant   |     239 days |                3 |
+| Research Grant   |    2009 days |                3 |
+| Fellowship       |    1217 days |                3 |
+| Studentship      |    1345 days |                3 |
+| Research Grant   |     634 days |                3 |
+| Studentship      |    1462 days |                3 |
+| Studentship      |    1248 days |                3 |
+| Research Grant   |     435 days |                3 |
+| Fellowship       |     396 days |                3 |
+| Training Grant   |     364 days |                3 |
+| Research Grant   |     399 days |                3 |
+| Studentship      |    1337 days |                3 |
+| Fellowship       |     851 days |                3 |
+| Training Grant   |    1401 days |                3 |
+| Studentship      |    1900 days |                3 |
+| Research Grant   |     818 days |                3 |
+| Fellowship       |      29 days |                3 |
+| Studentship      |    1125 days |                3 |
+| Training Grant   |     365 days |                3 |
+| Research Grant   |      61 days |                3 |
+| Studentship      |    1634 days |                3 |
+| Fellowship       |      88 days |                3 |
+| Research Grant   |     579 days |                3 |
+| Studentship      |    1565 days |                3 |
+| Research Grant   |     908 days |                3 |
+| Research Grant   |    1672 days |                3 |
+| Studentship      |    1613 days |                3 |
+| Studentship      |    1365 days |                3 |
+| Research Grant   |     465 days |                3 |
+| Studentship      |    1560 days |                3 |
+| Training Grant   |    1370 days |                3 |
+| Studentship      |    1285 days |                3 |
+| Studentship      |    3103 days |                3 |
+| Studentship      |    1245 days |                3 |
+| Training Grant   |     273 days |                3 |
+| Research Grant   |     773 days |                3 |
+| Research Grant   |     405 days |                3 |
+| Studentship      |    1841 days |                3 |
+| Research Grant   |     683 days |                3 |
+| Studentship      |    1288 days |                3 |
+| Studentship      |    1473 days |                3 |
+| Studentship      |    1533 days |                3 |
+| Studentship      |    1103 days |                3 |
+| Research Grant   |     593 days |                3 |
+| Training Grant   |     671 days |                3 |
+| Research Grant   |     689 days |                3 |
+| Studentship      |    2313 days |                3 |
+| Studentship      |    1192 days |                3 |
+| Studentship      |    1295 days |                3 |
+| Research Grant   |     347 days |                3 |
+| Research Grant   |    1110 days |                3 |
+| Fellowship       |     393 days |                3 |
+| Research Grant   |    1735 days |                3 |
+| Research Grant   |     366 days |                3 |
+| Research Grant   |    2006 days |                3 |
+| Research Grant   |    1674 days |                3 |
+| Research Grant   |      90 days |                3 |
+| Studentship      |    1193 days |                3 |
+| Studentship      |    1003 days |                3 |
+| Fellowship       |    1279 days |                3 |
+| Fellowship       |     517 days |                3 |
+| Fellowship       |     423 days |                3 |
+| Research Grant   |    1978 days |                3 |
+| Research Grant   |    2373 days |                3 |
+| Studentship      |    1646 days |                3 |
+| Research Grant   |     868 days |                3 |
+| Studentship      |    1740 days |                3 |
+| Studentship      |    1563 days |                3 |
+| Studentship      |    1372 days |                3 |
+| Studentship      |    1547 days |                3 |
+| Fellowship       |    1276 days |                3 |
+| Fellowship       |     333 days |                3 |
+| Studentship      |    1561 days |                3 |
+| Studentship      |    1309 days |                3 |
+| Fellowship       |     912 days |                3 |
+| Studentship      |    1165 days |                3 |
+| Studentship      |    1279 days |                3 |
+| Research Grant   |    1245 days |                3 |
+| Studentship      |    1604 days |                3 |
+| Research Grant   |     745 days |                3 |
+| Studentship      |    1649 days |                3 |
+| Studentship      |    1289 days |                3 |
+| Research Grant   |    1324 days |                3 |
+| Fellowship       |     637 days |                3 |
+| Research Grant   |     472 days |                3 |
+| Research Grant   |     750 days |                2 |
+| Research Grant   |     685 days |                2 |
+| Research Grant   |    1175 days |                2 |
+| Studentship      |     370 days |                2 |
+| Research Grant   |    1018 days |                2 |
+| Fellowship       |     243 days |                2 |
+| Studentship      |    1640 days |                2 |
+| Studentship      |    1754 days |                2 |
+| Studentship      |    1616 days |                2 |
+| Fellowship       |     606 days |                2 |
+| Research Grant   |    1457 days |                2 |
+| Studentship      |    1396 days |                2 |
+| Fellowship       |    1367 days |                2 |
+| Studentship      |    1541 days |                2 |
+| Research Grant   |     370 days |                2 |
+| Studentship      |    2282 days |                2 |
+| Studentship      |    1093 days |                2 |
+| Studentship      |    1695 days |                2 |
+| Fellowship       |    1278 days |                2 |
+| Studentship      |    2155 days |                2 |
+| Fellowship       |     717 days |                2 |
+| Studentship      |    1236 days |                2 |
+| Research Grant   |    1733 days |                2 |
+| Fellowship       |    1338 days |                2 |
+| Research Grant   |     854 days |                2 |
+| Research Grant   |     944 days |                2 |
+| Research Grant   |     671 days |                2 |
+| Fellowship       |     778 days |                2 |
+| Studentship      |    1369 days |                2 |
+| Studentship      |    1710 days |                2 |
+| Research Grant   |     806 days |                2 |
+| Research Grant   |    1915 days |                2 |
+| Research Grant   |     766 days |                2 |
+| Studentship      |    2042 days |                2 |
+| Research Grant   |     795 days |                2 |
+| Research Grant   |    1020 days |                2 |
+| Studentship      |    2799 days |                2 |
+| Research Grant   |     898 days |                2 |
+| Studentship      |    1141 days |                2 |
+| Studentship      |    1636 days |                2 |
+| Studentship      |    1747 days |                2 |
+| Research Grant   |     451 days |                2 |
+| Fellowship       |     485 days |                2 |
+| Fellowship       |    1032 days |                2 |
+| Studentship      |    1545 days |                2 |
+| Research Grant   |     412 days |                2 |
+| Studentship      |    1151 days |                2 |
+| Research Grant   |     459 days |                2 |
+| Research Grant   |    1318 days |                2 |
+| Training Grant   |     487 days |                2 |
+| Training Grant   |    2374 days |                2 |
+| Research Grant   |     656 days |                2 |
+| Training Grant   |    3834 days |                2 |
+| Research Grant   |    1012 days |                2 |
+| Studentship      |    1678 days |                2 |
+| Studentship      |    1486 days |                2 |
+| Studentship      |    1446 days |                2 |
+| Studentship      |    1857 days |                2 |
+| Studentship      |    2159 days |                2 |
+| Fellowship       |     382 days |                2 |
+| Studentship      |    1502 days |                2 |
+| Research Grant   |     691 days |                2 |
+| Studentship      |    1077 days |                2 |
+| Research Grant   |    1249 days |                2 |
+| Research Grant   |     627 days |                2 |
+| Research Grant   |    1105 days |                2 |
+| Studentship      |    1759 days |                2 |
+| Studentship      |    1480 days |                2 |
+| Studentship      |    1359 days |                2 |
+| Studentship      |    1831 days |                2 |
+| Research Grant   |    1006 days |                2 |
+| Studentship      |    1259 days |                2 |
+| Research Grant   |     536 days |                2 |
+| Studentship      |    1951 days |                2 |
+| Studentship      |    1742 days |                2 |
+| Studentship      |    1771 days |                2 |
+| Research Grant   |     543 days |                2 |
+| Studentship      |    1367 days |                2 |
+| Research Grant   |    2068 days |                2 |
+| Studentship      |    1108 days |                2 |
+| Research Grant   |     550 days |                2 |
+| Studentship      |    1608 days |                2 |
+| Research Grant   |    1350 days |                2 |
+| Research Grant   |    1394 days |                2 |
+| Training Grant   |    2556 days |                2 |
+| Studentship      |    1658 days |                2 |
+| Studentship      |    1574 days |                2 |
+| Research Grant   |     349 days |                2 |
+| Research Grant   |    1612 days |                2 |
+| Research Grant   |    1611 days |                2 |
+| Studentship      |    1275 days |                2 |
+| Studentship      |    1115 days |                2 |
+| Studentship      |    1687 days |                2 |
+| Training Grant   |    1735 days |                2 |
+| Research Grant   |     641 days |                2 |
+| Research Grant   |    1119 days |                2 |
+| Studentship      |    2458 days |                2 |
+| Research Grant   |    1567 days |                2 |
+| Studentship      |    1789 days |                2 |
+| Research Grant   |     119 days |                2 |
+| Studentship      |    1540 days |                2 |
+| Fellowship       |     515 days |                2 |
+| Fellowship       |     335 days |                2 |
+| Studentship      |    1155 days |                2 |
+| Research Grant   |     556 days |                2 |
+| Research Grant   |    1153 days |                2 |
+| Research Grant   |    1550 days |                2 |
+| Studentship      |    1763 days |                2 |
+| Research Grant   |     612 days |                2 |
+| Research Grant   |     445 days |                2 |
+| Studentship      |    1287 days |                2 |
+| Studentship      |    1197 days |                2 |
+| Fellowship       |     853 days |                2 |
+| Studentship      |    1370 days |                2 |
+| Studentship      |    1282 days |                2 |
+| Studentship      |    1612 days |                2 |
+| Studentship      |    2129 days |                2 |
+| Research Grant   |    1113 days |                2 |
+| Research Grant   |     815 days |                2 |
+| Studentship      |    1618 days |                2 |
+| Studentship      |    1178 days |                2 |
+| Fellowship       |     577 days |                2 |
+| Research Grant   |    1328 days |                2 |
+| Fellowship       |     308 days |                2 |
+| Research Grant   |     665 days |                2 |
+| Research Grant   |     120 days |                2 |
+| Studentship      |    1121 days |                2 |
+| Research Grant   |    1583 days |                2 |
+| Research Grant   |    2040 days |                2 |
+| Research Grant   |    1428 days |                2 |
+| Research Grant   |     751 days |                2 |
+| Studentship      |    1829 days |                2 |
+| Research Grant   |     598 days |                2 |
+| Studentship      |    1617 days |                2 |
+| Fellowship       |     380 days |                2 |
+| Studentship      |    1137 days |                2 |
+| Research Grant   |    1261 days |                2 |
+| Studentship      |     822 days |                2 |
+| Training Grant   |    1582 days |                2 |
+| Studentship      |    1437 days |                2 |
+| Research Grant   |     713 days |                2 |
+| Studentship      |    1258 days |                2 |
+| Research Grant   |     392 days |                2 |
+| Research Grant   |    1062 days |                2 |
+| Research Grant   |     466 days |                2 |
+| Studentship      |    1666 days |                2 |
+| Studentship      |    1410 days |                2 |
+| Fellowship       |      90 days |                2 |
+| Studentship      |    1832 days |                2 |
+| Studentship      |    1385 days |                2 |
+| Fellowship       |     453 days |                2 |
+| Studentship      |    1948 days |                2 |
+| Fellowship       |     213 days |                2 |
+| Studentship      |    1645 days |                2 |
+| Studentship      |    1354 days |                2 |
+| Studentship      |    2952 days |                2 |
+| Studentship      |    1362 days |                2 |
+| Studentship      |    1291 days |                2 |
+| Research Grant   |    1555 days |                2 |
+| Studentship      |    2494 days |                2 |
+| Fellowship       |     313 days |                2 |
+| Research Grant   |     664 days |                2 |
+| Research Grant   |     721 days |                2 |
+| Research Grant   |     788 days |                2 |
+| Research Grant   |    1032 days |                2 |
+| Research Grant   |    2070 days |                2 |
+| Research Grant   |     481 days |                2 |
+| Studentship      |    1546 days |                2 |
+| Studentship      |    1819 days |                2 |
+| Studentship      |    1665 days |                2 |
+| Research Grant   |    1081 days |                2 |
+| Studentship      |    1522 days |                2 |
+| Research Grant   |    1521 days |                2 |
+| Research Grant   |    1438 days |                2 |
+| Studentship      |    1544 days |                2 |
+| Research Grant   |     304 days |                2 |
+| Research Grant   |     927 days |                2 |
+| Research Grant   |     471 days |                2 |
+| Fellowship       |     150 days |                2 |
+| Studentship      |    1503 days |                2 |
+| Fellowship       |     303 days |                2 |
+| Studentship      |    1516 days |                2 |
+| Studentship      |    1280 days |                2 |
+| Research Grant   |    1067 days |                2 |
+| Research Grant   |      60 days |                2 |
+| Research Grant   |     490 days |                2 |
+| Research Grant   |     792 days |                2 |
+| Research Grant   |    1143 days |                2 |
+| Studentship      |    1834 days |                2 |
+| Fellowship       |     119 days |                2 |
+| Studentship      |    1796 days |                2 |
+| Training Grant   |    1309 days |                2 |
+| Fellowship       |     296 days |                2 |
+| Research Grant   |    2921 days |                2 |
+| Research Grant   |     958 days |                2 |
+| Research Grant   |     636 days |                2 |
+| Fellowship       |     302 days |                2 |
+| Studentship      |    1914 days |                2 |
+| Studentship      |    2193 days |                2 |
+| Fellowship       |     850 days |                2 |
+| Training Grant   |    1098 days |                2 |
+| Studentship      |    1498 days |                2 |
+| Training Grant   |    1613 days |                2 |
+| Research Grant   |     488 days |                2 |
+| Research Grant   |     510 days |                2 |
+| Research Grant   |     596 days |                2 |
+| Fellowship       |     609 days |                2 |
+| Studentship      |      91 days |                2 |
+| Studentship      |    1268 days |                2 |
+| Research Grant   |     755 days |                2 |
+| Research Grant   |     731 days |                2 |
+| Studentship      |    2013 days |                2 |
+| Research Grant   |     985 days |                2 |
+| Research Grant   |     473 days |                2 |
+| Research Grant   |     575 days |                2 |
+| Studentship      |    1450 days |                2 |
+| Research Grant   |     929 days |                2 |
+| Research Grant   |    1188 days |                2 |
+| Research Grant   |     975 days |                2 |
+| Research Grant   |    2283 days |                2 |
+| Research Grant   |     931 days |                2 |
+| Studentship      |    1122 days |                2 |
+| Research Grant   |     938 days |                2 |
+| Studentship      |    1918 days |                2 |
+| Studentship      |    1915 days |                2 |
+| Research Grant   |     867 days |                2 |
+| Studentship      |    1586 days |                2 |
+| Research Grant   |     610 days |                2 |
+| Studentship      |    2372 days |                2 |
+| Studentship      |    1284 days |                2 |
+| Research Grant   |     748 days |                2 |
+| Studentship      |    2434 days |                2 |
+| Research Grant   |     591 days |                2 |
+| Training Grant   |     944 days |                2 |
+| Fellowship       |     669 days |                2 |
+| Research Grant   |    1325 days |                2 |
+| Fellowship       |    1370 days |                2 |
+| Research Grant   |    1173 days |                2 |
+| Fellowship       |     699 days |                2 |
+| Studentship      |    1314 days |                2 |
+| Studentship      |    2008 days |                2 |
+| Research Grant   |    1208 days |                2 |
+| Studentship      |    1537 days |                2 |
+| Fellowship       |    1151 days |                2 |
+| Studentship      |    2283 days |                2 |
+| Studentship      |    1376 days |                2 |
+| Research Grant   |     772 days |                2 |
+| Research Grant   |     784 days |                2 |
+| Fellowship       |     267 days |                2 |
+| Studentship      |    1375 days |                2 |
+| Fellowship       |    1246 days |                2 |
+| Fellowship       |     548 days |                2 |
+| Research Grant   |     834 days |                2 |
+| Training Grant   |     640 days |                2 |
+| Studentship      |    1615 days |                2 |
+| Research Grant   |    1123 days |                2 |
+| Fellowship       |     408 days |                2 |
+| Research Grant   |    1794 days |                2 |
+| Fellowship       |    1125 days |                2 |
+| Research Grant   |     234 days |                2 |
+| Fellowship       |     399 days |                2 |
+| Research Grant   |     917 days |                2 |
+| Training Grant   |    1429 days |                2 |
+| Training Grant   |    2190 days |                2 |
+| Studentship      |    2105 days |                2 |
+| Studentship      |    1274 days |                2 |
+| Studentship      |    2012 days |                2 |
+| Studentship      |    1350 days |                2 |
+| Studentship      |    1661 days |                2 |
+| Research Grant   |     673 days |                2 |
+| Studentship      |    1429 days |                2 |
+| Fellowship       |     379 days |                2 |
+| Research Grant   |    1904 days |                2 |
+| Research Grant   |    1078 days |                2 |
+| Fellowship       |    1185 days |                2 |
+| Studentship      |    1953 days |                2 |
+| Studentship      |    1424 days |                2 |
+| Research Grant   |    1886 days |                2 |
+| Studentship      |    2222 days |                2 |
+| Fellowship       |     608 days |                2 |
+| Research Grant   |     501 days |                2 |
+| Studentship      |    1660 days |                2 |
+| Studentship      |    1356 days |                2 |
+| Research Grant   |    1042 days |                2 |
+| Studentship      |    1916 days |                1 |
+| Studentship      |     333 days |                1 |
+| Studentship      |    1109 days |                1 |
+| Studentship      |    1718 days |                1 |
+| Studentship      |    1509 days |                1 |
+| Fellowship       |     405 days |                1 |
+| Studentship      |     272 days |                1 |
+| Studentship      |    2938 days |                1 |
+| Research Grant   |    2023 days |                1 |
+| Research Grant   |     383 days |                1 |
+| Studentship      |    1886 days |                1 |
+| Research Grant   |     470 days |                1 |
+| Studentship      |    2525 days |                1 |
+| Studentship      |    1163 days |                1 |
+| Research Grant   |    1546 days |                1 |
+| Studentship      |    2237 days |                1 |
+| Research Grant   |     902 days |                1 |
+| Research Grant   |     585 days |                1 |
+| Research Grant   |    1115 days |                1 |
+| Studentship      |    1888 days |                1 |
+| Studentship      |    2645 days |                1 |
+| Research Grant   |     243 days |                1 |
+| Training Grant   |    2831 days |                1 |
+| Research Grant   |    1265 days |                1 |
+| Studentship      |     921 days |                1 |
+| Fellowship       |     287 days |                1 |
+| Research Grant   |     440 days |                1 |
+| Studentship      |    1358 days |                1 |
+| Research Grant   |     866 days |                1 |
+| Studentship      |    1797 days |                1 |
+| Training Grant   |     426 days |                1 |
+| Studentship      |    1499 days |                1 |
+| Studentship      |    1792 days |                1 |
+| Research Grant   |     899 days |                1 |
+| Research Grant   |    1295 days |                1 |
+| Fellowship       |     496 days |                1 |
+| Fellowship       |    1325 days |                1 |
+| Studentship      |    1823 days |                1 |
+| Fellowship       |      58 days |                1 |
+| Studentship      |    1227 days |                1 |
+| Studentship      |     280 days |                1 |
+| Studentship      |    1752 days |                1 |
+| Research Grant   |    1269 days |                1 |
+| Studentship      |    1523 days |                1 |
+| Studentship      |    2352 days |                1 |
+| Studentship      |    2208 days |                1 |
+| Research Grant   |     137 days |                1 |
+| Research Grant   |     492 days |                1 |
+| Studentship      |      93 days |                1 |
+| Research Grant   |    1494 days |                1 |
+| Research Grant   |    1403 days |                1 |
+| Fellowship       |     273 days |                1 |
+| Research Grant   |     740 days |                1 |
+| Studentship      |    2463 days |                1 |
+| Studentship      |     640 days |                1 |
+| Training Grant   |     222 days |                1 |
+| Training Grant   |     213 days |                1 |
+| Research Grant   |    1263 days |                1 |
+| Studentship      |    1175 days |                1 |
+| Studentship      |    1448 days |                1 |
+| Studentship      |    1736 days |                1 |
+| Research Grant   |    1183 days |                1 |
+| Fellowship       |     879 days |                1 |
+| Studentship      |    2860 days |                1 |
+| Studentship      |    2371 days |                1 |
+| Studentship      |    1530 days |                1 |
+| Fellowship       |     345 days |                1 |
+| Studentship      |    1704 days |                1 |
+| Research Grant   |     388 days |                1 |
+| Research Grant   |    1241 days |                1 |
+| Training Grant   |    1094 days |                1 |
+| Training Grant   |    1397 days |                1 |
+| Research Grant   |    1179 days |                1 |
+| Studentship      |    1312 days |                1 |
+| Research Grant   |     890 days |                1 |
+| Research Grant   |    2284 days |                1 |
+| Studentship      |    1683 days |                1 |
+| Studentship      |    2088 days |                1 |
+| Training Grant   |     579 days |                1 |
+| Studentship      |    2195 days |                1 |
+| Studentship      |    1804 days |                1 |
+| Research Grant   |     741 days |                1 |
+| Research Grant   |    1343 days |                1 |
+| Research Grant   |    1662 days |                1 |
+| Studentship      |    2341 days |                1 |
+| Studentship      |    1433 days |                1 |
+| Studentship      |    2381 days |                1 |
+| Fellowship       |    1315 days |                1 |
+| Studentship      |    1802 days |                1 |
+| Studentship      |    1807 days |                1 |
+| Research Grant   |     655 days |                1 |
+| Studentship      |    1510 days |                1 |
+| Studentship      |    2037 days |                1 |
+| Research Grant   |     980 days |                1 |
+| Research Grant   |     229 days |                1 |
+| Training Grant   |    1248 days |                1 |
+| Research Grant   |     415 days |                1 |
+| Fellowship       |     483 days |                1 |
+| Research Grant   |    1129 days |                1 |
+| Studentship      |    1842 days |                1 |
+| Studentship      |    1290 days |                1 |
+| Research Grant   |    1427 days |                1 |
+| Research Grant   |     701 days |                1 |
+| Research Grant   |    1616 days |                1 |
+| Studentship      |    2251 days |                1 |
+| Studentship      |    1439 days |                1 |
+| Research Grant   |    2311 days |                1 |
+| Research Grant   |     184 days |                1 |
+| Fellowship       |    1256 days |                1 |
+| Research Grant   |     271 days |                1 |
+| Training Grant   |    1156 days |                1 |
+| Research Grant   |    1467 days |                1 |
+| Studentship      |    1622 days |                1 |
+| Research Grant   |     749 days |                1 |
+| Studentship      |    1775 days |                1 |
+| Fellowship       |     378 days |                1 |
+| Research Grant   |     951 days |                1 |
+| Research Grant   |    1193 days |                1 |
+| Fellowship       |     578 days |                1 |
+| Research Grant   |    1673 days |                1 |
+| Research Grant   |     467 days |                1 |
+| Studentship      |    1830 days |                1 |
+| Research Grant   |      24 days |                1 |
+| Research Grant   |    1912 days |                1 |
+| Research Grant   |    1704 days |                1 |
+| Research Grant   |    1823 days |                1 |
+| Studentship      |      80 days |                1 |
+| Research Grant   |     848 days |                1 |
+| Fellowship       |     820 days |                1 |
+| Research Grant   |     541 days |                1 |
+| Studentship      |    1890 days |                1 |
+| Fellowship       |     151 days |                1 |
+| Research Grant   |     611 days |                1 |
+| Studentship      |    2085 days |                1 |
+| Research Grant   |     507 days |                1 |
+| Research Grant   |     626 days |                1 |
+| Training Grant   |    1917 days |                1 |
+| Research Grant   |    1109 days |                1 |
+| Fellowship       |    1368 days |                1 |
+| Research Grant   |      59 days |                1 |
+| Research Grant   |     719 days |                1 |
+| Research Grant   |     277 days |                1 |
+| Research Grant   |    1800 days |                1 |
+| Studentship      |    1696 days |                1 |
+| Research Grant   |     798 days |                1 |
+| Research Grant   |    1708 days |                1 |
+| Research Grant   |    1192 days |                1 |
+| Fellowship       |     588 days |                1 |
+| Research Grant   |    1884 days |                1 |
+| Studentship      |    1453 days |                1 |
+| Research Grant   |    1810 days |                1 |
+| Studentship      |     759 days |                1 |
+| Studentship      |    1412 days |                1 |
+| Studentship      |     105 days |                1 |
+| Research Grant   |    1827 days |                1 |
+| Research Grant   |     310 days |                1 |
+| Studentship      |    2464 days |                1 |
+| Studentship      |    2402 days |                1 |
+| Research Grant   |    1380 days |                1 |
+| Studentship      |    1590 days |                1 |
+| Studentship      |    1578 days |                1 |
+| Studentship      |     535 days |                1 |
+| Fellowship       |     401 days |                1 |
+| Training Grant   |     638 days |                1 |
+| Studentship      |    2578 days |                1 |
+| Research Grant   |     377 days |                1 |
+| Research Grant   |     976 days |                1 |
+| Research Grant   |    1288 days |                1 |
+| Studentship      |    2925 days |                1 |
+| Studentship      |    1310 days |                1 |
+| Studentship      |    1346 days |                1 |
+| Research Grant   |    1637 days |                1 |
+| Fellowship       |    1157 days |                1 |
+| Research Grant   |      96 days |                1 |
+| Studentship      |    1120 days |                1 |
+| Research Grant   |    1703 days |                1 |
+| Research Grant   |     208 days |                1 |
+| Research Grant   |    1133 days |                1 |
+| Research Grant   |     793 days |                1 |
+| Fellowship       |    1194 days |                1 |
+| Studentship      |    1514 days |                1 |
+| Research Grant   |     993 days |                1 |
+| Studentship      |    1253 days |                1 |
+| Studentship      |    1821 days |                1 |
+| Studentship      |    1184 days |                1 |
+| Studentship      |    1880 days |                1 |
+| Research Grant   |     387 days |                1 |
+| Research Grant   |     315 days |                1 |
+| Studentship      |    1355 days |                1 |
+| Studentship      |    1852 days |                1 |
+| Studentship      |    1657 days |                1 |
+| Research Grant   |     870 days |                1 |
+| Studentship      |    1303 days |                1 |
+| Research Grant   |     117 days |                1 |
+| Research Grant   |    1384 days |                1 |
+| Fellowship       |     375 days |                1 |
+| Studentship      |    1580 days |                1 |
+| Research Grant   |    2280 days |                1 |
+| Fellowship       |     176 days |                1 |
+| Research Grant   |     808 days |                1 |
+| Research Grant   |    1285 days |                1 |
+| Studentship      |    2327 days |                1 |
+| Studentship      |    1114 days |                1 |
+| Studentship      |    1762 days |                1 |
+| Fellowship       |     866 days |                1 |
+| Research Grant   |     893 days |                1 |
+| Studentship      |    1341 days |                1 |
+| Research Grant   |    1518 days |                1 |
+| Research Grant   |    1149 days |                1 |
+| Studentship      |    2435 days |                1 |
+| Research Grant   |    1412 days |                1 |
+| Studentship      |    2056 days |                1 |
+| Training Grant   |     349 days |                1 |
+| Studentship      |    1451 days |                1 |
+| Studentship      |    2235 days |                1 |
+| Studentship      |    2131 days |                1 |
+| Studentship      |     444 days |                1 |
+| Studentship      |    2068 days |                1 |
+| Research Grant   |    1948 days |                1 |
+| Research Grant   |     995 days |                1 |
+| Research Grant   |    1361 days |                1 |
+| Studentship      |    2262 days |                1 |
+| Research Grant   |     230 days |                1 |
+| Studentship      |    1564 days |                1 |
+| Studentship      |    1725 days |                1 |
+| Research Grant   |     495 days |                1 |
+| Fellowship       |     668 days |                1 |
+| Studentship      |    1513 days |                1 |
+| Studentship      |    1778 days |                1 |
+| Studentship      |     742 days |                1 |
+| Research Grant   |    1098 days |                1 |
+| Fellowship       |     326 days |                1 |
+| Research Grant   |     299 days |                1 |
+| Training Grant   |     949 days |                1 |
+| Studentship      |    1013 days |                1 |
+| Studentship      |     361 days |                1 |
+| Research Grant   |    1190 days |                1 |
+| Fellowship       |      89 days |                1 |
+| Studentship      |    1068 days |                1 |
+| Studentship      |     140 days |                1 |
+| Studentship      |     376 days |                1 |
+| Studentship      |    2287 days |                1 |
+| Studentship      |    2019 days |                1 |
+| Fellowship       |     968 days |                1 |
+| Fellowship       |     727 days |                1 |
+| Studentship      |    1664 days |                1 |
+| Studentship      |    2917 days |                1 |
+| Research Grant   |      94 days |                1 |
+| Research Grant   |    1372 days |                1 |
+| Studentship      |    1380 days |                1 |
+| Training Grant   |    2288 days |                1 |
+| Research Grant   |     757 days |                1 |
+| Studentship      |    1623 days |                1 |
+| Research Grant   |    1401 days |                1 |
+| Research Grant   |    1855 days |                1 |
+| Studentship      |    1934 days |                1 |
+| Research Grant   |     343 days |                1 |
+| Fellowship       |     713 days |                1 |
+| Studentship      |    2070 days |                1 |
+| Research Grant   |     586 days |                1 |
+| Research Grant   |    1165 days |                1 |
+| Research Grant   |     149 days |                1 |
+| Studentship      |    1887 days |                1 |
+| Research Grant   |     903 days |                1 |
+| Studentship      |    1386 days |                1 |
+| Studentship      |    1892 days |                1 |
+| Research Grant   |    1234 days |                1 |
+| Research Grant   |    2204 days |                1 |
+| Training Grant   |    1230 days |                1 |
+| Research Grant   |    1448 days |                1 |
+| Fellowship       |    1248 days |                1 |
+| Research Grant   |     622 days |                1 |
+| Training Grant   |    1459 days |                1 |
+| Fellowship       |     772 days |                1 |
+| Research Grant   |    1121 days |                1 |
+| Studentship      |    1495 days |                1 |
+| Studentship      |    2050 days |                1 |
+| Studentship      |    1247 days |                1 |
+| Research Grant   |    1296 days |                1 |
+| Research Grant   |     139 days |                1 |
+| Research Grant   |     561 days |                1 |
+| Studentship      |    1731 days |                1 |
+| Studentship      |    2109 days |                1 |
+| Research Grant   |     291 days |                1 |
+| Studentship      |    1873 days |                1 |
+| Studentship      |    1838 days |                1 |
+| Research Grant   |     410 days |                1 |
+| Fellowship       |     519 days |                1 |
+| Fellowship       |     700 days |                1 |
+| Fellowship       |      30 days |                1 |
+| Research Grant   |     332 days |                1 |
+| Research Grant   |     106 days |                1 |
+| Fellowship       |     435 days |                1 |
+| Research Grant   |     763 days |                1 |
+| Studentship      |    1206 days |                1 |
+| Fellowship       |     311 days |                1 |
+| Research Grant   |     897 days |                1 |
+| Research Grant   |    1108 days |                1 |
+| Research Grant   |    1464 days |                1 |
+| Research Grant   |     777 days |                1 |
+| Studentship      |    3374 days |                1 |
+| Research Grant   |     564 days |                1 |
+| Research Grant   |     971 days |                1 |
+| Studentship      |    1629 days |                1 |
+| Training Grant   |    2106 days |                1 |
+| Studentship      |    1682 days |                1 |
+| Studentship      |     294 days |                1 |
+| Studentship      |    1748 days |                1 |
+| Training Grant   |    1887 days |                1 |
+| Studentship      |    2196 days |                1 |
+| Training Grant   |     729 days |                1 |
+| Training Grant   |    2082 days |                1 |
+| Research Grant   |     449 days |                1 |
+| Studentship      |    2099 days |                1 |
+| Studentship      |    1512 days |                1 |
+| Studentship      |    2006 days |                1 |
+| Research Grant   |     601 days |                1 |
+| Research Grant   |     916 days |                1 |
+| Research Grant   |     381 days |                1 |
+| Research Grant   |     431 days |                1 |
+| Studentship      |    2564 days |                1 |
+| Studentship      |    1594 days |                1 |
+| Research Grant   |    2251 days |                1 |
+| Research Grant   |     785 days |                1 |
+| Research Grant   |     500 days |                1 |
+| Training Grant   |      90 days |                1 |
+| Training Grant   |     203 days |                1 |
+| Research Grant   |     869 days |                1 |
+| Research Grant   |     644 days |                1 |
+| Training Grant   |    1339 days |                1 |
+| Training Grant   |    1856 days |                1 |
+| Research Grant   |    1533 days |                1 |
+| Studentship      |    1593 days |                1 |
+| Research Grant   |     702 days |                1 |
+| Studentship      |    1261 days |                1 |
+| Research Grant   |    1359 days |                1 |
+| Research Grant   |    1945 days |                1 |
+| Research Grant   |    1946 days |                1 |
+| Research Grant   |     708 days |                1 |
+| Research Grant   |    1522 days |                1 |
+| Training Grant   |    3433 days |                1 |
+| Studentship      |    1782 days |                1 |
+| Fellowship       |     510 days |                1 |
+| Studentship      |    1639 days |                1 |
+| Studentship      |    1223 days |                1 |
+| Research Grant   |    1345 days |                1 |
+| Studentship      |    1876 days |                1 |
+| Training Grant   |     914 days |                1 |
+| Studentship      |      70 days |                1 |
+| Studentship      |    1226 days |                1 |
+| Research Grant   |     421 days |                1 |
+| Studentship      |     158 days |                1 |
+| Research Grant   |    3896 days |                1 |
+| Research Grant   |    1274 days |                1 |
+| Research Grant   |    1210 days |                1 |
+| Research Grant   |     398 days |                1 |
+| Fellowship       |    1002 days |                1 |
+| Studentship      |    1677 days |                1 |
+| Research Grant   |    1236 days |                1 |
+| Research Grant   |    1170 days |                1 |
+| Studentship      |    1363 days |                1 |
+| Training Grant   |    1004 days |                1 |
+| Fellowship       |    1186 days |                1 |
+| Research Grant   |     416 days |                1 |
+| Fellowship       |     982 days |                1 |
+| Studentship      |    1685 days |                1 |
+| Studentship      |    1112 days |                1 |
+| Fellowship       |     910 days |                1 |
+| Studentship      |     526 days |                1 |
+| Research Grant   |     933 days |                1 |
+| Research Grant   |    1229 days |                1 |
+| Studentship      |    2021 days |                1 |
+| Fellowship       |    1156 days |                1 |
+| Research Grant   |     884 days |                1 |
+| Fellowship       |     278 days |                1 |
+| Studentship      |    2466 days |                1 |
+| Studentship      |    1690 days |                1 |
+| Research Grant   |    2556 days |                1 |
+| Fellowship       |     407 days |                1 |
+| Research Grant   |    1200 days |                1 |
+| Studentship      |    2756 days |                1 |
+| Studentship      |    1242 days |                1 |
+| Studentship      |    3652 days |                1 |
+| Research Grant   |     684 days |                1 |
+| Studentship      |    1037 days |                1 |
+| Studentship      |    2374 days |                1 |
+| Research Grant   |     179 days |                1 |
+| Research Grant   |     419 days |                1 |
+| Studentship      |    1378 days |                1 |
+| Fellowship       |     247 days |                1 |
+| Fellowship       |     789 days |                1 |
+| Fellowship       |     241 days |                1 |
+| Studentship      |    2976 days |                1 |
+| Research Grant   |     856 days |                1 |
+| Studentship      |    2034 days |                1 |
+| Studentship      |    1945 days |                1 |
+| Fellowship       |     406 days |                1 |
+| Studentship      |    1487 days |                1 |
+| Studentship      |     445 days |                1 |
+| Research Grant   |     480 days |                1 |
+| Research Grant   |     955 days |                1 |
+| Studentship      |    2983 days |                1 |
+| Research Grant   |    1235 days |                1 |
+| Research Grant   |     269 days |                1 |
+| Studentship      |     778 days |                1 |
+| Studentship      |    2939 days |                1 |
+| Research Grant   |    1366 days |                1 |
+| Studentship      |     362 days |                1 |
+| Research Grant   |     107 days |                1 |
+| Research Grant   |     649 days |                1 |
+| Fellowship       |     728 days |                1 |
+| Research Grant   |     218 days |                1 |
+| Studentship      |    1195 days |                1 |
+| Studentship      |    1812 days |                1 |
+| Research Grant   |    1242 days |                1 |
+| Research Grant   |     196 days |                1 |
+| Research Grant   |    2100 days |                1 |
+| Studentship      |     761 days |                1 |
+| Studentship      |    1768 days |                1 |
+| Studentship      |    1746 days |                1 |
+| Research Grant   |    1347 days |                1 |
+| Fellowship       |    1372 days |                1 |
+| Studentship      |    1267 days |                1 |
+| Research Grant   |    1419 days |                1 |
+| Fellowship       |     294 days |                1 |
+| Research Grant   |    1434 days |                1 |
+| Research Grant   |      92 days |                1 |
+| Research Grant   |    1487 days |                1 |
+| Research Grant   |    1031 days |                1 |
+| Research Grant   |     799 days |                1 |
+| Studentship      |    1139 days |                1 |
+| Research Grant   |     774 days |                1 |
+| Research Grant   |    1036 days |                1 |
+| Studentship      |     669 days |                1 |
+| Training Grant   |    1074 days |                1 |
+| Fellowship       |     437 days |                1 |
+| Studentship      |    1198 days |                1 |
+| Research Grant   |    1061 days |                1 |
+| Research Grant   |    2160 days |                1 |
+| Training Grant   |    4018 days |                1 |
+| Fellowship       |     698 days |                1 |
+| Fellowship       |     265 days |                1 |
+| Studentship      |    2311 days |                1 |
+| Research Grant   |    1899 days |                1 |
+| Studentship      |    1693 days |                1 |
+| Studentship      |    2087 days |                1 |
+| Fellowship       |     230 days |                1 |
+| Studentship      |    1292 days |                1 |
+| Research Grant   |    1144 days |                1 |
+| Research Grant   |     355 days |                1 |
+| Studentship      |    1389 days |                1 |
+| Studentship      |      99 days |                1 |
+| Training Grant   |    1760 days |                1 |
+| Fellowship       |    1215 days |                1 |
+| Studentship      |    1177 days |                1 |
+| Studentship      |    2481 days |                1 |
+| Research Grant   |    1364 days |                1 |
+| Training Grant   |      61 days |                1 |
+| Studentship      |    1361 days |                1 |
+| Research Grant   |    1293 days |                1 |
+| Studentship      |    1224 days |                1 |
+| Research Grant   |     504 days |                1 |
+| Studentship      |    1497 days |                1 |
+| Studentship      |    2429 days |                1 |
+| Research Grant   |    2039 days |                1 |
+| Training Grant   |    1523 days |                1 |
+| Studentship      |    2495 days |                1 |
+| Research Grant   |    1763 days |                1 |
+| Research Grant   |     727 days |                1 |
+| Fellowship       |     232 days |                1 |
+| Training Grant   |    1064 days |                1 |
+| Research Grant   |     990 days |                1 |
+| Research Grant   |    3895 days |                1 |
+| Training Grant   |    2250 days |                1 |
+| Research Grant   |    1365 days |                1 |
+| Fellowship       |    1000 days |                1 |
+| Studentship      |     741 days |                1 |
+| Studentship      |    1676 days |                1 |
+| Training Grant   |     959 days |                1 |
+| Studentship      |    2391 days |                1 |
+| Studentship      |    2400 days |                1 |
+| Studentship      |    1925 days |                1 |
+| Studentship      |    1520 days |                1 |
+| Research Grant   |     378 days |                1 |
+| Studentship      |    1335 days |                1 |
+| Research Grant   |    1530 days |                1 |
+| Research Grant   |    1093 days |                1 |
+| Research Grant   |    1458 days |                1 |
+| Research Grant   |    1489 days |                1 |
+| Research Grant   |    1335 days |                1 |
+| Research Grant   |    1320 days |                1 |
+| Research Grant   |    1470 days |                1 |
+| Research Grant   |     199 days |                1 |
+| Fellowship       |     359 days |                1 |
+| Studentship      |    1323 days |                1 |
+| Research Grant   |    2862 days |                1 |
+| Research Grant   |     816 days |                1 |
+| Fellowship       |     677 days |                1 |
+| Research Grant   |    1151 days |                1 |
+| Studentship      |    1525 days |                1 |
+| Studentship      |    1858 days |                1 |
+| Training Grant   |    1431 days |                1 |
+| Research Grant   |    1040 days |                1 |
+| Studentship      |    1555 days |                1 |
+| Studentship      |    1596 days |                1 |
+| Studentship      |    1255 days |                1 |
+| Training Grant   |    1490 days |                1 |
+| Studentship      |     512 days |                1 |
+| Research Grant   |     329 days |                1 |
+| Research Grant   |     635 days |                1 |
+| Fellowship       |     105 days |                1 |
+| Fellowship       |      48 days |                1 |
+| Research Grant   |    2646 days |                1 |
+| Studentship      |    3287 days |                1 |
+| Research Grant   |     344 days |                1 |
+| Research Grant   |    1678 days |                1 |
+| Research Grant   |     231 days |                1 |
+| Research Grant   |     633 days |                1 |
+| Research Grant   |    2059 days |                1 |
+| Research Grant   |     753 days |                1 |
+| Training Grant   |    1495 days |                1 |
+| Research Grant   |     417 days |                1 |
+| Research Grant   |     422 days |                1 |
+| Studentship      |    2617 days |                1 |
+| Studentship      |    2106 days |                1 |
+| Fellowship       |      57 days |                1 |
+| Research Grant   |     404 days |                1 |
+| Research Grant   |     288 days |                1 |
+| Studentship      |    1993 days |                1 |
+| Research Grant   |    1796 days |                1 |
+| Research Grant   |     961 days |                1 |
+| Research Grant   |     653 days |                1 |
+| Research Grant   |     452 days |                1 |
+| Fellowship       |     141 days |                1 |
+| Research Grant   |     537 days |                1 |
+| Research Grant   |    1008 days |                1 |
+| Studentship      |    1449 days |                1 |
+| Research Grant   |    1581 days |                1 |
+| Research Grant   |     628 days |                1 |
+| Studentship      |    1614 days |                1 |
+| Research Grant   |     361 days |                1 |
+| Studentship      |    1214 days |                1 |
+| Research Grant   |    1336 days |                1 |
+| Research Grant   |    3881 days |                1 |
+| Research Grant   |    1189 days |                1 |
+| Studentship      |    1949 days |                1 |
+| Studentship      |     728 days |                1 |
+| Studentship      |    1989 days |                1 |
+| Studentship      |    1566 days |                1 |
+| Research Grant   |     952 days |                1 |
+| Studentship      |     262 days |                1 |
+| Research Grant   |     491 days |                1 |
+| Studentship      |     595 days |                1 |
+| Fellowship       |     938 days |                1 |
+| Studentship      |    2125 days |                1 |
+| Research Grant   |    1260 days |                1 |
+| Studentship      |      34 days |                1 |
+| Research Grant   |     368 days |                1 |
+| Research Grant   |     900 days |                1 |
+| Studentship      |    1579 days |                1 |
+| Studentship      |    1603 days |                1 |
+| Fellowship       |     488 days |                1 |
+| Research Grant   |    1376 days |                1 |
+| Research Grant   |    1348 days |                1 |
+| Fellowship       |    2006 days |                1 |
+| Research Grant   |     164 days |                1 |
+| Studentship      |    1183 days |                1 |
+| Studentship      |    1420 days |                1 |
+| Studentship      |    2055 days |                1 |
+| Research Grant   |    1341 days |                1 |
+| Studentship      |     514 days |                1 |
+| Studentship      |    1861 days |                1 |
+| Research Grant   |    1597 days |                1 |
+| Research Grant   |    1211 days |                1 |
+| Fellowship       |     566 days |                1 |
+| Studentship      |    1488 days |                1 |
+| Fellowship       |     346 days |                1 |
+| Fellowship       |    1307 days |                1 |
+| Research Grant   |    1017 days |                1 |
+| Research Grant   |     441 days |                1 |
+| Research Grant   |     629 days |                1 |
+| Fellowship       |     630 days |                1 |
+| Research Grant   |     864 days |                1 |
+| Research Grant   |     896 days |                1 |
+| Research Grant   |    1100 days |                1 |
+| Studentship      |    2295 days |                1 |
+| Studentship      |    1595 days |                1 |
+| Studentship      |    2101 days |                1 |
+| Research Grant   |     529 days |                1 |
+| Research Grant   |     803 days |                1 |
+| Studentship      |    2139 days |                1 |
+| Fellowship       |     944 days |                1 |
+| Studentship      |    2038 days |                1 |
+| Studentship      |    1625 days |                1 |
+| Research Grant   |     312 days |                1 |
+| Training Grant   |    1125 days |                1 |
+| Studentship      |    1342 days |                1 |
+| Research Grant   |     621 days |                1 |
+| Fellowship       |     317 days |                1 |
+| Research Grant   |    1379 days |                1 |
+| Studentship      |    1883 days |                1 |
+| Studentship      |    1884 days |                1 |
+| Fellowship       |    1093 days |                1 |
+| Research Grant   |     906 days |                1 |
+| Studentship      |     757 days |                1 |
+| Research Grant   |    1462 days |                1 |
+| Research Grant   |    1262 days |                1 |
+| Fellowship       |    1581 days |                1 |
+| Studentship      |     273 days |                1 |
+| Studentship      |    1171 days |                1 |
+| Research Grant   |     805 days |                1 |
+| Training Grant   |    4382 days |                1 |
+| Research Grant   |    1887 days |                1 |
+| Studentship      |    1203 days |                1 |
+| Fellowship       |     942 days |                1 |
+| Research Grant   |    1569 days |                1 |
+| Studentship      |     604 days |                1 |
+| Research Grant   |    1334 days |                1 |
+| Studentship      |    1758 days |                1 |
+| Studentship      |    2370 days |                1 |
+| Studentship      |    1504 days |                1 |
+| Fellowship       |     876 days |                1 |
+| Research Grant   |     554 days |                1 |
+| Research Grant   |     190 days |                1 |
+| Research Grant   |    1841 days |                1 |
+| Studentship      |    2742 days |                1 |
+| Research Grant   |    1308 days |                1 |
+| Studentship      |     389 days |                1 |
+| Fellowship       |     567 days |                1 |
+| Research Grant   |     245 days |                1 |
+| Training Grant   |    1001 days |                1 |
+| Research Grant   |     551 days |                1 |
+| Research Grant   |    1397 days |                1 |
+| Research Grant   |     739 days |                1 |
+| Fellowship       |     626 days |                1 |
+| Fellowship       |    1188 days |                1 |
+| Fellowship       |     657 days |                1 |
+| Research Grant   |     776 days |                1 |
+| Research Grant   |    1766 days |                1 |
+| Studentship      |    1318 days |                1 |
+| Studentship      |     821 days |                1 |
+| Fellowship       |     598 days |                1 |
+| Studentship      |    1181 days |                1 |
+| Research Grant   |    1145 days |                1 |
+| Studentship      |    2935 days |                1 |
+| Research Grant   |     909 days |                1 |
+| Studentship      |    1698 days |                1 |
+| Studentship      |    1294 days |                1 |
+| Studentship      |    1414 days |                1 |
+| Research Grant   |     327 days |                1 |
+| Research Grant   |    1539 days |                1 |
+| Studentship      |    1526 days |                1 |
+| Research Grant   |     651 days |                1 |
+| Studentship      |    1626 days |                1 |
+| Studentship      |    1403 days |                1 |
+| Studentship      |    1655 days |                1 |
+| Studentship      |    3474 days |                1 |
+| Studentship      |    2533 days |                1 |
+| Fellowship       |     199 days |                1 |
+| Fellowship       |     790 days |                1 |
+| Studentship      |    2233 days |                1 |
+| Research Grant   |     796 days |                1 |
+| Research Grant   |     198 days |                1 |
+| Research Grant   |     888 days |                1 |
+| Fellowship       |      37 days |                1 |
+| Studentship      |     109 days |                1 |
+| Studentship      |    1293 days |                1 |
+| Research Grant   |     356 days |                1 |
+| Studentship      |    1211 days |                1 |
+| Studentship      |    2510 days |                1 |
+| Fellowship       |    1340 days |                1 |
+| Research Grant   |     824 days |                1 |
+| Research Grant   |     562 days |                1 |
+| Fellowship       |      92 days |                1 |
+| Studentship      |    2224 days |                1 |
+| Training Grant   |     811 days |                1 |
+| Research Grant   |     703 days |                1 |
+| Training Grant   |     609 days |                1 |
+| Research Grant   |    2129 days |                1 |
+| Research Grant   |    1630 days |                1 |
+| Studentship      |    1252 days |                1 |
+| Research Grant   |     276 days |                1 |
+| Research Grant   |     232 days |                1 |
+| Research Grant   |    1140 days |                1 |
+| Research Grant   |     787 days |                1 |
+| Research Grant   |     307 days |                1 |
+| Studentship      |    1647 days |                1 |
+| Research Grant   |    1291 days |                1 |
+| Research Grant   |    1250 days |                1 |
+| Studentship      |    1947 days |                1 |
+| Studentship      |    3111 days |                1 |
+| Training Grant   |     699 days |                1 |
+| Research Grant   |     301 days |                1 |
+| Studentship      |    1602 days |                1 |
+| Training Grant   |    1035 days |                1 |
+| Research Grant   |     358 days |                1 |
+| Research Grant   |     524 days |                1 |
+| Research Grant   |     316 days |                1 |
+| Studentship      |     815 days |                1 |
+| Research Grant   |    1728 days |                1 |
+| Research Grant   |     843 days |                1 |
+| Training Grant   |    1404 days |                1 |
+| Studentship      |    2200 days |                1 |
+| Fellowship       |      80 days |                1 |
+| Research Grant   |    1266 days |                1 |
+| Studentship      |    1053 days |                1 |
+| Fellowship       |     315 days |                1 |
+| Research Grant   |    1520 days |                1 |
+| Studentship      |    1562 days |                1 |
+| Fellowship       |     211 days |                1 |
+| Research Grant   |    1209 days |                1 |
+| Studentship      |    1633 days |                1 |
+| Studentship      |    1588 days |                1 |
+| Studentship      |     963 days |                1 |
+| Studentship      |     138 days |                1 |
+| Studentship      |    1388 days |                1 |
+| Studentship      |    1691 days |                1 |
+| Research Grant   |     807 days |                1 |
+| Studentship      |    2265 days |                1 |
+| Fellowship       |     881 days |                1 |
+| Studentship      |    1419 days |                1 |
+| Research Grant   |     249 days |                1 |
+| Training Grant   |    1894 days |                1 |
+| Studentship      |    1606 days |                1 |
+| Research Grant   |     602 days |                1 |
+| Studentship      |    2201 days |                1 |
+| Research Grant   |     340 days |                1 |
+| Fellowship       |     684 days |                1 |
+| Research Grant   |    1205 days |                1 |
+| Fellowship       |     671 days |                1 |
+| Fellowship       |     111 days |                1 |
+| Research Grant   |    1284 days |                1 |
+| Training Grant   |    3836 days |                1 |
+| Studentship      |    1652 days |                1 |
+| Studentship      |    2243 days |                1 |
+| Research Grant   |    1977 days |                1 |
+| Research Grant   |     482 days |                1 |
+| Research Grant   |    2128 days |                1 |
+| Fellowship       |     490 days |                1 |
+| Research Grant   |     765 days |                1 |
+| Research Grant   |     489 days |                1 |
+| Fellowship       |     554 days |                1 |
+| Research Grant   |     267 days |                1 |
+| Research Grant   |    2281 days |                1 |
+| Research Grant   |     496 days |                1 |
+| Studentship      |    2114 days |                1 |
+| Studentship      |    1452 days |                1 |
+| Studentship      |    1667 days |                1 |
+| Research Grant   |     605 days |                1 |
+| Studentship      |      98 days |                1 |
+| Research Grant   |    1463 days |                1 |
+| Research Grant   |     707 days |                1 |
+| Research Grant   |     247 days |                1 |
+| Research Grant   |     521 days |                1 |
+| Research Grant   |     353 days |                1 |
+| Research Grant   |     494 days |                1 |
+| Studentship      |    2152 days |                1 |
+| Studentship      |    1720 days |                1 |
+| Training Grant   |    1704 days |                1 |
+| Research Grant   |     764 days |                1 |
+| Research Grant   |    1435 days |                1 |
+| Fellowship       |     338 days |                1 |
+| Research Grant   |    1580 days |                1 |
+| Research Grant   |     165 days |                1 |
+| Fellowship       |     579 days |                1 |
+| Studentship      |    1059 days |                1 |
+| Research Grant   |    1239 days |                1 |
+| Research Grant   |    1131 days |                1 |
+| Studentship      |    1100 days |                1 |
+| Research Grant   |    2037 days |                1 |
+| Studentship      |    1237 days |                1 |
+| Studentship      |    1084 days |                1 |
+| Studentship      |     414 days |                1 |
+| Research Grant   |     255 days |                1 |
+| Research Grant   |    1702 days |                1 |
+| Research Grant   |     939 days |                1 |
+| Research Grant   |    2708 days |                1 |
+| Research Grant   |    3135 days |                1 |
+| Fellowship       |     392 days |                1 |
+| Studentship      |    1542 days |                1 |
+| Studentship      |    1215 days |                1 |
+| Research Grant   |     752 days |                1 |
+| Studentship      |    2470 days |                1 |
+| Research Grant   |    1433 days |                1 |
+| Research Grant   |     895 days |                1 |
+| Research Grant   |    1194 days |                1 |
+| Research Grant   |    1029 days |                1 |
+| Studentship      |    1906 days |                1 |
+| Research Grant   |     657 days |                1 |
+| Research Grant   |    1454 days |                1 |
+| Studentship      |    1860 days |                1 |
+| Studentship      |    1585 days |                1 |
+| Studentship      |    1333 days |                1 |
+| Studentship      |    1479 days |                1 |
+| Training Grant   |     909 days |                1 |
+| Research Grant   |     666 days |                1 |
+| Research Grant   |    1294 days |                1 |
+| Studentship      |    1454 days |                1 |
+| Studentship      |    2345 days |                1 |
+| Research Grant   |    1174 days |                1 |
+| Research Grant   |     762 days |                1 |
+| Studentship      |    1330 days |                1 |
+| Studentship      |     995 days |                1 |
+| Research Grant   |    1609 days |                1 |
+| Fellowship       |     377 days |                1 |
+| Studentship      |    1659 days |                1 |
+| Studentship      |    1219 days |                1 |
+| Research Grant   |     860 days |                1 |
+| Fellowship       |     120 days |                1 |
+| Studentship      |    1090 days |                1 |
+| Research Grant   |     428 days |                1 |
+| Research Grant   |    1142 days |                1 |
+| Research Grant   |     905 days |                1 |
+| Studentship      |    1744 days |                1 |
+| Research Grant   |    1824 days |                1 |
+| Studentship      |    1154 days |                1 |
+| Studentship      |    1257 days |                1 |
+| Studentship      |    1610 days |                1 |
+| Studentship      |    1811 days |                1 |
+| Studentship      |    3292 days |                1 |
+| Training Grant   |     395 days |                1 |
+| Research Grant   |     625 days |                1 |
+| Studentship      |    1751 days |                1 |
+| Studentship      |    1348 days |                1 |
+| Research Grant   |     317 days |                1 |
+| Fellowship       |     791 days |                1 |
+| Studentship      |    2767 days |                1 |
+| Studentship      |    2272 days |                1 |
+| Research Grant   |    2375 days |                1 |
+| Research Grant   |    3468 days |                1 |
+| Research Grant   |    1214 days |                1 |
+| Studentship      |    1431 days |                1 |
+| Training Grant   |     478 days |                1 |
+| Fellowship       |     385 days |                1 |
+| Research Grant   |     960 days |                1 |
+| Studentship      |    1172 days |                1 |
+| Research Grant   |    1482 days |                1 |
+| Studentship      |    1130 days |                1 |
+| Studentship      |     287 days |                1 |
+| Research Grant   |     371 days |                1 |
+| Studentship      |    1360 days |                1 |
+| Research Grant   |     645 days |                1 |
+| Studentship      |    2044 days |                1 |
+| Research Grant   |     722 days |                1 |
+| Fellowship       |     430 days |                1 |
+| Fellowship       |    1399 days |                1 |
+| Studentship      |     694 days |                1 |
+| Studentship      |    1329 days |                1 |
+| Research Grant   |    2371 days |                1 |
+| Fellowship       |      97 days |                1 |
+| Fellowship       |     125 days |                1 |
+| Research Grant   |     363 days |                1 |
+| Training Grant   |     821 days |                1 |
+| Research Grant   |    1253 days |                1 |
+| Fellowship       |     986 days |                1 |
+| Research Grant   |     983 days |                1 |
+| Studentship      |    2192 days |                1 |
+| Studentship      |    1313 days |                1 |
+| Studentship      |     758 days |                1 |
+| Fellowship       |     647 days |                1 |
+| Fellowship       |     214 days |                1 |
+| Fellowship       |     336 days |                1 |
+| Research Grant   |     224 days |                1 |
+| Fellowship       |     529 days |                1 |
+| Research Grant   |    1302 days |                1 |
+| Studentship      |    1531 days |                1 |
+| Fellowship       |    1245 days |                1 |
+| Research Grant   |     225 days |                1 |
+| Studentship      |    1240 days |                1 |
+| Studentship      |    1196 days |                1 |
+| Studentship      |    1180 days |                1 |
+| Studentship      |    3438 days |                1 |
+| Studentship      |      31 days |                1 |
+| Fellowship       |    1642 days |                1 |
+| Studentship      |    1406 days |                1 |
+| Studentship      |    2695 days |                1 |
+| Studentship      |    1441 days |                1 |
+| Research Grant   |     138 days |                1 |
+| Studentship      |    2221 days |                1 |
+| Fellowship       |    1362 days |                1 |
+| Research Grant   |    1037 days |                1 |
+| Studentship      |    1739 days |                1 |
+| Studentship      |    1964 days |                1 |
+| Studentship      |    1382 days |                1 |
+| Studentship      |    3133 days |                1 |
+| Training Grant   |    1766 days |                1 |
+| Training Grant   |    1646 days |                1 |
+| Research Grant   |    2069 days |                1 |
+| Training Grant   |    2130 days |                1 |
+| Research Grant   |    1051 days |                1 |
+| Research Grant   |     617 days |                1 |
+| Studentship      |    1726 days |                1 |
+| Studentship      |    1383 days |                1 |
+| Research Grant   |    1056 days |                1 |
+| Studentship      |    2567 days |                1 |
+| Fellowship       |    1124 days |                1 |
+| Studentship      |    1927 days |                1 |
+| Fellowship       |    1430 days |                1 |
+| Research Grant   |     891 days |                1 |
+| Fellowship       |     514 days |                1 |
+| Research Grant   |     557 days |                1 |
+| Studentship      |    1543 days |                1 |
+| Fellowship       |     262 days |                1 |
+| Research Grant   |    1258 days |                1 |
+| Training Grant   |     333 days |                1 |
+| Studentship      |     375 days |                1 |
+| Studentship      |    2558 days |                1 |
+| Fellowship       |     442 days |                1 |
+| Training Grant   |    2100 days |                1 |
+| Research Grant   |     926 days |                1 |
+| Research Grant   |    1220 days |                1 |
+| Studentship      |    1484 days |                1 |
+| Research Grant   |    1158 days |                1 |
+| Studentship      |     397 days |                1 |
+| Studentship      |    3001 days |                1 |
+| Research Grant   |    1947 days |                1 |
+| Research Grant   |     756 days |                1 |
+| Studentship      |    1111 days |                1 |
+| Fellowship       |     513 days |                1 |
+| Training Grant   |     243 days |                1 |
+| Studentship      |    1270 days |                1 |
+| Training Grant   |     566 days |                1 |
+| Research Grant   |    1306 days |                1 |
+| Fellowship       |     403 days |                1 |
+| Studentship      |    1867 days |                1 |
+| Research Grant   |     565 days |                1 |
+| Fellowship       |     500 days |                1 |
+| Studentship      |    2522 days |                1 |
+| Studentship      |    1668 days |                1 |
+| Research Grant   |     623 days |                1 |
+| Research Grant   |     226 days |                1 |
+| Research Grant   |    1270 days |                1 |
+| Fellowship       |     343 days |                1 |
+| Studentship      |    1745 days |                1 |
+| Research Grant   |    1204 days |                1 |
+| Fellowship       |      77 days |                1 |
+| Research Grant   |    1413 days |                1 |
+| Training Grant   |     503 days |                1 |
+| Research Grant   |     350 days |                1 |
+| Studentship      |    2796 days |                1 |
+| Studentship      |    1492 days |                1 |
+| Research Grant   |     989 days |                1 |
+| Research Grant   |    1469 days |                1 |
+| Research Grant   |     528 days |                1 |
+| Training Grant   |    2164 days |                1 |
+| Fellowship       |     610 days |                1 |
+| Research Grant   |     176 days |                1 |
+| Studentship      |    1315 days |                1 |
+| Fellowship       |     591 days |                1 |
+| Research Grant   |     216 days |                1 |
+| Studentship      |    1901 days |                1 |
+| Training Grant   |     927 days |                1 |
+| Fellowship       |    1033 days |                1 |
+| Fellowship       |     381 days |                1 |
+| Studentship      |    3286 days |                1 |
+| Research Grant   |     397 days |                1 |
+| Research Grant   |     280 days |                1 |
+| Research Grant   |    1508 days |                1 |
+| Research Grant   |     418 days |                1 |
+| Research Grant   |    1671 days |                1 |
+| Research Grant   |     275 days |                1 |
 
 Look at the award given by the length of project by project category for
 all projects.
