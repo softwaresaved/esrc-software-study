@@ -537,7 +537,7 @@ esrcdat %>% select(ProjectCategory, AwardPounds, StartDate)                %>%
             group_by(Year, ProjectCategory)                                %>% 
             summarise(TotalExpenditure = round(sum(AwardPounds)/1e6), 
                      .groups = "keep")                                     %>% 
-            filter(!is.na(TotalExpenditure))                               %>% 
+            filter(!is.na(TotalExpenditure) & TotalExpenditure > 0)        %>% 
             ggplot(aes(x = Year, y = TotalExpenditure, fill = ProjectCategory)) + 
             geom_col(colour="black", position = "fill") +
             xlab("Year") + labs(fill = "Project Category") +
@@ -593,7 +593,7 @@ esrcdat %>% filter(Status == "Active")                                     %>%
             group_by(Year, ProjectCategory)                                %>% 
             summarise(TotalExpenditure = round(sum(AwardPounds)/1e6), 
                      .groups = "keep")                                     %>% 
-            filter(!is.na(TotalExpenditure))                               %>% 
+            filter(!is.na(TotalExpenditure) & TotalExpenditure > 0)        %>% 
             ggplot(aes(x = Year, y = TotalExpenditure, fill = ProjectCategory)) + 
             geom_col(colour="black", position = "fill") +
             xlab("Year") + labs(fill = "Project Category") +
