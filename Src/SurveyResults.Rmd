@@ -3853,7 +3853,7 @@ data %>% select(num_range("Q11_", 1:12))                 %>%
          theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
          xlab(my$lab) + ylab("Numbers") +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.position = "None")
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12), legend.position = "None")
 ```
 
 ```{r acquiring_skills_per}
@@ -3866,12 +3866,12 @@ data %>% select(num_range("Q11_", 1:12))                 %>%
          group_by(skills)                                %>% 
          mutate(n = n())                                 %>% 
          mutate(per = percent(n/N, accuracy = 1))        %>% 
-         ggplot(aes(x = reorder(skills, -n))) + 
-         geom_bar(fill = "light blue", colour = "black") +
-         theme_bw() +
+         ggplot(aes(x = reorder(skills, -n), fill = n)) + 
+         geom_bar(colour = "black") +
+         theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
          xlab("Where skills are acquired") + ylab("Numbers") + ylim(0, 129) +
          geom_text(aes(y = n, label = paste0(n, " (", per,")")), vjust = -0.5, size = 3) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12), legend.position = "None")
 ```
 
 ### Choice correlations
