@@ -777,7 +777,7 @@ esrcdat %>% filter(Status == "Active")                                          
                                 "Number of awards")) 
 ```
 
-Where the longest awards lie in term of days by project category is tabulated below.
+The longest fifteen awards lie in term of days by project category is tabulated below.
 
 ```{r award_lengths_active_table, echo = FALSE}
 
@@ -821,7 +821,7 @@ esrcdat %>% filter(Status == "Active")                                          
             filter(AwardPounds > 0)                                             %>% 
             #mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
             ggplot(aes(x = as.numeric(grant_length), y = AwardPounds, colour = ProjectCategory)) + 
-            geom_point(alpha = 0.25) + 
+            geom_point(alpha = 0.25) + scale_y_continuous(labels = comma) +
             ylab("Awards (£)") + xlab("Award Length (days)") + #scale_y_log10() +
             facet_wrap(vars(ProjectCategory)) +
             labs(colour = "Project Category") + theme_bw()

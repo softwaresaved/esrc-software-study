@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 13/06/22.
+**Last updated**: 15/06/22.
 
 -   <a href="#introduction" id="toc-introduction">Introduction</a>
 -   <a href="#overall-expenditure" id="toc-overall-expenditure">Overall
@@ -2988,7 +2988,7 @@ The main peaks happen at 1460 days (4 years), 1095 days (3 years) and
 | Research Grant   |    1508 days |                1 |
 | Research Grant   |    1671 days |                1 |
 
-Where the longest awards lie in term of days by project category is
+The longest fifteen awards lie in term of days by project category is
 tabulated below.
 
 | Number of days | Project Category | Number of projects |
