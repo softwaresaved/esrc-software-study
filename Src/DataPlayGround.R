@@ -623,10 +623,9 @@ ggplot() + geom_polygon(data = mapdata, aes( x = long, y = lat, group = group), 
 # Check sample distributions ----
 
 
-# Use a two Sample Kolmogorov-Smirnov Test
-
 # Data from the GtR - institution and award numbers, rename some of the entries
-# to be compatible with the survey
+# to be compatible with the survey. Rename some of the institutions to match the
+# survey institutional names.
 esrcdat %>% filter(Status == "Active")        %>%
             select(Institution=LeadROName)    %>%
             mutate(Institution = ifelse(Institution == "Queen Mary, University of London",
@@ -648,23 +647,29 @@ data %>% select(Institution = CleanLocs)     %>%
          arrange(desc(n)) -> sur
 
 
-# Set null values in the sample to zero
+# Do a left join by institution (gtr takes precedence so if not in the survey data
+# a null value is set for the survey) in this case substitute null values in the
+# survey sample with a zero
 gtr %>% left_join(sur, by = "Institution", suffix = c(".gtr",".sur")) %>%
       mutate(n.sur = ifelse(is.na(n.sur), 0, n.sur)) -> gtr_sur
 
-# Plot the values, reduce the input by only having GtR values with more tha one count.
+# Plot the values, reduce the input by only having GtR values with more than one
+# count to make the diagram less busy.
 gtr_sur %>% filter(n.gtr > 1) %>%
   ggplot(aes(x=reorder(Institution, -n.gtr))) + theme_bw() +
   geom_col(aes(y = n.gtr, fill = "green"), alpha = 0.25, colour = "black",  na.rm = TRUE) +
   geom_col(aes(y = n.sur, fill = "red"), alpha = 0.25, colour = "black", na.rm = TRUE) +
   theme(axis.text.x = element_text(angle= -90, hjust = 0, size = 6)) +
-  scale_y_log10(oob = squish_infinite) + ylab("Numbers") + labs(fill="Source") + xlab("Institutions") +
+  scale_y_log10(oob = squish_infinite) + ylab("Numbers") + labs(fill="Source") +
+  xlab("Institutions") +
   scale_fill_manual(labels = c("GtR", "Survey"), values = c("green","red"))
 
-# Do not have zero values - ignore null values in the join
+# Create another tibble that does not have zero values when merging the gtr and
+# the survey data - ignore null values that arise from the join.
 gtr %>% left_join(sur, by = "Institution", suffix = c(".gtr",".sur")) %>%
   filter(!is.na(n.sur)) -> gtr_sur2
 
+# Plot this data
 gtr_sur2 %>% ggplot(aes(x=reorder(Institution, -n.gtr))) + theme_bw() +
       geom_col(aes(y = n.gtr, fill = "green"), alpha = 0.25, colour = "black") +
       geom_col(aes(y = n.sur, fill = "red"), alpha = 0.25, colour = "black") +
@@ -672,16 +677,20 @@ gtr_sur2 %>% ggplot(aes(x=reorder(Institution, -n.gtr))) + theme_bw() +
       scale_y_log10() + ylab("Numbers") + xlab("Institution") + labs(fill="Source") +
       scale_fill_manual(labels = c("GtR", "Survey"), values = c("green","red"))
 
+# This time use the survey data as the basis for the left join
 sur %>% left_join(gtr, by = "Institution", suffix = c(".sur",".gtr")) %>%
       filter(!is.na(n.gtr)) -> sur_gtr
 
-
+# Plot the data
 sur_gtr %>% ggplot(aes(x=reorder(Institution, -n.gtr))) + theme_bw() +
   geom_col(aes(y = n.gtr, fill = "green"), alpha = 0.25, colour = "black") +
   geom_col(aes(y = n.sur, fill = "red"), alpha = 0.25, colour = "black") +
   theme(axis.text.x = element_text(angle= -90, hjust = 0)) +
   scale_y_log10() + ylab("Numbers") + xlab("Institution") + labs(fill="Source") +
   scale_fill_manual(labels = c("GtR", "Survey"), values = c("green","red"))
+
+# Try to see if the data come from the same distribution, i.e. does the survey
+# data correlate with the gtr data.
 
 # Not sure if this is an appropriate test - require a continuous distribution
 # and the inputs are supposed to be cumulative density distribution.
@@ -722,10 +731,13 @@ student_emails <- read_csv("../Data/esrc-students.csv", show_col_types = FALSE)
 # Vector of all the emails
 emails <- c(pi_emails[["Email"]], pi_emails2[["constructed email"]], student_emails[["constructed email"]])
 
+# Remove any duplicated emails
+emails <- emails[!duplicated(emails)]
+
 # Get the domains
 domains <- str_split(emails, "@", simplify = TRUE)[,2]
 
-# Get the institution names
+# Get the institution names for the domains
 insts <- read_csv("/Users/mario/Git/gateway-to-research-playing-about/output/uni_and_email_address_construction.csv", show_col_types = FALSE)
 
 # Tally the results for emails sent out
