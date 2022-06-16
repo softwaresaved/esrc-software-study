@@ -3894,7 +3894,7 @@ plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
 
 ```
 
-### How skills are acquired by career stage
+### Skills acquisition by career stage
 
 ```{r acquiring_skills_career}
 data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
@@ -3915,7 +3915,7 @@ data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-### How skills are acquired by % career stage
+### Skills acquisition by % career stage
 
 ```{r acquiring_skills_career_per}
 
@@ -3976,7 +3976,7 @@ data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-### How skills are acquired by gender
+### Skills acquisition by gender
 
 ```{r acquiring_skills_gender}
 
@@ -3997,7 +3997,7 @@ data %>% select(num_range("Q11_", 1:12), gender = Q21)   %>%
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
-### How skills are acquired by % gender pop
+### Skills acquisition by % gender pop
 
 ```{r acquiring_skills_gender_per}
 
@@ -4052,6 +4052,38 @@ data %>% select(num_range("Q11_", 1:12), gender = Q21)   %>%
                    vjust = -0.5, size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+### Skills acquisition % gender and career stage
+
+```{r acquiring_skills_gender_per2_career}
+
+data %>% select(num_range("Q11_", 1:12), career = Q20, gender = Q21)   %>%
+         group_by(gender)                                              %>% 
+         mutate(N = n())                                               %>% 
+         filter(!(gender %in% lowstatsgender))                         %>% 
+         filter(!(career %in% c("-", "Other")))                        %>% 
+         pivot_longer(cols = num_range("Q11_", 1:12),
+                      names_to = "questions",
+                      values_to = "skills")                           %>%
+         filter(skills != 0)                                          %>%
+         group_by(skills)                                             %>% 
+         mutate(M = n())                                              %>% 
+         group_by(gender, skills, career)                             %>% 
+         mutate(per = n()/N)                                          %>% 
+         distinct(gender, skills, per, M, career)                     %>% 
+         ggplot(aes(x = reorder(skills, -M), y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"),
+                  colour = "black") +
+         theme_bw() +
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.34)) +
+         xlab("How skills are being acquired") + ylab("Percent") +
+         geom_text(aes(label = percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"),
+                   vjust = -0.5, size = 3) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set2", name = "Gender") +
+         facet_wrap( ~ career)
 ```
 
 ### Counting combined choices
