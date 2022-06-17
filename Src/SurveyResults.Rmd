@@ -5199,6 +5199,34 @@ data %>% select(num_range("Q13_4_",1:5), gender = Q21)                          
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
+### Combined Q13 graph
+
+```{r combined_q13}
+data %>% select(URN, starts_with("Q13_"), career = Q20, gender = Q21)     %>%
+         pivot_longer(cols = num_range("Q13_1_",1:5),
+                      names_to = NULL,
+                      values_to = "Q13a")                                 %>% 
+         pivot_longer(cols = num_range("Q13_2_",1:5),
+                      names_to = NULL,
+                      values_to = "Q13b")                                 %>% 
+         pivot_longer(cols = num_range("Q13_3_",1:5),
+                      names_to = NULL,
+                      values_to = "Q13c")                                 %>% 
+         pivot_longer(cols = num_range("Q13_4_",1:5),
+                      names_to = NULL,
+                      values_to = "Q13d")                                %>% 
+         pivot_longer(cols = c("Q13a", "Q13b","Q13c","Q13d"),
+                      names_to = "Q13",
+                      values_to ="Response")                             %>% 
+        filter(Response != 0)                                            %>% 
+        distinct(URN, career, gender, Q13, Response)                     %>% 
+        mutate(Response = factor(Response, 
+              levels = c("Strongly agree","Agree","Undecided", "Disagree","Strongly disagree"))) %>% 
+        ggplot(aes(x = Response, fill = Q13)) + geom_bar(position = position_dodge2(), colour = "black") +
+        theme_bw() + ylab("Numbers")
+
+```
+
 ## Q14 Where software is run
 
 Where do you normally run your digital tools/software? Please check all
