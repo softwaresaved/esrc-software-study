@@ -4856,6 +4856,34 @@ data %>% select(num_range("Q13_2_",1:5), gender = Q21)                          
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
+#### Gender and career stage
+
+```{r aware_policies_gender_per2_career}
+
+data %>% select(num_range("Q13_2_",1:5), career = Q20, gender = Q21)                    %>%
+         filter(!(gender %in% lowstatsgender))                                          %>% 
+         filter(!(career %in% c("-", "Other")))                                         %>% 
+         group_by(gender)                                                               %>% 
+         mutate(N = n())                                                                %>% 
+         pivot_longer(cols = starts_with("Q13"),
+                      names_to = NULL,
+                      values_to = "understanding")                                      %>%
+         filter(understanding != 0)                                                     %>%
+         group_by(understanding, gender, career)                                        %>% 
+         mutate(per = n()/N)                                                            %>% 
+         mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
+         distinct(understanding, gender, per, career)                                   %>% 
+         ggplot(aes(x = understanding, y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 3, vjust = -0.5) +
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.21)) +
+         theme_bw() + ylab("Percent") +
+         xlab("Aware of how institution/funder's policies on how s/w is funded, managed and licensed") +
+         scale_fill_brewer(palette = "Set2", name = "Gender") +
+         facet_wrap(~ career)
+```
+
 ### Q13c Insufficient attention paid to s/w funding, management and licensing
 
 There is insufficient attention paid to software funding, management and
@@ -5026,6 +5054,33 @@ data %>% select(num_range("Q13_3_",1:5), gender = Q21)                          
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
+#### Gender and career stage
+
+```{r insufficient_attention_gender_per2_career}
+
+data %>% select(num_range("Q13_3_",1:5), career = Q20, gender = Q21)                    %>%
+         filter(!(gender %in% lowstatsgender))                                          %>% 
+         filter(!(career %in% c("-","Other")))                                          %>% 
+         group_by(gender)                                                               %>% 
+         mutate(N = n())                                                                %>% 
+         pivot_longer(cols = starts_with("Q13"),
+                      names_to = NULL,
+                      values_to = "understanding")                                      %>%
+         filter(understanding != 0)                                                     %>%
+         group_by(understanding, gender, career)                                        %>% 
+         mutate(per = n()/N)                                                            %>% 
+         mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
+         distinct(understanding, gender, per, career)                                   %>% 
+         ggplot(aes(x = understanding, y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 3, vjust = -0.5) +
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.22)) +
+         theme_bw() + ylab("Percent") +
+         xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community") +
+         scale_fill_brewer(palette = "Set2", name = "Gender") + 
+         facet_wrap(~ career)
+```
 ### Q13d Insufficient incentive to learn how s/w is funded, managed and licensed
 
 There is insufficient incentive for me to learn how my software is
@@ -5197,6 +5252,35 @@ data %>% select(num_range("Q13_4_",1:5), gender = Q21)                          
          theme_bw() + ylab("Percent") +
          xlab("Insufficient incentive to learn how s/w is funded, managed and licensed") +
          scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+#### Gender and career stage
+
+```{r insufficient_incentives_gender_per2_career}
+
+data %>% select(num_range("Q13_4_",1:5), career = Q20, gender = Q21)                    %>%
+         filter(!(career %in% c("-", "Other")))                                         %>% 
+         filter(!(gender %in% lowstatsgender))                                          %>% 
+         group_by(gender)                                                               %>% 
+         mutate(N = n())                                                                %>% 
+         pivot_longer(cols = starts_with("Q13"),
+                      names_to = NULL,
+                      values_to = "understanding")                                      %>%
+         filter(understanding != 0)                                                     %>%
+         group_by(understanding, gender, career)                                        %>% 
+         mutate(per = n()/N)                                                            %>% 
+         mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
+         distinct(understanding, gender, per, career)                                   %>% 
+         ggplot(aes(x = understanding, y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), 
+                   size = 3, vjust = -0.5) +
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.20)) +
+         theme_bw() + ylab("Percent") +
+         xlab("Insufficient incentive to learn how s/w is funded, managed and licensed") +
+         scale_fill_brewer(palette = "Set2", name = "Gender") +
+         facet_wrap(~ career)
 ```
 
 ### Combined Q13 graph
