@@ -4489,6 +4489,33 @@ data %>%  select(rew = Q12, gender = Q21)        %>%
           scale_fill_brewer(palette = "Set2", name = "Gender")
 
 ```
+
+```{r recognition_gender_per2_career}
+
+data %>%  select(rew = Q12, career= Q20, gender = Q21)  %>%
+          group_by(rew)                          %>% 
+          mutate(M = n())                        %>% 
+          filter(!(gender %in% lowstatsgender))  %>% 
+          filter(!(career %in% c("-", "Other"))) %>% 
+          group_by(gender)                       %>% 
+          mutate(N = n())                        %>% 
+          group_by(rew, gender, career)                  %>% 
+          mutate(per = n()/N)                    %>% 
+          distinct(rew, gender, per, M, career)          %>% 
+          ggplot(aes(x = reorder(rew, -M), y = per, fill = gender)) + 
+          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black", na.rm = TRUE) +
+          theme_bw() +
+          xlab("Development/Maintenance of rsearch software rewarded/recognised") +
+          ylab("Percentage") +
+          scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.32)) +
+          geom_text(aes(label = percent(per, accuracy = 1)), 
+                    position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
+                    size = 3, na.rm = TRUE) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+          scale_fill_brewer(palette = "Set2", name = "Gender") +
+          facet_wrap(~ career)
+
+```
 ### Rationale
 
 If you answered yes or no can you briefly state your reasons for
