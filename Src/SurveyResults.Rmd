@@ -5684,6 +5684,39 @@ data %>% select(id = URN, starts_with("Q15_"), -"Q15_a", gender = Q21)    %>%
 
 ```
 
+### Awareness by gender and career stage
+
+```{r licensing_gender_per_career}
+
+data %>% select(id = URN, starts_with("Q15_"), -"Q15_a", career = Q20, 
+                gender = Q21)    %>%
+         group_by(gender)                                                 %>%
+         mutate(N = n())                                                  %>% 
+         pivot_longer(cols = starts_with("Q15_"),
+                      names_to = NULL,
+                      values_to ="aware")                                 %>%
+         filter(aware != 0)                                               %>%
+         distinct(id, aware, gender,N, career)                            %>% 
+         filter(!(gender %in% lowstatsgender))                            %>% 
+         filter(!(career %in% c("-", "Other")))                           %>% 
+         mutate(aware = factor(aware, ordered = TRUE, levels = licawa))   %>% 
+         group_by(gender, aware, career)                                  %>% 
+         mutate(n = n())                                                  %>% 
+         mutate(per = percent(n/N, accuracy = 1))                         %>% 
+         distinct(n, N, per, gender, aware, career)                       %>% 
+         ggplot(aes(x = aware, y = n/N, fill = gender)) +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() + 
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.23)) +
+         geom_text(aes(label = per), vjust = -0.5,
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 3) +
+         ylab("Percent") + xlab("Aware of the policy for") +
+         scale_fill_brewer(palette = "Set2", name = "Gender") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         facet_wrap(~career)
+
+```
+
 ### Awareness vs institutions
 
 Percentages are given as a percentage from an institution.
