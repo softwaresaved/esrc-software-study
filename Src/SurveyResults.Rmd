@@ -5563,7 +5563,7 @@ data %>% select(URN, starts_with("Q15_"), -"Q15_a")                     %>%
                       names_to = NULL,
                       values_to ="aware")                               %>%
          filter(aware != 0)                                             %>%
-         mutate(N = n())                                                %>% 
+         mutate(N = n_distinct(URN))                                    %>% 
          mutate(aware = factor(aware, ordered = TRUE, levels = licawa)) %>% 
          group_by(aware)                                                %>%
          mutate(n = n_distinct(URN))                                    %>% 
@@ -5574,7 +5574,7 @@ data %>% select(URN, starts_with("Q15_"), -"Q15_a")                     %>%
          geom_text(aes(y = n, label = paste0(n, " (", per, ")")),  
                    vjust = -0.5, size = 3) +
          ylab("Numbers") + xlab(my$lab)  +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), 
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12), 
                legend.position = "None") 
 ```
 
