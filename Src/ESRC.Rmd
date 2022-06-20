@@ -1917,6 +1917,7 @@ combined2 %>% ggplot(aes(x = reorder(category, id.subject))) +
 
 
 ```{r compare_award, echo=FALSE}
+
 combined %>% ggplot(aes(x = reorder(category, id.subject))) + 
              geom_col(aes(y = Amount.subject, fill = "red"), colour = "black", alpha = 0.25) + 
              geom_col(aes(y = Amount.topic, fill = "blue"), colour = "black", alpha = 0.25) +  
@@ -1924,7 +1925,23 @@ combined %>% ggplot(aes(x = reorder(category, id.subject))) +
              theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
              xlab("Category") + ylab("Award (£)") + labs(fill = "Research") +
              scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
+
 ```
+
+Removing other and uncategorised fields.
+
+```{r compare_award2, echo=FALSE}
+
+combined %>% filter(!(category %in% c("Other", "Uncategorised"))) %>% 
+             ggplot(aes(x = reorder(category, id.subject))) + 
+             geom_col(aes(y = Amount.subject, fill = "red"), colour = "black", alpha = 0.25) + 
+             geom_col(aes(y = Amount.topic, fill = "blue"), colour = "black", alpha = 0.25) +  
+             scale_y_continuous(labels = comma) +
+             theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
+             xlab("Category") + ylab("Award (£)") + labs(fill = "Research") +
+             scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
+```
+
 
 In terms of the award numbers scaled by multiple subject/topic classifications there are some differences but I think
 these mainly lie in the Uncategorised and Other categories. There are also some differences in Development studies,
@@ -1940,6 +1957,35 @@ combined %>% ggplot(aes(x = reorder(category, id.subject))) +
              scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
 ```
 
+Removing the `Other` and `Unclassified` categories:
+
+```{r compare_number2, echo=FALSE}
+
+combined %>% filter(!(category %in% c("Other", "Uncategorised"))) %>% 
+             ggplot(aes(x = reorder(category, id.subject))) + 
+             geom_col(aes(y = Contribution.subject, fill = "red"), colour = "black", alpha = 0.25) + 
+             geom_col(aes(y = Contribution.topic, fill = "blue"), colour = "black", alpha = 0.25) +  
+             scale_y_log10(labels = comma) +
+             theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
+             xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
+             scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
+```
+
+Normalising the quantities without the `Other` and `Unclassified`:
+
+```{r compare_number2_norm, echo=FALSE}
+
+combined %>% filter(!(category %in% c("Other", "Uncategorised"))) %>% 
+             mutate(Nt = sum(Contribution.topic), Ns = sum(Contribution.subject)) %>% 
+             mutate(cs = Contribution.subject/Ns, ct = Contribution.topic/Nt) %>%  
+             ggplot(aes(x = reorder(category, id.subject))) + 
+             geom_col(aes(y = cs, fill = "red"), colour = "black", alpha = 0.25) + 
+             geom_col(aes(y = ct, fill = "blue"), colour = "black", alpha = 0.25) +  
+             scale_y_continuous(labels = percent_format(accuracy = 1)) +
+             theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
+             xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
+             scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
+```
 The `Other` category dominates by award amount though the `Uncategorised` dominate by numbers. Looking at the `Other` category in more detail:
 
 ```{r categories_topics2, echo = FALSE}

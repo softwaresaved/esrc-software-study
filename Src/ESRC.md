@@ -3716,6 +3716,10 @@ If we remove `Other` and the `Uncategorised` categories:
 
 ![](ESRC_files/figure-gfm/compare_award-1.png)<!-- -->
 
+Removing other and uncategorised fields.
+
+![](ESRC_files/figure-gfm/compare_award2-1.png)<!-- -->
+
 In terms of the award numbers scaled by multiple subject/topic
 classifications there are some differences but I think these mainly lie
 in the Uncategorised and Other categories. There are also some
@@ -3724,9 +3728,15 @@ and Technology and Area Studies.
 
 ![](ESRC_files/figure-gfm/compare_number-1.png)<!-- -->
 
-The `Other` category dominates by award amount though the
-`Uncategorised` dominate by numbers. Looking at the `Other` category in
-more detail:
+Removing the `Other` and `Unclassified` categories:
+
+![](ESRC_files/figure-gfm/compare_number2-1.png)<!-- -->
+
+Normalising the quantities without the `Other` and `Unclassified`:
+
+![](ESRC_files/figure-gfm/compare_number2_norm-1.png)<!-- --> The
+`Other` category dominates by award amount though the `Uncategorised`
+dominate by numbers. Looking at the `Other` category in more detail:
 
 | Subject                        | Number of awards | Number % | Award (£)      | Award % |
 |:-------------------------------|:-----------------|:---------|:---------------|:--------|
