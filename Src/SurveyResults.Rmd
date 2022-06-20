@@ -6235,12 +6235,13 @@ data %>%  select(num_range("Q19_", 1:22))               %>%
           group_by(disciplines)                         %>% 
           mutate(n = n())                               %>% 
           mutate(per = percent(n/N, accuracy = 1))      %>% 
-          ggplot(aes(x = reorder(disciplines, -n))) +
-          geom_bar(fill = "light blue", colour = "black") +
+          ggplot(aes(x = reorder(disciplines, -n), fill = n)) +
+          geom_bar(colour = "black") +
           theme_bw() + ylim(0, 44) +
           xlab("Discipline") + ylab("Numbers") +
+          scale_fill_distiller(palette = "Blues", direction = 1) +
           geom_text(aes(label = paste0(n, " (",per,")")), stat = "count", vjust = -0.5, size = 3) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.position = "None")
 ```
 
 ### Number of research disciplines selected
