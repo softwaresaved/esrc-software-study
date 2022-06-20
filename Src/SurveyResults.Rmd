@@ -6256,11 +6256,11 @@ data %>%  select(URN, num_range("Q19_", 1:22))          %>%
           group_by(URN)                                 %>% 
           mutate(n = n())                               %>%                           
           distinct(URN, n)                              %>% 
-          ggplot(aes(x = n)) + 
-          geom_bar(fill = "light blue", colour ="black") + 
-          theme_bw() +
+          ggplot(aes(x = n, fill = ..count..)) + 
+          geom_bar(colour ="black") + 
+          theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
           xlab("Number of research disciplines chosen by an individual") +
-          ylab("Number of people") +
+          ylab("Number of people") + theme(legend.position = "None") +
           geom_text(aes(label = ..count..), stat = "count", size = 3, vjust = -0.5)
 ```
 
