@@ -801,8 +801,10 @@ gtr %>%  left_join(ems, by = "Institution", suffix = c(".gtr",".ems")) %>%
          scale_y_log10() + ylab("Numbers") + xlab("Institution") + labs(fill="Source") +
          scale_fill_manual(labels = c("Gtr (awards)", "Emails"), values = c("green","blue"))
 
-# Distribtution by research discipline ----
+# Distribution by research discipline ----
 
+# Plot Gtr research categories obtained from research subjects and research
+# topics/
 combined %>% filter(!(category %in% c("Other", "Uncategorised"))) %>%
   mutate(Nt = sum(Contribution.topic), Ns = sum(Contribution.subject)) %>%
   mutate(cs = Contribution.subject/Ns, ct = Contribution.topic/Nt) %>%
@@ -814,7 +816,7 @@ combined %>% filter(!(category %in% c("Other", "Uncategorised"))) %>%
   xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
   scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
 
-
+# Normalise the research disciplines by the numbers and plot the output
 data %>%  select(URN, num_range("Q19_", 1:22))          %>%
           pivot_longer(cols = num_range("Q19_", 1:22),
                        names_to = NULL,
@@ -834,3 +836,16 @@ data %>%  select(URN, num_range("Q19_", 1:22))          %>%
           ylab("Percent") +
           theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position = "None") +
           geom_text(aes(label = percent(Per, accuracy = 1)), size = 3, vjust = -0.5)
+
+# Save the normalised research topic information
+data %>%  select(URN, num_range("Q19_", 1:22))  %>%
+  pivot_longer(cols = num_range("Q19_", 1:22),
+               names_to = NULL,
+               values_to = "disciplines")       %>%
+  filter(disciplines != 0)                      %>%
+  group_by(URN)                                 %>%
+  mutate(n = n())                               %>%
+  group_by(disciplines)                         %>%
+  summarise(Con = round(sum(1/n), 2))           %>%
+  mutate(Tot = sum(Con))                        %>%
+  mutate(Per = Con/Tot)  -> sur_research
