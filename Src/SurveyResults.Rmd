@@ -543,7 +543,7 @@ data <- data %>% left_join(locations, by = c("CleanLocs" = "Location"))
 # 21	Tools, technologies & methods
 # 22	Other
 
-discipline <- c("AreaStudies", "DS_AI", "Demography","DvelopmentStudies",
+discipline <- c("AreaStudies", "DS_AI", "Demography","DevelopmentStudies",
                 "Economics", "Education", "EnvPlanning","History","HumanGeography",
                 "InfoSci","Law","Linguistics","ManBusStud","PolSci_IntStud",
                 "Pyschology", "SciTechStud",
