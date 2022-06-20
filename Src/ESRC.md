@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 15/06/22.
+**Last updated**: 20/06/22.
 
 -   <a href="#introduction" id="toc-introduction">Introduction</a>
 -   <a href="#overall-expenditure" id="toc-overall-expenditure">Overall
@@ -3709,6 +3709,10 @@ are broadly similar. There are many less uncategorised items using the
 research topics though there are a lot more others which are items that
 do not fit into chosen categories. There are smaller differences in
 Sociology, Development studies, Human geography and in other cases too.
+
+If we remove `Other` and the `Uncategorised` categories:
+
+![](ESRC_files/figure-gfm/compare_order2-1.png)<!-- -->
 
 ![](ESRC_files/figure-gfm/compare_award-1.png)<!-- -->
 

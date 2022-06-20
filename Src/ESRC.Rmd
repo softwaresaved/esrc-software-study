@@ -27,6 +27,7 @@ library(RColorBrewer)
 library(leaflet)
 library(viridis)
 library(scales)
+library(ggrepel)
 
 # Do not use scientific notation
 options(scipen=999)
@@ -1889,6 +1890,31 @@ combined %>% ggplot(aes(x = reorder(category, id.subject))) +
 The award amounts are broadly similar. There are many less uncategorised items using the research topics though
 there are a lot more others which are items that do not fit into chosen categories. There are smaller differences
 in Sociology, Development studies, Human geography and in other cases too.
+
+If we remove `Other` and the `Uncategorised` categories:
+
+```{r compare_order2, echo = FALSE}
+
+subjects_sum2 <- subjects_sum %>% filter(!(category %in% c("Other", "Uncategorised")))
+topics_sum2 <- topics_sum %>% filter(!(category %in% c("Other", "Uncategorised")))
+
+subjects_sum2$id <- 1:nrow(subjects_sum2)
+topics_sum2$id <- 1:nrow(topics_sum2)
+
+subjects_sum2 %>% left_join(topics_sum2, by = "category", suffix = c(".subject", ".topic")) -> combined2
+
+combined2 %>% ggplot(aes(x = reorder(category, id.subject))) + 
+             geom_line(aes(y = id.subject, group = 1)) + geom_point(aes(y = id.subject, colour = "red")) + 
+             geom_line(aes(y = id.topic, group = 2)) + geom_point(aes(y = id.topic, colour = "blue")) + 
+             theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
+             xlab("Category") + ylab("Order id") + labs(colour = "Research") +
+             scale_color_manual(labels = c("Topic", "Subject"), values = c("blue", "red")) +
+             geom_label_repel(aes(x = category, y = id.subject, label = id.subject), 
+                              colour = "red", alpha = 1.0, size = 2, force = 2) +
+             geom_label_repel(aes(x = category, y = id.topic, label = id.topic), 
+                              colour = "blue", alpha = 1.0, size = 2, force = 2) 
+```
+
 
 ```{r compare_award, echo=FALSE}
 combined %>% ggplot(aes(x = reorder(category, id.subject))) + 
