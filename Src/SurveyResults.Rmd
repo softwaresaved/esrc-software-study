@@ -6264,6 +6264,36 @@ data %>%  select(URN, num_range("Q19_", 1:22))          %>%
           geom_text(aes(label = ..count..), stat = "count", size = 3, vjust = -0.5)
 ```
 
+We can use the above information to normalise contribtuions so that if a research
+discipline is mentioned N times it will only contribut 1/N times.
+The other disciplines specified were:
+
+```{r normalised_research_disciplines, echo = FALSE}
+
+data %>%  select(URN, num_range("Q19_", 1:22))          %>%
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = NULL,
+                       values_to = "disciplines")       %>%
+          filter(disciplines != 0)                      %>%
+          group_by(URN)                                 %>%
+          mutate(n = n())                               %>%
+          group_by(disciplines)                         %>%
+          summarise(Con = round(sum(1/n), 2))           %>%
+          mutate(Tot = sum(Con))                        %>%
+          mutate(Per = Con/Tot)                         %>%
+          ggplot(aes(x = reorder(disciplines, -Per), y = Per, fill = Per)) +
+          geom_col(colour ="black") +
+          scale_y_continuous(labels = percent_format(accuracy = 1)) +
+          theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
+          xlab("Normalised research disciplines") +
+          ylab("Percent") +
+          theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position = "None") +
+          geom_text(aes(label = percent(Per, accuracy = 1)), size = 3, vjust = -0.5)
+
+```
+
+The `Other` disciplines are:
+
 ```{r row_all_zeros, results='asis'}
 
 data %>% select(num_range("Q19_", 1:22))          %>%  
