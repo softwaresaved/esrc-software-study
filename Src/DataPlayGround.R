@@ -804,17 +804,17 @@ gtr %>%  left_join(ems, by = "Institution", suffix = c(".gtr",".ems")) %>%
 # Distribution by research discipline ----
 
 # Plot Gtr research categories obtained from research subjects and research
-# topics/
-combined %>% filter(!(category %in% c("Other", "Uncategorised"))) %>%
-  mutate(Nt = sum(Contribution.topic), Ns = sum(Contribution.subject)) %>%
-  mutate(cs = Contribution.subject/Ns, ct = Contribution.topic/Nt) %>%
-  ggplot(aes(x = reorder(category, id.subject))) +
-  geom_col(aes(y = cs, fill = "red"), colour = "black", alpha = 0.25) +
-  geom_col(aes(y = ct, fill = "blue"), colour = "black", alpha = 0.25) +
-  scale_y_continuous(labels = percent_format(accuracy = 1)) +
-  theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
-  xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
-  scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
+# topics.
+combined %>% filter(!(category %in% c("Other", "Uncategorised")))                 %>%
+             mutate(Nt = sum(Contribution.topic), Ns = sum(Contribution.subject)) %>%
+             mutate(cs = Contribution.subject/Ns, ct = Contribution.topic/Nt)     %>%
+             ggplot(aes(x = reorder(category, id.subject))) +
+             geom_col(aes(y = cs, fill = "red"), colour = "black", alpha = 0.25) +
+             geom_col(aes(y = ct, fill = "blue"), colour = "black", alpha = 0.25) +
+             scale_y_continuous(labels = percent_format(accuracy = 1)) +
+             theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
+             xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
+             scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
 
 # Normalise the research disciplines by the numbers and plot the output
 data %>%  select(URN, num_range("Q19_", 1:22))          %>%
@@ -837,15 +837,62 @@ data %>%  select(URN, num_range("Q19_", 1:22))          %>%
           theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position = "None") +
           geom_text(aes(label = percent(Per, accuracy = 1)), size = 3, vjust = -0.5)
 
-# Save the normalised research topic information
-data %>%  select(URN, num_range("Q19_", 1:22))  %>%
-  pivot_longer(cols = num_range("Q19_", 1:22),
-               names_to = NULL,
-               values_to = "disciplines")       %>%
-  filter(disciplines != 0)                      %>%
-  group_by(URN)                                 %>%
-  mutate(n = n())                               %>%
-  group_by(disciplines)                         %>%
-  summarise(Con = round(sum(1/n), 2))           %>%
-  mutate(Tot = sum(Con))                        %>%
-  mutate(Per = Con/Tot)  -> sur_research
+# Save the normalised research topic information - ignore the other category.
+data %>%  select(URN, num_range("Q19_", 1:22))          %>%
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = NULL,
+                       values_to = "disciplines")       %>%
+          filter(disciplines != 0)                      %>%
+          filter(disciplines != "Other")                %>%
+          group_by(URN)                                 %>%
+          mutate(n = n())                               %>%
+          group_by(disciplines)                         %>%
+          summarise(Con = round(sum(1/n), 2))           %>%
+          mutate(Tot = sum(Con))                        %>%
+          mutate(Per = Con/Tot)  -> sur_research
+
+# Rename the research disciplines
+topics <-  c("Area Studies", "Data science and artificial intelligence", "Demography",
+             "Development studies", "Economics", "Education", "Environmental planning",
+             "History", "Human Geography", "Information science", "Law & legal studies",
+             "Linguistics", "Management & business studies", "Political science. & international studies",
+             "Psychology", "Science and Technology Studies", "Social anthropology", "Social policy",
+             "Social work", "Sociology", "Tools, technologies & methods", "Other")
+
+# Note Dvelopment studies may have to go back to Development studies
+names(topics) <- c("AreaStudies", "DS_AI", "Demography","DvelopmentStudies",
+                   "Economics", "Education", "EnvPlanning","History","HumanGeography",
+                   "InfoSci","Law","Linguistics","ManBusStud","PolSci_IntStud",
+                   "Pyschology", "SciTechStud",
+                   "SocAnth", "SocPol", "SocWork","Sociology","ToolsTechMeth",
+                    "Other")
+
+# Create a new column - rs for research subjects
+sur_research$rs <-  unname(topics[sur_research[["disciplines"]]])
+
+# Check we are not missing categories
+rs <-  unname(topics[sur_research[["disciplines"]]])
+combined %>% select(category)                     %>%
+             filter(category != "Uncategorised")  %>%
+             filter(!(category %in% rs))
+
+# Now join the data together
+combined %>% filter(!(category %in% c("Uncategorised", "Other")))  %>%
+             left_join(sur_research, by = c("category" = "rs"))    %>%
+             mutate(Nt = sum(Contribution.topic),
+                    Ns = sum(Contribution.subject))                %>%
+             mutate(cs = Contribution.subject/Ns,
+                    ct = Contribution.topic/Nt)                    %>%
+             pivot_longer(cols = c("cs","ct","Per"),
+                          names_to = "type",
+                          values_to = "percent")                   %>%
+             ggplot(aes(x = reorder(category, id.subject), fill = type, by = type)) +
+             geom_col(aes(y = percent),
+                      position = position_dodge2(width = 0.8, preserve = "single"), colour = "black", alpha = 0.5) +
+             scale_y_continuous(labels = percent_format(accuracy = 1)) +
+             theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
+             xlab("Category") + ylab("Percent") + labs(fill = "Research") +
+             scale_fill_manual(labels = c("Subject", "Topic", "Survey"),
+                               values = c("blue", "red", "green"))
+
+
