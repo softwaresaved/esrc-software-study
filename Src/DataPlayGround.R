@@ -620,7 +620,7 @@ mapdata <- tidy(shapesfile, region="RGN20NM")
 ggplot() + geom_polygon(data = mapdata, aes( x = long, y = lat, group = group), fill="#69b3a2", color="white") +
             theme_void()
 
-# Check sample distributions ----
+# Institution distributions ----
 
 
 # Data from the GtR - institution and award numbers, rename some of the entries
@@ -681,7 +681,7 @@ gtr_sur2 %>% ggplot(aes(x=reorder(Institution, -n.gtr))) + theme_bw() +
 sur %>% left_join(gtr, by = "Institution", suffix = c(".sur",".gtr")) %>%
       filter(!is.na(n.gtr)) -> sur_gtr
 
-# Plot the data
+# Plot the data -bar graphs
 sur_gtr %>% ggplot(aes(x=reorder(Institution, -n.gtr))) + theme_bw() +
   geom_col(aes(y = n.gtr, fill = "green"), alpha = 0.25, colour = "black") +
   geom_col(aes(y = n.sur, fill = "red"), alpha = 0.25, colour = "black") +
@@ -689,12 +689,21 @@ sur_gtr %>% ggplot(aes(x=reorder(Institution, -n.gtr))) + theme_bw() +
   scale_y_log10() + ylab("Numbers") + xlab("Institution") + labs(fill="Source") +
   scale_fill_manual(labels = c("GtR", "Survey"), values = c("green","red"))
 
+
 # Try to see if the data come from the same distribution, i.e. does the survey
 # data correlate with the gtr data.
 
 # Not sure if this is an appropriate test - require a continuous distribution
-# and the inputs are supposed to be cumulative density distribution.
+# and the inputs are supposed to be cumulative density distribution. At the
+# moment feeding it a sample vector.
 # https://www.statology.org/kolmogorov-smirnov-test-r/
+#
+# https://miningthedetails.com/blog/r/non-parametric-tests/
+#
+# o Null HYPOTHESIS: The two distributions are the same
+# o p-value can be used to determine rejection of null hypothesis (i.e. p< 0.05 reject null)
+# o D close to 1 indicates the two samples are from different distributions
+# o D closer to 0 indicates the two samples are from the same distribution
 
 # Two sample Kolmogorov-Smirnov Test
 ks.test(gtr_sur[["n.gtr"]], gtr_sur[["n.sur"]])
@@ -791,3 +800,37 @@ gtr %>%  left_join(ems, by = "Institution", suffix = c(".gtr",".ems")) %>%
          theme(axis.text.x = element_text(angle= -90, hjust = 0, size = 6)) +
          scale_y_log10() + ylab("Numbers") + xlab("Institution") + labs(fill="Source") +
          scale_fill_manual(labels = c("Gtr (awards)", "Emails"), values = c("green","blue"))
+
+# Distribtution by research discipline ----
+
+combined %>% filter(!(category %in% c("Other", "Uncategorised"))) %>%
+  mutate(Nt = sum(Contribution.topic), Ns = sum(Contribution.subject)) %>%
+  mutate(cs = Contribution.subject/Ns, ct = Contribution.topic/Nt) %>%
+  ggplot(aes(x = reorder(category, id.subject))) +
+  geom_col(aes(y = cs, fill = "red"), colour = "black", alpha = 0.25) +
+  geom_col(aes(y = ct, fill = "blue"), colour = "black", alpha = 0.25) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
+  xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
+  scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
+
+
+data %>%  select(URN, num_range("Q19_", 1:22))          %>%
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = NULL,
+                       values_to = "disciplines")       %>%
+          filter(disciplines != 0)                      %>%
+          group_by(URN)                                 %>%
+          mutate(n = n())                               %>%
+          group_by(disciplines)                         %>%
+          summarise(Con = round(sum(1/n), 2))           %>%
+          mutate(Tot = sum(Con))                        %>%
+          mutate(Per = Con/Tot)                         %>%
+          ggplot(aes(x = reorder(disciplines, -Per), y = Per, fill = Per)) +
+          geom_col(colour ="black") +
+          scale_y_continuous(labels = percent_format(accuracy = 1)) +
+          theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
+          xlab("Normalised research disciplines") +
+          ylab("Percent") +
+          theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position = "None") +
+          geom_text(aes(label = percent(Per, accuracy = 1)), size = 3, vjust = -0.5)
