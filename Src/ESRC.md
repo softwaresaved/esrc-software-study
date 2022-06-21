@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 20/06/22.
+**Last updated**: 21/06/22.
 
 -   <a href="#introduction" id="toc-introduction">Introduction</a>
 -   <a href="#overall-expenditure" id="toc-overall-expenditure">Overall
@@ -3354,8 +3354,7 @@ award has expired.
 
 ## Classification by category using research subjects
 
-We want to be able to classify projects under the following base
-categories:
+We want to classify projects under the following base categories:
 
 -   Area Studies
 -   Demography
@@ -3378,20 +3377,22 @@ categories:
 -   Tools, technologies & methods
 -   Other
 
-These categories are derived from decomposition of previous ESRC
+These categories are derived from the decomposition of previous ESRC
 expenditure reports at [ESRC application and success rate data and
-analysis](https://www.ukri.org/publications/esrc-application-and-success-rate-data-and-analysis/).
+analysis](https://www.ukri.org/publications/esrc-application-and-success-rate-data-and-analysis/),
+in particular the `All_grants_by_discipline` tab in the
+`Application and success rate data 2011-12 to 2017-18` spreadsheet.
 
 The GtR allows each project to be classified under one or more research
-subjects. This data does not come with the data snapshots but can be
-obtained by other means. This has been mapped to the above categories
-using the mapping provided below. Where a project subject is not
-provided an “Unclassified” type is used.
+subjects. This data does not come with the data snapshots that can be
+downloaded but can be obtained by other means. This has been mapped to
+the above categories using the mapping provided below. Where a project
+subject is not provided an “Unclassified” type is used.
 
-There are 73 research subject types and 21 categories described above
-plus the `Uncategorised` type for the cases where this information has
-not been provided. The GtR subjects for ESRC projects have been mapped
-to categories according to:
+There are 73 research subject types that have to be mapped into the 21
+categories described above plus the `Uncategorised` type for the cases
+where this information has not been provided. The GtR subjects for ESRC
+projects have been mapped to categories according to:
 
 -   **Area Studies**: Area Studies
 -   **Demography**: Demography, Demography & human geography
@@ -3432,12 +3433,13 @@ to categories according to:
     detectors, Materials Processing
 -   **Uncategorised**: NA
 
-A project might be assigned more than one research subject, where this
-is the case if the project has been assigned with n subjects then each
-will contribute 1/n to the classification count and will be assigned a
-contribution of Award_amount/n to each subject. Taking this into account
-for each project, this gives a breakdown of the number of awards and
-amount awarded as:
+In the GtR, a project might be classified under more than one research
+subject. If this is the case then if the project has been associated
+with n research subjects then each will contribute 1/n to the
+classification count and will be assigned a contribution of
+Award_amount/n to each of the categories that the research subject has
+been associated with. Taking this into account for each project, this
+gives a breakdown of thenumber of awards and amount awarded as:
 
 | Category                                   | Number of awards | Number % | Award (£)   | Award % |
 |:-------------------------------------------|:-----------------|:---------|:------------|:--------|
@@ -3463,9 +3465,11 @@ amount awarded as:
 | Science and Technology Studies             | 60.3             | 1        | 23,625,071  | 1       |
 | Area Studies                               | 42.0             | 0        | 13,558,534  | 0       |
 
-The `Other` category dominates by award amount though the
-`Uncategorised` dominate by numbers. Looking at the `Other` category in
-more detail:
+`Uncategorised` arises from the original classification in the GtR. The
+`Other` category, where anything that did not have an immediate mapping
+from the research subject to one of our categories is put, dominates by
+award amount though the `Uncategorised` dominate by numbers. Looking at
+the `Other` category in more detail:
 
 | Subject                        | Number of awards | Number % | Award (£)      | Award % |
 |:-------------------------------|:-----------------|:---------|:---------------|:--------|
@@ -3518,7 +3522,7 @@ more detail:
 | Catalysis & surfaces           | 0.2              | 0        | 30,020.75      | 0       |
 
 There are some large items near the top. Also, some of the items would
-not usually fall under the ESRC area.
+not normally fall under the ESRC remit.
 
 If we only focus on currently active projects we get:
 
@@ -3618,21 +3622,17 @@ active projects:
 | Area Studies                               | 18.8             | 2        | 8,353,914   | 1       |
 | History                                    | 19.3             | 2        | 6,413,233   | 1       |
 
-Plot the number of contributions against research subject.
+Plot the number of contributions against categories.
 
 ![](ESRC_files/figure-gfm/categoriesContrib_graph-1.png)<!-- -->
 
-Plot the total awards against research subject.
+Plot the total awards against categories.
 
 ![](ESRC_files/figure-gfm/categoriesAward_graph-1.png)<!-- -->
 
-Plot the average award against research subject.
+Plot the average award against categories.
 
 ![](ESRC_files/figure-gfm/categoriesAvgAward_graph-1.png)<!-- -->
-
-![](ESRC_files/figure-gfm/AwardPiePlot-1.png)<!-- -->
-
-![](ESRC_files/figure-gfm/NumberOfAwardsPiePlot-1.png)<!-- -->
 
 ## Classification by category using research topics
 
