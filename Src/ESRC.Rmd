@@ -1639,17 +1639,26 @@ esrc_subjects %>% filter(category != "Other", category != "Uncategorised", Statu
 
 ## Classification by category using research topics
 
-Unlike the 71 unique research subjects there are 399 unique [research topics](https://gtr.ukri.org/resources/classificationlists.html) but it gives as
-a different way of classifying awards into the categories mentioned above. As there
-are a lot more topics to assign you will have to examine the code to see the detail.
-This would be a zeroth order approximation to the matching with categories.
+GtR projects are also classified by `research topics` but unlike the 71 unique 
+research subjects for the ESRC data there are 399 unique 
+[research topics](https://gtr.ukri.org/resources/classificationlists.html) used but this gives as
+a different way of classifying projects into the different categories described above. As there
+are a lot more topics to assign, you will have to examine the 
+[source code](https://github.com/softwaresaved/esrc-software-study/blob/main/Src/ESRC.Rmd) 
+to see the detail of the mapping used.
+This would be a zeroth order approximation to the matching the research topics with 
+the categories.
 
 The GtR [says](https://gtr.ukri.org/resources/data.html):
 
-> Classifications: The ability to search for classifications has been provided to give an insight into grants that are   from similar areas that may be of interest to the user. Care should be taken if using these classifications for 
-  comparative analysis purposes as the source, coverage and level of usage of the classifications varies significantly   across the GtR funders. It is not possible to search and download all the classification categories that are being 
+> Classifications: The ability to search for classifications has been provided to give an insight into grants that are from similar areas that may be of interest to the user. Care should be taken if using these classifications for 
+  comparative analysis purposes as the source, coverage and level of usage of the classifications varies significantly across the GtR funders. It is not possible to search and download all the classification categories that are being 
   published on GtR. The ones that are searchable and downloadable are Research Topics, Health Category and UKRI 
- Programmes. A full list of these classifications and their categories can be found here.
+ Programmes. A full list of these classifications and their categories can be found [here](https://gtr.ukri.org/resources/classificationlists.html).
+
+There are caveats but we are using data pertaining to only one research council, the ESRC, and
+we are using both the `research subjects` and `research topics`. The `research topics` are slightly
+more onerous as there are a lot more of them.
 
 ```{r read_topics, echo = FALSE}
 
@@ -1749,12 +1758,13 @@ if(any(esrc_topics$category == "-")) {
 ```
 
 
-As with research subjects a project might be assigned more than one research topics, 
+As with research subjects, a project might be assigned more than one research topic, 
 as previously done if a project is associated with n research topics then each of these 
 will contribute 1/n to the classification count and will be assigned a contribution of Award_amount/n to each
 category. We can compare the number of research subjects/topics assigned to each project in the graph below.
 
 ```{r cmp_subs_tos, echo = FALSE}
+
 esrc_subjects %>% select(Nsub)       %>% 
                   group_by(Nsub)     %>% 
                   tally(name ="Ns") -> subjs
@@ -1764,7 +1774,7 @@ esrc_topics %>% select(Ntop)     %>%
                 tally(name = "Nt") -> tops
 
 # Normalise over-counting - a subject with 2 subject will appear twice so divide 
-# by 2 and so on.
+# by 2, and so on.
 for(i in 1:7){
   tops[i, 2] <- tops[i, 2]/i
   subjs[i, 2] <- subjs[i, 2]/i
@@ -1777,12 +1787,13 @@ subjs %>% left_join(tops, by = c("Nsub" = "Ntop")) %>%
           geom_col(aes(y = Nt, fill = "blue"), alpha = 0.5, colour = "black") + 
           theme_bw() + scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red")) +
           scale_y_log10(labels = comma) + labs(fill = "Research") +
-          ylab("Number of entries") + xlab("Number of research subjects/topics per projects")
+          ylab("Number of entries") + xlab("Number of research subjects/topics per project")
 ```
 
 
-Taking this into account for each project, this gives a breakdown of the 
-number of awards and amount awarded as ordered by the total awarded to each category:
+Taking this into account for each project, gives us a breakdown of the 
+number of awards and amount awarded as ordered by the total awarded to each 
+category:
 
 ```{r categories_from_topics1, echo = FALSE}
 
@@ -1807,6 +1818,7 @@ esrc_topics %>% select(category, AwardPounds, fracContrib)                      
 
 
 ```{r compare_sub_top, echo = FALSE}
+
 esrc_subjects %>% select(category, AwardPounds, fracContrib)                      %>% 
                   group_by(category)                                              %>% 
                   summarise(Contribution = round(sum(fracContrib),1), 
@@ -1817,7 +1829,6 @@ esrc_subjects %>% select(category, AwardPounds, fracContrib)                    
                   select(-totContrib, -totAmount)                                 %>% 
                   relocate(percContrib, .after = Contribution)                    %>% 
                   relocate(perAward, .after = Amount)                             %>% 
-                  # mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
                   arrange(desc(Amount)) -> subjects_sum
 
 esrc_topics %>% select(category, AwardPounds, fracContrib)                      %>% 
@@ -1827,11 +1838,9 @@ esrc_topics %>% select(category, AwardPounds, fracContrib)                      
                   mutate(totContrib = sum(Contribution), totAmount = sum(Amount)) %>% 
                   mutate(percContrib = round(Contribution/totContrib,2)*100,
                          perAward = round(Amount/totAmount,2) * 100)              %>%
-                    
                   select(-totContrib, -totAmount)                                 %>% 
                   relocate(percContrib, .after = Contribution)                    %>% 
                   relocate(perAward, .after = Amount)                             %>% 
-                  # mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
                   arrange(desc(Amount)) -> topics_sum
 
 subjects_sum$id <- 1:nrow(subjects_sum)

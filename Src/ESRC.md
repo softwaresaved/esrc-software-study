@@ -3636,12 +3636,16 @@ Plot the average award against categories.
 
 ## Classification by category using research topics
 
-Unlike the 71 unique research subjects there are 399 unique [research
-topics](https://gtr.ukri.org/resources/classificationlists.html) but it
-gives as a different way of classifying awards into the categories
-mentioned above. As there are a lot more topics to assign you will have
-to examine the code to see the detail. This would be a zeroth order
-approximation to the matching with categories.
+GtR projects are also classified by `research topics` but unlike the 71
+unique research subjects for the ESRC data there are 399 unique
+[research
+topics](https://gtr.ukri.org/resources/classificationlists.html) used
+but this gives as a different way of classifying projects into the
+different categories described above. As there are a lot more topics to
+assign, you will have to examine the [source
+code](https://github.com/softwaresaved/esrc-software-study/blob/main/Src/ESRC.Rmd)
+to see the detail of the mapping used. This would be a zeroth order
+approximation to the matching the research topics with the categories.
 
 The GtR [says](https://gtr.ukri.org/resources/data.html):
 
@@ -3654,10 +3658,16 @@ The GtR [says](https://gtr.ukri.org/resources/data.html):
 > download all the classification categories that are being published on
 > GtR. The ones that are searchable and downloadable are Research
 > Topics, Health Category and UKRI Programmes. A full list of these
-> classifications and their categories can be found here.
+> classifications and their categories can be found
+> [here](https://gtr.ukri.org/resources/classificationlists.html).
 
-As with research subjects a project might be assigned more than one
-research topics, as previously done if a project is associated with n
+There are caveats but we are using data pertaining to only one research
+council, the ESRC, and we are using both the `research subjects` and
+`research topics`. The `research topics` are slightly more onerous as
+there are a lot more of them.
+
+As with research subjects, a project might be assigned more than one
+research topic, as previously done if a project is associated with n
 research topics then each of these will contribute 1/n to the
 classification count and will be assigned a contribution of
 Award_amount/n to each category. We can compare the number of research
@@ -3665,7 +3675,7 @@ subjects/topics assigned to each project in the graph below.
 
 ![](ESRC_files/figure-gfm/cmp_subs_tos-1.png)<!-- -->
 
-Taking this into account for each project, this gives a breakdown of the
+Taking this into account for each project, gives us a breakdown of the
 number of awards and amount awarded as ordered by the total awarded to
 each category:
 
