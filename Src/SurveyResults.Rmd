@@ -12,7 +12,7 @@ editor_options:
     wrap: 72
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include = FALSE, warnings = FALSE}
 
 # Defaults for chunk size outputs
 knitr::opts_chunk$set(echo = TRUE, echo = FALSE, dpi = 300)
@@ -33,7 +33,7 @@ library(tibble)
 library(scales)
 library(ellipse, warn.conflicts = FALSE)
 library(viridis)
-
+library(corrplot)
 
 ```
 
