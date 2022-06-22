@@ -4586,7 +4586,8 @@ data %>% select(num_range("Q13_1_",1:5))            %>%
          geom_bar(colour = "black") + scale_fill_distiller(palette = "Blues", direction = 1) +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
          theme_bw() + ylab("Numbers") +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.position = "None") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10), 
+               legend.position = "None") +
          xlab(my$lab)
 ```
 
@@ -5805,7 +5806,7 @@ data %>%  select(num_range("Q16_", 1:13))         %>%
   theme_bw() + ylim(0, 91) +
   xlab(my$lab) + ylab("Numbers") + scale_fill_distiller(palette = "Blues", direction = 1) +
   geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-  theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0, size = 6),
+  theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0, size = 10),
         legend.position = "None")
 
 ```
