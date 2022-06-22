@@ -2971,6 +2971,11 @@ my_colors <- colorRampPalette(my_colors)(100)
 
 plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
 
+# http://www.sthda.com/english/wiki/visualize-correlation-matrix-using-correlogram
+# corrplot(cor(q), method="circle")
+# corrplot(cor(q), method="pie")
+# corrplot(cor(q), method="color")
+# corrplot(cor(q), method="number")
 ```
 
 ### Responses by career stage
