@@ -2682,25 +2682,27 @@ for using open source software?
 ```{r reason4os}
 
 # Calculate an x label with the folks that filled in this question.
-data %>% select(URN, starts_with("Q6_a"))  %>% 
-         summarise(lab = paste0("Used of OS (N=", n_distinct(URN),")")) -> my
+data %>% select(URN, starts_with("Q6_a"))         %>% 
+         pivot_longer(cols = starts_with("Q6_a"),
+                      names_to = NULL,
+                      values_to = "UseOS")        %>%
+         filter(UseOS != 0)                       %>%             
+         summarise(lab = paste0("Reason for using OS (N=", n_distinct(URN),")")) -> my
 
-data %>% select(starts_with("Q6_a"))             %>%
-         mutate(N = n())                          %>% 
+data %>% select(starts_with("Q6_a"))              %>%
          pivot_longer(cols = starts_with("Q6_a"),
                       names_to = NULL,
                       values_to = "UseOS")        %>%
          filter(UseOS != 0)                       %>%
          group_by(UseOS)                          %>% 
          mutate(n = n())                          %>% 
-         mutate(per = percent(n/N, accuracy = 1)) %>% 
          ungroup()                                %>% 
-         distinct(UseOS, per, n, N)               %>% 
+         distinct(UseOS, n)                       %>% 
          ggplot(aes(x = reorder(UseOS, -n), y = n, fill = n)) + 
          geom_col(colour = "black") + xlab(unique(my$lab)) +
          theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +         
          geom_text(aes(label = n), vjust = -0.5, size = 3) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.position = "None") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10), legend.position = "None") +
          ylab("Numbers")
 ```
  
@@ -2949,7 +2951,7 @@ data %>% select(starts_with("Q6_b"))        %>%
          geom_bar(colour = "black") + 
          theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.position = "None") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10), legend.position = "None") +
          xlab(my$lab) + ylab("Numbers")
 ```
 
