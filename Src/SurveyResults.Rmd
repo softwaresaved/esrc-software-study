@@ -34,6 +34,7 @@ library(scales)
 library(ellipse, warn.conflicts = FALSE)
 library(viridis)
 library(corrplot)
+library(ggrepel)
 
 ```
 
@@ -6737,9 +6738,11 @@ data %>%  select(career = Q20)     %>%
           mutate(per =  n()/N)     %>% 
           distinct(career, per)    %>% 
           ggplot(aes(x = "", y = per, fill = career)) +
-          geom_bar(stat="identity", width=1, colour = "black") + coord_polar("y", start=0) +
+          geom_bar(stat="identity", width=1, colour = "black") + 
+          coord_polar("y", start = 0) +
           theme_void() +
-          geom_text(aes(y = per, label = percent(per, accuracy = 1)), colour = "black", position = position_stack(0.5), size = 2.5) +
+          geom_label_repel(aes(y = per, label = percent(per, accuracy = 1)), colour = "black",
+                    position = position_stack(0.5), size = 2.5) +
           scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 

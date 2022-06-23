@@ -11,23 +11,22 @@ output:
 
 ```{r setup, include=FALSE}
 
-# Global knitr options
+# Global knitr options for code chunks
 knitr::opts_chunk$set(echo = TRUE)
 
 # Load packages to be used
-library(readr)
-library(lubridate)
-library(dplyr)
-library(ggplot2)
-library(stringr)
-library(knitr)
-library(kableExtra)
-library(tidytext)
-library(RColorBrewer)
-library(leaflet)
-library(viridis)
-library(scales)
-library(ggrepel)
+library(readr)        # To read the data
+library(lubridate)    # For processing dates
+library(dplyr)        # To manipulate tibbles/data frames
+library(ggplot2)      # To do plots
+library(stringr)      # To manipulate data
+library(knitr)        # To handle transformation from R markdown to other formats   
+library(kableExtra)   # To output into nicer looking tables
+library(RColorBrewer) # For colour maps
+library(leaflet)      # For geographical maps
+library(viridis)      # For more colour maps
+library(scales)       # For various scaling functions
+library(ggrepel)      # For non-overlapping labels
 
 # Do not use scientific notation
 options(scipen=999)
