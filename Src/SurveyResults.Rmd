@@ -6128,7 +6128,7 @@ funding body - each of these is given a count of 1 regardless of how many were p
 ```{r funding}
 
 # Calculate an x label with the folks that filled in this question.
-funding %>% select(URN, num_range("Q18_", 1:7))  %>% 
+funding %>% select(URN, num_range("Q18_", 1:7))          %>% 
             pivot_longer(cols = num_range("Q18_", 1:7),
                          names_to = NULL,
                          values_to =  "funding")         %>% 
@@ -6194,7 +6194,7 @@ plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
 ### Funding distribution normalised
 
 The graph below normalises the contributions suggested by the responder,
-i.e. if they mayd N suggestion then each suggestion contributes 1/N to
+i.e. if they made N suggestion then each suggestion contributes 1/N to
 the total.
 
 ```{r funding_norm}
@@ -6208,11 +6208,13 @@ funding %>% mutate(nelements = rowSums(!is.na(.)))                             %
             group_by(funding)                                                  %>% 
             summarise(N = sum(contrib))                                        %>% 
             filter(N > 1)                                                      %>%
-            ggplot(aes(x = reorder(funding, -N), y = N)) +
-            geom_col(colour = "black", fill = "light blue") +
+            ggplot(aes(x = reorder(funding, -N), y = N, fill = N)) +
+            geom_col(colour = "black") +
             theme_bw() + xlab("Funding body") + ylab("Numbers") +
+            scale_fill_distiller(palette = "Blues", direction = 1) +
             geom_text(aes(x = funding, label = N), vjust = -0.6, size = 2) +
-            theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+            theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), 
+                  legend.position = "None")
 ```
 
 ### Funding distribution normalised with career stage
@@ -6259,6 +6261,7 @@ discipline is not listed. (Please check all that apply.)
 ### Discipline of respondents
 
 ```{r research_disc}
+
 data %>%  select(num_range("Q19_", 1:22))               %>%
           pivot_longer(cols = num_range("Q19_", 1:22),
                        names_to = NULL,
@@ -6275,11 +6278,20 @@ data %>%  select(num_range("Q19_", 1:22))               %>%
           scale_fill_distiller(palette = "Blues", direction = 1) +
           geom_text(aes(label = paste0(n, " (",per,")")), stat = "count", vjust = -0.5, size = 3) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.position = "None")
+
 ```
 
 ### Number of research disciplines selected
 
 ```{r num_disciplines}
+
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, num_range("Q19_", 1:22))         %>% 
+         pivot_longer(cols = num_range("Q19_", 1:22),
+                      names_to = NULL,
+                      values_to = "disciplines")      %>%
+          filter(disciplines != 0)                    %>%
+          summarise(lab = paste0("Number of research disciplines chosen (N=", n_distinct(URN),")")) -> my
 
 data %>%  select(URN, num_range("Q19_", 1:22))          %>%
           pivot_longer(cols = num_range("Q19_", 1:22),
@@ -6292,16 +6304,16 @@ data %>%  select(URN, num_range("Q19_", 1:22))          %>%
           ggplot(aes(x = n, fill = ..count..)) + 
           geom_bar(colour ="black") + 
           theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
-          xlab("Number of research disciplines chosen by an individual") +
-          ylab("Number of people") + theme(legend.position = "None") +
+          xlab(my$lab) +
+          ylab("Number") + theme(legend.position = "None") +
           geom_text(aes(label = ..count..), stat = "count", size = 3, vjust = -0.5)
 ```
 
-We can use the above information to normalise contribtuions so that if a research
-discipline is mentioned N times it will only contribut 1/N times.
+We can use the above information to normalise contributions so that if a research
+discipline is mentioned N times it will only contribute 1/N times.
 The other disciplines specified were:
 
-```{r normalised_research_disciplines, echo = FALSE}
+```{r normalised_research_disciplines}
 
 data %>%  select(URN, num_range("Q19_", 1:22))          %>%
           pivot_longer(cols = num_range("Q19_", 1:22),
@@ -6316,7 +6328,7 @@ data %>%  select(URN, num_range("Q19_", 1:22))          %>%
           mutate(Per = Con/Tot)                         %>%
           ggplot(aes(x = reorder(disciplines, -Per), y = Per, fill = Per)) +
           geom_col(colour ="black") +
-          scale_y_continuous(labels = percent_format(accuracy = 1)) +
+          scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.18)) +
           theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
           xlab("Normalised research disciplines") +
           ylab("Percent") +
