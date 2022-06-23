@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 21/06/22.
+**Last updated**: 23/06/22.
 
 -   <a href="#introduction" id="toc-introduction">Introduction</a>
 -   <a href="#overall-expenditure" id="toc-overall-expenditure">Overall
@@ -3344,9 +3344,9 @@ date.
 | University of Southampton            | Sch of Economic, Social & Political Sci | 01/10/17 | 30/09/27 | 14,988,643 |
 | University College London            | Epidemiology and Public Health          | 01/10/20 | 30/09/26 |  1,453,720 |
 
-We can do a time line plot. From this we can see that certain
-organisations get different trenches of funding before the original
-award has expired.
+We can do a time line plot for awards that have *Doctoral Training* in
+their titles. From this, we can see that certain organisations get
+different trenches of funding before the original award has expired.
 
 ![](ESRC_files/figure-gfm/active_DTPs_graph-1.png)<!-- -->
 

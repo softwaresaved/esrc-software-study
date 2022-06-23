@@ -816,11 +816,10 @@ Look at the award given by the length of project by project category for active 
 
 # The as.numeric() is a workaround for https://github.com/tidyverse/ggplot2/issues/1377
 esrcdat %>% filter(Status == "Active")                                          %>%
-             select(StartDate, EndDate, ProjectCategory, AwardPounds)           %>% 
+            select(StartDate, EndDate, ProjectCategory, AwardPounds)            %>% 
             filter(!is.na(StartDate) & !is.na(EndDate))                         %>% 
             mutate(grant_length = difftime(EndDate, StartDate,units = "days"))  %>% 
             filter(AwardPounds > 0)                                             %>% 
-            #mutate(across(where(is.numeric), ~ format(., big.mark = ","))) %>% 
             ggplot(aes(x = as.numeric(grant_length), y = AwardPounds, colour = ProjectCategory)) + 
             geom_point(alpha = 0.25) + scale_y_continuous(labels = comma) +
             ylab("Awards (£)") + xlab("Award Length (days)") + #scale_y_log10() +
@@ -931,8 +930,9 @@ esrcdat %>% filter(Status == "Active")                                          
             slice_head(n = 25)                                                  %>% 
             ggplot(aes(x = reorder(LeadROName, -Number), y = Number, fill = Number)) + 
             geom_col(colour = "black") +
-            theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
-            ylab("Number of Awards") + xlab("Organisation") + scale_fill_viridis()
+            theme_bw() + 
+            theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
+            ylab("Number of Awards") + xlab("Lead Organisation") + scale_fill_viridis()
 ```
 
 Plotting by the total amount of awards and institution but keeping the number of awards order.
@@ -948,8 +948,9 @@ esrcdat %>% filter(Status == "Active")                                          
             slice_head(n = 25)                                                  %>% 
             ggplot(aes(x = reorder(LeadROName, -Number), y = TotalAward, fill = TotalAward)) + 
             geom_col(colour = "black") + scale_y_continuous(labels = comma) +
-            theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
-            ylab("Total Awards (£)") + xlab("Organisation") + scale_fill_viridis(option="magma")
+            theme_bw() + 
+            theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
+            ylab("Total Awards (£)") + xlab("Lead Organisation") + scale_fill_viridis(option="magma")
 ```
 
 Plotting by the average size of awards and institution but keeping the number of awards order.
@@ -965,8 +966,9 @@ esrcdat %>% filter(Status == "Active")                                          
             slice_head(n = 25)                                                  %>% 
             ggplot(aes(x = reorder(LeadROName, -Number), y = AvgAward, fill = AvgAward)) + 
             geom_col(colour = "black") + scale_y_continuous(labels = comma) +
-            theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
-            ylab("Average Award (£)") + xlab("Organisation") + scale_fill_viridis(option="inferno")
+            theme_bw() + 
+            theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
+            ylab("Average Award (£)") + xlab("Lead Organisation") + scale_fill_viridis(option="inferno")
 ```
 
 ## Department awards
@@ -1127,7 +1129,8 @@ esrcdat %>% filter(Status == "Active")                                %>%
             filter(n >= 30)                                           %>% 
             ggplot(aes(x = reorder(CleanDep, -n), y = n, fill = n)) + 
             geom_col(colour = "black") + #scale_y_continuous(labels = comma) +
-            theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
+            theme_bw() + 
+            theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
             ylab("Number of Awards") + xlab("Deparment") + scale_fill_viridis(option="magma")
 
 ```
@@ -1147,7 +1150,8 @@ esrcdat %>% filter(Status == "Active")                                    %>%
             filter(n >= 30)                                               %>% 
             ggplot(aes(x = reorder(CleanDep, -n), y = Total, fill = Total)) + 
             geom_col(colour = "black") + scale_y_continuous(labels = comma) +
-            theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
+            theme_bw() + 
+            theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
             ylab("Total Awards (£)") + xlab("Deparment") + scale_fill_viridis(option="magma")
 
 ```
@@ -1168,7 +1172,8 @@ esrcdat %>% filter(Status == "Active")                                    %>%
             filter(n >= 30)                                               %>% 
             ggplot(aes(x = reorder(CleanDep, -n), y = AvgAward, fill = AvgAward)) + 
             geom_col(colour = "black") + scale_y_continuous(labels = comma) +
-            theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
+            theme_bw() + 
+            theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 6), legend.position = "None") +
             ylab("Average Awards (£)") + xlab("Deparment") + scale_fill_viridis(option="magma")
 
 ```
@@ -1192,8 +1197,9 @@ esrcdat %>% filter(Status == "Active")                                      %>%
             kable(format="pipe", align= c("l","l","l","l","r"), 
                   col.names = c("Lead Organisation", "Department","Start", "End","Award (£)")) 
 ```
-We can do a time line plot. From this we can see that certain organisations get different trenches of funding
-before the original award has expired.
+
+We can do a time line plot for awards that have *Doctoral Training* in their titles. From this, we can 
+see that certain organisations get different trenches of funding before the original award has expired.
 
 ```{r active_DTPs_graph, echo = FALSE}
 
@@ -1205,7 +1211,8 @@ esrcdat %>% filter(Status == "Active")                                      %>%
             geom_segment(aes(x = StartDate, xend = EndDate, yend = DepOrg)) +
             geom_point(aes(x = StartDate, y = DepOrg)) +
             geom_point(aes(x = EndDate, y = DepOrg)) +
-            theme_bw() + xlab("Duration") + ylab("Dep & Organisation") + 
+            theme_bw() + xlab("Award duration") + 
+            ylab("Department of Lead Organisation") + 
             scale_colour_viridis(option="magma", labels = comma) + labs(colour = "Award (£)") +
             theme(axis.text.y = element_text(size = 6)) 
 ```
