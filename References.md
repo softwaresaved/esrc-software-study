@@ -6,4 +6,5 @@
 * [ESRC Research funding guide](https://www.ukri.org/publications/esrc-research-funding-guide/). This guide gives details of the arrangements and procedures for ESRC research grants, together with a summary of proposal procedures. 
 * [ESRC Postgraduate funding guide](https://esrc.ukri.org/skills-and-careers/doctoral-training/prospective-students/postgraduate-funding-guide/). The Postgraduate Funding Guide supports directors, supervisors, nominated contacts and students in the administration of studentships and Doctoral Training Grants (DTGs) in respect of financial payments, monitoring and evaluation, and rules, regulations and procedures.
 * [SSRC/ESRC the first forty years](https://esrc.ukri.org/files/news-events-and-publications/publications/ssrc-and-esrc-the-first-forty-years/) a review of the first 40 years of the ESRC (1965-2005).
+* [A National Agenda for Research Software](https://zenodo.org/record/6378082#.Yrm2zexKj4g) from the Australian Research Data Commons, V1.0, March 2022.
 
