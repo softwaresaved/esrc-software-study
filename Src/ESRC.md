@@ -3737,15 +3737,25 @@ in the Uncategorised and Other categories. There are also some
 differences in Development studies, Demography, Human geography, Science
 and Technology and Area Studies.
 
-![](ESRC_files/figure-gfm/compare_number-1.png)<!-- -->
+![](ESRC_files/figure-gfm/compare_number-1.png)<!-- --> If you only
+consider active projects
 
-Removing the `Other` and `Unclassified` categories:
+![](ESRC_files/figure-gfm/active_compare_number-1.png)<!-- --> Removing
+the `Other` and `Unclassified` categories:
 
 ![](ESRC_files/figure-gfm/compare_number2-1.png)<!-- -->
+
+and for only active projects
+
+![](ESRC_files/figure-gfm/active_compare_number2-1.png)<!-- -->
 
 Normalising the quantities without the `Other` and `Unclassified`:
 
 ![](ESRC_files/figure-gfm/compare_number2_norm-1.png)<!-- -->
+
+And for only active projects:
+
+![](ESRC_files/figure-gfm/active_compare_number2_norm-1.png)<!-- -->
 
 The `Other` category dominates by award amount though the
 `Uncategorised` dominate by numbers. Looking at the `Other` category in

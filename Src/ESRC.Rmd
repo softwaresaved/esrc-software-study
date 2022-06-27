@@ -1838,7 +1838,7 @@ esrc_subjects %>% select(category, AwardPounds, fracContrib)                    
                   relocate(perAward, .after = Amount)                             %>% 
                   arrange(desc(Amount)) -> subjects_sum
 
-esrc_topics %>% select(category, AwardPounds, fracContrib)                      %>% 
+esrc_topics %>% select(category, AwardPounds, fracContrib)                        %>% 
                   group_by(category)                                              %>% 
                   summarise(Contribution = round(sum(fracContrib),1), 
                             Amount = sum(fracContrib*AwardPounds))                %>%
@@ -1854,6 +1854,43 @@ subjects_sum$id <- 1:nrow(subjects_sum)
 topics_sum$id <- 1:nrow(topics_sum)
 
 subjects_sum %>% left_join(topics_sum, by = "category", suffix = c(".subject", ".topic")) -> combined
+
+```
+
+```{r compare_active_sub_top, echo = FALSE}
+
+# Deal with only active projects
+
+esrc_subjects %>% filter(Status == "Active")                                      %>% 
+                  select(category, AwardPounds, fracContrib)                      %>% 
+                  group_by(category)                                              %>% 
+                  summarise(Contribution = round(sum(fracContrib),1), 
+                            Amount = sum(fracContrib*AwardPounds))                %>%
+                  mutate(totContrib = sum(Contribution), totAmount = sum(Amount)) %>% 
+                  mutate(percContrib = round(Contribution/totContrib,2)*100,
+                         perAward = round(Amount/totAmount,2) * 100)              %>%
+                  select(-totContrib, -totAmount)                                 %>% 
+                  relocate(percContrib, .after = Contribution)                    %>% 
+                  relocate(perAward, .after = Amount)                             %>% 
+                  arrange(desc(Amount)) -> a_subjects_sum
+
+esrc_topics %>%   filter(Status == "Active")                                      %>%
+                  select(category, AwardPounds, fracContrib)                      %>% 
+                  group_by(category)                                              %>% 
+                  summarise(Contribution = round(sum(fracContrib),1), 
+                            Amount = sum(fracContrib*AwardPounds))                %>%
+                  mutate(totContrib = sum(Contribution), totAmount = sum(Amount)) %>% 
+                  mutate(percContrib = round(Contribution/totContrib,2)*100,
+                         perAward = round(Amount/totAmount,2) * 100)              %>%
+                  select(-totContrib, -totAmount)                                 %>% 
+                  relocate(percContrib, .after = Contribution)                    %>% 
+                  relocate(perAward, .after = Amount)                             %>% 
+                  arrange(desc(Amount)) -> a_topics_sum
+
+a_subjects_sum$id <- 1:nrow(a_subjects_sum)
+a_topics_sum$id <- 1:nrow(a_topics_sum)
+
+a_subjects_sum %>% left_join(a_topics_sum, by = "category", suffix = c(".subject", ".topic")) -> a_combined
 
 ```
 
@@ -1943,7 +1980,17 @@ combined %>% ggplot(aes(x = reorder(category, -Contribution.subject))) +
              xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
              scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
 ```
+If you only consider active projects
 
+```{r active_compare_number, echo=FALSE}
+a_combined %>% ggplot(aes(x = reorder(category, -Contribution.subject))) + 
+             geom_col(aes(y = Contribution.subject, fill = "red"), colour = "black", alpha = 0.25) + 
+             geom_col(aes(y = Contribution.topic, fill = "blue"), colour = "black", alpha = 0.25) +  
+             scale_y_log10(labels = comma) +
+             theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
+             xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
+             scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
+```
 Removing the `Other` and `Unclassified` categories:
 
 ```{r compare_number2, echo=FALSE}
@@ -1958,11 +2005,42 @@ combined %>% filter(!(category %in% c("Other", "Uncategorised"))) %>%
              scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
 ```
 
+and for only active projects
+
+```{r active_compare_number2, echo=FALSE}
+
+a_combined %>% filter(!(category %in% c("Other", "Uncategorised"))) %>% 
+             ggplot(aes(x = reorder(category, -Contribution.subject))) + 
+             geom_col(aes(y = Contribution.subject, fill = "red"), colour = "black", alpha = 0.25) + 
+             geom_col(aes(y = Contribution.topic, fill = "blue"), colour = "black", alpha = 0.25) +  
+             scale_y_log10(labels = comma) +
+             theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
+             xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
+             scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
+```
+
 Normalising the quantities without the `Other` and `Unclassified`:
 
 ```{r compare_number2_norm, echo=FALSE}
 
 combined %>% select(category, Contribution.subject, Contribution.topic)           %>% 
+             filter(!(category %in% c("Other", "Uncategorised")))                 %>% 
+             mutate(Nt = sum(Contribution.topic), Ns = sum(Contribution.subject)) %>% 
+             mutate(cs = Contribution.subject/Ns, ct = Contribution.topic/Nt)     %>%  
+             ggplot(aes(x = reorder(category, -Contribution.subject))) + 
+             geom_col(aes(y = cs, fill = "red"), colour = "black", alpha = 0.25) + 
+             geom_col(aes(y = ct, fill = "blue"), colour = "black", alpha = 0.25) +  
+             scale_y_continuous(labels = percent_format(accuracy = 1)) +
+             theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
+             xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
+             scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
+```
+
+And for only active projects:
+
+```{r active_compare_number2_norm, echo=FALSE}
+
+a_combined %>% select(category, Contribution.subject, Contribution.topic)           %>% 
              filter(!(category %in% c("Other", "Uncategorised")))                 %>% 
              mutate(Nt = sum(Contribution.topic), Ns = sum(Contribution.subject)) %>% 
              mutate(cs = Contribution.subject/Ns, ct = Contribution.topic/Nt)     %>%  
