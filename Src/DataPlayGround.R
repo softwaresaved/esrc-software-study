@@ -793,6 +793,8 @@ tibble(domain = domains) %>% left_join(insts, by = "domain")          %>%
                              tally()                                  %>%
                              arrange(desc(n)) -> ems
 
+## Survey results vs Mails sent out ----
+
 # Survey data
 data %>% select(Institution = CleanLocs)  %>%
          filter(!is.na(Institution))      %>%
@@ -806,16 +808,18 @@ ems %>% left_join(sur2, by = "Institution", suffix = c(".ems",".sur")) %>%
 
 # Join the data but ignore null values
 ems %>% left_join(sur2, by = "Institution", suffix = c(".ems",".sur")) %>%
-  mutate(!is.na(n.sur)) -> ems_sur2
+        mutate(!is.na(n.sur)) -> ems_sur2
 
 # Plot the results
-ems_sur %>%
-  ggplot(aes(x=reorder(Institution, -n.ems))) + theme_bw() +
-  geom_col(aes(y = n.ems, fill = "blue"), alpha = 0.25, colour = "black") +
-  geom_col(aes(y = n.sur, fill = "red"), alpha = 0.25, colour = "black") +
-  theme(axis.text.x = element_text(angle= -90, hjust = 0)) +
-  scale_y_log10() + ylab("Numbers") + xlab("Institution") + labs(fill="Source") +
-  scale_fill_manual(labels = c("Emails", "Survey"), values = c("blue","red"))
+ems_sur %>%  #filter(n.sur > 0) %>%
+       ggplot(aes(x=reorder(Institution, -n.ems))) +
+       theme_bw() +
+       geom_col(aes(y = n.ems, fill = "blue"), alpha = 0.25, colour = "black",  na.rm = TRUE) +
+       geom_col(aes(y = n.sur, fill = "red"), alpha = 0.25, colour = "black", na.rm = TRUE) +
+       theme(axis.text.x = element_text(angle= -90, hjust = 0)) +
+       scale_y_continuous(trans = pseudo_log_trans(base = 10)) + #scale_y_log10() +
+       ylab("Numbers") + xlab("Institution") + labs(fill="Source") +
+       scale_fill_manual(labels = c("Emails", "Survey"), values = c("blue","red"))
 
 # Two sample Kolmogorov-Smirnov Test
 ks.test(ems_sur[["n.ems"]],ems_sur[["n.sur"]])
