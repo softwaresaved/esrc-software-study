@@ -1,7 +1,7 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 23/06/22.
+**Last updated**: 27/06/22.
 
 -   <a href="#introduction" id="toc-introduction">Introduction</a>
 -   <a href="#overall-expenditure" id="toc-overall-expenditure">Overall
@@ -3389,7 +3389,7 @@ downloaded but can be obtained by other means. This has been mapped to
 the above categories using the mapping provided below. Where a project
 subject is not provided an “Unclassified” type is used.
 
-There are 73 research subject types that have to be mapped into the 21
+There are 70 research subject types that have to be mapped into the 21
 categories described above plus the `Uncategorised` type for the cases
 where this information has not been provided. The GtR subjects for ESRC
 projects have been mapped to categories according to:
@@ -3465,11 +3465,12 @@ gives a breakdown of thenumber of awards and amount awarded as:
 | Science and Technology Studies             | 60.3             | 1        | 23,625,071  | 1       |
 | Area Studies                               | 42.0             | 0        | 13,558,534  | 0       |
 
-`Uncategorised` arises from the original classification in the GtR. The
-`Other` category, where anything that did not have an immediate mapping
-from the research subject to one of our categories is put, dominates by
-award amount though the `Uncategorised` dominate by numbers. Looking at
-the `Other` category in more detail:
+`Uncategorised` arises from no research subjects being provided in the
+original GtR classification. The `Other` category, where anything that
+did not have an immediate mapping from the research subject to one of
+our categories is put, dominates by award amount though the
+`Uncategorised` dominate by numbers. Looking at the `Other` category in
+more detail:
 
 | Subject                        | Number of awards | Number % | Award (£)      | Award % |
 |:-------------------------------|:-----------------|:---------|:---------------|:--------|
@@ -3636,9 +3637,9 @@ Plot the average award against categories.
 
 ## Classification by category using research topics
 
-GtR projects are also classified by `research topics` but unlike the 71
-unique research subjects for the ESRC data there are 399 unique
-[research
+GtR projects are also classified by `research topics` but unlike the 70
+unique research subjects for the ESRC data there are
+`length(unique(topics$topic))` unique [research
 topics](https://gtr.ukri.org/resources/classificationlists.html) used
 but this gives as a different way of classifying projects into the
 different categories described above. As there are a lot more topics to

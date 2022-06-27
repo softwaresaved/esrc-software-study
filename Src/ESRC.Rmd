@@ -1421,7 +1421,7 @@ if(any(esrc_subjects$category == "-")) {
 
 ```
 
-There are 73 research subject types that have to be mapped into the 21 categories 
+There are `r length(unique(subjects$subject))` research subject types that have to be mapped into the 21 categories 
 described above plus the `Uncategorised` type for the cases where this information 
 has not been provided. The GtR subjects for ESRC projects have been mapped to 
 categories according to:
@@ -1492,8 +1492,8 @@ esrc_subjects %>% select(category, AwardPounds, fracContrib)                    
                                 "Award %"))    
 ```
 
-`Uncategorised` arises from the original classification in the GtR. The `Other` category,
-where anything that did not have an immediate mapping from the research subject to 
+`Uncategorised` arises from no research subjects being provided in the original GtR classification. 
+The `Other` category, where anything that did not have an immediate mapping from the research subject to 
 one of our categories is put, dominates by award amount though the `Uncategorised` dominate by numbers. 
 Looking at the `Other` category in more detail:
 
@@ -1645,8 +1645,8 @@ esrc_subjects %>% filter(category != "Other", category != "Uncategorised", Statu
 
 ## Classification by category using research topics
 
-GtR projects are also classified by `research topics` but unlike the 71 unique 
-research subjects for the ESRC data there are 399 unique 
+GtR projects are also classified by `research topics` but unlike the `r length(unique(subjects$subject))` unique 
+research subjects for the ESRC data there are `length(unique(topics$topic))` unique 
 [research topics](https://gtr.ukri.org/resources/classificationlists.html) used but this gives as
 a different way of classifying projects into the different categories described above. As there
 are a lot more topics to assign, you will have to examine the 
