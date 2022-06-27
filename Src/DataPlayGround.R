@@ -620,7 +620,7 @@ mapdata <- tidy(shapesfile, region="RGN20NM")
 ggplot() + geom_polygon(data = mapdata, aes( x = long, y = lat, group = group), fill="#69b3a2", color="white") +
             theme_void()
 
-# Institution distributions ----
+# Institutions - survey vs GtR ----
 
 
 # Data from the GtR - institution and award numbers, rename some of the entries
@@ -639,7 +639,7 @@ esrcdat %>% filter(Status == "Active")        %>%
             tally()                           %>%
             arrange(desc(n)) -> gtr
 
-# Data from the survey
+# Institutions from the survey data with counts
 data %>% select(Institution = CleanLocs)     %>%
          group_by(Institution)               %>%
          filter(!is.na(Institution))         %>%
@@ -651,43 +651,72 @@ data %>% select(Institution = CleanLocs)     %>%
 # a null value is set for the survey) in this case substitute null values in the
 # survey sample with a zero
 gtr %>% left_join(sur, by = "Institution", suffix = c(".gtr",".sur")) %>%
-      mutate(n.sur = ifelse(is.na(n.sur), 0, n.sur)) -> gtr_sur
+        mutate(n.sur = ifelse(is.na(n.sur), 0, n.sur)) -> gtr_sur
 
 # Plot the values, reduce the input by only having GtR values with more than one
 # count to make the diagram less busy.
-gtr_sur %>% filter(n.gtr > 1) %>%
-  ggplot(aes(x=reorder(Institution, -n.gtr))) + theme_bw() +
-  geom_col(aes(y = n.gtr, fill = "green"), alpha = 0.25, colour = "black",  na.rm = TRUE) +
-  geom_col(aes(y = n.sur, fill = "red"), alpha = 0.25, colour = "black", na.rm = TRUE) +
-  theme(axis.text.x = element_text(angle= -90, hjust = 0, size = 6)) +
-  scale_y_log10(oob = squish_infinite) + ylab("Numbers") + labs(fill="Source") +
-  xlab("Institutions") +
-  scale_fill_manual(labels = c("GtR", "Survey"), values = c("green","red"))
+gtr_sur %>% filter(n.gtr > 7) %>%
+            ggplot(aes(x=reorder(Institution, -n.gtr))) + theme_bw() +
+            geom_col(aes(y = n.gtr, fill = "green"), alpha = 0.25, colour = "black",  na.rm = TRUE) +
+            geom_col(aes(y = n.sur, fill = "red"), alpha = 0.25, colour = "black", na.rm = TRUE) +
+            theme(axis.text.x = element_text(angle= -90, hjust = 0, size = 6)) +
+            scale_y_log10(oob = squish_infinite) + ylab("Numbers") + labs(fill="Source") +
+            xlab("Institutions") +
+            scale_fill_manual(labels = c("GtR", "Survey"), values = c("green","red"))
+
+# Use percentages instead
+gtr_sur %>% mutate(Ng = sum(n.gtr), Ns = sum(n.sur)) %>%
+            mutate(Pg = n.gtr/Ng, Ps = n.sur/Ns)     %>%
+            filter(Pg > 0.005) %>%
+            ggplot(aes(x=reorder(Institution, -n.gtr))) + theme_bw() +
+            geom_col(aes(y = Pg, fill = "green"), alpha = 0.25, colour = "black",  na.rm = TRUE) +
+            geom_col(aes(y = Ps, fill = "red"), alpha = 0.25, colour = "black", na.rm = TRUE) +
+            theme(axis.text.x = element_text(angle= -90, hjust = 0, size = 6)) +
+            scale_y_continuous(labels = percent_format(accuracy = 1)) +
+            ylab("Percent") +
+            labs(fill="Source") +
+            xlab("Institutions") +
+            scale_fill_manual(labels = c("GtR", "Survey"), values = c("green","red"))
 
 # Create another tibble that does not have zero values when merging the gtr and
 # the survey data - ignore null values that arise from the join.
 gtr %>% left_join(sur, by = "Institution", suffix = c(".gtr",".sur")) %>%
-  filter(!is.na(n.sur)) -> gtr_sur2
+        filter(!is.na(n.sur)) -> gtr_sur2
 
 # Plot this data
 gtr_sur2 %>% ggplot(aes(x=reorder(Institution, -n.gtr))) + theme_bw() +
-      geom_col(aes(y = n.gtr, fill = "green"), alpha = 0.25, colour = "black") +
-      geom_col(aes(y = n.sur, fill = "red"), alpha = 0.25, colour = "black") +
-      theme(axis.text.x = element_text(angle= -90, hjust = 0)) +
-      scale_y_log10() + ylab("Numbers") + xlab("Institution") + labs(fill="Source") +
-      scale_fill_manual(labels = c("GtR", "Survey"), values = c("green","red"))
+             geom_col(aes(y = n.gtr, fill = "green"), alpha = 0.25, colour = "black") +
+             geom_col(aes(y = n.sur, fill = "red"), alpha = 0.25, colour = "black") +
+             theme(axis.text.x = element_text(angle= -90, hjust = 0)) +
+             scale_y_log10() + ylab("Numbers") + xlab("Institution") + labs(fill="Source") +
+             scale_fill_manual(labels = c("GtR", "Survey"), values = c("green","red"))
+
+# Use percentages instead
+gtr_sur2 %>% mutate(Ng = sum(n.gtr), Ns = sum(n.sur)) %>%
+             mutate(Pg = n.gtr/Ng, Ps = n.sur/Ns)     %>%
+             filter(Pg > 0.01) %>%
+             ggplot(aes(x=reorder(Institution, -n.gtr))) + theme_bw() +
+             geom_col(aes(y = Pg, fill = "green"), alpha = 0.25, colour = "black",  na.rm = TRUE) +
+             geom_col(aes(y = Ps, fill = "red"), alpha = 0.25, colour = "black", na.rm = TRUE) +
+             theme(axis.text.x = element_text(angle= -90, hjust = 0, size = 6)) +
+             scale_y_continuous(labels = percent_format(accuracy = 1)) +
+             ylab("Percent") +
+             labs(fill="Source") +
+             xlab("Institutions") +
+             scale_fill_manual(labels = c("GtR", "Survey"), values = c("green","red"))
+
 
 # This time use the survey data as the basis for the left join
 sur %>% left_join(gtr, by = "Institution", suffix = c(".sur",".gtr")) %>%
-      filter(!is.na(n.gtr)) -> sur_gtr
+        filter(!is.na(n.gtr)) -> sur_gtr
 
-# Plot the data -bar graphs
+# Plot the data - bar graphs
 sur_gtr %>% ggplot(aes(x=reorder(Institution, -n.gtr))) + theme_bw() +
-  geom_col(aes(y = n.gtr, fill = "green"), alpha = 0.25, colour = "black") +
-  geom_col(aes(y = n.sur, fill = "red"), alpha = 0.25, colour = "black") +
-  theme(axis.text.x = element_text(angle= -90, hjust = 0)) +
-  scale_y_log10() + ylab("Numbers") + xlab("Institution") + labs(fill="Source") +
-  scale_fill_manual(labels = c("GtR", "Survey"), values = c("green","red"))
+            geom_col(aes(y = n.gtr, fill = "green"), alpha = 0.25, colour = "black") +
+            geom_col(aes(y = n.sur, fill = "red"), alpha = 0.25, colour = "black") +
+            theme(axis.text.x = element_text(angle= -90, hjust = 0)) +
+            scale_y_log10() + ylab("Numbers") + xlab("Institution") + labs(fill="Source") +
+            scale_fill_manual(labels = c("GtR", "Survey"), values = c("green","red"))
 
 
 # Try to see if the data come from the same distribution, i.e. does the survey
@@ -808,7 +837,7 @@ gtr %>%  left_join(ems, by = "Institution", suffix = c(".gtr",".ems")) %>%
 combined %>% filter(!(category %in% c("Other", "Uncategorised")))                 %>%
              mutate(Nt = sum(Contribution.topic), Ns = sum(Contribution.subject)) %>%
              mutate(cs = Contribution.subject/Ns, ct = Contribution.topic/Nt)     %>%
-             ggplot(aes(x = reorder(category, id.subject))) +
+             ggplot(aes(x = reorder(category, -Contribution.subject))) +
              geom_col(aes(y = cs, fill = "red"), colour = "black", alpha = 0.25) +
              geom_col(aes(y = ct, fill = "blue"), colour = "black", alpha = 0.25) +
              scale_y_continuous(labels = percent_format(accuracy = 1)) +
