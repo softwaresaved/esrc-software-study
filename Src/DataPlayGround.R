@@ -660,7 +660,8 @@ gtr_sur %>% filter(n.gtr > 7) %>%
             geom_col(aes(y = n.gtr, fill = "green"), alpha = 0.25, colour = "black",  na.rm = TRUE) +
             geom_col(aes(y = n.sur, fill = "red"), alpha = 0.25, colour = "black", na.rm = TRUE) +
             theme(axis.text.x = element_text(angle= -90, hjust = 0, size = 6)) +
-            scale_y_log10(oob = squish_infinite) + ylab("Numbers") + labs(fill="Source") +
+            scale_y_continuous(trans = pseudo_log_trans()) + #scale_y_log10(oob = squish_infinite) +
+            ylab("Numbers") + labs(fill="Source") +
             xlab("Institutions") +
             scale_fill_manual(labels = c("GtR", "Survey"), values = c("green","red"))
 
@@ -688,7 +689,8 @@ gtr_sur2 %>% ggplot(aes(x=reorder(Institution, -n.gtr))) + theme_bw() +
              geom_col(aes(y = n.gtr, fill = "green"), alpha = 0.25, colour = "black") +
              geom_col(aes(y = n.sur, fill = "red"), alpha = 0.25, colour = "black") +
              theme(axis.text.x = element_text(angle= -90, hjust = 0)) +
-             scale_y_log10() + ylab("Numbers") + xlab("Institution") + labs(fill="Source") +
+             scale_y_log10() +
+             ylab("Numbers") + xlab("Institution") + labs(fill="Source") +
              scale_fill_manual(labels = c("GtR", "Survey"), values = c("green","red"))
 
 # Use percentages instead
@@ -715,7 +717,8 @@ sur_gtr %>% ggplot(aes(x=reorder(Institution, -n.gtr))) + theme_bw() +
             geom_col(aes(y = n.gtr, fill = "green"), alpha = 0.25, colour = "black") +
             geom_col(aes(y = n.sur, fill = "red"), alpha = 0.25, colour = "black") +
             theme(axis.text.x = element_text(angle= -90, hjust = 0)) +
-            scale_y_log10() + ylab("Numbers") + xlab("Institution") + labs(fill="Source") +
+            scale_y_log10() +
+            ylab("Numbers") + xlab("Institution") + labs(fill="Source") +
             scale_fill_manual(labels = c("GtR", "Survey"), values = c("green","red"))
 
 
@@ -828,10 +831,11 @@ ks.test(ems_sur[["n.ems"]],ems_sur[["n.sur"]])
 gtr %>%  left_join(ems, by = "Institution", suffix = c(".gtr",".ems")) %>%
          mutate(n.ems = ifelse(is.na(n.ems), 0, n.ems)) %>%
          ggplot(aes(x=reorder(Institution, -n.ems))) + theme_bw() +
-         geom_col(aes(y = n.ems, fill = "blue"), alpha = 0.25, colour = "black") +
-         geom_col(aes(y = n.gtr, fill = "green"), alpha = 0.25, colour = "black") +
+         geom_col(aes(y = n.ems, fill = "blue"), alpha = 0.25, colour = "black", na.rm = TRUE) +
+         geom_col(aes(y = n.gtr, fill = "green"), alpha = 0.25, colour = "black", na.rm = TRUE) +
          theme(axis.text.x = element_text(angle= -90, hjust = 0, size = 6)) +
-         scale_y_log10() + ylab("Numbers") + xlab("Institution") + labs(fill="Source") +
+         scale_y_continuous(trans = pseudo_log_trans()) + #scale_y_log10() +
+         ylab("Numbers") + xlab("Institution") + labs(fill="Source") +
          scale_fill_manual(labels = c("Gtr (awards)", "Emails"), values = c("green","blue"))
 
 # Distribution by research discipline ----
