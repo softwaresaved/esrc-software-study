@@ -1295,7 +1295,8 @@ subjects <- subjects                                %>%
             mutate(fracContrib = round(1/Nsub, 3))  %>% 
             rename(subject = text, encodedSubject = encodedText)
 
-# Join with the ESRC data
+# Join with the ESRC data - the number of rows will grow because there will be 
+# N - 1 new rows for each project which has more than one subject assigned.
 esrc_subjects <- esrcdat %>%
                  left_join(subjects, by = c("ProjectReference" = "grantReference")) %>%
                  select( -percentage, -status, -grantCategory)
@@ -1865,6 +1866,7 @@ relation to the Subject ordering. The fact that the very first value differs cau
 order is done by the total amount awarded per category).
 
 ```{r compare_order, echo = FALSE}
+
 combined %>% ggplot(aes(x = reorder(category, id.subject))) + 
              geom_line(aes(y = id.subject, group = 1)) + geom_point(aes(y = id.subject, colour = "red")) + 
              geom_line(aes(y = id.topic, group = 2)) + geom_point(aes(y = id.topic, colour = "blue")) + 
@@ -1933,7 +1935,7 @@ these mainly lie in the Uncategorised and Other categories. There are also some 
 Demography, Human geography, Science and Technology and Area Studies.
 
 ```{r compare_number, echo=FALSE}
-combined %>% ggplot(aes(x = reorder(category, id.subject))) + 
+combined %>% ggplot(aes(x = reorder(category, -Contribution.subject))) + 
              geom_col(aes(y = Contribution.subject, fill = "red"), colour = "black", alpha = 0.25) + 
              geom_col(aes(y = Contribution.topic, fill = "blue"), colour = "black", alpha = 0.25) +  
              scale_y_log10(labels = comma) +
@@ -1947,7 +1949,7 @@ Removing the `Other` and `Unclassified` categories:
 ```{r compare_number2, echo=FALSE}
 
 combined %>% filter(!(category %in% c("Other", "Uncategorised"))) %>% 
-             ggplot(aes(x = reorder(category, id.subject))) + 
+             ggplot(aes(x = reorder(category, -Contribution.subject))) + 
              geom_col(aes(y = Contribution.subject, fill = "red"), colour = "black", alpha = 0.25) + 
              geom_col(aes(y = Contribution.topic, fill = "blue"), colour = "black", alpha = 0.25) +  
              scale_y_log10(labels = comma) +
@@ -1960,10 +1962,11 @@ Normalising the quantities without the `Other` and `Unclassified`:
 
 ```{r compare_number2_norm, echo=FALSE}
 
-combined %>% filter(!(category %in% c("Other", "Uncategorised"))) %>% 
+combined %>% select(category, Contribution.subject, Contribution.topic)           %>% 
+             filter(!(category %in% c("Other", "Uncategorised")))                 %>% 
              mutate(Nt = sum(Contribution.topic), Ns = sum(Contribution.subject)) %>% 
-             mutate(cs = Contribution.subject/Ns, ct = Contribution.topic/Nt) %>%  
-             ggplot(aes(x = reorder(category, id.subject))) + 
+             mutate(cs = Contribution.subject/Ns, ct = Contribution.topic/Nt)     %>%  
+             ggplot(aes(x = reorder(category, -Contribution.subject))) + 
              geom_col(aes(y = cs, fill = "red"), colour = "black", alpha = 0.25) + 
              geom_col(aes(y = ct, fill = "blue"), colour = "black", alpha = 0.25) +  
              scale_y_continuous(labels = percent_format(accuracy = 1)) +
@@ -1971,6 +1974,7 @@ combined %>% filter(!(category %in% c("Other", "Uncategorised"))) %>%
              xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
              scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
 ```
+
 The `Other` category dominates by award amount though the `Uncategorised` dominate by numbers. Looking at the `Other` category in more detail:
 
 ```{r categories_topics2, echo = FALSE}

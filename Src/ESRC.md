@@ -3745,9 +3745,11 @@ Removing the `Other` and `Unclassified` categories:
 
 Normalising the quantities without the `Other` and `Unclassified`:
 
-![](ESRC_files/figure-gfm/compare_number2_norm-1.png)<!-- --> The
-`Other` category dominates by award amount though the `Uncategorised`
-dominate by numbers. Looking at the `Other` category in more detail:
+![](ESRC_files/figure-gfm/compare_number2_norm-1.png)<!-- -->
+
+The `Other` category dominates by award amount though the
+`Uncategorised` dominate by numbers. Looking at the `Other` category in
+more detail:
 
 | Subject                        | Number of awards | Number % | Award (£)      | Award % |
 |:-------------------------------|:-----------------|:---------|:---------------|:--------|
