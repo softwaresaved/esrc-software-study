@@ -1804,23 +1804,22 @@ category:
 
 ```{r categories_from_topics1, echo = FALSE}
 
-# Generate stats for the categories
+# Generate a summary table for the categories
 esrc_topics %>% select(category, AwardPounds, fracContrib)                      %>% 
-                  group_by(category)                                              %>% 
-                  summarise(Contribution = round(sum(fracContrib),1), 
-                            Amount = sum(fracContrib*AwardPounds))                %>%
-                  mutate(totContrib = sum(Contribution), totAmount = sum(Amount)) %>% 
-                  mutate(percContrib = round(Contribution/totContrib,2)*100,
-                         perAward = round(Amount/totAmount,2) * 100)              %>%
-                    
-                  select(-totContrib, -totAmount)                                 %>% 
-                  relocate(percContrib, .after = Contribution)                    %>% 
-                  relocate(perAward, .after = Amount)                             %>% 
-                  mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
-                  arrange(desc(Amount))                                           %>% 
-                  kable(format="pipe", align= rep("l",5), 
-                  col.names = c("Category", "Number of awards","Number %", "Award (£)",
-                                "Award %"))    
+                group_by(category)                                              %>% 
+                summarise(Contribution = round(sum(fracContrib),1), 
+                          Amount = sum(fracContrib*AwardPounds))                %>%
+                mutate(totContrib = sum(Contribution), totAmount = sum(Amount)) %>% 
+                mutate(percContrib = round(Contribution/totContrib,2)*100,
+                       perAward = round(Amount/totAmount,2) * 100)              %>%
+                select(-totContrib, -totAmount)                                 %>% 
+                relocate(percContrib, .after = Contribution)                    %>% 
+                relocate(perAward, .after = Amount)                             %>% 
+                mutate(across(where(is.numeric), ~ format(., big.mark = ",")))  %>% 
+                arrange(desc(Amount))                                           %>% 
+                kable(format="pipe", align= rep("l",5), 
+                col.names = c("Category", "Number of awards","Number %", "Award (£)",
+                              "Award %"))    
 ```
 
 
@@ -2032,7 +2031,7 @@ combined %>% select(category, Contribution.subject, Contribution.topic)         
              geom_col(aes(y = ct, fill = "blue"), colour = "black", alpha = 0.25) +  
              scale_y_continuous(labels = percent_format(accuracy = 1)) +
              theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
-             xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
+             xlab("Category") + ylab("Percentage") + labs(fill = "Research") +
              scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
 ```
 
@@ -2049,7 +2048,7 @@ a_combined %>% select(category, Contribution.subject, Contribution.topic)       
              geom_col(aes(y = ct, fill = "blue"), colour = "black", alpha = 0.25) +  
              scale_y_continuous(labels = percent_format(accuracy = 1)) +
              theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
-             xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
+             xlab("Category") + ylab("Percentage") + labs(fill = "Research") +
              scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
 ```
 
