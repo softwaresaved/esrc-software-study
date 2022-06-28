@@ -746,7 +746,8 @@ emails <- emails[!duplicated(emails)]
 domains <- str_split(emails, "@", simplify = TRUE)[,2]
 
 # Get the institution names for the domains
-insts <- read_csv("/Users/mario/Git/gateway-to-research-playing-about/output/uni_and_email_address_construction.csv", show_col_types = FALSE)
+insts <- read_csv("~/Git/gateway-to-research-playing-about/output/uni_and_email_address_construction.csv",
+                  show_col_types = FALSE)
 
 # Tally the results for emails sent out
 tibble(domain = domains) %>% left_join(insts, by = "domain")                                                %>%
@@ -790,8 +791,6 @@ ems_sur %>%  #filter(n.sur > 0) %>%
        ylab("Numbers") + xlab("Institution") + labs(fill="Source") +
        scale_fill_manual(labels = c("Emails", "Survey"), values = c("blue","red"))
 
-# Two sample Kolmogorov-Smirnov Test
-ks.test(ems_sur[["n.ems"]],ems_sur[["n.sur"]])
 
 # Emails numbers vs Award numbers (not quite counting the same things)
 gtr %>%  left_join(ems, by = "Institution", suffix = c(".gtr",".ems")) %>%
@@ -807,7 +806,7 @@ gtr %>%  left_join(ems, by = "Institution", suffix = c(".gtr",".ems")) %>%
 # Distribution by research discipline ----
 
 # Plot Gtr research categories obtained from research subjects and research
-# topics.
+# topics. combined is defined in the ESRC.Rmd file.
 combined %>% filter(!(category %in% c("Other", "Uncategorised")))                 %>%
              mutate(Nt = sum(Contribution.topic), Ns = sum(Contribution.subject)) %>%
              mutate(cs = Contribution.subject/Ns, ct = Contribution.topic/Nt)     %>%
@@ -818,6 +817,18 @@ combined %>% filter(!(category %in% c("Other", "Uncategorised")))               
              theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
              xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
              scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
+
+# Same information but only using active projects
+a_combined %>% filter(!(category %in% c("Other", "Uncategorised")))                 %>%
+               mutate(Nt = sum(Contribution.topic), Ns = sum(Contribution.subject)) %>%
+               mutate(cs = Contribution.subject/Ns, ct = Contribution.topic/Nt)     %>%
+               ggplot(aes(x = reorder(category, -Contribution.subject))) +
+               geom_col(aes(y = cs, fill = "red"), colour = "black", alpha = 0.25) +
+               geom_col(aes(y = ct, fill = "blue"), colour = "black", alpha = 0.25) +
+               scale_y_continuous(labels = percent_format(accuracy = 1)) +
+               theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
+               xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
+               scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
 
 # Normalise the research disciplines by the numbers and plot the output
 data %>%  select(URN, num_range("Q19_", 1:22))          %>%
@@ -854,7 +865,8 @@ data %>%  select(URN, num_range("Q19_", 1:22))          %>%
           mutate(Tot = sum(Con))                        %>%
           mutate(Per = Con/Tot)  -> sur_research
 
-# Rename the research disciplines
+# Rename the research disciplines - base names and name these with the shortened
+# name used in the survey data thus effectively creating a look-up table.
 topics <-  c("Area Studies", "Data science and artificial intelligence", "Demography",
              "Development studies", "Economics", "Education", "Environmental planning",
              "History", "Human Geography", "Information science", "Law & legal studies",
@@ -862,8 +874,8 @@ topics <-  c("Area Studies", "Data science and artificial intelligence", "Demogr
              "Psychology", "Science and Technology Studies", "Social anthropology", "Social policy",
              "Social work", "Sociology", "Tools, technologies & methods", "Other")
 
-# Note Dvelopment studies may have to go back to Development studies
-names(topics) <- c("AreaStudies", "DS_AI", "Demography","DvelopmentStudies",
+# Short names used in the survey data
+names(topics) <- c("AreaStudies", "DS_AI", "Demography","DevelopmentStudies",
                    "Economics", "Education", "EnvPlanning","History","HumanGeography",
                    "InfoSci","Law","Linguistics","ManBusStud","PolSci_IntStud",
                    "Pyschology", "SciTechStud",
@@ -873,13 +885,15 @@ names(topics) <- c("AreaStudies", "DS_AI", "Demography","DvelopmentStudies",
 # Create a new column - rs for research subjects
 sur_research$rs <-  unname(topics[sur_research[["disciplines"]]])
 
-# Check we are not missing categories
+# Check we are not missing categories we are missing out the Other and
+# Uncategorised elements
 rs <-  unname(topics[sur_research[["disciplines"]]])
 combined %>% select(category)                     %>%
              filter(category != "Uncategorised")  %>%
+             filter(category != "Other")  %>%
              filter(!(category %in% rs))
 
-# Now join the data together
+# Now join the data together for all projects
 combined %>% filter(!(category %in% c("Uncategorised", "Other")))  %>%
              left_join(sur_research, by = c("category" = "rs"))    %>%
              mutate(Nt = sum(Contribution.topic),
@@ -889,13 +903,32 @@ combined %>% filter(!(category %in% c("Uncategorised", "Other")))  %>%
              pivot_longer(cols = c("cs","ct","Per"),
                           names_to = "type",
                           values_to = "percent")                   %>%
-             ggplot(aes(x = reorder(category, id.subject), fill = type, by = type)) +
+             ggplot(aes(x = reorder(category, -Contribution.subject), fill = type, by = type)) +
              geom_col(aes(y = percent),
                       position = position_dodge2(width = 0.8, preserve = "single"), colour = "black", alpha = 0.5) +
              scale_y_continuous(labels = percent_format(accuracy = 1)) +
-             theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
+             theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
              xlab("Category") + ylab("Percent") + labs(fill = "Research") +
              scale_fill_manual(labels = c("Subject", "Topic", "Survey"),
                                values = c("blue", "red", "green"))
 
+
+# Using only active projects
+a_combined %>% filter(!(category %in% c("Uncategorised", "Other")))  %>%
+                left_join(sur_research, by = c("category" = "rs"))    %>%
+                mutate(Nt = sum(Contribution.topic),
+                       Ns = sum(Contribution.subject))                %>%
+                mutate(cs = Contribution.subject/Ns,
+                       ct = Contribution.topic/Nt)                    %>%
+                pivot_longer(cols = c("cs","ct","Per"),
+                             names_to = "type",
+                             values_to = "percent")                   %>%
+                ggplot(aes(x = reorder(category, -Contribution.subject), fill = type, by = type)) +
+                geom_col(aes(y = percent),
+                         position = position_dodge2(width = 0.8, preserve = "single"), colour = "black", alpha = 0.5) +
+                scale_y_continuous(labels = percent_format(accuracy = 1)) +
+                theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+                xlab("Category") + ylab("Percent") + labs(fill = "Research") +
+                scale_fill_manual(labels = c("Subject", "Topic", "Survey"),
+                                  values = c("blue", "red", "green"))
 
