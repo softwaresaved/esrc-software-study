@@ -625,18 +625,19 @@ ggplot() + geom_polygon(data = mapdata, aes( x = long, y = lat, group = group), 
 
 # Data from the GtR - institution and award numbers, rename some of the entries
 # to be compatible with the survey. Rename some of the institutions to match the
-# survey institutional names.
-esrcdat %>% filter(Status == "Active")        %>%
-            select(Institution=LeadROName)    %>%
+# survey institutional names. Note we are looking at active projects!
+esrcdat %>% filter(Status == "Active")                                                     %>%
+            select(Institution=LeadROName)                                                 %>%
             mutate(Institution = ifelse(Institution == "Queen Mary, University of London",
                                         "Queen Mary University of London", Institution))   %>%
             mutate(Institution = ifelse(Institution == "University of Abertay Dundee",
                                         "Abertay University", Institution))                %>%
             mutate(Institution = ifelse(Institution == "The James Hutton Institute",
                                        "James Hutton Institute", Institution))             %>%
-            mutate(Institution = ifelse(Institution == "London School of Economics & Pol Sci", "LSE", Institution)) %>%
-            group_by(Institution)             %>%
-            tally()                           %>%
+            mutate(Institution = ifelse(Institution == "London School of Economics & Pol Sci",
+                                        "LSE", Institution))                               %>%
+            group_by(Institution)                                                          %>%
+            tally()                                                                        %>%
             arrange(desc(n)) -> gtr
 
 # Institutions from the survey data with counts
@@ -684,7 +685,7 @@ gtr_sur %>% mutate(Ng = sum(n.gtr), Ns = sum(n.sur)) %>%
 gtr %>% left_join(sur, by = "Institution", suffix = c(".gtr",".sur")) %>%
         filter(!is.na(n.sur)) -> gtr_sur2
 
-# Plot this data
+# Plot award numbers gtr and survey responses
 gtr_sur2 %>% ggplot(aes(x=reorder(Institution, -n.gtr))) + theme_bw() +
              geom_col(aes(y = n.gtr, fill = "green"), alpha = 0.25, colour = "black") +
              geom_col(aes(y = n.sur, fill = "red"), alpha = 0.25, colour = "black") +
@@ -696,7 +697,7 @@ gtr_sur2 %>% ggplot(aes(x=reorder(Institution, -n.gtr))) + theme_bw() +
 # Use percentages instead
 gtr_sur2 %>% mutate(Ng = sum(n.gtr), Ns = sum(n.sur)) %>%
              mutate(Pg = n.gtr/Ng, Ps = n.sur/Ns)     %>%
-             filter(Pg > 0.01) %>%
+             filter(Pg > 0.01)                        %>%
              ggplot(aes(x=reorder(Institution, -n.gtr))) + theme_bw() +
              geom_col(aes(y = Pg, fill = "green"), alpha = 0.25, colour = "black",  na.rm = TRUE) +
              geom_col(aes(y = Ps, fill = "red"), alpha = 0.25, colour = "black", na.rm = TRUE) +
