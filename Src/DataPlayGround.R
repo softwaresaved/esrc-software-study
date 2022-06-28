@@ -722,44 +722,9 @@ sur_gtr %>% ggplot(aes(x=reorder(Institution, -n.gtr))) + theme_bw() +
             ylab("Numbers") + xlab("Institution") + labs(fill="Source") +
             scale_fill_manual(labels = c("GtR", "Survey"), values = c("green","red"))
 
+## Emails vs survey responses ----
 
-# Try to see if the data come from the same distribution, i.e. does the survey
-# data correlate with the gtr data.
-
-# Not sure if this is an appropriate test - require a continuous distribution
-# and the inputs are supposed to be cumulative density distribution. At the
-# moment feeding it a sample vector.
-# https://www.statology.org/kolmogorov-smirnov-test-r/
-#
-# https://miningthedetails.com/blog/r/non-parametric-tests/
-#
-# o Null HYPOTHESIS: The two distributions are the same
-# o p-value can be used to determine rejection of null hypothesis (i.e. p< 0.05 reject null)
-# o D close to 1 indicates the two samples are from different distributions
-# o D closer to 0 indicates the two samples are from the same distribution
-
-# Two sample Kolmogorov-Smirnov Test
-ks.test(gtr_sur[["n.gtr"]], gtr_sur[["n.sur"]])
-ks.test(gtr_sur2[["n.gtr"]], gtr_sur2[["n.sur"]])
-ks.test(sur_gtr[["n.gtr"]], sur_gtr[["n.sur"]])
-
-# Chi squared test
-# http://www.sthda.com/english/wiki/chi-square-test-of-independence-in-r
-# https://statsandr.com/blog/chi-square-test-of-independence-in-r/
-library(corrplot)
-t <- data.frame(gtr = gtr_sur[["n.gtr"]], sur = gtr_sur[["n.sur"]])
-rownames(t) <- gtr_sur[[1]]
-(t1 <- chisq.test(t$gtr, t$sur))
-corrplot(t1$residuals, is.corr = FALSE)
-
-u <- data.frame(gtr = gtr_sur2[["n.gtr"]], sur = gtr_sur2[["n.sur"]])
-rownames(u) <- gtr_sur2[[1]]
-(t2 <- chisq.test(u$gtr, u$sur))
-corrplot(t1$residuals, is.corr = FALSE)
-
-chisq.test(sur_gtr[["n.gtr"]], sur_gtr[["n.sur"]])
-
-# Compare results with the email list we used
+# Compare institution survey responses with the email list we used
 
 # The first email lists - cleaned
 pi_emails <- read_csv("../Data/Mailmerge_clean_list.csv", show_col_types = FALSE)
@@ -798,8 +763,6 @@ tibble(domain = domains) %>% left_join(insts, by = "domain")                    
                              group_by(Institution)                                                          %>%
                              tally()                                                                        %>%
                              arrange(desc(n)) -> ems
-
-## Institutions: survey vs Mails sent out ----
 
 # Survey data
 data %>% select(Institution = CleanLocs)  %>%
