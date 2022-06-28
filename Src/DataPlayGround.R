@@ -770,7 +770,8 @@ pi_emails2 <- read_csv("../Data/fname-sname-org-email.csv", show_col_types = FAL
 student_emails <- read_csv("../Data/esrc-students.csv", show_col_types = FALSE)
 
 # Vector of all the emails
-emails <- c(pi_emails[["Email"]], pi_emails2[["constructed email"]], student_emails[["constructed email"]])
+emails <- c(pi_emails[["Email"]], pi_emails2[["constructed email"]],
+            student_emails[["constructed email"]])
 
 # Remove any duplicated emails
 emails <- emails[!duplicated(emails)]
@@ -782,21 +783,22 @@ domains <- str_split(emails, "@", simplify = TRUE)[,2]
 insts <- read_csv("/Users/mario/Git/gateway-to-research-playing-about/output/uni_and_email_address_construction.csv", show_col_types = FALSE)
 
 # Tally the results for emails sent out
-tibble(domain = domains) %>% left_join(insts, by = "domain")          %>%
-                             filter(!is.na(university))               %>%
+tibble(domain = domains) %>% left_join(insts, by = "domain")                                                %>%
+                             filter(!is.na(university))                                                     %>%
                              select(domain, Institution = university) %>%
                              mutate(Institution = ifelse(Institution == "Queen Mary, University of London",
-                                                        "Queen Mary University of London", Institution))   %>%
+                                                        "Queen Mary University of London", Institution))    %>%
                              mutate(Institution = ifelse(Institution == "University of Abertay Dundee",
-                                                        "Abertay University", Institution))                %>%
+                                                        "Abertay University", Institution))                 %>%
                              mutate(Institution = ifelse(Institution == "The James Hutton Institute",
                                                         "James Hutton Institute", Institution))             %>%
-                             mutate(Institution = ifelse(Institution == "London School of Economics & Pol Sci", "LSE", Institution)) %>%
-                             group_by(Institution)                    %>%
-                             tally()                                  %>%
+                             mutate(Institution = ifelse(Institution == "London School of Economics & Pol Sci",
+                                                         "LSE", Institution))                               %>%
+                             group_by(Institution)                                                          %>%
+                             tally()                                                                        %>%
                              arrange(desc(n)) -> ems
 
-## Survey results vs Mails sent out ----
+## Institutions: survey vs Mails sent out ----
 
 # Survey data
 data %>% select(Institution = CleanLocs)  %>%
