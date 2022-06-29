@@ -19,6 +19,7 @@ library(stringr, warn.conflicts = FALSE)
 library(rvest, warn.conflicts = FALSE)
 library(xml2)
 library(fmsb) # radar/spider charts (https://www.datanovia.com/en/blog/beautiful-radar-chart-in-r-using-fmsb-and-ggplot-packages/)
+library(knitr)
 
 # Read the data -----------------------------------------------------------
 
@@ -778,7 +779,19 @@ ems %>% left_join(sur2, by = "Institution", suffix = c(".ems",".sur")) %>%
 
 # Join the data but ignore null values
 ems %>% left_join(sur2, by = "Institution", suffix = c(".ems",".sur")) %>%
-        mutate(!is.na(n.sur)) -> ems_sur2
+        filter(!is.na(n.sur)) -> ems_sur2
+
+# Tabulate results
+ems_sur %>% mutate(per = percent(n.sur/n.ems, accuracy = 0.01)) %>%
+            filter(n.sur > 0)                                   %>%
+            arrange(desc(n.ems))                                %>%
+            kable(format="pipe", align= c("l", "r", "r","r"),
+            col.names = c("Institution", "Emails sent","Survey responses", "Percentage Response"))
+
+nrow(ems_sur) # Total entries
+nrow(ems_sur[ems_sur$n.sur == 0,]) # Ones with no responses
+sum(ems_sur[ems_sur$n.sur == 0,]$n.ems) # Number of emails sent out that did not get a response
+sum(ems_sur[ems_sur$n.sur > 0,]$n.ems) # Number of emails sent out that got a response
 
 # Plot the results
 ems_sur %>%  #filter(n.sur > 0) %>%
