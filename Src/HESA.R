@@ -1,5 +1,5 @@
-# Examine some HESA data
-#
+# Examine some Higher Education Statistical Agency (HESA) data for the
+# Economic and Social Sciences Research Council (ESRC)
 
 # Setup ----
 library(readxl)
@@ -7,8 +7,10 @@ library(dplyr)
 library(ggplot2)
 
 # ESRC related subjects mapped to cost centres
-# https://www.ukri.org/about-us/esrc/what-is-social-science/social-science-disciplines/
-esrc_cc <- c( "(123) Architecture, built environment & planning",
+# ESRC disciplines: https://www.ukri.org/about-us/esrc/what-is-social-science/social-science-disciplines/
+# HESA cost centres: https://www.hesa.ac.uk/support/documentation/cost-centres/2012-13-onwards
+esrc_cc <- c( "(104) Psychology & behavioural sciences",
+              "(123) Architecture, built environment & planning",
               "(124) Geography & environmental studies",
               "(125) Area studies",
               "(127) Anthropology & development studies",
@@ -17,21 +19,24 @@ esrc_cc <- c( "(123) Architecture, built environment & planning",
               "(130) Law",
               "(131) Social work & social policy",
               "(132) Sociology",
+              "133) Business & management studies",
               "(135) Education",
+              "(136) Continuing education",
               "(145) Media studies"
 )
 
 # Gender ----
 
 # Read the corresponding data and sheet
-hesdat <- read_xlsx("../Data/hesa.xlsx", sheet = "Gender", skip = 3)
+hesadat <- read_xlsx("../Data/hesa.xlsx", sheet = "Gender", skip = 3)
 
+# Difference betwee
 #  FPE - Full Person Equivalent
 #  _RO - Research Only
 # p_RO - % Research Only
 #  _TO - Teaching Only
 # p_TO - % Teaching Only
-names(hesdat) <- c("Academic_Year",
+names(hesadat) <- c("Academic_Year",
                    "Cost_centre_group_v2",
                    "Cost_centre_v2",
                    "FPE_Female_RO",
@@ -50,6 +55,7 @@ names(hesdat) <- c("Academic_Year",
                    "FPE_Totalp")
 
 # Fill NA values with repeated values in labelling columns.
-hesdat <- hesdat %>% fill(Academic_Year, Cost_centre_group_v2)
+hesadat <- hesadat %>% fill(Academic_Year, Cost_centre_group_v2)
 
-
+# Pick the ESRC related cost centres
+gender <- hesadat %>% filter(Cost_centre_v2 %in% esrc_cc)
