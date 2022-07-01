@@ -2,13 +2,18 @@
 # Economic and Social Sciences Research Council (ESRC)
 
 # Setup ----
+
 library(readxl)
 library(dplyr)
 library(ggplot2)
 
+# Create a look-up table to map cost centres to subjects
+#
 # ESRC related subjects mapped to cost centres
 # ESRC disciplines: https://www.ukri.org/about-us/esrc/what-is-social-science/social-science-disciplines/
 # HESA cost centres: https://www.hesa.ac.uk/support/documentation/cost-centres/2012-13-onwards
+
+# The cost codes
 esrc_cc <- c( "(104) Psychology & behavioural sciences",
               "(123) Architecture, built environment & planning",
               "(124) Geography & environmental studies",
@@ -23,14 +28,34 @@ esrc_cc <- c( "(104) Psychology & behavioural sciences",
               "(135) Education",
               "(136) Continuing education",
               "(145) Media studies"
-)
+            )
+
+# The subjects
+cc2subjects <- c("Psychology & behavioural sciences",
+                 "Architecture, built environment & planning",
+                 "Geography & environmental studies",
+                 "Area studies",
+                 "Anthropology & development studies",
+                 "Politics & international studies",
+                 "Economics & econometrics",
+                 "Law",
+                 "Social work & social policy",
+                 "Sociology",
+                 "Business & management studies",
+                 "Education",
+                 "Continuing education",
+                 "Media studies"
+                 )
+
+# Names are the cost centres, values the subjects
+names(cc2subjects) <- esrc_cc
 
 # Gender ----
 
 # Read the corresponding data and sheet
 hesadat <- read_xlsx("../Data/hesa.xlsx", sheet = "Gender", skip = 3)
 
-# Difference betwee
+# Difference between
 #  FPE - Full Person Equivalent
 #  _RO - Research Only
 # p_RO - % Research Only
@@ -59,3 +84,9 @@ hesadat <- hesadat %>% fill(Academic_Year, Cost_centre_group_v2)
 
 # Pick the ESRC related cost centres
 gender <- hesadat %>% filter(Cost_centre_v2 %in% esrc_cc)
+
+# Map cost centres to a new column of subjects
+gender$discipline <-unname(cc2subjects[gender[["Cost_centre_v2"]]])
+
+# Plot gender
+
