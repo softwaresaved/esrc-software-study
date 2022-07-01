@@ -1,11 +1,13 @@
 # Examine some Higher Education Statistical Agency (HESA) data for the
 # Economic and Social Sciences Research Council (ESRC)
 
-# Setup ----
+# Set up ----
 
+# Packages to be used
 library(readxl)
 library(dplyr)
 library(ggplot2)
+library(scales)
 
 # Create a look-up table to map cost centres to subjects
 #
@@ -90,3 +92,19 @@ gender$discipline <-unname(cc2subjects[gender[["Cost_centre_v2"]]])
 
 # Plot gender
 
+gender %>% select(discipline, FPE_Femalep_RO, FPE_Malep_RO, FPE_Otherp_RO, FPE_Total) %>%
+           pivot_longer(cols = c("FPE_Femalep_RO", "FPE_Malep_RO", "FPE_Otherp_RO"),
+                        names_to = "gender",
+                        values_to = "percent") %>%
+           filter(!is.na(percent))             %>%
+           group_by(discipline)                %>%
+           mutate(pos = sum(percent))          %>%
+           ggplot(aes(y = discipline, x = percent, fill = gender)) +
+           geom_col(colour = "black", na.rm = TRUE) +
+           scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0,0.38)) +
+           theme_bw() +
+           xlab("Percent") + ylab("Research discipline") +
+           labs(fill = "Gender") +
+           geom_text(aes(y = discipline, x = pos, label = comma(FPE_Total)), hjust = -0.25,
+                     position = "identity", inherit.aes = FALSE, size = 3) +
+           scale_fill_manual(labels = c("Female", "Male", "Other"), values = c("green","red","blue"))
