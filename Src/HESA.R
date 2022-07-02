@@ -155,7 +155,7 @@ disability %>% pivot_longer(
                 theme_bw() +
                 scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 1.05)) +
                 ylab("Research discipline") +
-                xlab("No know discipline percent") +
+                xlab("No know disability percent") +
                 geom_text(aes(y = discipline, x = pos, label = comma(Total)), hjust = -0.25,
                          position = "identity", inherit.aes = FALSE, size = 3) +
                 scale_fill_manual(labels = c("Resarch only", "Teaching only"), values = c("green","red"))
@@ -183,7 +183,7 @@ disability <- disability %>% filter(Cost_centre_v2 %in% esrc_cc)
 # Map cost centres to a new column of subjects
 disability$discipline <-unname(cc2subjects[disability[["Cost_centre_v2"]]])
 
-# Plot the graph
+# Plot the graph for Research Only (RO) and Training Only (TO)
 disability %>% pivot_longer(
                            cols = c("dis_RO",	"no_dis_RO",	"dis_TO",	"no_dis_TO"),
                            names_to = "disability",
@@ -196,8 +196,27 @@ disability %>% pivot_longer(
                 theme_bw() +
                 scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 1.1)) +
                 ylab("Research discipline") +
-                xlab("No know discipline percent") + labs(fill = "Disability") +
+                xlab("Percent") + labs(fill = "Disability") +
                 geom_text(aes(y = discipline, x = pos, label = comma(Total_num)), hjust = -0.25,
                           position = "identity", inherit.aes = FALSE, size = 3) +
                 scale_fill_manual(labels = c("RO disability", "TO disability", "RO no known disability", "TO no known disability"),
                                   values = c("green","red","blue","yellow"))
+
+# Plot the graph for Research Only (RO)
+disability %>% pivot_longer(
+                            cols = c("dis_RO",	"no_dis_RO"),
+                            names_to = "disability",
+                            values_to = "percent"
+                             )                        %>%
+                 group_by(discipline)                 %>%
+                 mutate(pos = sum(percent))           %>%
+                 ggplot(aes(y = discipline, x = percent, fill = disability)) +
+                 geom_col(colour = "black") +
+                 theme_bw() +
+                 scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.38)) +
+                 ylab("Research discipline") +
+                 xlab("Percent") + labs(fill = "Disability") +
+                 geom_text(aes(y = discipline, x = pos, label = comma(Total_num)), hjust = -0.25,
+                           position = "identity", inherit.aes = FALSE, size = 3) +
+                 scale_fill_manual(labels = c("RO disability", "RO no known disability"),
+                                  values = c("blue","yellow"))
