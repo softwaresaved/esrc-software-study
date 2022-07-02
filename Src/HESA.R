@@ -91,8 +91,7 @@ gender <- hesadat %>% filter(Cost_centre_v2 %in% esrc_cc)
 # Map cost centres to a new column of subjects
 gender$discipline <-unname(cc2subjects[gender[["Cost_centre_v2"]]])
 
-# Plot gender
-
+# Plot gender - Research Only
 gender %>% select(discipline, FPE_Femalep_RO, FPE_Malep_RO, FPE_Otherp_RO, FPE_Total) %>%
            pivot_longer(cols = c("FPE_Femalep_RO", "FPE_Malep_RO", "FPE_Otherp_RO"),
                         names_to = "gender",
@@ -109,6 +108,29 @@ gender %>% select(discipline, FPE_Femalep_RO, FPE_Malep_RO, FPE_Otherp_RO, FPE_T
            geom_text(aes(y = discipline, x = pos, label = comma(FPE_Total)), hjust = -0.25,
                      position = "identity", inherit.aes = FALSE, size = 3) +
            scale_fill_manual(labels = c("Female", "Male", "Other"), values = c("green","red","blue"))
+
+# Plot gender - Research and Teaching Only
+gender %>% select(discipline, FPE_Femalep_RO, FPE_Malep_RO, FPE_Otherp_RO,
+                  FPE_Femalep_TO, FPE_Malep_TO, FPE_Otherp_TO,FPE_Total) %>%
+           pivot_longer(cols = c("FPE_Femalep_RO", "FPE_Malep_RO", "FPE_Otherp_RO",
+                                 "FPE_Femalep_TO", "FPE_Malep_TO", "FPE_Otherp_TO"),
+                        names_to = "gender",
+                        values_to = "percent") %>%
+           filter(!is.na(percent))             %>%
+           group_by(discipline)                %>%
+           mutate(pos = sum(percent))          %>%
+           mutate(gender = factor(gender, levels = c("FPE_Femalep_RO", "FPE_Malep_RO", "FPE_Otherp_RO",
+                                                     "FPE_Femalep_TO", "FPE_Malep_TO", "FPE_Otherp_TO"), ordered = TRUE)) %>%
+           ggplot(aes(y = discipline, x = percent, fill = gender)) +
+           geom_col(colour = "black", na.rm = TRUE) +
+           scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0,1.1)) +
+           theme_bw() +
+           xlab("Percent") + ylab("Research discipline") +
+           labs(fill = "Gender") +
+           geom_text(aes(y = discipline, x = pos, label = comma(FPE_Total)), hjust = -0.25,
+                    position = "identity", inherit.aes = FALSE, size = 3) +
+           scale_fill_manual(labels = c("RO Female","RO Male", "RO Other", "TO Female", "TO Male","TO Other"),
+                             values = c("green","red","blue","yellow", "purple", "chocolate"))
 
 # Disability ----
 
