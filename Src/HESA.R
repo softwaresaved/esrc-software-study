@@ -9,6 +9,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(scales)
+library(viridis)
 
 # Create a look-up table to map cost centres to subjects
 #
@@ -242,3 +243,50 @@ disability %>% pivot_longer(
                            position = "identity", inherit.aes = FALSE, size = 3) +
                  scale_fill_manual(labels = c("RO disability", "RO no known disability"),
                                   values = c("blue","yellow"))
+
+# Ethnicity ----
+
+# Read the data
+ethnicity <-  read_xlsx("../Data/hesa.xlsx", sheet = "Ethnicity", skip = 3)
+
+# Rename the columns
+names(ethnicity) <- c("Academic_Year", "Cost_centre_group_v2",	"Cost_centre_v2",
+                      "ROp_Asian",	"ROp_Black",	"ROp_Mixed",	"ROp_Other",	"ROp_Unknown_NA",	"ROp_White",
+                      "RO_Asian",	"RO_Black",	"RO_Mixed",	"RO_Other",	"RO_Unknown_NA",	"RO_White",
+                      "TOp_Asian",	"TOp_Black",	"TOp_Mixed",	"TOp_Other",	"TOp_Unknown_NA",	"TOp_White",
+                      "TO_Asian",	"TO_Black",	"TO_Mixed",	"TO_Other",	"TO_Unknown_NA",	"TO_White",
+                      "pTotal", "nTotal")
+
+# Repeat values
+ethnicity <- ethnicity %>% fill(Academic_Year, Cost_centre_group_v2)
+
+# Pick the ESRC related cost centres
+ethnicity <- ethnicity %>% filter(Cost_centre_v2 %in% esrc_cc)
+
+# Map cost centres to a new column of subjects
+ethnicity$discipline <-unname(cc2subjects[ethnicity[["Cost_centre_v2"]]])
+
+# Plot the ethnicity
+ethnicity %>% pivot_longer(
+                           cols = c("ROp_Asian",	"ROp_Black",	"ROp_Mixed",	"ROp_Other",	"ROp_Unknown_NA",	"ROp_White",
+                                    "TOp_Asian",	"TOp_Black",	"TOp_Mixed",	"TOp_Other",	"TOp_Unknown_NA",	"TOp_White"),
+                           names_to = "ethnicity",
+                           values_to = "percent"
+                         )                         %>%
+              filter(!is.na(percent))              %>%
+              group_by(discipline)                 %>%
+              mutate(pos = sum(percent))           %>%
+              mutate(ethnicity = factor(ethnicity, levels = c("ROp_Asian",	"ROp_Black",	"ROp_Mixed",	"ROp_Other",	"ROp_Unknown_NA",	"ROp_White",
+                                                              "TOp_Asian",	"TOp_Black",	"TOp_Mixed",	"TOp_Other",	"TOp_Unknown_NA",	"TOp_White"),
+                                        ordered = TRUE)) %>%
+              ggplot(aes(y = discipline, x = percent, fill = ethnicity)) +
+              geom_col(colour = "black") +
+              theme_bw() +
+              scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 1.1)) +
+              ylab("Research discipline") +
+              xlab("Percent") + labs(fill = "Ethnicity") +
+              geom_text(aes(y = discipline, x = pos, label = comma(nTotal)), hjust = -0.25,
+                        position = "identity", inherit.aes = FALSE, size = 3) +
+              scale_fill_manual(labels = c("RO Asian",	"RO Black",	"RO Mixed",	"RO Other",	"RO Unknown/NA",	"RO White",
+                                          "TO Asian",	"TO Black",	"TO Mixed",	"TO Other",	"TO Unknown/NA",	"TO White"),
+                                values = viridis(12))
