@@ -137,6 +137,16 @@ gender %>% select(discipline, FPE_Femalep_RO, FPE_Malep_RO, FPE_Otherp_RO,
 # This numbers are approximate as all sort of rounding effects come into play
 gender %>% summarise(Total = sum(FPE_Total))
 
+# Plot only the totals
+gender %>%  ggplot(aes(y = discipline, x = FPE_Total, fill = FPE_Total)) +
+            geom_col(colour = "black", na.rm = TRUE) +
+            theme_bw() +
+            scale_x_continuous(labels = comma, limits = c(0, 11550)) +
+            xlab("Full Person Equivalent") + ylab("Research discipline") +
+            geom_text(aes(y = discipline, x = FPE_Total, label = comma(FPE_Total)), hjust = -0.25,
+            position = "identity", inherit.aes = FALSE, size = 3) +
+            scale_fill_viridis(option="magma") + theme(legend.position = "None")
+
 # Disability ----
 
 # Do not appear to be able to read non-adjacent columns and do not want all
