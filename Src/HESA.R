@@ -29,7 +29,7 @@ esrc_cc <- c( "(104) Psychology & behavioural sciences",
               "(130) Law",
               "(131) Social work & social policy",
               "(132) Sociology",
-              "133) Business & management studies",
+              "(133) Business & management studies",
               "(135) Education",
               "(136) Continuing education",
               "(145) Media studies"
