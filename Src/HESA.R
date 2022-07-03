@@ -5,6 +5,7 @@
 
 # Packages to be used
 library(readxl)
+library(readr)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -183,7 +184,8 @@ disability %>% pivot_longer(
                          position = "identity", inherit.aes = FALSE, size = 3) +
                 scale_fill_manual(labels = c("Resarch only", "Teaching only"), values = c("green","red"))
 
-# Modified the spreadsheet to aggregate the disability values.
+# Modified the spreadsheet to aggregate the disability values. This is reading
+# this in.
 disability <- read_xlsx("../Data/hesa.xlsx", range = "Disability!A5:C54")
 names(disability) <-  c("Academic_Year", "Cost_centre_group_v2", "Cost_centre_v2")
 
@@ -333,3 +335,67 @@ ethnicity %>% pivot_longer(
                                     position = "identity", inherit.aes = FALSE, size = 3) +
                           scale_fill_manual(labels = c("TO Asian",	"TO Black",	"TO Mixed",	"TO Other",	"TO Unknown/NA",	"TO White"),
                                             values = viridis(6))
+# Institutions ----
+
+# Read in the data
+provider <-  read_xlsx("../Data/hesa.xlsx", sheet = "Provider", skip = 2)
+
+# Rename the columns
+# RO - Research Only
+# ROp - Research Only percentage
+# TO - Teaching Only
+# TOp - Teaching Only percentage
+names(provider) <-  c("Academic_Year", "Cost_centre_group_v2", "Cost_centre_v2", "ukprn",
+                      "RO", "ROp", "TO",	"TOp", "Total",	"Totalp")
+
+# Repeat values
+provider <- provider %>% fill(Academic_Year, Cost_centre_group_v2, Cost_centre_v2)
+
+# Pick the ESRC related cost centres
+provider <- provider %>% filter(Cost_centre_v2 %in% esrc_cc)
+
+# Map cost centres to a new column of subjects
+provider$discipline <-unname(cc2subjects[provider[["Cost_centre_v2"]]])
+
+# Can download the unistat dataset from:
+#
+# https://www.hesa.ac.uk/support/tools-and-downloads/unistats
+#
+# UKPRN to institution can be obtained
+institutions <-  read_csv("../Data/on_2022_03_15_13_26_06/AccreditationByHep.csv",
+                          show_col_types = FALSE)
+
+# Keep only the institutions
+institutions <- unique(institutions$HEP)
+
+# Create a new data frame with the UKPRN and institution
+ukprn2inst <- data.frame(ukprn = sub("^\\((\\d+)\\)\\s+(.*)$", "\\1", institutions, perl = TRUE),
+                         institution = sub("^\\((\\d+)\\)\\s+(.*)$", "\\2", institutions, perl = TRUE))
+
+# Join the two data sets
+provider <- provider %>% left_join(ukprn2inst, by = "ukprn")
+
+# Plot the results by research discipline
+for(disc in unique(provider$discipline)){
+
+  print(paste("Research discipline:", disc))
+
+  # Need to print to get the plots to show
+  print(
+          provider %>% pivot_longer(cols = c("ROp", "TOp"),
+                                    names_to = "Type",
+                                    values_to = "percent")  %>%
+                        filter(!is.na(percent))             %>%
+                        filter(!is.na(institution))         %>%
+                        filter(discipline == disc)          %>%
+                        ggplot(aes(y = institution, x = percent, fill = Type)) +
+                        geom_col(colour = "black") +
+                        theme_bw() +
+                        scale_x_continuous(labels = percent_format(accuracy = 1)) +
+                        theme(axis.text.y = element_text(size = 8)) +
+                        ylab("Research discipline") + xlab("Percent") +
+                        scale_fill_manual(labels = c("Research Only", "Teaching Only"),
+                                          values = viridis(2)) +
+                        ggtitle(paste0("Research discipline: ", disc))
+    )
+}
