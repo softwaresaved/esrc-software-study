@@ -134,6 +134,9 @@ gender %>% select(discipline, FPE_Femalep_RO, FPE_Malep_RO, FPE_Otherp_RO,
            scale_fill_manual(labels = c("RO Female","RO Male", "RO Other", "TO Female", "TO Male","TO Other"),
                              values = c("green","red","blue","yellow", "purple", "chocolate"))
 
+# This numbers are approximate as all sort of rounding effects come into play
+gender %>% summarise(Total = sum(FPE_Total))
+
 # Disability ----
 
 # Do not appear to be able to read non-adjacent columns and do not want all
