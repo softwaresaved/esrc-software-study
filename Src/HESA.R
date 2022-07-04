@@ -149,7 +149,8 @@ gender %>%  ggplot(aes(y = discipline, x = FPE_Total, fill = FPE_Total)) +
             position = "identity", inherit.aes = FALSE, size = 3) +
             scale_fill_viridis(option="magma") + theme(legend.position = "None")
 
-# Calculate proportions (there will be rounding effects)
+# Calculate proportions (there will be rounding effects).
+# The Other values are hitting rounding issues.
 gender %>% summarise(RO_F_Tot = sum(FPE_Female_RO, na.rm = TRUE),
                      RO_M_Tot = sum(FPE_Male_RO, na.rm = TRUE),
                      RO_O_Tot = sum(FPE_Other_RO, na.rm = TRUE),
@@ -221,8 +222,8 @@ disability %>% pivot_longer(
                          position = "identity", inherit.aes = FALSE, size = 3) +
                 scale_fill_manual(labels = c("Resarch only", "Teaching & Research"), values = c("green","red"))
 
-# Modified the spreadsheet to aggregate the disability values. This is reading
-# this in.
+# Modified the spreadsheet to aggregate the disability values.
+# Read a modified version of the spreadsheet that sums up the disabilities.
 disability <- read_xlsx("../Data/hesa.xlsx", range = "Disability!A5:C54")
 names(disability) <-  c("Academic_Year", "Cost_centre_group_v2", "Cost_centre_v2")
 
@@ -245,7 +246,7 @@ disability <- disability %>% filter(Cost_centre_v2 %in% esrc_cc)
 # Map cost centres to a new column of subjects
 disability$discipline <-unname(cc2subjects[disability[["Cost_centre_v2"]]])
 
-# Plot the graph for Research Only (RO) and Training and Resarch (TR)
+# Plot the graph for Research Only (RO) and Training & Research (TR)
 disability %>% pivot_longer(
                            cols = c("dis_RO",	"no_dis_RO",	"dis_TR",	"no_dis_TR"),
                            names_to = "disability",
@@ -253,15 +254,16 @@ disability %>% pivot_longer(
                             )                        %>%
                 group_by(discipline)                 %>%
                 mutate(pos = sum(percent))           %>%
+                mutate(disability = factor(disability, levels = c("dis_RO",	"no_dis_RO",	"dis_TR",	"no_dis_TR"), ordered = TRUE)) %>%
                 ggplot(aes(y = discipline, x = percent, fill = disability)) +
                 geom_col(colour = "black") +
                 theme_bw() +
-                scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 1.1)) +
+                scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 1.125)) +
                 ylab("Research discipline") +
                 xlab("Percent") + labs(fill = "Disability") +
                 geom_text(aes(y = discipline, x = pos, label = comma(Total_num)), hjust = -0.25,
                           position = "identity", inherit.aes = FALSE, size = 3) +
-                scale_fill_manual(labels = c("RO disability", "TR disability", "RO no known disability", "TR no known disability"),
+                scale_fill_manual(labels = c("RO disability", "RO no known disability" , "TR disability", "TR no known disability"),
                                   values = c("green","red","blue","yellow"))
 
 # Plot the graph for Research Only (RO)
@@ -283,10 +285,12 @@ disability %>% pivot_longer(
                  scale_fill_manual(labels = c("RO disability", "RO no known disability"),
                                   values = c("blue","yellow"))
 
+# Generate some statistics
+
 # Ethnicity ----
 
 # Read the data
-ethnicity <-  read_xlsx("../Data/hesa.xlsx", sheet = "Ethnicity", skip = 3)
+ethnicity <- read_xlsx("../Data/hesa.xlsx", sheet = "Ethnicity", skip = 3)
 
 # Rename the columns
 names(ethnicity) <- c("Academic_Year", "Cost_centre_group_v2",	"Cost_centre_v2",
@@ -321,7 +325,7 @@ ethnicity %>% pivot_longer(
               ggplot(aes(y = discipline, x = percent, fill = ethnicity)) +
               geom_col(colour = "black") +
               theme_bw() +
-              scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 1.1)) +
+              scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 1.125)) +
               ylab("Research discipline") +
               xlab("Percent") + labs(fill = "Ethnicity") +
               geom_text(aes(y = discipline, x = pos, label = comma(nTotal)), hjust = -0.25,
@@ -413,7 +417,7 @@ ukprn2inst <- data.frame(ukprn = sub("^\\((\\d+)\\)\\s+(.*)$", "\\1", institutio
 # Join the two data sets
 provider <- provider %>% left_join(ukprn2inst, by = "ukprn")
 
-# Plot the results by research discipline
+# Plot the results by RO and TR %s for research disciplines
 for(disc in unique(provider$discipline)){
 
   print(paste("Research discipline:", disc))
@@ -436,4 +440,25 @@ for(disc in unique(provider$discipline)){
                                           values = viridis(2)) +
                         ggtitle(paste0("Research discipline: ", disc))
     )
+}
+
+# Plot the FPEs for research disciplines
+for(disc in unique(provider$discipline)){
+
+  print(paste("Research discipline:", disc))
+
+  # Need to print to get the plots to show
+  print(
+       provider %>%
+      filter(!is.na(institution))         %>%
+      filter(Total > 10)                   %>%
+      filter(discipline == disc)          %>%
+      ggplot(aes(y = institution, x = Total, fill = Total)) +
+      geom_col(colour = "black") +
+      theme_bw() +
+      theme(axis.text.y = element_text(size = 6), legend.position = "None") +
+      ylab("Research discipline") + xlab("Full Person Equivalents") +
+      scale_fill_viridis(option="magma") +
+      ggtitle(paste0("Research discipline: ", disc))
+  )
 }
