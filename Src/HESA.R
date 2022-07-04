@@ -384,11 +384,12 @@ provider <- provider %>% filter(Cost_centre_v2 %in% esrc_cc)
 # Map cost centres to a new column of subjects
 provider$discipline <-unname(cc2subjects[provider[["Cost_centre_v2"]]])
 
-# Can download the unistat dataset from:
+# Need to download the unistat dataset from:
 #
 # https://www.hesa.ac.uk/support/tools-and-downloads/unistats
 #
-# UKPRN to institution can be obtained
+# UKPRN to institution can be obtained from the AccreditationByHep.csv but needs
+# a bit of massaging.
 institutions <-  read_csv("../Data/on_2022_03_15_13_26_06/AccreditationByHep.csv",
                           show_col_types = FALSE)
 
