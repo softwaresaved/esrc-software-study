@@ -159,7 +159,17 @@ gender %>% summarise(RO_F_Tot = sum(FPE_Female_RO, na.rm = TRUE),
                      Tot_F_all = sum(FPE_Female_RO + FPE_Female_TR, na.rm = TRUE),
                      Tot_M_all = sum(FPE_Male_RO + FPE_Male_TR, na.rm = TRUE),
                      Tot_O_all = sum(FPE_Other_RO + FPE_Other_TR, na.rm = TRUE),
-                     Tot = sum(FPE_Female_RO + FPE_Female_TR + FPE_Male_RO + FPE_Male_TR + FPE_Other_RO + FPE_Other_TR, na.rm = TRUE))
+                     Tot = sum(FPE_Female_RO + FPE_Female_TR + FPE_Male_RO + FPE_Male_TR + FPE_Other_RO + FPE_Other_TR, na.rm = TRUE), # Does not add up!
+                     Tot2 = sum(FPE_Total)) %>%
+            summarise(TotFemalPer = percent(Tot_F_all/Tot2, accuracy = 0.1),
+                      Female_ROPer = percent(RO_F_Tot/Tot2, accuracy = 0.01),
+                      Female_TRPer = percent(TR_F_Tot/Tot2, accuracy = 0.01),
+                      TotMalePer = percent(Tot_M_all/Tot2, accuracy = 0.1),
+                      Male_ROPer = percent(RO_M_Tot/Tot2, accuracy = 0.1),
+                      Male_TRPer = percent(TR_M_Tot/Tot2, accuracy = 0.1),
+                      OtherPer = percent(Tot_O_all/Tot2, accuracy = 0.001),
+                      Other_ROPer = percent(RO_O_Tot/Tot2, accuracy = 0.001),
+                      Other_TRPer = percent(TR_O_Tot/Tot2, accuracy = 0.001))
 
 # Disability ----
 
@@ -193,7 +203,7 @@ disability <- disability %>% filter(Cost_centre_v2 %in% esrc_cc)
 # Map cost centres to a new column of subjects
 disability$discipline <-unname(cc2subjects[disability[["Cost_centre_v2"]]])
 
-# Plot the graph
+# Plot graph of no known disabilities
 disability %>% pivot_longer(
                              cols = c("No_known_RO", "No_known_TR"),
                              names_to = "disability",
