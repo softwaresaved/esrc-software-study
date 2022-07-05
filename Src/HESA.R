@@ -62,12 +62,17 @@ names(cc2subjects) <- esrc_cc
 # Read the corresponding data and sheet
 hesadat <- read_xlsx("../Data/hesa.xlsx", sheet = "Gender", skip = 3)
 
-# Difference between
-#  FPE - Full Person Equivalent
+# Difference between Full Person Equivalent (FPE) and Full Time Equivalent (FTE)
+#
+# https://www.hesa.ac.uk/collection/c20025/fte_vs_fpe
+#
+# Only have Full Person Equivalent (FPE) data
+#
 #  _RO - Research Only
 # p_RO - % Research Only
 #  _TR - Teaching and Research
-# p_TR - % Teaching and Resarch
+# p_TR - % Teaching and Research
+#
 names(hesadat) <- c("Academic_Year",
                    "Cost_centre_group_v2",
                    "Cost_centre_v2",
@@ -451,13 +456,13 @@ for(disc in unique(provider$discipline)){
   print(
        provider %>%
       filter(!is.na(institution))         %>%
-      filter(Total > 10)                   %>%
+      filter(Total > 0)                   %>%
       filter(discipline == disc)          %>%
       ggplot(aes(y = institution, x = Total, fill = Total)) +
       geom_col(colour = "black") +
       theme_bw() +
       theme(axis.text.y = element_text(size = 6), legend.position = "None") +
-      ylab("Research discipline") + xlab("Full Person Equivalents") +
+      ylab("Research discipline") + xlab("Full Person Equivalent") +
       scale_fill_viridis(option="magma") +
       ggtitle(paste0("Research discipline: ", disc))
   )
