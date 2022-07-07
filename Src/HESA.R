@@ -497,7 +497,7 @@ for(disc in unique(provider$discipline)){
 
   # Need to print to get the plots to show
   print(
-       provider %>%
+      provider %>%
       filter(!is.na(institution))         %>%
       filter(Total > 0)                   %>%
       filter(discipline == disc)          %>%
@@ -510,3 +510,187 @@ for(disc in unique(provider$discipline)){
       ggtitle(paste0("Research discipline: ", disc))
   )
 }
+
+# Tune the plots (a lot of them are too busy)
+disc <- "Business & management studies"
+N <- 100
+provider %>%  filter(!is.na(institution))         %>%
+              filter(Total > N)                   %>%
+              filter(discipline == disc)          %>%
+              ggplot(aes(y = institution, x = Total, fill = Total)) +
+              geom_col(colour = "black") +
+              theme_bw() +
+              theme(axis.text.y = element_text(size = 8), legend.position = "None") +
+              ylab("Institutions") + xlab("Full Person Equivalent") +
+              scale_fill_viridis(option="magma") +
+              ggtitle(paste0("Research discipline: ", disc," for N > ", N))
+
+disc <- "Architecture, built environment & planning"
+N <- 10
+provider %>%  filter(!is.na(institution))         %>%
+  filter(Total > N)                   %>%
+  filter(discipline == disc)          %>%
+  ggplot(aes(y = institution, x = Total, fill = Total)) +
+  geom_col(colour = "black") +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 8), legend.position = "None") +
+  ylab("Institutions") + xlab("Full Person Equivalent") +
+  scale_fill_viridis(option="magma") +
+  ggtitle(paste0("Research discipline: ", disc," for N > ", N))
+
+disc <- "Education"
+N <- 50
+provider %>%  filter(!is.na(institution))         %>%
+  filter(Total > N)                   %>%
+  filter(discipline == disc)          %>%
+  ggplot(aes(y = institution, x = Total, fill = Total)) +
+  geom_col(colour = "black") +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 8), legend.position = "None") +
+  ylab("Institutions") + xlab("Full Person Equivalent") +
+  scale_fill_viridis(option="magma") +
+  ggtitle(paste0("Research discipline: ", disc," for N > ", N))
+
+disc <- "Continuing education"
+N <- 0
+provider %>%  filter(!is.na(institution))         %>%
+  filter(Total > N)                   %>%
+  filter(discipline == disc)          %>%
+  ggplot(aes(y = institution, x = Total, fill = Total)) +
+  geom_col(colour = "black") +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 8), legend.position = "None") +
+  ylab("Institutions") + xlab("Full Person Equivalent") +
+  scale_fill_viridis(option="magma") +
+  ggtitle(paste0("Research discipline: ", disc))
+
+disc <- "Area studies"
+N <- 0
+provider %>%  filter(!is.na(institution))         %>%
+  filter(Total > N)                   %>%
+  filter(discipline == disc)          %>%
+  ggplot(aes(y = institution, x = Total, fill = Total)) +
+  geom_col(colour = "black") +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 8), legend.position = "None") +
+  ylab("Institutions") + xlab("Full Person Equivalent") +
+  scale_fill_viridis(option="magma") +
+  ggtitle(paste0("Research discipline: ", disc))
+
+disc <- "Psychology & behavioural sciences"
+N <- 50
+provider %>%  filter(!is.na(institution))         %>%
+  filter(Total > N)                   %>%
+  filter(discipline == disc)          %>%
+  ggplot(aes(y = institution, x = Total, fill = Total)) +
+  geom_col(colour = "black") +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 8), legend.position = "None") +
+  ylab("Institutions") + xlab("Full Person Equivalent") +
+  scale_fill_viridis(option="magma") +
+  ggtitle(paste0("Research discipline: ", disc," for N > ", N))
+
+disc <- "Geography & environmental studies"
+N <- 20
+provider %>%  filter(!is.na(institution))         %>%
+  filter(Total > N)                   %>%
+  filter(discipline == disc)          %>%
+  ggplot(aes(y = institution, x = Total, fill = Total)) +
+  geom_col(colour = "black") +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 8), legend.position = "None") +
+  ylab("Institutions") + xlab("Full Person Equivalent") +
+  scale_fill_viridis(option="magma") +
+  ggtitle(paste0("Research discipline: ", disc," for N > ", N))
+
+disc <- "Anthropology & development studies"
+N <- 0
+provider %>%  filter(!is.na(institution))         %>%
+  filter(Total > N)                   %>%
+  filter(discipline == disc)          %>%
+  ggplot(aes(y = institution, x = Total, fill = Total)) +
+  geom_col(colour = "black") +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 8), legend.position = "None") +
+  ylab("Institutions") + xlab("Full Person Equivalent") +
+  scale_fill_viridis(option="magma") +
+  ggtitle(paste0("Research discipline: ", disc))
+
+disc <- "Politics & international studies"
+N <- 20
+provider %>%  filter(!is.na(institution))         %>%
+  filter(Total > N)                   %>%
+  filter(discipline == disc)          %>%
+  ggplot(aes(y = institution, x = Total, fill = Total)) +
+  geom_col(colour = "black") +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 8), legend.position = "None") +
+  ylab("Institutions") + xlab("Full Person Equivalent") +
+  scale_fill_viridis(option="magma") +
+  ggtitle(paste0("Research discipline: ", disc," for N > ", N))
+
+disc <- "Economics & econometrics"
+N <- 20
+provider %>%  filter(!is.na(institution))         %>%
+  filter(Total > N)                   %>%
+  filter(discipline == disc)          %>%
+  ggplot(aes(y = institution, x = Total, fill = Total)) +
+  geom_col(colour = "black") +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 8), legend.position = "None") +
+  ylab("Institutions") + xlab("Full Person Equivalent") +
+  scale_fill_viridis(option="magma") +
+  ggtitle(paste0("Research discipline: ", disc," for N > ", N))
+
+disc <- "Law"
+N <- 40
+provider %>%  filter(!is.na(institution))         %>%
+  filter(Total > N)                   %>%
+  filter(discipline == disc)          %>%
+  ggplot(aes(y = institution, x = Total, fill = Total)) +
+  geom_col(colour = "black") +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 8), legend.position = "None") +
+  ylab("Institutions") + xlab("Full Person Equivalent") +
+  scale_fill_viridis(option="magma") +
+  ggtitle(paste0("Research discipline: ", disc," for N > ", N))
+
+disc <- "Social work & social policy"
+N <- 10
+provider %>%  filter(!is.na(institution))         %>%
+  filter(Total > N)                   %>%
+  filter(discipline == disc)          %>%
+  ggplot(aes(y = institution, x = Total, fill = Total)) +
+  geom_col(colour = "black") +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 8), legend.position = "None") +
+  ylab("Institutions") + xlab("Full Person Equivalent") +
+  scale_fill_viridis(option="magma") +
+  ggtitle(paste0("Research discipline: ", disc," for N > ", N))
+
+disc <- "Sociology"
+N <- 20
+provider %>%  filter(!is.na(institution))         %>%
+  filter(Total > N)                   %>%
+  filter(discipline == disc)          %>%
+  ggplot(aes(y = institution, x = Total, fill = Total)) +
+  geom_col(colour = "black") +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 8), legend.position = "None") +
+  ylab("Institutions") + xlab("Full Person Equivalent") +
+  scale_fill_viridis(option="magma") +
+  ggtitle(paste0("Research discipline: ", disc," for N > ", N))
+
+disc <- "Media studies"
+N <- 20
+provider %>%  filter(!is.na(institution))         %>%
+  filter(Total > N)                   %>%
+  filter(discipline == disc)          %>%
+  ggplot(aes(y = institution, x = Total, fill = Total)) +
+  geom_col(colour = "black") +
+  theme_bw() +
+  theme(axis.text.y = element_text(size = 8), legend.position = "None") +
+  ylab("Institutions") + xlab("Full Person Equivalent") +
+  scale_fill_viridis(option="magma") +
+  ggtitle(paste0("Research discipline: ", disc," for N > ", N))
+
