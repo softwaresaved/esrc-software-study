@@ -694,3 +694,17 @@ provider %>%  filter(!is.na(institution))         %>%
   scale_fill_viridis(option="magma") +
   ggtitle(paste0("Research discipline: ", disc," for N > ", N))
 
+
+# Plot the total ESRC FPEs per institution
+N <-  250
+provider %>% filter(!is.na(institution))         %>%
+             group_by(institution)               %>%
+             summarise(rTotal = sum(Total))      %>%
+             filter(rTotal > N)                  %>%
+             ggplot(aes(y = institution, x = rTotal, fill = rTotal)) +
+             geom_col(colour = "black") +
+             theme_bw() +
+             theme(axis.text.y = element_text(size = 8), legend.position = "None") +
+             ylab("Institutions") + xlab("Full Person Equivalent") +
+             scale_fill_viridis(option="magma") +
+             ggtitle(paste0("ESRC FPE staff for N > ", N))
