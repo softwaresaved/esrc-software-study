@@ -154,6 +154,19 @@ gender %>%  ggplot(aes(y = discipline, x = FPE_Total, fill = FPE_Total)) +
             position = "identity", inherit.aes = FALSE, size = 3) +
             scale_fill_viridis(option="magma") + theme(legend.position = "None")
 
+
+# Same as the above but as percentages
+# Plot only the FPE totals for each cost centre
+gender %>% mutate(N = sum(FPE_Total)) %>%
+           ggplot(aes(y = discipline, x = FPE_Total/N, fill = FPE_Total)) +
+           geom_col(colour = "black", na.rm = TRUE) +
+           theme_bw() +
+           scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.27)) +
+           xlab("Percent") + ylab("Research discipline") +
+           geom_text(aes(y = discipline, x = FPE_Total/N, label = percent(FPE_Total/N, accuracy = 0.1)), hjust = -0.25,
+           position = "identity", inherit.aes = FALSE, size = 3) +
+          scale_fill_viridis(option="magma") + theme(legend.position = "None")
+
 # Calculate proportions (there will be rounding effects).
 # The Other values are hitting rounding issues.
 gender %>% summarise(RO_F_Tot = sum(FPE_Female_RO, na.rm = TRUE),
