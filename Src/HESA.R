@@ -465,6 +465,12 @@ provider$discipline <-unname(cc2subjects[provider[["Cost_centre_v2"]]])
 #
 # UKPRN to institution can be obtained from the AccreditationByHep.csv but needs
 # a bit of massaging.
+#
+# The following source would be better but the code below works with the unistat
+# data.
+#
+# https://www.hesa.ac.uk/files/ProviderAllHESA.csv?20220621
+#
 institutions <-  read_csv("../Data/on_2022_03_15_13_26_06/AccreditationByHep.csv",
                           show_col_types = FALSE)
 
