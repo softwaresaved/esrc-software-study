@@ -59,6 +59,7 @@ names(cc2subjects) <- esrc_cc
 
 # Gender ----
 
+## Read data ----
 # Read the corresponding data and sheet
 hesadat <- read_xlsx("../Data/hesa.xlsx", sheet = "Gender", skip = 3)
 
@@ -100,6 +101,7 @@ gender <- hesadat %>% filter(Cost_centre_v2 %in% esrc_cc)
 # Map cost centres to a new column of subjects
 gender$discipline <-unname(cc2subjects[gender[["Cost_centre_v2"]]])
 
+## RO gender plot ----
 # Plot gender - Research Only
 gender %>% select(discipline, FPE_Femalep_RO, FPE_Malep_RO, FPE_Otherp_RO, FPE_Total) %>%
            pivot_longer(cols = c("FPE_Femalep_RO", "FPE_Malep_RO", "FPE_Otherp_RO"),
@@ -118,6 +120,7 @@ gender %>% select(discipline, FPE_Femalep_RO, FPE_Malep_RO, FPE_Otherp_RO, FPE_T
                      position = "identity", inherit.aes = FALSE, size = 3) +
            scale_fill_manual(labels = c("Female", "Male", "Other"), values = c("green","red","blue"))
 
+## TR gender plot ----
 # Plot gender - Research and Teaching & Research
 gender %>% select(discipline, FPE_Femalep_RO, FPE_Malep_RO, FPE_Otherp_RO,
                   FPE_Femalep_TR, FPE_Malep_TR, FPE_Otherp_TR,FPE_Total) %>%
@@ -144,6 +147,7 @@ gender %>% select(discipline, FPE_Femalep_RO, FPE_Malep_RO, FPE_Otherp_RO,
 # This numbers are approximate as all sort of rounding effects come into play
 gender %>% summarise(Total = sum(FPE_Total))
 
+## FPE by CC ----
 # Plot only the FPE totals for each cost centre
 gender %>%  ggplot(aes(y = discipline, x = FPE_Total, fill = FPE_Total)) +
             geom_col(colour = "black", na.rm = TRUE) +
@@ -154,7 +158,7 @@ gender %>%  ggplot(aes(y = discipline, x = FPE_Total, fill = FPE_Total)) +
             position = "identity", inherit.aes = FALSE, size = 3) +
             scale_fill_viridis(option="magma") + theme(legend.position = "None")
 
-
+## FPE by CC % ----
 # Same as the above but as percentages
 # Plot only the FPE totals for each cost centre
 gender %>% mutate(N = sum(FPE_Total)) %>%
@@ -167,6 +171,7 @@ gender %>% mutate(N = sum(FPE_Total)) %>%
            position = "identity", inherit.aes = FALSE, size = 3) +
           scale_fill_viridis(option="magma") + theme(legend.position = "None")
 
+## Gender stats ----
 # Calculate proportions (there will be rounding effects).
 # The Other values are hitting rounding issues.
 gender %>% summarise(RO_F_Tot = sum(FPE_Female_RO, na.rm = TRUE),
@@ -192,6 +197,7 @@ gender %>% summarise(RO_F_Tot = sum(FPE_Female_RO, na.rm = TRUE),
 
 # Disability ----
 
+## Disabo;otu read data ----
 # Do not appear to be able to read non-adjacent columns and do not want all
 # the detail so will have to read in separately and then put back together
 disability <- read_xlsx("../Data/hesa.xlsx", range = "Disability!A5:C54")
@@ -222,6 +228,7 @@ disability <- disability %>% filter(Cost_centre_v2 %in% esrc_cc)
 # Map cost centres to a new column of subjects
 disability$discipline <-unname(cc2subjects[disability[["Cost_centre_v2"]]])
 
+## RO & TR disability %s ----
 # Plot graph of no known disabilities
 disability %>% pivot_longer(
                              cols = c("No_known_RO", "No_known_TR"),
@@ -240,6 +247,7 @@ disability %>% pivot_longer(
                          position = "identity", inherit.aes = FALSE, size = 3) +
                 scale_fill_manual(labels = c("Resarch only", "Teaching & Research"), values = c("green","red"))
 
+## Read aggregated disabilities values ----
 # Modified the spreadsheet to aggregate the disability values.
 # Read a modified version of the spreadsheet that sums up the disabilities.
 disability <- read_xlsx("../Data/hesa.xlsx", range = "Disability!A5:C54")
@@ -264,6 +272,7 @@ disability <- disability %>% filter(Cost_centre_v2 %in% esrc_cc)
 # Map cost centres to a new column of subjects
 disability$discipline <-unname(cc2subjects[disability[["Cost_centre_v2"]]])
 
+## Plot aggregated disabilities ----
 # Plot the graph for Research Only (RO) and Training & Research (TR)
 disability %>% pivot_longer(
                            cols = c("dis_RO",	"no_dis_RO",	"dis_TR",	"no_dis_TR"),
@@ -284,6 +293,7 @@ disability %>% pivot_longer(
                 scale_fill_manual(labels = c("RO disability", "RO no known disability" , "TR disability", "TR no known disability"),
                                   values = c("green","red","blue","yellow"))
 
+## Plot RO only aggregated disabilities ----
 # Plot the graph for Research Only (RO)
 disability %>% pivot_longer(
                             cols = c("dis_RO",	"no_dis_RO"),
@@ -305,6 +315,7 @@ disability %>% pivot_longer(
 
 # Ethnicity ----
 
+## Read ethnicity data ----
 # Read the data
 ethnicity <- read_xlsx("../Data/hesa.xlsx", sheet = "Ethnicity", skip = 3)
 
@@ -325,6 +336,7 @@ ethnicity <- ethnicity %>% filter(Cost_centre_v2 %in% esrc_cc)
 # Map cost centres to a new column of subjects
 ethnicity$discipline <-unname(cc2subjects[ethnicity[["Cost_centre_v2"]]])
 
+## Plot all ethnicities ----
 # Plot the ethnicity - RO and TR
 ethnicity %>% pivot_longer(
                            cols = c("ROp_Asian",	"ROp_Black",	"ROp_Mixed",	"ROp_Other",	"ROp_Unknown_NA",	"ROp_White",
@@ -350,9 +362,10 @@ ethnicity %>% pivot_longer(
                                           "TR Asian",	"TR Black",	"TR Mixed",	"TR Other",	"TR Unknown/NA",	"TR White"),
                                 values = viridis(12))
 
-# Colormap to use
+# Colour map to use
 colormap <- viridis(6)
 
+## Plot ethnicity RO only ----
 # Plot the ethnicity - RO only
 ethnicity %>% pivot_longer(
                 cols = c("ROp_Asian",	"ROp_Black",	"ROp_Mixed",	"ROp_Other",	"ROp_Unknown_NA",	"ROp_White"),
@@ -374,6 +387,7 @@ ethnicity %>% pivot_longer(
               scale_fill_manual(labels = c("RO Asian",	"RO Black",	"RO Mixed",	"RO Other",	"RO Unknown/NA",	"RO White"),
                                 values = colormap)
 
+## Plot filled cols ethnicity RO only ----
 # Plot the ethnicity - RO only (filling values to compare proportions)
 ethnicity %>% pivot_longer(
   cols = c("ROp_Asian",	"ROp_Black",	"ROp_Mixed",	"ROp_Other",	"ROp_Unknown_NA",	"ROp_White"),
@@ -393,6 +407,7 @@ ethnicity %>% pivot_longer(
   scale_fill_manual(labels = c("RO Asian",	"RO Black",	"RO Mixed",	"RO Other",	"RO Unknown/NA",	"RO White"),
                     values = colormap)
 
+## Plot ethnicity TR only ----
 # Plot the ethnicity - TR only
 ethnicity %>% pivot_longer(
                           cols = c("TRp_Asian",	"TRp_Black",	"TRp_Mixed",	"TRp_Other",	"TRp_Unknown_NA",	"TRp_White"),
@@ -415,6 +430,7 @@ ethnicity %>% pivot_longer(
                           scale_fill_manual(labels = c("TR Asian",	"TR Black",	"TR Mixed",	"TR Other",	"TR Unknown/NA",	"TR White"),
                                             values = colormap)
 
+## Plot filled cols ethnicity TR only ----
 # Plot the ethnicity - TR only (with the position filled to compare proportions)
 ethnicity %>% pivot_longer(
   cols = c("TRp_Asian",	"TRp_Black",	"TRp_Mixed",	"TRp_Other",	"TRp_Unknown_NA",	"TRp_White"),
@@ -439,6 +455,7 @@ ethnicity %>% pivot_longer(
 
 # Institutions ----
 
+## Read in data ----
 # Read in the data
 provider <-  read_xlsx("../Data/hesa.xlsx", sheet = "Provider", skip = 2)
 
@@ -484,6 +501,7 @@ ukprn2inst <- data.frame(ukprn = sub("^\\((\\d+)\\)\\s+(.*)$", "\\1", institutio
 # Join the two data sets
 provider <- provider %>% left_join(ukprn2inst, by = "ukprn")
 
+## Loop to plot TR and RO by institutions ----
 # Plot the results by RO and TR %s for research disciplines
 for(disc in unique(provider$discipline)){
 
@@ -509,6 +527,7 @@ for(disc in unique(provider$discipline)){
     )
 }
 
+## Loop to plot numbers institution numbers for each CC ----
 # Plot the FPEs for research disciplines
 for(disc in unique(provider$discipline)){
 
@@ -530,6 +549,7 @@ for(disc in unique(provider$discipline)){
   )
 }
 
+## Tuned CC for institutions ----
 # Tune the plots (a lot of them are too busy)
 disc <- "Business & management studies"
 N <- 100
