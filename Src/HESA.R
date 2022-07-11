@@ -197,7 +197,7 @@ gender %>% summarise(RO_F_Tot = sum(FPE_Female_RO, na.rm = TRUE),
 
 # Disability ----
 
-## Disabo;otu read data ----
+## Read the disability data ----
 # Do not appear to be able to read non-adjacent columns and do not want all
 # the detail so will have to read in separately and then put back together
 disability <- read_xlsx("../Data/hesa.xlsx", range = "Disability!A5:C54")
@@ -312,6 +312,8 @@ disability %>% pivot_longer(
                            position = "identity", inherit.aes = FALSE, size = 3) +
                  scale_fill_manual(labels = c("RO disability", "RO no known disability"),
                                   values = c("blue","yellow"))
+
+# Percentages are calculated in the spreadsheet.
 
 # Ethnicity ----
 
