@@ -6284,8 +6284,8 @@ data %>%  select(num_range("Q19_", 1:22))               %>%
           theme_bw() + ylim(0, 44) +
           xlab(my$lab) + ylab("Numbers") +
           scale_fill_distiller(palette = "Blues", direction = 1) +
-          geom_text(aes(label = n), stat = "count", vjust = -0.5, size = 3) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.position = "None")
+          geom_text(aes(label = n), stat = "count", vjust = -0.5, size = 4) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10), legend.position = "None")
 
 ```
 
@@ -6310,11 +6310,11 @@ data %>%  select(URN, num_range("Q19_", 1:22))          %>%
           mutate(n = n())                               %>%                           
           distinct(URN, n)                              %>% 
           ggplot(aes(x = n, fill = ..count..)) + 
-          geom_bar(colour ="black") + 
+          geom_bar(colour ="black") + ylim(0, 93) +
           theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
           xlab(my$lab) +
           ylab("Number") + theme(legend.position = "None") +
-          geom_text(aes(label = ..count..), stat = "count", size = 3, vjust = -0.5)
+          geom_text(aes(label = ..count..), stat = "count", size = 4, vjust = -0.5)
 ```
 
 We can use the above information to normalise contributions so that if a research
@@ -6719,17 +6719,19 @@ describes your role.
 
 ```{r career}
 
-data %>%  select(career = Q20)                      %>%
-          mutate(N = n())                           %>% 
-          group_by(career)                          %>% 
-          mutate(n =  n())                          %>% 
-          mutate(per = percent(n/N, accuracy = 1))  %>% 
-          distinct(n, per, career)                  %>% 
+NN <- data %>% select(URN, Q20) %>%  n_distinct()
+
+data %>%  select(career = Q20)                       %>%
+          mutate(N = n())                            %>% 
+          group_by(career)                           %>% 
+          mutate(n = n())                            %>% 
+          mutate(per = percent(n/N, accuracy = 1))   %>% 
+          distinct(n, per, career)                   %>% 
           ggplot(aes(x = reorder(career, -n),  y = n, fill = career)) +
           geom_col(colour = "black") +
-          theme_bw() +
-          xlab("Career stage") + ylab("Numbers")  +
-          geom_text(aes(label = paste0(n," (", per, ")")), vjust = -0.5, size = 3) +
+          theme_bw() + ylim(0, 49) +
+          xlab(paste0("Career stage (N = ", eval(unique(NN)),")")) + ylab("Numbers")  +
+          geom_text(aes(label = paste0(n," (", per, ")")), vjust = -0.5, size = 4) +
           scale_fill_brewer(palette = "Set1", name = "Career stage") + 
           theme(legend.position = "none")
 
@@ -6765,6 +6767,8 @@ this platform.
 
 ```{r gender}
 
+NN <- data %>% select(URN, Q21) %>%  n_distinct()
+
 data %>%  select(gender = Q21)                      %>%
           mutate(N = n())                           %>% 
           group_by(gender)                          %>% 
@@ -6774,8 +6778,8 @@ data %>%  select(gender = Q21)                      %>%
           ggplot(aes(x = reorder(gender, -n),  y = n, fill = gender)) +
           geom_col(colour = "black") +
           theme_bw() +
-          xlab("Gender") + ylab("Numbers")  +
-          geom_text(aes(label = paste0(n," (", per, ")")), vjust = -0.5, size = 3) +
+          xlab(paste0("Gender (N =", NN,")")) + ylab("Numbers")  +
+          geom_text(aes(label = paste0(n," (", per, ")")), vjust = -0.5, size = 4) +
           scale_fill_brewer(palette = "Set2", name = "Gender") +
           theme(legend.position = "none")
 
