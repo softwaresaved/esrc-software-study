@@ -4167,6 +4167,7 @@ listOther("Q11_a")
 
 ```
 
+
 ### Q11b NCRM courses
 
 If you have participated in National Centre for Research Methods
@@ -4182,27 +4183,29 @@ survey.
 
 # These variables are used in the summary paragraph after the code section.
 
+# Count the number of NCRM courses taken by individuals and their career stage.
 data %>% select(id = URN, num_range("Q11_b_", 1:22), career = Q20) %>%
          pivot_longer(cols = num_range("Q11_b_", 1:22),
                       names_to = NULL,
-                      values_to = "ncrm")              %>%
-         filter(ncrm != 0)                             %>%
-         group_by(id)                                  %>%
-         mutate(N = n())                               %>%
-         ungroup()                                     %>%
-         distinct(career, N) -> a
+                      values_to = "ncrm")                          %>%
+         filter(ncrm != 0)                                         %>%
+         group_by(id)                                              %>%
+         mutate(N = n())                                           %>%
+         ungroup()                                                 %>%
+         distinct(id, career, N) -> a
 
 # This takes into account the "Other" category - previous code section only looks
-# at 1 too 22, this one also includes i for (other)
+# at 1 too 22, this one also includes "i" for (other) NCRM courses not on the list.
+
 data %>% select(id = URN, starts_with("Q11_b_"), career = Q20) %>%
          pivot_longer(cols = starts_with("Q11_b_"),
                       names_to = NULL,
-                      values_to = "ncrm")              %>%
-         filter(ncrm != 0)                             %>%
-         group_by(id)                                  %>%
-         mutate(N = n())                               %>%
-         ungroup()                                     %>%
-         distinct(career, N) -> b
+                      values_to = "ncrm")                      %>%
+         filter(ncrm != 0)                                     %>%
+         group_by(id)                                          %>%
+         mutate(N = n())                                       %>%
+         ungroup()                                             %>%
+         distinct(id, career, N) -> b
 
 
 ```
@@ -4210,9 +4213,9 @@ data %>% select(id = URN, starts_with("Q11_b_"), career = Q20) %>%
 We asked people if they had taken NCRM courses (question 11b) and asked people to check a list of the courses 
 they had taken from a sample of 22 current courses (at the time the survey was deployed - that is early 2022)  
 provided by the NCRM. What we can say though is that out of the `r nrow(data)` individual answers that we are 
-using from the survey, `r sum(a$N)` individuals have taken NCRM courses or, if we take the `Other` content category
-this rises to `r sum(b$N)` individuals that is `r percent(sum(a$N)/nrow(data), accuracy = 0.1)` or
-`r percent(sum(b$N)/nrow(data), accuracy = 0.1)` respectively have taken NCRM courses.
+using from the survey, `r nrow(a)` individuals have taken NCRM courses or, if we take the `Other` content category
+this rises to `r nrow(b)` individuals that is `r percent(nrow(a)/nrow(data), accuracy = 0.1)` or
+`r percent(nrow(b)/nrow(data), accuracy = 0.1)` respectively have taken NCRM courses.
 
 #### List of NCRM courses taken
 
@@ -4220,7 +4223,7 @@ this rises to `r sum(b$N)` individuals that is `r percent(sum(a$N)/nrow(data), a
 
 data %>% select(num_range("Q11_b_", 1:22)) %>%
          pivot_longer(cols = num_range("Q11_b_", 1:22),
-                      names_to = "questions",
+                      names_to = NULL,
                       values_to = "ncrm")              %>%
          filter(ncrm != 0)                             %>%
          group_by(ncrm)                                %>%
@@ -4237,17 +4240,17 @@ data %>% select(num_range("Q11_b_", 1:22)) %>%
 data %>% select(id = URN, starts_with("Q11_b_"), career = Q20) %>%
          pivot_longer(cols = starts_with("Q11_b_"),
                       names_to = NULL,
-                      values_to = "ncrm")              %>%
-         filter(ncrm != 0)                             %>%
-         distinct(id, ncrm, career)                    %>% 
-         group_by(career)                              %>% 
-         mutate(n = n())                               %>%
-         distinct(career, n)                           %>% 
+                      values_to = "ncrm")                      %>%
+         filter(ncrm != 0)                                     %>%
+         distinct(id, ncrm, career)                            %>% 
+         group_by(career)                                      %>% 
+         mutate(n = n())                                       %>%
+         distinct(career, n)                                   %>% 
          ggplot(aes(x = career, y = n, fill = career)) +
          geom_col(colour = "black") + theme_bw() +
          scale_fill_brewer(palette = "Set1", name = "Career stage") +
          theme(legend.position = "none")  + ylab("Number of NCRM courses taken") +
-         xlab("Career stage") + geom_text(aes(x = career, label = n ), vjust = -0.5, size = 3)
+         xlab("Career stage") + geom_text(aes(x = career, label = n ), vjust = -0.5, size = 4)
 
 ```
 
@@ -4291,7 +4294,7 @@ data %>% select(id = URN, starts_with("Q11_b_"), gender = Q21) %>%
          geom_col(colour = "black") + theme_bw() +
          scale_fill_brewer(palette = "Set2", name = "Career stage") +
          theme(legend.position = "none")  + ylab("Number of NCRM courses taken") +
-         xlab("Gender") + geom_text(aes(x = gender, label = n ), vjust = -0.5, size = 3)
+         xlab("Gender") + geom_text(aes(x = gender, label = n ), vjust = -0.5, size = 4)
 
 ```
 
