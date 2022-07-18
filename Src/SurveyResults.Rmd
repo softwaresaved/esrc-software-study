@@ -2522,7 +2522,7 @@ data %>% select(Q6)       %>%
          theme_bw() +
          xlab(my$lab) + scale_fill_distiller(palette = "Blues", direction = 1) +
          ylab("Numbers") + ylim(0, 110) + theme(legend.position = "None") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) 
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 4) 
 
 ```
 
@@ -2704,8 +2704,8 @@ data %>% select(starts_with("Q6_a"))              %>%
          ggplot(aes(x = reorder(UseOS, -n), y = n, fill = n)) + 
          geom_col(colour = "black") + xlab(unique(my$lab)) +
          theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +         
-         geom_text(aes(label = n), vjust = -0.5, size = 3) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10), legend.position = "None") +
+         geom_text(aes(label = n), vjust = -0.5, size = 4) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12), legend.position = "None") +
          ylab("Numbers")
 ```
  
@@ -2953,8 +2953,8 @@ data %>% select(starts_with("Q6_b"))        %>%
          ggplot(aes(x = reorder(UseOS, -n), fill = n)) + 
          geom_bar(colour = "black") + 
          theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10), legend.position = "None") +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 4) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12), legend.position = "None") +
          xlab(my$lab) + ylab("Numbers")
 ```
 
@@ -3897,7 +3897,7 @@ data %>% select(num_range("Q11_", 1:12))                 %>%
          geom_bar(colour = "black") +
          theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
          xlab(my$lab) + ylab("Numbers") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 4) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12), legend.position = "None")
 ```
 
@@ -4386,8 +4386,9 @@ data %>%  select(URN, rew = Q12)                   %>%
           theme_bw() +
           xlab(my$lab) + scale_fill_distiller(palette = "Blues", direction = 1) +
           ylab("Numbers") + ylim(0, 76) +
-          geom_text(aes(label = paste0(n," (", per,")")), vjust = -0.5, size = 3) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.position = "None")
+          geom_text(aes(label = paste0(n," (", per,")")), vjust = -0.5, size = 4) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0, size = 10), 
+                legend.position = "None")
 
 ```
 
@@ -4786,7 +4787,7 @@ data %>% select(num_range("Q13_2_",1:5))            %>%
          ggplot(aes(x = understanding, fill = n)) + 
          geom_bar(colour = "black") + 
         scale_fill_distiller(palette = "Blues", direction = 1) +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 4) +
          theme_bw() + ylab("Numbers") + theme(legend.position = "None") +
          xlab(my$lab)
 ```
@@ -4986,7 +4987,7 @@ data %>% select(num_range("Q13_3_",1:5))            %>%
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
          ggplot(aes(x = understanding, fill = n)) + 
          geom_bar(colour = "black") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 4) +
          theme_bw() + ylab("Numbers") + scale_fill_distiller(palette = "Blues", direction = 1) +
          xlab(my$lab) + theme(legend.position = "None")
 ```
@@ -5183,7 +5184,7 @@ data %>% select(num_range("Q13_4_",1:5))            %>%
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
          ggplot(aes(x = understanding, fill = n)) + 
          geom_bar(colour = "black") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 4) +
          scale_fill_distiller(palette = "Blues", direction = 1) +
          theme_bw() + ylab("Numbers") + theme(legend.position = "None") +
          xlab(my$lab)
@@ -5415,8 +5416,8 @@ data %>%  select(URN, num_range("Q14_", 1:9))         %>%
   geom_bar(colour = "black") +
   theme_bw() + ylim(0, 111) +
   xlab(my$lab) + ylab("Numbers") + scale_fill_distiller(palette = "Blues", direction = 1) +
-  geom_text(aes(y = n,label = paste0(n," (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 3) +
-  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 8), legend.position = "None")
+  geom_text(aes(y = n,label = paste0(n," (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 4) +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10), legend.position = "None")
 ```
 
 ### Choice correlations
@@ -5618,7 +5619,7 @@ data %>% select(URN, starts_with("Q15_"), -"Q15_a")                     %>%
          geom_bar(colour = "black") +
          theme_bw() + ylim(0,76) + scale_fill_distiller(palette = "Blues", direction = 1) +
          geom_text(aes(y = n, label = paste0(n, " (", per, ")")),  
-                   vjust = -0.5, size = 3) +
+                   vjust = -0.5, size = 4) +
          ylab("Numbers") + xlab(my$lab)  +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12), 
                legend.position = "None") 
@@ -5826,7 +5827,7 @@ data %>%  select(num_range("Q16_", 1:13))         %>%
   geom_bar(colour = "black") +
   theme_bw() + ylim(0, 91) +
   xlab(my$lab) + ylab("Numbers") + scale_fill_distiller(palette = "Blues", direction = 1) +
-  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 4) +
   theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0, size = 10),
         legend.position = "None")
 
