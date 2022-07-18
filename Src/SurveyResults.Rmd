@@ -782,7 +782,7 @@ data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>
          theme_bw() +
          xlab("Use of data") + ylab("Numbers") +
          geom_text(aes(x = datause, label = ..count..),
-                position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
+                position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 4) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
@@ -2587,7 +2587,7 @@ data %>% select(Q6, gender = Q21)         %>%
          xlab("Use of Open Source") + 
          ylab("Numbers") +
          geom_text(aes(x = Q6, label = n), position = position_stack(vjust = 0.5), 
-                                 stat = "count", size = 3) +
+                                 stat = "count", size = 4) +
          scale_fill_brewer(palette = "Set2", name = "Gender") +
          theme(axis.text.x = element_text(size = 8),
                legend.text=element_text(size = 6))  
@@ -2973,10 +2973,10 @@ q <- apply(q, 2, function(x) as.integer(x))
 my_colors <- brewer.pal(5, "Spectral")
 my_colors <- colorRampPalette(my_colors)(100)
 
-plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
+#plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
 
 # http://www.sthda.com/english/wiki/visualize-correlation-matrix-using-correlogram
-# corrplot(cor(q), method="circle")
+ corrplot(cor(q), method="circle")
 # corrplot(cor(q), method="pie")
 # corrplot(cor(q), method="color")
 # corrplot(cor(q), method="number")
@@ -6795,7 +6795,7 @@ data %>% select(gender = Q21, career = Q20)                     %>%
          geom_bar(colour = "black") +
          theme_bw() +
          geom_text(aes(label = ..count..), stat = "count", 
-                   position = position_stack(vjust = 0.5), size = 2, colour = "white") +
+                   position = position_stack(vjust = 0.5), size = 4, colour = "white") +
          xlab("Gender") + ylab("Numbers") + labs(fill = "Career stage") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
@@ -6816,9 +6816,9 @@ data %>% select(gender = Q21, career = Q20)                     %>%
          ggplot(aes(x = career, y = n/N, fill = gender)) +
          geom_col(colour = "black") +
          theme_bw() + scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         geom_text(aes(label = per), position = position_stack(vjust = 0.5), size = 3, colour = "black") +
-         xlab("Career stage") + ylab("percent") + labs(fill = "Gender") +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         geom_text(aes(label = per), position = position_stack(vjust = 0.5), size = 4, colour = "black") +
+         xlab("Career stage") + ylab("Percent") + labs(fill = "Gender") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10)) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
@@ -7080,7 +7080,7 @@ data %>% select(ethnicity = Q22, career = Q20)    %>%
          scale_y_discrete(expand = expansion(add = 0.75), 
                           labels = function(x) stringr::str_wrap(x, width = 35)) + 
          theme(axis.text.y = element_text(size = 8), legend.position = "none") +
-         geom_text(aes(label = paste0(n," (", per,")")), colour = "white", size = 3) +
+         geom_text(aes(label = paste0(n," (", per,")")), colour = "white", size = 4) +
          scale_fill_continuous(high = "#132B43", low = "#56B1F7") 
 
 ```
@@ -7228,7 +7228,7 @@ data %>% select(dis = "Q23")                      %>%
          ggplot(aes(x = reorder(dis, -n), fill = dis)) +
          geom_bar(colour = "black") +
          theme_bw() +
-         geom_text(aes(label = paste0(n, " (", per, ")")), stat = "count", vjust = -0.5, size = 3) +
+         geom_text(aes(label = paste0(n, " (", per, ")")), stat = "count", vjust = -0.5, size = 4) +
          xlab("Disability") + ylab("Numbers")  + theme(legend.position = "None") +
          scale_fill_brewer(palette = "Set3", name = "Disability")
 ```
