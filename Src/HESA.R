@@ -147,18 +147,59 @@ gender %>% select(discipline, FPE_Femalep_RO, FPE_Malep_RO, FPE_Otherp_RO,
 # This numbers are approximate as all sort of rounding effects come into play
 gender %>% summarise(Total = sum(FPE_Total))
 
-## FPE by CC ----
+## Gender TR + RO by Cost Centre ----
+
+# Replacing NAs by 0 which is iffy but just want an overview
+gender %>% replace(is.na(.), 0)                                          %>%
+           mutate(Female = FPE_Female_RO + FPE_Female_TR,
+                  Male = FPE_Male_RO + FPE_Male_TR,
+                  Other = FPE_Other_RO + FPE_Other_TR, na.rm = TRUE)     %>%
+           pivot_longer(cols = c(Female, Male, Other),
+                        names_to = "gender",
+                        values_to = "number")                            %>%
+           select(discipline, gender, number)                            %>%
+           ggplot(aes(y = discipline, x = number, fill = gender)) +
+           geom_col(colour = "black") + theme_bw() +
+           xlab("Number of FPEs") + ylab("Research discipline") +
+           labs(fill = "Gender")
+
+## Gender TR + RO by Cost Centre % ----
+
+# Replacing NAs by 0 which is iffy but just want an overview
+
+# Rounding an issue for "Continuing education", need to rescale
+scale <- gender[gender$discipline == "Continuing education",][["FPE_Total"]]/sum(gender[gender$discipline == "Continuing education",][c(4:6, 10:12)], na.rm = TRUE)
+
+gender %>% replace(is.na(.), 0)                                          %>%
+           mutate(Female = FPE_Female_RO + FPE_Female_TR,
+                  Male = FPE_Male_RO + FPE_Male_TR,
+                  Other = FPE_Other_RO + FPE_Other_TR, na.rm = TRUE)     %>%
+           pivot_longer(cols = c(Female, Male, Other),
+                        names_to = "gender",
+                        values_to = "number")                            %>%
+           mutate(number = number/FPE_Total) %>%
+           mutate(number = if_else(discipline == "Continuing education",
+                                   scale*number, number))    %>%
+           select(discipline, gender, number,FPE_Total)                  %>%
+           ggplot(aes(y = discipline, x = number, fill = gender)) +
+           geom_col(colour = "black") +
+           theme_bw() +
+           scale_x_continuous(labels = percent_format(accuracy = 1)) +
+           xlab("Number of FPEs") + ylab("Research discipline") +
+           labs(fill = "Gender")
+
+## FPE by Cost Centre ----
 # Plot only the FPE totals for each cost centre
 gender %>%  ggplot(aes(y = discipline, x = FPE_Total, fill = FPE_Total)) +
             geom_col(colour = "black", na.rm = TRUE) +
             theme_bw() +
             scale_x_continuous(labels = comma, limits = c(0, 11550)) +
-            xlab("Full Person Equivalent") + ylab("Research discipline") +
+            xlab("Percent Full Person Equivalent") + ylab("Research discipline") +
             geom_text(aes(y = discipline, x = FPE_Total, label = comma(FPE_Total)), hjust = -0.25,
             position = "identity", inherit.aes = FALSE, size = 3) +
             scale_fill_viridis(option="magma") + theme(legend.position = "None")
 
-## FPE by CC % ----
+## FPE by Cost Centre % ----
 # Same as the above but as percentages
 # Plot only the FPE totals for each cost centre
 gender %>% mutate(N = sum(FPE_Total)) %>%
@@ -169,7 +210,7 @@ gender %>% mutate(N = sum(FPE_Total)) %>%
            xlab("Percent") + ylab("Research discipline") +
            geom_text(aes(y = discipline, x = FPE_Total/N, label = percent(FPE_Total/N, accuracy = 0.1)), hjust = -0.25,
            position = "identity", inherit.aes = FALSE, size = 3) +
-          scale_fill_viridis(option="magma") + theme(legend.position = "None")
+           scale_fill_viridis(option="magma") + theme(legend.position = "None")
 
 ## Gender stats ----
 # Calculate proportions (there will be rounding effects).
