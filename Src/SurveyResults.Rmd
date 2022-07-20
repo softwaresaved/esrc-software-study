@@ -4249,13 +4249,14 @@ data %>% select(id = URN, starts_with("Q11_b_"), career = Q20) %>%
          filter(ncrm != 0)                                     %>%
          distinct(id, ncrm, career)                            %>% 
          group_by(career)                                      %>% 
-         mutate(n = n())                                       %>%
-         distinct(career, n)                                   %>% 
+         mutate(n = n(), nid = n_distinct(id))                 %>%
+         distinct(career, n, nid)                              %>% 
          ggplot(aes(x = career, y = n, fill = career)) +
          geom_col(colour = "black") + theme_bw() +
          scale_fill_brewer(palette = "Set1", name = "Career stage") +
          theme(legend.position = "none")  + ylab("Number of NCRM courses taken") +
-         xlab("Career stage") + geom_text(aes(x = career, label = n ), vjust = -0.5, size = 4)
+         xlab("Career stage") + 
+         geom_text(aes(x = career, label = paste0(n," (",nid,")")), vjust = -0.5, size = 4)
 
 ```
 
