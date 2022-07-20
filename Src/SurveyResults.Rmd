@@ -4271,14 +4271,15 @@ data %>% select(id = URN, starts_with("Q11_b_"), gender = Q21) %>%
          filter(ncrm != 0)                             %>%
          distinct(id, ncrm, gender)                    %>% 
          group_by(gender)                              %>% 
-         mutate(n = n())                               %>%
+         mutate(n = n(), nid = n_distinct(id))         %>%
          ungroup()                                     %>% 
-         distinct(gender, n)                           %>% 
+         distinct(gender, n, nid)                      %>% 
          ggplot(aes(x = gender, y = n, fill = gender)) +
          geom_col(colour = "black") + theme_bw() +
          scale_fill_brewer(palette = "Set2", name = "Career stage") +
          theme(legend.position = "none")  + ylab("Number of NCRM courses taken") +
-         xlab("Gender") + geom_text(aes(x = gender, label = n ), vjust = -0.5, size = 3)
+         xlab("Gender") + 
+         geom_text(aes(x = gender, label = paste0(n," (",nid,")") ), vjust = -0.5, size = 4)
 
 ```
 
@@ -4293,14 +4294,15 @@ data %>% select(id = URN, starts_with("Q11_b_"), gender = Q21) %>%
          filter(!(gender %in% lowstatsgender))         %>% 
          distinct(id, ncrm, gender)                    %>% 
          group_by(gender)                              %>% 
-         mutate(n = n())                               %>%
+         mutate(n = n(), nid = n_distinct(id))         %>%
          ungroup()                                     %>% 
-         distinct(gender, n)                           %>% 
+         distinct(gender, n, nid)                      %>% 
          ggplot(aes(x = gender, y = n, fill = gender)) +
          geom_col(colour = "black") + theme_bw() +
          scale_fill_brewer(palette = "Set2", name = "Career stage") +
          theme(legend.position = "none")  + ylab("Number of NCRM courses taken") +
-         xlab("Gender") + geom_text(aes(x = gender, label = n ), vjust = -0.5, size = 4)
+         xlab("Gender") + 
+         geom_text(aes(x = gender, label = paste0(n," (",nid,")")), vjust = -0.5, size = 4)
 
 ```
 
