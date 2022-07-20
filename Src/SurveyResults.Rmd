@@ -3011,12 +3011,12 @@ data %>% select(starts_with("Q6_b"), career = Q20)        %>%
 ```{r reasons4NotOS_career_per}
 
 data %>% select(starts_with("Q6_b"), career = Q20)  %>%
+         group_by(career)                          %>% 
+         mutate(N = n())                           %>% 
          pivot_longer(cols = starts_with("Q6_b"),
                       names_to = NULL,
                       values_to = "UseOS")         %>%
          filter(UseOS != 0)                        %>%
-         group_by(career)                          %>% 
-         mutate(N = n())                           %>% 
          group_by(UseOS, career)                   %>% 
          mutate(per = n()/N)                       %>% 
          distinct(UseOS, career, per)              %>% 
@@ -3054,7 +3054,7 @@ data %>% select(starts_with("Q6_b"), career = Q20)  %>%
          theme_bw() +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          geom_text(aes(label = percent(per, accuracy = 1)), vjust = -0.5,
-                   position = position_dodge2(width = 0.9, preserve = "single"), size = 3) +
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 4) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("Reasons for not using Open Source") + ylab("Percent") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
@@ -3904,6 +3904,8 @@ data %>% select(num_range("Q11_", 1:12))                 %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12), legend.position = "None")
 ```
 
+Include percentages.
+
 ```{r acquiring_skills_per}
 data %>% select(num_range("Q11_", 1:12))                 %>%
          mutate(N = n())                                 %>% 
@@ -3971,7 +3973,7 @@ data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
          group_by(career)                                %>% 
          mutate(N = n())                                 %>% 
          pivot_longer(cols = num_range("Q11_", 1:12),
-                      names_to = "questions",
+                      names_to = NULL,
                       values_to = "skills")              %>%
          filter(skills != 0)                             %>%
          group_by(skills)                                %>% 
@@ -4001,7 +4003,7 @@ data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
          group_by(career)                                %>% 
          mutate(N = n())                                 %>% 
          pivot_longer(cols = num_range("Q11_", 1:12),
-                      names_to = "questions",
+                      names_to = NULL,
                       values_to = "skills")              %>%
          filter(skills != 0)                             %>%
          filter(career != "Other" & career != "-")       %>%
@@ -4018,7 +4020,7 @@ data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
          xlab("Where skills are being acquired") + ylab("Percent") +
          geom_text(aes(label = percent(per, accuracy = 1)), 
                    position = position_dodge2(width = 0.9, preserve = "single"),
-                   vjust = -0.5, size = 3) +
+                   vjust = -0.5, size = 3.5) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0),
                legend.text=element_text(size = 8)) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
@@ -4222,7 +4224,7 @@ this rises to `r nrow(b)` individuals that is `r percent(nrow(a)/nrow(data), acc
 
 #### List of NCRM courses taken
 
-```{r ncrm_courses, results='asis'}
+```{r ncrm_courses, results = 'asis'}
 
 data %>% select(num_range("Q11_b_", 1:22)) %>%
          pivot_longer(cols = num_range("Q11_b_", 1:22),
@@ -4327,7 +4329,7 @@ data %>% select(id = URN, starts_with("Q11_b_"), career = Q20) %>%
          ylab("Number of people") +
          #scale_x_discrete() +
          xlab("Number of courses taken") + 
-         geom_text(aes(x = N, label = n), position = position_stack(0.5),  size = 3)
+         geom_text(aes(x = N, label = n), position = position_stack(0.5),  size = 4)
 
 ```
 
@@ -4355,7 +4357,7 @@ data %>% select(id = URN, starts_with("Q11_b_"), gender = Q21) %>%
          ylab("Number of people") +
          #scale_x_discrete() +
          xlab("Number of courses taken") + 
-         geom_text(aes(x = N, label = n), position = position_stack(0.5),  size = 3)
+         geom_text(aes(x = N, label = n), position = position_stack(0.5),  size = 4)
 
 ```
 
@@ -4612,7 +4614,7 @@ data %>% select(num_range("Q13_1_",1:5))            %>%
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
          ggplot(aes(x = understanding, fill = n)) + 
          geom_bar(colour = "black") + scale_fill_distiller(palette = "Blues", direction = 1) +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 4) +
          theme_bw() + ylab("Numbers") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10), 
                legend.position = "None") +
@@ -4685,7 +4687,7 @@ data %>% select(num_range("Q13_1_",1:5), career = Q20)                          
          ggplot(aes(x = understanding, y = per, fill = career)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
-                       position = position_dodge2(width = 0.9, preserve = "single"), size = 3, vjust = -0.5) +
+                       position = position_dodge2(width = 0.9, preserve = "single"), size = 4, vjust = -0.5) +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          theme_bw() + ylab("Percent") +
          xlab("Aware of how s/w I use is funded, managed and licensed") +
@@ -4704,7 +4706,7 @@ data %>% select(num_range("Q13_1_",1:5), gender = Q21)     %>%
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
          ggplot(aes(x = understanding, fill = gender)) + 
          geom_bar(colour = "black") +
-         geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 3) +
+         geom_text(aes(label = ..count..), stat = "count",position = position_stack(0.5), size = 4) +
          theme_bw() + ylab("Numbers") +
          xlab("Aware of how s/w I use is funded, managed and licensed") +
          scale_fill_brewer(palette = "Set2", name = "Gender")
@@ -4821,7 +4823,7 @@ data %>% select(num_range("Q13_2_",1:5), career = Q20)     %>%
 
 ```{r aware_policies_career_per}
 
-data %>% select(num_range("Q13_2_",1:5), career = Q20)     %>%
+data %>% select(num_range("Q13_2_",1:5), career = Q20)                                  %>%
          group_by(career)                                                               %>% 
          mutate(N = n())                                                                %>% 
          pivot_longer(cols = starts_with("Q13"),
@@ -4835,7 +4837,7 @@ data %>% select(num_range("Q13_2_",1:5), career = Q20)     %>%
          ggplot(aes(x = understanding, y = per, fill = career)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
-                   position = position_dodge2(width = 0.9, preserve = "single"), size = 3, vjust = -0.5) +
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 4, vjust = -0.5) +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          theme_bw() + ylab("Percent") +
          xlab("Aware of how institution/funder's policies on how s/w is funded, managed and licensed") +
@@ -4861,7 +4863,7 @@ data %>% select(num_range("Q13_2_",1:5), career = Q20)                          
          ggplot(aes(x = understanding, y = per, fill = career)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
-                   position = position_dodge2(width = 0.9, preserve = "single"), size = 3, vjust = -0.5) +
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 4, vjust = -0.5) +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          theme_bw() + ylab("Percent") +
          xlab("Aware of how institution/funder's policies on how s/w is funded, managed and licensed") +
@@ -4929,7 +4931,7 @@ data %>% select(num_range("Q13_2_",1:5), gender = Q21)                          
          ggplot(aes(x = understanding, y = per, fill = gender)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
-                   position = position_dodge2(width = 0.9, preserve = "single"), size = 3, vjust = -0.5) +
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 4, vjust = -0.5) +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          theme_bw() + ylab("Percent") +
          xlab("Aware of how institution/funder's policies on how s/w is funded, managed and licensed") +
@@ -6027,8 +6029,8 @@ data %>%  select(num_range("Q16_", 1:13), dis = Q23)    %>%
   geom_bar(colour = "black") +
   theme_bw() +
   xlab("Barriers to software use") + ylab("Numbers") +
-  geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 2) +
-  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
+  geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 3) +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0))  +
   scale_fill_brewer(palette = "Set3", name = "Dissability")
 
 ```
@@ -6036,16 +6038,16 @@ data %>%  select(num_range("Q16_", 1:13), dis = Q23)    %>%
 ```{r barriers_dis_per}
 
 data %>%  select(num_range("Q16_", 1:13), dis = Q23)    %>%
+  filter(dis != "-")                                    %>% 
+  group_by(dis)                                         %>% 
+  mutate(N = n())                                       %>% 
   pivot_longer(cols = num_range("Q16_", 1:13),
                names_to = NULL,
                values_to = "barriers")                  %>%
   filter(barriers != 0)                                 %>%
   group_by(barriers)                                    %>%
   mutate(M = n())                                       %>% 
-  group_by(dis)                                         %>% 
-  mutate(N = n())                                       %>% 
   group_by(dis, barriers)                               %>% 
-  filter(dis != "-")                                    %>% 
   mutate(n = n())                                       %>% 
   mutate(per = percent(n/N, accuracy = 1))              %>% 
   distinct(dis, M, N, n, per, barriers)                 %>% 
@@ -6056,7 +6058,7 @@ data %>%  select(num_range("Q16_", 1:13), dis = Q23)    %>%
   xlab("Barriers to software use") + ylab("Percent") +
   geom_text(aes(y = n/N, label = per), 
             position = position_dodge2(width = 0.9, preserve = "single"),
-            vjust = -0.5, size = 2) +
+            vjust = -0.5, size = 4) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
   scale_fill_brewer(palette = "Set3", name = "Dissability")
 
