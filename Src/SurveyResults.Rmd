@@ -769,6 +769,7 @@ data %>% select(num_range("Q2_", 1:2), career = Q20)                          %>
                    position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 2) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
+
 ### Use of data by gender
 
 ```{r use_of_data_gender_num}
@@ -830,6 +831,7 @@ data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>
                 position = position_dodge2(width = 0.9, preserve = "single"), colour = "black", size = 2) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
+
 ### Gender and career stage
 
 ```{r use_of_data_gender_per2_career}
@@ -927,7 +929,6 @@ data %>% select(id = URN, num_range("Q2_",1:2))                       %>%
          kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
 
-
 ### Combined plot
 
 Can produce a plot of the above table. N = 163.
@@ -992,23 +993,23 @@ data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-### Combined plot by % career stage 
+### Combined plot by % career stage
 
-Adding career stage. Percentages may not add to 100% as values that do not contribute
-are not shown.
+Adding career stage. Percentages may not add to 100% as values that do
+not contribute are not shown.
 
 ```{r datause_choices_career_per}
 
 data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
+         group_by(career)                                              %>% 
+         mutate(N = n())                                               %>% 
          pivot_longer(cols = starts_with("Q2_"),
                       names_to = NULL,
                       values_to = "ds")                                %>%
          filter(ds != 0)                                               %>%  
          group_by(id)                                                  %>% 
          mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         distinct(id, choices, career)                                 %>%
-         group_by(career)                                              %>% 
-         mutate(N = n())                                               %>% 
+         distinct(id, choices, career, N)                              %>%
          ungroup()                                                     %>% 
          select(-id)                                                   %>% 
          group_by(choices, career)                                     %>%
@@ -1026,20 +1027,21 @@ data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
          scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
+
 Filter out the "Other" and "-" categories.
 
 ```{r datause_choices_career_per2}
 
 data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
+         group_by(career)                                              %>% 
+         mutate(N = n())                                               %>% 
          pivot_longer(cols = starts_with("Q2_"),
                       names_to = NULL,
                       values_to = "ds")                                %>%
          filter(ds != 0)                                               %>% 
          group_by(id)                                                  %>% 
          mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         distinct(id, choices, career)                                 %>%
-         group_by(career)                                              %>% 
-         mutate(N = n())                                               %>% 
+         distinct(id, choices, career, N)                              %>%
          ungroup()                                                     %>% 
          select(-id)                                                   %>% 
          group_by(choices, career)                                     %>%
@@ -1054,7 +1056,7 @@ data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
          xlab("Data use") + ylab("Percent") +
          geom_text(aes(label = per), 
                    position = position_dodge2(width = 0.9, preserve = "single"), 
-                   vjust = -0.5, size = 2.5) +
+                   vjust = -0.5, size = 4) +
          scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
@@ -1086,7 +1088,7 @@ data %>% select(id = URN, num_range("Q2_",1:2), gender = Q21)          %>%
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          xlab("Data use") + ylab("Percent") +
          geom_text(aes(label = per), position = position_dodge2(width = 0.9, preserve = "single"), 
-                   vjust = -0.5, size = 3) +
+                   vjust = -0.5, size = 4) +
          scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
@@ -1125,8 +1127,8 @@ data %>% select(id = URN, num_range("Q2_",1:2), career = Q20, gender = Q21)  %>%
 
 ### Combined data use by institution
 
-Only showing instances that have more than 3 case at an institution otherwise the diagram
-becomes too busy and is difficult to see.
+Only showing instances that have more than 3 case at an institution
+otherwise the diagram becomes too busy and is difficult to see.
 
 ```{r combined_datause_institution}
 data %>% select(id = URN, num_range("Q2_",1:2), institution = CleanLocs)          %>%
@@ -1149,8 +1151,8 @@ data %>% select(id = URN, num_range("Q2_",1:2), institution = CleanLocs)        
          geom_tile(aes(fill = n)) + 
          theme_bw() +
          xlab("Data use") + ylab("Institutions") +
-         theme(axis.text.y = element_text(size = 8), legend.position = "None") +
-         geom_text(aes(label = n), size = 3, colour = "white") +
+         theme(axis.text.y = element_text(size = 12), legend.position = "None") +
+         geom_text(aes(label = n), size = 4, colour = "white") +
          scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
          scale_fill_continuous(high = "#132B43", low = "#56B1F7")
 ```
@@ -1216,12 +1218,11 @@ data %>% select(URN, num_range("Q2_",1:2))                                   %>%
          geom_tile(aes(fill = n)) + 
          theme_bw() +
          xlab("Data use") + ylab("Disciplines") +
-         theme(axis.text.y = element_text(size = 8), legend.position = "None") +
-         geom_text(aes(label = n), size = 3, colour = "white") +
+         theme(axis.text.y = element_text(size = 12), legend.position = "None") +
+         geom_text(aes(label = n), size = 4, colour = "white") +
          scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
          scale_fill_continuous(high = "#132B43", low = "#56B1F7")
 ```
-
 
 ## Q2a most important sources of data
 
@@ -1229,8 +1230,8 @@ What are your most important data source(s)?
 
 ### Important data sources
 
-This is a simplified version of the input provided by the respondents. It only 
-shows entries with more than two values.
+This is a simplified version of the input provided by the respondents.
+It only shows entries with more than two values.
 
 ```{r importantDS}
 
@@ -1254,14 +1255,13 @@ data %>% select(URN, num_range("ImportantDS_", 1:7))          %>%
          ggplot(aes(x = reorder(importantDS, -n), y = n, fill = n)) +
          geom_col(colour = "black") +
          theme_bw() + ylim(0, 33) + scale_fill_distiller(palette = "Blues", direction = 1) +
-         geom_text(aes(label = n), vjust = -0.5, size = 3) + 
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10), legend.position = "None") +
+         geom_text(aes(label = n), vjust = -0.5, size = 4) + 
+         theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0, size = 12), legend.position = "None") +
          xlab(my$lab) + ylab("Numbers")
 
 ```
 
 ### Important data sources by career
-
 
 ```{r importantDS_career}
 
@@ -1284,6 +1284,7 @@ data %>% select(num_range("ImportantDS_", 1:7), career = Q20)  %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 
 ```
+
 ### Important data sources by % career
 
 ```{r importantDS_career_per}
@@ -1311,7 +1312,6 @@ data %>% select(num_range("ImportantDS_", 1:7), career = Q20)  %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 
 ```
-
 
 ### Important data sources by gender
 
@@ -1457,9 +1457,10 @@ data %>% select(URN, num_range("Q2_b_",1:6))            %>%
 
 ### Choice correlations
 
-My interpretation of this graph is that obtuse angles are negatively correlated, 
-acute are positively correlated, circles are not correlated. The thinner the ellipse
-the stronger the correlation or anti correlation.
+My interpretation of this graph is that obtuse angles are negatively
+correlated, acute are positively correlated, circles are not correlated.
+The thinner the ellipse the stronger the correlation or anti
+correlation.
 
 ```{r q2_correlations}
 
@@ -1471,7 +1472,9 @@ q <- apply(q, 2, function(x) as.integer(x))
 my_colors <- brewer.pal(5, "Spectral")
 my_colors <- colorRampPalette(my_colors)(100)
 
-plotcorr(cor(q), col=my_colors[cor(q)*50+50],cex.lab = 0.6*par("cex.lab"))
+#plotcorr(cor(q), col=my_colors[cor(q)*50+50],cex.lab = 0.6*par("cex.lab"))
+corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
+
 
 ```
 
@@ -1578,7 +1581,6 @@ data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
 ```
 
 ### Reusing existing data by gender %
-
 
 ```{r data_sources_gender_per}
 
@@ -1713,8 +1715,6 @@ data %>% select(id = URN, num_range("Q2_b_",1:6))                      %>%
          kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
 
-
-
 ### Other data sources
 
 Values given for other data sources:
@@ -1773,9 +1773,10 @@ data %>% select(URN, num_range("Q3_", 1:7))                           %>%
 
 ### Choice correlations
 
-My interpretation of this graph is that obtuse angles are negatively correlated, 
-acute are positively correlated, circles are not correlated. The thinner the ellipse
-the stronger the correlation or anti correlation.
+My interpretation of this graph is that obtuse angles are negatively
+correlated, acute are positively correlated, circles are not correlated.
+The thinner the ellipse the stronger the correlation or anti
+correlation.
 
 ```{r q3_correlations}
 
@@ -1787,7 +1788,10 @@ q <- apply(q, 2, function(x) as.integer(x))
 my_colors <- brewer.pal(5, "Spectral")
 my_colors <- colorRampPalette(my_colors)(100)
 
-plotcorr(cor(q), col=my_colors[cor(q)*50+50])
+#plotcorr(cor(q), col=my_colors[cor(q)*50+50])
+
+corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
+
 
 ```
 
@@ -1812,7 +1816,6 @@ data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
 ```
 
 ### Data sharing by percentage at each career stage
-
 
 ```{r sharing_data_career_per}
 
@@ -1900,7 +1903,6 @@ data %>% select(num_range("Q3_", 1:7), gender = Q21)                       %>%
         scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
-
 ### Other ways of sharing data
 
 ```{r other_sharing_data, results = 'asis'}
@@ -1937,14 +1939,15 @@ data %>% select(num_range("Q4_",1:26))                              %>%
          theme_bw() + ylim(0, 132) + scale_fill_distiller(palette = "Blues", direction = 1) +
          ylab("Numbers") + xlab(my$lab) +
          geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 4) +
-         theme(axis.text.x = element_text(angle = 45, size = 10, hjust = 1.0), legend.position = "none")
+         theme(axis.text.x = element_text(angle = 60, size = 12, hjust = 1.0), legend.position = "none")
 ```
 
 ### Choice correlations
 
-My interpretation of this graph is that obtuse angles are negatively correlated, 
-acute are positively correlated, circles are not correlated. The thinner the ellipse
-the stronger the correlation or anti correlation.
+My interpretation of this graph is that obtuse angles are negatively
+correlated, acute are positively correlated, circles are not correlated.
+The thinner the ellipse the stronger the correlation or anti
+correlation.
 
 ```{r q4_correlations}
 
@@ -1956,7 +1959,9 @@ q <- apply(q, 2, function(x) as.integer(x))
 my_colors <- brewer.pal(5, "Spectral")
 my_colors <- colorRampPalette(my_colors)(100)
 
-plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
+#plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
+
+corrplot(cor(q), method="circle", type= "lower", diag = FALSE, number.cex = 6)
 
 ```
 
@@ -2067,7 +2072,8 @@ data %>% select(num_range("Q4_",1:26), career = "Q20")                       %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage") 
 ```
 
-Removing low stat components and only showing entries with more than 5 entries.
+Removing low stat components and only showing entries with more than 5
+entries.
 
 ```{r sw_used_career_per3}
 
@@ -2099,7 +2105,8 @@ data %>% select(URN, num_range("Q4_",1:26), career = "Q20")                  %>%
 
 ### Software by gender
 
-Removing low stat components and only showing entries with more than 20 entries.
+Removing low stat components and only showing entries with more than 20
+entries.
 
 ```{r sw_used_gender_per}
 
@@ -2160,6 +2167,7 @@ data %>% select(num_range("Q4_",1:26), career = Q20, gender = Q21)              
          ylab("Percent") + xlab("Software used") + 
          scale_fill_brewer(palette = "Set2", name = "Gender") + facet_wrap(~career)
 ```
+
 ### Software used by discipline
 
 These diagrams are over counting
@@ -2263,13 +2271,11 @@ aa  %>%  select(URN, num_range("OtherSw_", 1:13))            %>%
 
 ```
 
-
 ```{r other_software_used, results = 'asis'}
 
 listOther("Q4_a")
 
 ```
-
 
 ## Q5 Most important software
 
@@ -2414,6 +2420,7 @@ bind_cols(data["Q20"], important_software)                        %>%
                              legend.text=element_text(size = 8))  
 
 ```
+
 ### Important software by gender
 
 ```{r important_sw_bar_gender_per2}
@@ -2454,9 +2461,10 @@ bind_cols(data["Q21"], important_software)                        %>%
 ### Most important software as a percentage at a given career stage
 
 The percentages here are taken as a percentage of the responses from
-each career stage. Only software that has been nominated more than five times
-are shown otherwise the graph becomes very busy. Note that an individual may 
-have suggested more than one piece of software - this has not been normalised.
+each career stage. Only software that has been nominated more than five
+times are shown otherwise the graph becomes very busy. Note that an
+individual may have suggested more than one piece of software - this has
+not been normalised.
 
 ```{r important_sw_bar_career_per3}
 
@@ -2573,6 +2581,7 @@ data %>% select(os = Q6, career = Q20)             %>%
                              legend.text=element_text(size = 6))  
 
 ```
+
 ### OS by gender
 
 ```{r use_os_gender}
@@ -2645,8 +2654,9 @@ data %>% select(os = Q6, gender = Q21)             %>%
                              legend.text=element_text(size = 6))  
 
 ```
- Split by gender and career stage.
- 
+
+Split by gender and career stage.
+
 ```{r use_os_gender_per2_career}
 
 data %>% select(os = Q6, career = Q20, gender = Q21)    %>%
@@ -2708,13 +2718,13 @@ data %>% select(starts_with("Q6_a"))              %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12), legend.position = "None") +
          ylab("Numbers")
 ```
- 
- 
+
 ### Choice correlations
 
-My interpretation of this graph is that obtuse angles are negatively correlated, 
-acute are positively correlated, circles are not correlated. The thinner the ellipse
-the stronger the correlation or anti correlation.
+My interpretation of this graph is that obtuse angles are negatively
+correlated, acute are positively correlated, circles are not correlated.
+The thinner the ellipse the stronger the correlation or anti
+correlation.
 
 ```{r q6a_correlations}
 
@@ -2726,9 +2736,13 @@ q <- apply(q, 2, function(x) as.integer(x))
 my_colors <- brewer.pal(5, "Spectral")
 my_colors <- colorRampPalette(my_colors)(100)
 
-plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
+#plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
+
+corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
+
 
 ```
+
 ### Using OS by career stage
 
 ```{r reason4os_career}
@@ -2749,7 +2763,7 @@ data %>% select(starts_with("Q6_a"), career = Q20)   %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-### Using OS by % career stage pop 
+### Using OS by % career stage pop
 
 ```{r reason4os_career_per}
 
@@ -2773,6 +2787,7 @@ data %>% select(starts_with("Q6_a"), career = Q20)   %>%
          xlab("Reasons for using Open Source") + ylab("Numbers") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
+
 Leaving out "Other" and "-"
 
 ```{r reason4os_career_per2}
@@ -2800,7 +2815,8 @@ data %>% select(starts_with("Q6_a"), career = Q20)   %>%
          xlab("Reasons for using Open Source") + ylab("Percentage") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
-### Using OS by gender 
+
+### Using OS by gender
 
 ```{r reason4os_gender}
 
@@ -2820,7 +2836,7 @@ data %>% select(starts_with("Q6_a"), gender = Q21)   %>%
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
-### Using OS by % gender pop 
+### Using OS by % gender pop
 
 ```{r reason4os_gender_per}
 
@@ -2925,7 +2941,6 @@ data %>% select(id = URN, starts_with("Q6_a"))                         %>%
          kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
 
-
 ## Q6b Reasons for not using OS
 
 If you answered no to the previous question, what are your main reasons
@@ -2960,9 +2975,10 @@ data %>% select(starts_with("Q6_b"))        %>%
 
 ### Choice correlations
 
-My interpretation of this graph is that obtuse angles are negatively correlated, 
-acute are positively correlated, circles are not correlated. The thinner the ellipse
-the stronger the correlation or anti correlation.
+My interpretation of this graph is that obtuse angles are negatively
+correlated, acute are positively correlated, circles are not correlated.
+The thinner the ellipse the stronger the correlation or anti
+correlation.
 
 ```{r q6b_correlations}
 
@@ -2974,10 +2990,10 @@ q <- apply(q, 2, function(x) as.integer(x))
 my_colors <- brewer.pal(5, "Spectral")
 my_colors <- colorRampPalette(my_colors)(100)
 
-#plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
+# plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
 
 # http://www.sthda.com/english/wiki/visualize-correlation-matrix-using-correlogram
- corrplot(cor(q), method="circle")
+corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 # corrplot(cor(q), method="pie")
 # corrplot(cor(q), method="color")
 # corrplot(cor(q), method="number")
@@ -3057,6 +3073,7 @@ data %>% select(starts_with("Q6_b"), career = Q20)  %>%
          xlab("Reasons for not using Open Source") + ylab("Percent") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
+
 ### Responses by gender
 
 ```{r reasons4NotOS_gender}
@@ -3158,7 +3175,6 @@ data %>% select(id = URN, starts_with("Q6_b"))                         %>%
          kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
 
-
 ## Q7 How software is being maintained
 
 How is the software you use currently being supported and maintained?
@@ -3192,9 +3208,10 @@ data %>% select(num_range("Q7_", 1:7))              %>%
 
 ### Choice correlations
 
-My interpretation of this graph is that obtuse angles are negatively correlated, 
-acute are positively correlated, circles are not correlated. The thinner the ellipse
-the stronger the correlation or anti correlation.
+My interpretation of this graph is that obtuse angles are negatively
+correlated, acute are positively correlated, circles are not correlated.
+The thinner the ellipse the stronger the correlation or anti
+correlation.
 
 ```{r q7_correlations}
 
@@ -3381,8 +3398,8 @@ data %>% select(num_range("Q7_", 1:7), career = Q20, gender = Q21) %>%
          facet_wrap(~ career)
 
 ```
-### Software maintenance by discipline
 
+### Software maintenance by discipline
 
 ```{r swmaint_dist_test}
 
@@ -3459,7 +3476,6 @@ data %>% select(id = URN, num_range("Q7_", 1:7))                       %>%
          kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
 
-
 ### Other maintenance mechanisms
 
 ```{r other_maintenace, results = 'asis'}
@@ -3494,7 +3510,6 @@ message("The number of workflow entries is ", nn$n,".")
 listOther("Workflow")
 
 ```
-
 
 ### List original inputs
 
@@ -3595,7 +3610,7 @@ data %>% select(Q9, career = Q20)                  %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-### Responses by % gender 
+### Responses by % gender
 
 ```{r develop_sw_gender_per}
 
@@ -3680,6 +3695,7 @@ data %>% select(Q9, num_range("Q19_", 1:22))                             %>%
          ylab("Do you develop software?") + xlab("Discipline") +
          scale_fill_continuous(high = "#132B43", low = "#56B1F7")
 ```
+
 ### How you extend software
 
 If you answered yes to the above, could you briefly describe what
@@ -3725,9 +3741,10 @@ data %>% select(num_range("Q10_", 1:7))                 %>%
 
 ### Choice correlations
 
-My interpretation of this graph is that obtuse angles are negatively correlated, 
-acute are positively correlated, circles are not correlated. The thinner the ellipse
-the stronger the correlation or anti correlation.
+My interpretation of this graph is that obtuse angles are negatively
+correlated, acute are positively correlated, circles are not correlated.
+The thinner the ellipse the stronger the correlation or anti
+correlation.
 
 ```{r q10_correlations}
 
@@ -3924,9 +3941,10 @@ data %>% select(num_range("Q11_", 1:12))                 %>%
 
 ### Choice correlations
 
-My interpretation of this graph is that obtuse angles are negatively correlated, 
-acute are positively correlated, circles are not correlated. The thinner the ellipse
-the stronger the correlation or anti correlation.
+My interpretation of this graph is that obtuse angles are negatively
+correlated, acute are positively correlated, circles are not correlated.
+The thinner the ellipse the stronger the correlation or anti
+correlation.
 
 ```{r q11_correlations}
 
@@ -3938,7 +3956,9 @@ q <- apply(q, 2, function(x) as.integer(x))
 my_colors <- brewer.pal(5, "Spectral")
 my_colors <- colorRampPalette(my_colors)(100)
 
-plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
+#plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
+
+corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 
 ```
 
@@ -4170,7 +4190,6 @@ listOther("Q11_a")
 
 ```
 
-
 ### Q11b NCRM courses
 
 If you have participated in National Centre for Research Methods
@@ -4213,12 +4232,17 @@ data %>% select(id = URN, starts_with("Q11_b_"), career = Q20) %>%
 
 ```
 
-We asked people if they had taken NCRM courses (question 11b) and asked people to check a list of the courses 
-they had taken from a sample of 22 current courses (at the time the survey was deployed - that is early 2022)  
-provided by the NCRM. What we can say though is that out of the `r nrow(data)` individual answers that we are 
-using from the survey, `r nrow(a)` individuals have taken NCRM courses or, if we take the `Other` content category
-this rises to `r nrow(b)` individuals that is `r percent(nrow(a)/nrow(data), accuracy = 0.1)` or
-`r percent(nrow(b)/nrow(data), accuracy = 0.1)` respectively have taken NCRM courses.
+We asked people if they had taken NCRM courses (question 11b) and asked
+people to check a list of the courses they had taken from a sample of 22
+current courses (at the time the survey was deployed - that is early
+2022)\
+provided by the NCRM. What we can say though is that out of the
+`r nrow(data)` individual answers that we are using from the survey,
+`r nrow(a)` individuals have taken NCRM courses or, if we take the
+`Other` content category this rises to `r nrow(b)` individuals that is
+`r percent(nrow(a)/nrow(data), accuracy = 0.1)` or
+`r percent(nrow(b)/nrow(data), accuracy = 0.1)` respectively have taken
+NCRM courses.
 
 #### List of NCRM courses taken
 
@@ -4280,7 +4304,6 @@ data %>% select(id = URN, starts_with("Q11_b_"), gender = Q21) %>%
          geom_text(aes(x = gender, label = paste0(n," (",nid,")") ), vjust = -0.5, size = 4)
 
 ```
-
 
 ```{r ncrm_courses_gender2}
 
@@ -4571,6 +4594,7 @@ data %>%  select(rew = Q12, career= Q20, gender = Q21)  %>%
           facet_wrap(~ career)
 
 ```
+
 ### Rationale
 
 If you answered yes or no can you briefly state your reasons for
@@ -4643,8 +4667,8 @@ data %>% select(num_range("Q13_1_",1:5), career = Q20)     %>%
 
 #### Responses as % of career stage
 
-Percentages may not add up to 100% as members that have not answered the question 
-are not shown.
+Percentages may not add up to 100% as members that have not answered the
+question are not shown.
 
 ```{r aware_sw_career_per}
 
@@ -4715,8 +4739,8 @@ data %>% select(num_range("Q13_1_",1:5), gender = Q21)     %>%
 
 #### Responses as % of gender
 
-Percentages may not add up to 100% as members that have not answered the question 
-are not shown.
+Percentages may not add up to 100% as members that have not answered the
+question are not shown.
 
 ```{r aware_sw_gender_per}
 
@@ -4821,7 +4845,6 @@ data %>% select(num_range("Q13_2_",1:5), career = Q20)     %>%
 
 #### Responses as % of career stage
 
-
 ```{r aware_policies_career_per}
 
 data %>% select(num_range("Q13_2_",1:5), career = Q20)                                  %>%
@@ -4870,7 +4893,6 @@ data %>% select(num_range("Q13_2_",1:5), career = Q20)                          
          xlab("Aware of how institution/funder's policies on how s/w is funded, managed and licensed") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
-
 
 #### Responses by gender
 
@@ -5164,6 +5186,7 @@ data %>% select(num_range("Q13_3_",1:5), career = Q20, gender = Q21)            
          scale_fill_brewer(palette = "Set2", name = "Gender") + 
          facet_wrap(~ career)
 ```
+
 ### Q13d Insufficient incentive to learn how s/w is funded, managed and licensed
 
 There is insufficient incentive for me to learn how my software is
@@ -5431,10 +5454,11 @@ data %>%  select(URN, num_range("Q14_", 1:9))         %>%
 
 ### Choice correlations
 
-My interpretation of this graph is that obtuse angles are negatively correlated, 
-acute are positively correlated, circles are not correlated. The thinner the ellipse
-the stronger the correlation or anti correlation. Removed the use of tier 1 and
-tier 2 as these got no response.
+My interpretation of this graph is that obtuse angles are negatively
+correlated, acute are positively correlated, circles are not correlated.
+The thinner the ellipse the stronger the correlation or anti
+correlation. Removed the use of tier 1 and tier 2 as these got no
+response.
 
 ```{r q14_correlations}
 
@@ -5447,7 +5471,9 @@ q <- apply(q, 2, function(x) as.integer(x))
 my_colors <- brewer.pal(5, "Spectral")
 my_colors <- colorRampPalette(my_colors)(100)
 
-plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
+#plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
+
+corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 
 ```
 
@@ -5472,7 +5498,6 @@ data %>%  select(num_range("Q14_", 1:9), career = Q20)         %>%
   scale_fill_brewer(palette = "Set1", name = "Career stage")
 
 ```
-
 
 ### Where software is run by % career stage
 
@@ -5503,7 +5528,6 @@ data %>%  select(num_range("Q14_", 1:9), career = Q20)         %>%
 
 ```
 
-
 ### Where software is run by gender
 
 ```{r where_sw_run_gender}
@@ -5525,6 +5549,7 @@ data %>%  select(num_range("Q14_", 1:9), gender = Q21)         %>%
   scale_fill_brewer(palette = "Set2", name = "Gender")
 
 ```
+
 ### Where software is run by % gender
 
 ```{r where_sw_run_gender_per}
@@ -5553,7 +5578,6 @@ data %>%  select(num_range("Q14_", 1:9), gender = Q21)         %>%
   scale_fill_brewer(palette = "Set2", name = "Gender")
 
 ```
-
 
 ### Counting combined choices
 
@@ -5633,7 +5657,6 @@ data %>% select(URN, starts_with("Q15_"), -"Q15_a")                     %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12), 
                legend.position = "None") 
 ```
-
 
 ### Licensing policies awareness by career stage
 
@@ -5844,9 +5867,10 @@ data %>%  select(num_range("Q16_", 1:13))         %>%
 
 ### Choice correlations
 
-My interpretation of this graph is that obtuse angles are negatively correlated, 
-acute are positively correlated, circles are not correlated. The thinner the ellipse
-the stronger the correlation or anti correlation.
+My interpretation of this graph is that obtuse angles are negatively
+correlated, acute are positively correlated, circles are not correlated.
+The thinner the ellipse the stronger the correlation or anti
+correlation.
 
 ```{r q16_correlations}
 
@@ -6065,7 +6089,6 @@ data %>%  select(num_range("Q16_", 1:13), dis = Q23)    %>%
 
 ```
 
-
 ### Counting combined choices
 
 For each multiple choice replace spaces by "-"s and collapse all the
@@ -6146,7 +6169,8 @@ Who has funded your research within the last 5 years?
 The list given in the listing below has been manipulated to provide some
 level of uniformity. Note that in this instance all contributions are
 counted equally, i.e. a respondent may have suggested more than one
-funding body - each of these is given a count of 1 regardless of how many were provided.
+funding body - each of these is given a count of 1 regardless of how
+many were provided.
 
 ```{r funding}
 
@@ -6170,7 +6194,7 @@ funding %>% pivot_longer(cols = num_range("Q18_", 1:7),
             theme_bw() + xlab(my$lab) + ylab("Numbers") +
             scale_fill_distiller(palette = "Blues", direction = 1) +
             geom_text(aes(x = funding, label = n), vjust = -0.5, size = 4) +
-            theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10),
+            theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12),
                   legend.position = "None")
 ```
 
@@ -6339,9 +6363,9 @@ data %>%  select(URN, num_range("Q19_", 1:22))          %>%
           geom_text(aes(label = ..count..), stat = "count", size = 4, vjust = -0.5)
 ```
 
-We can use the above information to normalise contributions so that if a research
-discipline is mentioned N times it will only contribute 1/N times.
-The other disciplines specified were:
+We can use the above information to normalise contributions so that if a
+research discipline is mentioned N times it will only contribute 1/N
+times. The other disciplines specified were:
 
 ```{r normalised_research_disciplines}
 
@@ -6375,7 +6399,8 @@ data %>% select(num_range("Q19_", 1:22))          %>%
          filter(if_all(Q19_1:Q19_22, ~ . == 0))   -> a
 ```
 
-The number of people that did not specify an academic discipline `r nrow(a)`.
+The number of people that did not specify an academic discipline
+`r nrow(a)`.
 
 Look at cases greater than 1
 
@@ -6603,6 +6628,7 @@ data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
+
 ### Discipline by dissability
 
 ```{r research_disc_dissability}
@@ -6699,6 +6725,7 @@ data %>% select(Institutions = CleanLocs, num_range("Q19_", 1:22))       %>%
          labs(size = "Discipline %") + 
          scale_size_continuous(labels = percent_format(accuracy = 1))
 ```
+
 As a tile diagram with actual numbers:
 
 ```{r awareness_dist_per_tile}
@@ -6735,7 +6762,6 @@ data %>% select(OtherDisciplines)         %>%
          arrange(desc(n))                 %>% 
          kbl(format="pipe", align = c("l","r"), col.names = c("Discipline", "Count"))
 ```
-
 
 The actual values provided are as below:
 
@@ -6875,6 +6901,7 @@ data %>% select(gender = Q21, career = Q20) %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
 ```
+
 Same information in a tile diagram.
 
 ```{r gender_career_tile}
@@ -6896,7 +6923,6 @@ data %>% select(gender = Q21, career = Q20)             %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
 ```
-
 
 ```{r gender_career_points}
 
@@ -7002,7 +7028,6 @@ listOther("Q21_a")
 
 ```
 
-
 ## Q22 Ethnic group
 
 ### Ethnicity distribution
@@ -7072,7 +7097,8 @@ data %>% select(ethnicity = "Q22", career = Q20)    %>%
 
 ```
 
-Making the diagram a bit less busy by focusing on the non-White component.
+Making the diagram a bit less busy by focusing on the non-White
+component.
 
 ```{r ethnicity_career_popper_nonwhite}
 
@@ -7097,6 +7123,7 @@ data %>% select(ethnicity = "Q22", career = Q20)    %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 
 ```
+
 or using a tile diagram:
 
 ```{r ethnicity_career_tile}
@@ -7119,6 +7146,7 @@ data %>% select(ethnicity = Q22, career = Q20)    %>%
          scale_fill_continuous(high = "#132B43", low = "#56B1F7") 
 
 ```
+
 ### Ethnicity and gender
 
 ```{r ethnicity_gender}
@@ -7139,6 +7167,7 @@ data %>% select(ethnicity = Q22, gender = Q21)    %>%
          scale_fill_brewer(palette = "Set2", name = "Gender")
 
 ```
+
 or as a tile diagram
 
 ```{r ethnicity_gender_tile}
@@ -7327,7 +7356,8 @@ data %>% select(dis = Q23, career = Q20)    %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-As a tile diagram with percentages in relation to each career stage population.
+As a tile diagram with percentages in relation to each career stage
+population.
 
 ```{r disability_career_tile2}
 
@@ -7348,6 +7378,7 @@ data %>% select(dis = Q23, career = Q20)           %>%
          scale_fill_continuous(high = "#132B43", low = "#56B1F7")
 
 ```
+
 ### Disability by gender
 
 ```{r disability_gender}
@@ -7365,7 +7396,8 @@ data %>% select(dis = Q23, gender = Q21) %>%
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
-As a tile diagram with percentages as a fraction of the entire population:
+As a tile diagram with percentages as a fraction of the entire
+population:
 
 ```{r disability_gender_tile}
 
