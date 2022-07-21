@@ -1451,7 +1451,7 @@ data %>% select(URN, num_range("Q2_b_",1:6))            %>%
          geom_text(aes(label = paste0(n," (", per, ")")), 
                    stat = "count", vjust = -0.35, size = 4)  +
          xlab(my$lab) + ylim(0, 75) +
-         theme(axis.text.x = element_text(angle = -50, vjust = 0.5, hjust=0, size = 10)) +
+         theme(axis.text.x = element_text(angle = -50, vjust = 0.5, hjust=0, size = 12)) +
          theme(legend.position = "none")
 ```
 
@@ -1765,7 +1765,7 @@ data %>% select(URN, num_range("Q3_", 1:7))                           %>%
          ggplot(aes(x = reorder(DataSharing, -n), y = n, fill = n)) +
          geom_col(colour = "black") + 
          theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10)) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12)) +
          xlab(my$lab) + ylab("Numbers") + ylim(0,83) +
          geom_text(aes(label = paste0(n, " (", per,")")), vjust = -0.5, size = 4) +
          theme(legend.position = "none") 
@@ -1803,7 +1803,8 @@ data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
         ggplot(aes(x = reorder(DataSharing, -n), fill = career)) +
         geom_bar(colour = "black") + 
         theme_bw() +
-        theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.text=element_text(size = 8)) +
+        theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), 
+              legend.text=element_text(size = 8)) +
         xlab("Data sharing habits") + ylab("Numbers") +
         geom_text(aes(x = DataSharing, label = ..count..),
                     position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
@@ -1934,10 +1935,9 @@ data %>% select(num_range("Q4_",1:26))                              %>%
          ggplot(aes(x = reorder(software,-n), fill = n)) +
          geom_bar(colour = "black") +
          theme_bw() + ylim(0, 132) + scale_fill_distiller(palette = "Blues", direction = 1) +
-         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0)) +
          ylab("Numbers") + xlab(my$lab) +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 3) +
-         theme(axis.text.x = element_text(size = 12), legend.position = "none")
+         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 4) +
+         theme(axis.text.x = element_text(angle = 45, size = 10, hjust = 1.0), legend.position = "none")
 ```
 
 ### Choice correlations
@@ -2032,7 +2032,7 @@ data %>% select(num_range("Q4_",1:26), career = Q20)                         %>%
          ggplot(aes(x = reorder(software,-M), y = per, fill = career)) +
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() +
-         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0, size = 10),
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.15, hjust=0, size = 10),
                legend.text=element_text(size = 8)) +
          ylab("Percent") + xlab("Software used") +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
@@ -2122,7 +2122,7 @@ data %>% select(num_range("Q4_",1:26), gender = Q21)                         %>%
                   colour = "black") +
          theme_bw() +
          scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.83)) +
-         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0, size = 10),
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.15, hjust=0, size = 10),
                legend.text=element_text(size = 8)) +
          geom_text(aes(label = percent(per, accuracy = 1)), 
                    position = position_dodge2(width = 0.9, preserve = "single"), 
@@ -2305,7 +2305,7 @@ important_software %>% select(starts_with("Q5"))             %>%
                        ggplot(aes(x = reorder(software, -n), y = n, fill = n)) +
                        geom_col(colour = "black") + scale_fill_distiller(palette = "Blues", direction = 1) +
                        theme_bw() +
-                       theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
+                       theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
                        geom_text(aes(x = software, label = n), vjust = -0.5, size = 4) +
                        ylab("Numbers") + xlab(my$lab) + ylim(0,57) +
                        theme(axis.text.x = element_text(size = 12), legend.position = "None")  
@@ -2404,15 +2404,13 @@ bind_cols(data["Q20"], important_software)                        %>%
                        geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
                        scale_y_continuous(labels = percent_format(accuracy = 1)) +
                        theme_bw() +
-                       theme(axis.text.x = element_text(angle = -90, vjust = 0.5,
-                                                        hjust=0)) +
                        geom_text(aes(x = software, y = per, 
                                      label = percent(per, accuracy = 1)), vjust = -0.5,
                                  position = position_dodge2(width = 0.9, preserve = "single"),
-                                 size = 3) +
+                                 size = 4) +
                        ylab("Percentage") + xlab("Most important software") +
                        scale_fill_brewer(palette = "Set1", name = "Career stage") +
-                       theme(axis.text.x = element_text(size = 10),
+                       theme(axis.text.x = element_text(angle = -45, hjust = 0, size = 12),
                              legend.text=element_text(size = 8))  
 
 ```
@@ -5935,7 +5933,7 @@ data %>%  select(num_range("Q16_", 1:13), career = Q20)         %>%
           xlab("Barriers to software use") + ylab("Percentage") +
           geom_text(aes(label = percent(per, accuracy = 1)), 
                     position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 3) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10),
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12),
                 legend.text = element_text(size = 8))  +
           scale_fill_brewer(palette = "Set1", name = "Career stage")
 
@@ -5967,12 +5965,12 @@ data %>%  select(num_range("Q16_", 1:13), gender = Q21) %>%
 ```{r barriers_gender_per}
 
 data %>%  select(num_range("Q16_", 1:13), gender = Q21) %>%
+  group_by(gender)                                      %>%
+  mutate(N = n())                                       %>% 
   pivot_longer(cols = num_range("Q16_", 1:13),
                names_to = NULL,
                values_to = "barriers")                  %>%
   filter(barriers != 0)                                 %>%
-  group_by(gender)                                      %>%
-  mutate(N = n())                                       %>% 
   group_by(gender, barriers)                            %>%
   mutate(per = n()/N)                                   %>% 
   distinct(gender, barriers, per)                       %>% 
@@ -5993,15 +5991,15 @@ Remove the low stat components
 ```{r barriers_gender_per2}
 
 data %>%  select(num_range("Q16_", 1:13), gender = Q21) %>%
+  group_by(gender)                                      %>%
+  filter(!(gender %in% lowstatsgender))                 %>% 
+  mutate(N = n())                                       %>% 
   pivot_longer(cols = num_range("Q16_", 1:13),
                names_to = NULL,
                values_to = "barriers")                  %>%
   filter(barriers != 0)                                 %>%
   group_by(barriers)                                    %>% 
   mutate(M = n())                                       %>% 
-  group_by(gender)                                      %>%
-  filter(!(gender %in% lowstatsgender))                 %>% 
-  mutate(N = n())                                       %>% 
   group_by(gender, barriers)                            %>%
   mutate(per = n()/N)                                   %>% 
   distinct(gender, barriers, per, M)                    %>% 
@@ -6011,7 +6009,7 @@ data %>%  select(num_range("Q16_", 1:13), gender = Q21) %>%
   scale_y_continuous(labels = percent_format(accuracy = 1)) +
   xlab("Barriers to software use") + ylab("Percentage") +
   geom_text(aes(label = percent(per, accuracy = 0.1)), 
-            position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 2) +
+            position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 4) +
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
   scale_fill_brewer(palette = "Set2", name = "Gender")
 
@@ -6062,7 +6060,7 @@ data %>%  select(num_range("Q16_", 1:13), dis = Q23)    %>%
   geom_text(aes(y = n/N, label = per), 
             position = position_dodge2(width = 0.9, preserve = "single"),
             vjust = -0.5, size = 4) +
-  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0, size = 12))  +
   scale_fill_brewer(palette = "Set3", name = "Dissability")
 
 ```
@@ -7267,7 +7265,8 @@ data %>% select(dis = "Q23")                      %>%
          theme_bw() +
          geom_text(aes(label = paste0(n, " (", per, ")")), stat = "count", vjust = -0.5, size = 4) +
          xlab("Disability") + ylab("Numbers")  + theme(legend.position = "None") +
-         scale_fill_brewer(palette = "Set3", name = "Disability")
+         scale_fill_brewer(palette = "Set3", name = "Disability") +
+         theme(axis.title.x = element_text(size = 12))
 ```
 
 ### Disability by career stage
