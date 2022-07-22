@@ -239,6 +239,13 @@ gender %>% summarise(RO_F_Tot = sum(FPE_Female_RO, na.rm = TRUE),
 # Disability ----
 
 ## Read the disability data ----
+
+
+# Map cost centres to a new column of subjects
+dis$discipline <- unname(cc2subjects[dis[["Cost_centre_v2"]]])
+
+dis %>% select(!ends_with("%")) %>%  View()
+
 # Do not appear to be able to read non-adjacent columns and do not want all
 # the detail so will have to read in separately and then put back together
 disability <- read_xlsx("../Data/hesa.xlsx", range = "Disability!A5:C54")
@@ -267,7 +274,7 @@ disability <- disability %>% fill(Academic_Year, Cost_centre_group_v2)
 disability <- disability %>% filter(Cost_centre_v2 %in% esrc_cc)
 
 # Map cost centres to a new column of subjects
-disability$discipline <-unname(cc2subjects[disability[["Cost_centre_v2"]]])
+disability$discipline <- unname(cc2subjects[disability[["Cost_centre_v2"]]])
 
 ## RO & TR disability %s ----
 # Plot graph of no known disabilities
@@ -334,25 +341,120 @@ disability %>% pivot_longer(
                 scale_fill_manual(labels = c("RO disability", "RO no known disability" , "TR disability", "TR no known disability"),
                                   values = c("green","red","blue","yellow"))
 
+## Aggregate TR and RO ----
+
+# Have to read the data in again to capture the numeric data
+# Read the disability data
+dis <- read_xlsx("../Data/hesa.xlsx", range = "Disability!A5:AW55")
+
+# Rename the columns
+names(dis) <- c("Academic_Year",
+                "Cost_centre_group_v2",
+                "Cost_centre_v2",
+                "RO_a_long_standing_illness_or_health_condition",
+                "RO_a_physical_impairment_or_mobility_issues",
+                "RO_Another_disability_impairment_or_medical_condition",
+                "RO_Blind_or_a_serious_visual_impairment",
+                "RO_Deaf_or_a_serious_hearing_impairment",
+                "RO_General_learning_disability_such_as_Down_syndrome",
+                "RO_Mental_health_condition",
+                "RO_Social_communication_Autistic_spectrum_disorder",
+                "RO_Specific_learning_difficulty",
+                "RO_Two_or_more_conditions",
+                "RO_No_known_disability_unknown",
+                "RO_a_long_standing_illness_or_health_condition%",
+                "RO_a_physical_impairment_or_mobility_issues%",
+                "RO_Another_disability_impairment_or_medical_condition%",
+                "RO_Blind_or_a_serious_visual_impairment%",
+                "RO_Deaf_or_a_serious_hearing_impairment%",
+                "RO_General_learning_disability_such_as_Down_syndrome%",
+                "RO_Mental_health_condition%",
+                "RO_Social_communication_Autistic_spectrum_disorder%",
+                "RO_Specific_learning_difficulty%",
+                "RO_Two_or_more_conditions%",
+                "RO_No_known_disability_unknown%",
+                "TR_a_long_standing_illness_or_health_condition",
+                "TR_a_physical_impairment_or_mobility_issues",
+                "TR_Another_disability_impairment_or_medical_condition",
+                "TR_Blind_or_a_serious_visual_impairment",
+                "TR_Deaf_or_a_serious_hearing_impairment",
+                "TR_General_learning_disability_such_as_Down_syndrome",
+                "TR_Mental_health_condition",
+                "TR_Social_communication_Autistic_spectrum_disorder",
+                "TR_Specific_learning_difficulty",
+                "TR_Two_or_more_conditions",
+                "TR_No_known_disability_unknown",
+                "TR_a_long_standing_illness_or_health_condition%",
+                "TR_a_physical_impairment_or_mobility_issues%",
+                "TR_Another_disability_impairment_or_medical_condition%",
+                "TR_Blind_or_a_serious_visual_impairment%",
+                "TR_Deaf_or_a_serious_hearing_impairment%",
+                "TR_General_learning_disability_such_as_Down_syndrome%",
+                "TR_Mental_health_condition%",
+                "TR_Social_communication_Autistic_spectrum_disorder%",
+                "TR_Specific_learning_difficulty%",
+                "TR_Two_or_more_conditions%",
+                "TR_No_known_disability_unknown%",
+                "Total",
+                "Total%")
+
+# Map the data that we want - have to do this in two steps
+dis <- dis                                         %>%
+       select(!ends_with("%"))                     %>%
+       filter(Cost_centre_v2 %in% esrc_cc)         %>%
+       fill(Academic_Year, Cost_centre_group_v2)
+
+dis <- dis                                                                %>%
+       mutate(discipline = unname(cc2subjects[dis[["Cost_centre_v2"]]]))  %>%
+       select(-Academic_Year, -Cost_centre_group_v2)                      %>%
+       rowwise()                                                          %>%
+       mutate(dis = sum(c_across(c(RO_a_long_standing_illness_or_health_condition:RO_Two_or_more_conditions,
+                                  TR_a_long_standing_illness_or_health_condition:TR_Two_or_more_conditions)),
+                       na.rm = TRUE),
+              no_dis = sum(c_across(c(RO_No_known_disability_unknown, TR_No_known_disability_unknown)),
+                           na.rm = TRUE))
+
+# Plot the data
+dis %>% select(discipline, dis, no_dis, Total) %>%
+        pivot_longer(
+                    cols = c("dis",	"no_dis"),
+                    names_to = "disability",
+                    values_to = "numbers"
+                    )                         %>%
+
+        group_by(discipline)                  %>%
+        mutate(pos = sum(numbers))            %>%
+        mutate(disability = factor(disability, levels = c("dis",	"no_dis"), ordered = TRUE)) %>%
+        ggplot(aes(y = discipline, x = numbers, fill = disability)) +
+        geom_col(colour = "black") +
+        theme_bw() + xlim(0,13000) +
+        #scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 1.125)) +
+        ylab("Research discipline") +
+        xlab("Numbers") + labs(fill = "Disability") +
+        geom_text(aes(y = discipline, x = pos, label = comma(Total)), hjust = -0.25,
+                          position = "identity", inherit.aes = FALSE, size = 3) +
+        scale_fill_manual(labels = c("disability", "no known disability"),
+                                  values = c("blue","yellow"))
+
 ## Plot RO only aggregated disabilities ----
 # Plot the graph for Research Only (RO)
-disability %>% pivot_longer(
-                            cols = c("dis_RO",	"no_dis_RO"),
-                            names_to = "disability",
-                            values_to = "percent"
-                             )                        %>%
-                 group_by(discipline)                 %>%
-                 mutate(pos = sum(percent))           %>%
-                 ggplot(aes(y = discipline, x = percent, fill = disability)) +
-                 geom_col(colour = "black") +
-                 theme_bw() +
-                 scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.38)) +
-                 ylab("Research discipline") +
-                 xlab("Percent") + labs(fill = "Disability") +
-                 geom_text(aes(y = discipline, x = pos, label = comma(Total_num)), hjust = -0.25,
-                           position = "identity", inherit.aes = FALSE, size = 3) +
-                 scale_fill_manual(labels = c("RO disability", "RO no known disability"),
-                                  values = c("blue","yellow"))
+dis %>% pivot_longer(
+                      cols = c("dis",	"no_dis"),
+                      names_to = "disability",
+                      values_to = "percent"
+                    )                        %>%
+        group_by(discipline)                 %>%
+        mutate(pos = sum(percent))           %>%
+        ggplot(aes(y = discipline, x = percent, fill = disability)) +
+        geom_col(colour = "black") +
+        theme_bw() +
+        scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.38)) +
+        ylab("Research discipline") +
+        xlab("Number") + labs(fill = "Disability") +
+        geom_text(aes(y = discipline, x = pos, label = comma(Total_num)), hjust = -0.25,
+                          position = "identity", inherit.aes = FALSE, size = 3) +
+       scale_fill_manual(labels = c("RO disability", "RO no known disability"),
+                         values = c("blue","yellow"))
 
 # Percentages are calculated in the spreadsheet.
 
