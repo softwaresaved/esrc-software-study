@@ -11,6 +11,7 @@ library(tidyr)
 library(ggplot2)
 library(scales)
 library(viridis)
+library(knitr)
 
 # Create a look-up table to map cost centres to subjects
 #
@@ -693,6 +694,32 @@ ethnicity %>% replace(is.na(.), 0)                            %>%
               scale_fill_manual(labels = c("Asian",	"Black",	"Mixed",	"Other",	"Unknown/NA",	"White"),
                                 values = colormap)
 
+## TR + RO components %s tabular ----
+
+ethnicity %>% replace(is.na(.), 0)                            %>%
+              mutate(
+                Asian = RO_Asian + TR_Asian,
+                Black = RO_Black + TR_Black,
+                Mixed = RO_Mixed + TR_Mixed,
+                Other = RO_Other + TR_Other,
+                Unknown_NA = RO_Unknown_NA + TR_Unknown_NA,
+                White = RO_White + TR_White
+              )                                               %>%
+              pivot_longer(
+                cols = c("Asian",	"Black",	"Mixed",	"Other",	"Unknown_NA",	"White"),
+                names_to = "ethnicity",
+                values_to = "numbers"
+              )                                                         %>%
+              group_by(discipline)                                      %>%
+              mutate(myTot = sum(numbers))                              %>%
+              mutate(numbers = percent(numbers/nTotal, accuracy = 0.1)) %>%
+              select(discipline, ethnicity, numbers)                    %>%
+              pivot_wider(names_from = "ethnicity",
+                          values_from = "numbers" )                     %>%
+             kable(format = "simple",
+                   col.names = c("Research discipline", "Asian", "Black", "Mixed",
+                                 "Other", "Unknown/NA", "White"),
+                   align = c("l", rep("r", 6)))
 
 # Institutions ----
 
