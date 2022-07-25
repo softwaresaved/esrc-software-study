@@ -573,22 +573,24 @@ ethnicity %>% pivot_longer(
 ## Plot filled cols ethnicity RO only ----
 # Plot the ethnicity - RO only (filling values to compare proportions)
 ethnicity %>% pivot_longer(
-  cols = c("ROp_Asian",	"ROp_Black",	"ROp_Mixed",	"ROp_Other",	"ROp_Unknown_NA",	"ROp_White"),
-  names_to = "ethnicity",
-  values_to = "percent")             %>%
-  filter(!is.na(percent))              %>%
-  group_by(discipline)                 %>%
-  mutate(pos = sum(percent))           %>%
-  mutate(ethnicity = factor(ethnicity, levels = c("ROp_Asian",	"ROp_Black",	"ROp_Mixed",	"ROp_Other",	"ROp_Unknown_NA",	"ROp_White"),
-                            ordered = TRUE)) %>%
-  ggplot(aes(y = discipline, x = percent, fill = ethnicity)) +
-  geom_col(colour = "black", position = "fill") +
-  theme_bw() +
-  scale_x_continuous(labels = percent_format(accuracy = 1)) +
-  ylab("Research discipline") +
-  xlab("Percent") + labs(fill = "Ethnicity") +
-  scale_fill_manual(labels = c("RO Asian",	"RO Black",	"RO Mixed",	"RO Other",	"RO Unknown/NA",	"RO White"),
-                    values = colormap)
+                  cols = c("ROp_Asian",	"ROp_Black",	"ROp_Mixed",	"ROp_Other",	"ROp_Unknown_NA",	"ROp_White"),
+                  names_to = "ethnicity",
+                  values_to = "percent")             %>%
+               filter(!is.na(percent))              %>%
+               group_by(discipline)                 %>%
+               mutate(pos = sum(percent))           %>%
+               mutate(ethnicity = factor(ethnicity,
+                                         levels = c("ROp_Asian",	"ROp_Black",	"ROp_Mixed",	"ROp_Other",	"ROp_Unknown_NA",	"ROp_White"),
+                                    ordered = TRUE)) %>%
+               ggplot(aes(y = discipline, x = percent, fill = ethnicity)) +
+               geom_col(colour = "black", position = "fill") +
+               theme_bw() +
+               scale_x_continuous(labels = percent_format(accuracy = 1)) +
+               ylab("Research discipline") +
+               xlab("Percent") + labs(fill = "Ethnicity") +
+               scale_fill_manual(labels = c("RO Asian",	"RO Black",	"RO Mixed",	"RO Other",
+                                            "RO Unknown/NA",	"RO White"),
+                                 values = colormap)
 
 ## Plot ethnicity TR only ----
 # Plot the ethnicity - TR only
@@ -616,25 +618,27 @@ ethnicity %>% pivot_longer(
 ## Plot filled cols ethnicity TR only ----
 # Plot the ethnicity - TR only (with the position filled to compare proportions)
 ethnicity %>% pivot_longer(
-  cols = c("TRp_Asian",	"TRp_Black",	"TRp_Mixed",	"TRp_Other",	"TRp_Unknown_NA",	"TRp_White"),
-  names_to = "ethnicity",
-  values_to = "percent"
-)                                      %>%
-  filter(!is.na(percent))              %>%
-  group_by(discipline)                 %>%
-  mutate(pos = sum(percent))           %>%
-  mutate(ethnicity = factor(ethnicity, levels = c("TRp_Asian",	"TRp_Black",	"TRp_Mixed",	"TRp_Other",	"TRp_Unknown_NA",	"TRp_White"),
-                            ordered = TRUE)) %>%
-  ggplot(aes(y = discipline, x = percent, fill = ethnicity)) +
-  geom_col(colour = "black", position = "fill") +
-  theme_bw() +
-  scale_x_continuous(labels = percent_format(accuracy = 1)) +
-  ylab("Research discipline") +
-  xlab("Percent") + labs(fill = "Ethnicity") +
-  # geom_text(aes(y = discipline, x = pos, label = comma(nTotal)), hjust = -0.25,
-  #           position = "identity", inherit.aes = FALSE, size = 3) +
-  scale_fill_manual(labels = c("TR Asian",	"TR Black",	"TR Mixed",	"TR Other",	"TR Unknown/NA",	"TR White"),
-                    values = colormap)
+               cols = c("TRp_Asian",	"TRp_Black",	"TRp_Mixed",	"TRp_Other",	"TRp_Unknown_NA",	"TRp_White"),
+               names_to = "ethnicity",
+               values_to = "percent"
+              )                                     %>%
+              filter(!is.na(percent))              %>%
+              group_by(discipline)                 %>%
+              mutate(pos = sum(percent))           %>%
+              mutate(ethnicity = factor(ethnicity, levels = c("TRp_Asian",	"TRp_Black",	"TRp_Mixed",
+                                                              "TRp_Other",	"TRp_Unknown_NA",	"TRp_White"),
+                                  ordered = TRUE)) %>%
+              ggplot(aes(y = discipline, x = percent, fill = ethnicity)) +
+              geom_col(colour = "black", position = "fill") +
+              theme_bw() +
+              scale_x_continuous(labels = percent_format(accuracy = 1)) +
+              ylab("Research discipline") +
+              xlab("Percent") + labs(fill = "Ethnicity") +
+              # geom_text(aes(y = discipline, x = pos, label = comma(nTotal)), hjust = -0.25,
+              #           position = "identity", inherit.aes = FALSE, size = 3) +
+              scale_fill_manual(labels = c("TR Asian",	"TR Black",	"TR Mixed",	"TR Other",
+                                           "TR Unknown/NA",	"TR White"),
+                                values = colormap)
 
 ## TR + RO components numbers ----
 ethnicity %>% replace(is.na(.), 0)                            %>%
@@ -657,8 +661,38 @@ ethnicity %>% replace(is.na(.), 0)                            %>%
              ylab("Research discipline") +
              xlab("Number of FPEs") + labs(fill = "Ethnicity") +
              scale_fill_manual(labels = c("Asian",	"Black",	"Mixed",	"Other",	"Unknown/NA",	"White"),
-                    values = colormap) + xlim(0, 13000) +
+                    values = colormap) +
+             scale_x_continuous(labels = percent_format(accuracy = 1)) +
              geom_text(aes(y = discipline, x = nTotal, label = comma(nTotal)), hjust = -0.075)
+
+
+## TR + RO components %s ----
+ethnicity %>% replace(is.na(.), 0)                            %>%
+              mutate(
+                     Asian = RO_Asian + TR_Asian,
+                     Black = RO_Black + TR_Black,
+                     Mixed = RO_Mixed + TR_Mixed,
+                     Other = RO_Other + TR_Other,
+                     Unknown_NA = RO_Unknown_NA + TR_Unknown_NA,
+                     White = RO_White + TR_White
+              )                                               %>%
+              pivot_longer(
+                     cols = c("Asian",	"Black",	"Mixed",	"Other",	"Unknown_NA",	"White"),
+                     names_to = "ethnicity",
+                     values_to = "numbers"
+              )                                              %>%
+              group_by(discipline)                           %>%
+              mutate(myTot = sum(numbers))                   %>%
+              mutate(numbers = numbers/nTotal)               %>%
+              ggplot(aes(y = discipline, x = numbers, fill = ethnicity)) +
+              geom_col(colour = "black", position = "fill") +
+              theme_bw() +
+              ylab("Research discipline") +
+              xlab("Percent of FPEs") + labs(fill = "Ethnicity") +
+              scale_x_continuous(labels = percent_format(accuracy = 1)) +
+              scale_fill_manual(labels = c("Asian",	"Black",	"Mixed",	"Other",	"Unknown/NA",	"White"),
+                                values = colormap)
+
 
 # Institutions ----
 
