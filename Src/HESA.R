@@ -340,8 +340,30 @@ disability %>% pivot_longer(
                           position = "identity", inherit.aes = FALSE, size = 3) +
                 scale_fill_manual(labels = c("RO disability", "RO no known disability" , "TR disability", "TR no known disability"),
                                   values = c("green","red","blue","yellow"))
+## Plot RO only aggregated disabilities ----
+# Plot the graph for Research Only (RO)
+dis %>% pivot_longer(
+  cols = c("dis",	"no_dis"),
+  names_to = "disability",
+  values_to = "percent"
+)                        %>%
+  group_by(discipline)                 %>%
+  mutate(pos = sum(percent))           %>%
+  ggplot(aes(y = discipline, x = percent, fill = disability)) +
+  geom_col(colour = "black") +
+  theme_bw() +
+  scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.38)) +
+  ylab("Research discipline") +
+  xlab("Number") + labs(fill = "Disability") +
+  geom_text(aes(y = discipline, x = pos, label = comma(Total_num)), hjust = -0.25,
+            position = "identity", inherit.aes = FALSE, size = 3) +
+  scale_fill_manual(labels = c("RO disability", "RO no known disability"),
+                    values = c("blue","yellow"))
 
-## Aggregate TR and RO ----
+# Percentages are calculated in the spreadsheet.
+
+
+## Aggregated TR and RO numbers ----
 
 # Have to read the data in again to capture the numeric data
 # Read the disability data
@@ -414,7 +436,7 @@ dis <- dis                                                                %>%
               no_dis = sum(c_across(c(RO_No_known_disability_unknown, TR_No_known_disability_unknown)),
                            na.rm = TRUE))
 
-# Plot the data
+# Plot the numbers data
 dis %>% select(discipline, dis, no_dis, Total) %>%
         pivot_longer(
                     cols = c("dis",	"no_dis"),
@@ -428,7 +450,6 @@ dis %>% select(discipline, dis, no_dis, Total) %>%
         ggplot(aes(y = discipline, x = numbers, fill = disability)) +
         geom_col(colour = "black") +
         theme_bw() + xlim(0,13000) +
-        #scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 1.125)) +
         ylab("Research discipline") +
         xlab("Numbers") + labs(fill = "Disability") +
         geom_text(aes(y = discipline, x = pos, label = comma(Total)), hjust = -0.25,
@@ -436,27 +457,31 @@ dis %>% select(discipline, dis, no_dis, Total) %>%
         scale_fill_manual(labels = c("disability", "no known disability"),
                                   values = c("blue","yellow"))
 
-## Plot RO only aggregated disabilities ----
-# Plot the graph for Research Only (RO)
-dis %>% pivot_longer(
-                      cols = c("dis",	"no_dis"),
-                      names_to = "disability",
-                      values_to = "percent"
-                    )                        %>%
+## Aggregated TR and RO %s ----
+
+# Plot the numbers data as percentages - this shows the impact of rounding up/down
+# of the raw data.
+dis %>% select(discipline, dis, no_dis, Total) %>%
+        pivot_longer(
+                     cols = c("dis",	"no_dis"),
+                     names_to = "disability",
+                     values_to = "numbers"
+        )                         %>%
         group_by(discipline)                 %>%
-        mutate(pos = sum(percent))           %>%
-        ggplot(aes(y = discipline, x = percent, fill = disability)) +
+        mutate(numbers = numbers/Total)      %>%
+        mutate(pos = sum(numbers))           %>%
+        mutate(disability = factor(disability, levels = c("dis",	"no_dis"), ordered = TRUE)) %>%
+        ggplot(aes(y = discipline, x = numbers, fill = disability)) +
         geom_col(colour = "black") +
         theme_bw() +
-        scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.38)) +
+        scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 1.2)) +
         ylab("Research discipline") +
-        xlab("Number") + labs(fill = "Disability") +
-        geom_text(aes(y = discipline, x = pos, label = comma(Total_num)), hjust = -0.25,
-                          position = "identity", inherit.aes = FALSE, size = 3) +
-       scale_fill_manual(labels = c("RO disability", "RO no known disability"),
+        xlab("Percent") + labs(fill = "Disability") +
+        geom_text(aes(y = discipline, x = pos, label = comma(Total)), hjust = -0.25,
+                position = "identity", inherit.aes = FALSE, size = 3) +
+        scale_fill_manual(labels = c("disability", "no known disability"),
                          values = c("blue","yellow"))
 
-# Percentages are calculated in the spreadsheet.
 
 # Ethnicity ----
 
