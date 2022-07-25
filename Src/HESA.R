@@ -366,7 +366,10 @@ dis %>% pivot_longer(
 ## Aggregated TR and RO numbers ----
 
 # Have to read the data in again to capture the numeric data
-# Read the disability data
+# Read the disability data. Note the original data set is
+# modified in the processes below. If you try  rerunning
+# the code without realoading the original data set they
+# will fail.
 dis <- read_xlsx("../Data/hesa.xlsx", range = "Disability!A5:AW55")
 
 # Rename the columns
@@ -436,7 +439,11 @@ dis <- dis                                                                %>%
               no_dis = sum(c_across(c(RO_No_known_disability_unknown, TR_No_known_disability_unknown)),
                            na.rm = TRUE))
 
-# Plot the numbers data
+# Plot the numbers data - CAVEAT - data will not add up, that is rounding is
+# applied to the original data 1,2 and 3 get rounded up and above this they
+# get rounded up. The Totals appear to be calculated before the rounding is
+# carried out after the Totals have been calculated so an evaluated Total
+# may not match the original Totals included.
 dis %>% select(discipline, dis, no_dis, Total) %>%
         pivot_longer(
                     cols = c("dis",	"no_dis"),
@@ -460,26 +467,30 @@ dis %>% select(discipline, dis, no_dis, Total) %>%
 ## Aggregated TR and RO %s ----
 
 # Plot the numbers data as percentages - this shows the impact of rounding up/down
-# of the raw data.
-dis %>% select(discipline, dis, no_dis, Total) %>%
+# of the raw data.See the comment above for calculating the Totals. The rounding
+# effect becomes more noted when doing percentages. Here we evaluate a new Total
+# to calculate the totals but quote the original total.
+dis %>% select(discipline, dis, no_dis, Total)                      %>%
         pivot_longer(
                      cols = c("dis",	"no_dis"),
                      names_to = "disability",
                      values_to = "numbers"
-        )                         %>%
-        group_by(discipline)                 %>%
-        mutate(numbers = numbers/Total)      %>%
-        mutate(pos = sum(numbers))           %>%
-        mutate(disability = factor(disability, levels = c("dis",	"no_dis"), ordered = TRUE)) %>%
+        )                                                           %>%
+        group_by(discipline)                                        %>%
+        mutate(myTotal = sum(numbers))                              %>%
+        mutate(numbers = numbers/myTotal)                           %>%
+        mutate(disability = factor(disability,
+                                   levels = c("dis",	"no_dis"),
+                                   ordered = TRUE))                 %>%
         ggplot(aes(y = discipline, x = numbers, fill = disability)) +
         geom_col(colour = "black") +
         theme_bw() +
         scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 1.2)) +
         ylab("Research discipline") +
         xlab("Percent") + labs(fill = "Disability") +
-        geom_text(aes(y = discipline, x = pos, label = comma(Total)), hjust = -0.25,
+        geom_text(aes(y = discipline, x = rep(1, 28), label = comma(Total)), hjust = -0.25,
                 position = "identity", inherit.aes = FALSE, size = 3) +
-        scale_fill_manual(labels = c("disability", "no known disability"),
+        scale_fill_manual(labels = c("Disability", "No known disability"),
                          values = c("blue","yellow"))
 
 
