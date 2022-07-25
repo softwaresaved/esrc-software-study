@@ -488,8 +488,10 @@ dis %>% select(discipline, dis, no_dis, Total)                      %>%
         scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 1.2)) +
         ylab("Research discipline") +
         xlab("Percent") + labs(fill = "Disability") +
-        geom_text(aes(y = discipline, x = rep(1, 28), label = comma(Total)), hjust = -0.25,
-                position = "identity", inherit.aes = FALSE, size = 3) +
+        geom_text(aes(y = discipline, label = percent(numbers, accuracy = 1)),
+                  position = position_stack(vjust = 0.5), hjust = -0.5) +
+      # geom_text(aes(y = discipline, x = rep(1, 28), label = comma(Total)), hjust = -0.25,
+      #          position = "identity", inherit.aes = FALSE, size = 3) +
         scale_fill_manual(labels = c("Disability", "No known disability"),
                          values = c("blue","yellow"))
 
@@ -633,6 +635,30 @@ ethnicity %>% pivot_longer(
   #           position = "identity", inherit.aes = FALSE, size = 3) +
   scale_fill_manual(labels = c("TR Asian",	"TR Black",	"TR Mixed",	"TR Other",	"TR Unknown/NA",	"TR White"),
                     values = colormap)
+
+## TR + RO components numbers ----
+ethnicity %>% replace(is.na(.), 0)                            %>%
+              mutate(
+                Asian = RO_Asian + TR_Asian,
+                Black = RO_Black + TR_Black,
+                Mixed = RO_Mixed + TR_Mixed,
+                Other = RO_Other + TR_Other,
+                Unknown_NA = RO_Unknown_NA + TR_Unknown_NA,
+                White = RO_White + TR_White
+              )                                               %>%
+              pivot_longer(
+                        cols = c("Asian",	"Black",	"Mixed",	"Other",	"Unknown_NA",	"White"),
+                        names_to = "ethnicity",
+                       values_to = "numbers"
+              )                                              %>%
+             ggplot(aes(y = discipline, x = numbers, fill = ethnicity)) +
+             geom_col(colour = "black") +
+             theme_bw() +
+             ylab("Research discipline") +
+             xlab("Number of FPEs") + labs(fill = "Ethnicity") +
+             scale_fill_manual(labels = c("Asian",	"Black",	"Mixed",	"Other",	"Unknown/NA",	"White"),
+                    values = colormap) + xlim(0, 13000) +
+             geom_text(aes(y = discipline, x = nTotal, label = comma(nTotal)), hjust = -0.075)
 
 # Institutions ----
 
