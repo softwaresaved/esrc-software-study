@@ -231,7 +231,7 @@ gender %>%  ggplot(aes(y = discipline, x = FPE_Total, fill = FPE_Total)) +
             geom_col(colour = "black", na.rm = TRUE) +
             theme_bw() +
             scale_x_continuous(labels = comma, limits = c(0, 11550)) +
-            xlab("Percent Full Person Equivalent") + ylab("Research discipline") +
+            xlab("Number of Full Person Equivalents") + ylab("Research discipline") +
             geom_text(aes(y = discipline, x = FPE_Total, label = comma(FPE_Total)), hjust = -0.25,
             position = "identity", inherit.aes = FALSE, size = 3) +
             scale_fill_viridis(option="magma") + theme(legend.position = "None")
@@ -239,6 +239,7 @@ gender %>%  ggplot(aes(y = discipline, x = FPE_Total, fill = FPE_Total)) +
 ## FPE by Cost Centre % ----
 # Same as the above but as percentages
 # Plot only the FPE totals for each cost centre
+
 gender %>% mutate(N = sum(FPE_Total)) %>%
            ggplot(aes(y = discipline, x = FPE_Total/N, fill = FPE_Total)) +
            geom_col(colour = "black", na.rm = TRUE) +
