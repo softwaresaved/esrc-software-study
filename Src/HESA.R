@@ -180,14 +180,36 @@ gender %>% replace(is.na(.), 0)                                          %>%
                         values_to = "number")                            %>%
            mutate(number = number/FPE_Total) %>%
            mutate(number = if_else(discipline == "Continuing education",
-                                   scale*number, number))    %>%
-           select(discipline, gender, number,FPE_Total)                  %>%
+                                   scale*number, number))                 %>%
+           select(discipline, gender, number, FPE_Total)                  %>%
            ggplot(aes(y = discipline, x = number, fill = gender)) +
            geom_col(colour = "black") +
            theme_bw() +
            scale_x_continuous(labels = percent_format(accuracy = 1)) +
-           xlab("Number of FPEs") + ylab("Research discipline") +
-           labs(fill = "Gender")
+           xlab("Percent of FPEs") + ylab("Research discipline") +
+           labs(fill = "Gender") + geom_vline(xintercept = 0.5, colour = "red")
+
+## Tabulate Gender by research discipline ----
+
+gender %>% replace(is.na(.), 0)                                           %>%
+           mutate(Female = FPE_Female_RO + FPE_Female_TR,
+                   Male = FPE_Male_RO + FPE_Male_TR,
+                   Other = FPE_Other_RO + FPE_Other_TR, na.rm = TRUE)     %>%
+           pivot_longer(cols = c(Female, Male, Other),
+                         names_to = "gender",
+                         values_to = "numbers")                           %>%
+           mutate(numbers = numbers/FPE_Total)                            %>%
+           mutate(numbers = if_else(discipline == "Continuing education",
+                                    scale*numbers, numbers))              %>%
+           mutate(numbers = percent(numbers, accuracy = 0.01))            %>%
+           select(discipline, gender, numbers)                            %>%
+           pivot_wider(names_from = gender,
+                       values_from = numbers)                             %>%
+           kable(format = "pipe",
+                 col.names = c("Research discipline", "Female", "Male","Other"),
+                 align = c("l", rep("r", 3)))
+
+# FPEs derived from gender ----
 
 ## FPE by Cost Centre ----
 # Plot only the FPE totals for each cost centre
@@ -471,6 +493,7 @@ dis %>% select(discipline, dis, no_dis, Total) %>%
 # of the raw data.See the comment above for calculating the Totals. The rounding
 # effect becomes more noted when doing percentages. Here we evaluate a new Total
 # to calculate the totals but quote the original total.
+
 dis %>% select(discipline, dis, no_dis, Total)                      %>%
         pivot_longer(
                      cols = c("dis",	"no_dis"),
@@ -488,11 +511,9 @@ dis %>% select(discipline, dis, no_dis, Total)                      %>%
         theme_bw() +
         scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 1.2)) +
         ylab("Research discipline") +
-        xlab("Percent") + labs(fill = "Disability") +
+        xlab("Percent of FPEs") + labs(fill = "Disability") +
         geom_text(aes(y = discipline, label = percent(numbers, accuracy = 1)),
                   position = position_stack(vjust = 0.5), hjust = -0.5) +
-      # geom_text(aes(y = discipline, x = rep(1, 28), label = comma(Total)), hjust = -0.25,
-      #          position = "identity", inherit.aes = FALSE, size = 3) +
         scale_fill_manual(labels = c("Disability", "No known disability"),
                          values = c("blue","yellow"))
 
@@ -716,7 +737,7 @@ ethnicity %>% replace(is.na(.), 0)                            %>%
               select(discipline, ethnicity, numbers)                    %>%
               pivot_wider(names_from = "ethnicity",
                           values_from = "numbers" )                     %>%
-             kable(format = "simple",
+             kable(format = "pipe",
                    col.names = c("Research discipline", "Asian", "Black", "Mixed",
                                  "Other", "Unknown/NA", "White"),
                    align = c("l", rep("r", 6)))
