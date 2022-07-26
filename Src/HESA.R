@@ -145,12 +145,26 @@ gender %>% select(discipline, FPE_Femalep_RO, FPE_Malep_RO, FPE_Otherp_RO,
            scale_fill_manual(labels = c("RO Female","RO Male", "RO Other", "TR Female", "TR Male","TR Other"),
                              values = c("green","red","blue","yellow", "purple", "chocolate"))
 
-# This numbers are approximate as all sort of rounding effects come into play
+# These numbers are approximate as all sort of rounding effects come into play.
 gender %>% summarise(Total = sum(FPE_Total))
+
+## Percent TR & RO by Cost Centre ----
+
+gender %>% replace(is.na(.), 0)                                        %>%
+  group_by(discipline)                                        %>%
+  mutate(RO = FPE_Femalep_RO + FPE_Malep_RO + FPE_Otherp_RO,
+         TR = FPE_Femalep_TR + FPE_Malep_TR + FPE_Otherp_TR)  %>%
+  mutate(myTot = RO + TR)                                     %>%
+  mutate(ROp = percent(RO/myTot, accuracy = 0.1),
+         TRp = percent(TR/myTot, accuarcy = 0.1))             %>%
+  select(discipline, TRp, ROp)                               %>%
+  kable(format = "pipe",
+        col.names = c("Research discipline", "Teaching and Research", "Research only"),
+        align = c("l","r", "r"))
 
 ## Gender TR + RO by Cost Centre ----
 
-# Replacing NAs by 0 which is iffy but just want an overview
+# Replacing NAs by 0 which is iffy (NA does not mean 0) but just want an overview
 gender %>% replace(is.na(.), 0)                                          %>%
            mutate(Female = FPE_Female_RO + FPE_Female_TR,
                   Male = FPE_Male_RO + FPE_Male_TR,
