@@ -58,6 +58,65 @@ cc2subjects <- c("Psychology & behavioural sciences",
 # Names are the cost centres, values the subjects
 names(cc2subjects) <- esrc_cc
 
+# Staffing ----
+# Data comes from: HE academic staff by cost centre and nationality 2014/15 to 2020/21
+#
+#            https://www.hesa.ac.uk/data-and-analysis/staff/table-26
+#
+# Need:
+#       Cost centre -> cost centre (not the cost centre group)
+#       Academic Year -> 2020/21
+#
+# Two data sets have to be downloaded separately:
+#
+#       Mode of employment: part-time and full-time
+#
+# Then click on the link "Download table (csv)" at the bottom of the table.
+#
+
+# Read the data
+#staffing <- read_csv("../Data/table-26.csv", skip = 19, show_col_types = FALSE)
+staffing_pt <- read_csv("../Data/dt025-table-26-part-time.csv", skip = 15, show_col_types = FALSE)
+staffing_ft <- read_csv("../Data/dt025-table-26-full-time.csv", skip = 15, show_col_types = FALSE)
+
+# Rename columns: substitute embedded spaces in names by underscores
+#names(staffing) <- gsub(" ","_", names(staffing))
+
+# Rename columns: substitute embedded spaces in names by underscores and append with _pt or _ft
+names(staffing_pt) <- paste0(gsub(" ","_", names(staffing_pt)),"_pt")
+names(staffing_ft) <- paste0(gsub(" ","_", names(staffing_ft)),"_ft")
+
+# This data does not have brackets round the cost centre codes
+esrc_cc2 <- gsub("\\(|\\)", "", esrc_cc)
+
+# Filter the ESRC subjects
+staffing_pt <-  staffing_pt                                                %>%
+                select(Cost_centre = Cost_centre_pt, Part_time = Total_pt) %>%
+                filter(Cost_centre %in% esrc_cc2)                          %>%
+                mutate(Cost_centre = gsub("\\d{3} ", "", Cost_centre))
+
+staffing_ft <-  staffing_ft                                                %>%
+                select(Cost_centre = Cost_centre_ft, Full_time = Total_ft) %>%
+                filter(Cost_centre %in% esrc_cc2)                          %>%
+                mutate(Cost_centre = gsub("\\d{3} ", "", Cost_centre))
+
+# Join and plot the data
+staffing_pt %>% left_join(staffing_ft, by = "Cost_centre")         %>%
+                pivot_longer(cols = c("Part_time", "Full_time"),
+                             names_to = "Employment_type",
+                             values_to = "Numbers")                %>%
+                ggplot(aes(y = Cost_centre, x = Numbers, fill = Employment_type)) +
+                geom_col(colour = "black") + theme_bw() +
+                ylab("Research discipline") + labs(fill = "Employment type") +
+                geom_text(aes(label = Numbers), position = position_stack(vjust = 0.5))
+
+# Tabulate the data
+staffing_pt %>% left_join(staffing_ft, by = "Cost_centre")  %>%
+                group_by(Cost_centre)                       %>%
+                mutate(Total = Part_time + Full_time)       %>%
+                mutate(Part_time = percent(Part_time/Total, accuarcy = 1)) %>%
+                mutate(Full_time = percent(Full_time/Total, accuracy = 1))
+
 # Gender ----
 
 ## Read data ----
