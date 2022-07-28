@@ -6153,7 +6153,8 @@ my_colors <- brewer.pal(5, "Spectral")
 my_colors <- colorRampPalette(my_colors)(100)
 
 # plot the correlation
-plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
+#plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
+corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 
 ```
 
@@ -6178,7 +6179,7 @@ funding %>% mutate(nelements = rowSums(!is.na(.)))                             %
             geom_col(colour = "black") +
             theme_bw() + xlab("Funding body") + ylab("Numbers") +
             scale_fill_distiller(palette = "Blues", direction = 1) +
-            geom_text(aes(x = funding, label = N), vjust = -0.6, size = 2) +
+            geom_text(aes(x = funding, label = N), vjust = -0.6, size = 4) +
             theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), 
                   legend.position = "None")
 ```
