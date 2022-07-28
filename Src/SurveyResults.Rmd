@@ -6470,7 +6470,9 @@ my_colors <- brewer.pal(5, "Spectral")
 my_colors <- colorRampPalette(my_colors)(100)
 
 # plot the correlation
-plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
+# plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
+
+corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 
 ```
 
