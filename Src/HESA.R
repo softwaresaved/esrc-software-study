@@ -1113,16 +1113,42 @@ provider %>%  filter(!is.na(institution))         %>%
   ggtitle(paste0("Research discipline: ", disc," for N > ", N))
 
 
-# Plot the total ESRC FPEs per institution
-N <-  250
+## Total ESRC FPEs per institution ----
+# Threshold to
+N <-  275
 provider %>% filter(!is.na(institution))         %>%
              group_by(institution)               %>%
              summarise(rTotal = sum(Total))      %>%
              filter(rTotal > N)                  %>%
-             ggplot(aes(y = institution, x = rTotal, fill = rTotal)) +
+             ggplot(aes(y = reorder(institution, -rTotal), x = rTotal, fill = rTotal)) +
              geom_col(colour = "black") +
              theme_bw() +
              theme(axis.text.y = element_text(size = 8), legend.position = "None") +
-             ylab("Institutions") + xlab("Full Person Equivalent") +
+             ylab("Institutions") + xlab("Full Person Equivalent Numbers") +
              scale_fill_viridis(option="magma") +
              ggtitle(paste0("ESRC FPE staff for N > ", N))
+
+# Number of unique institutions
+length(unique(provider$institution[!is.na(provider$institution) & provider$Total > 0]))
+
+
+# Get some general stats about staffing across institutions
+
+# From https://rpubs.com/Mentors_Ubiqum/using_mode
+mymode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+provider %>% select(institution, Total)        %>%
+             filter(!is.na(institution))       %>%
+             group_by(institution)             %>%
+             mutate(rTotal = sum(Total))       %>%
+             ungroup()                         %>%
+             summarise(mean = mean(rTotal),
+                       mode = mymode(rTotal),
+                       median = median(rTotal),
+                       min = min(rTotal),
+                       max = max(rTotal))
+# Where is the max
+provider$institution[provider$Total == max(provider$Total)]
