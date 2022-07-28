@@ -587,7 +587,7 @@ dis %>% select(discipline, dis, no_dis, Total)                      %>%
         ylab("Research discipline") +
         xlab("Percent of FPEs") + labs(fill = "Disability") +
         geom_text(aes(y = discipline, label = percent(numbers, accuracy = 1)),
-                  position = position_stack(vjust = 0.5), hjust = -0.5) +
+                  position = position_stack(vjust = 0.5), hjust = -0.75) +
         scale_fill_manual(labels = c("Disability", "No known disability"),
                          values = c("blue","yellow"))
 
@@ -783,6 +783,7 @@ ethnicity %>% replace(is.na(.), 0)                            %>%
               ggplot(aes(y = discipline, x = numbers, fill = ethnicity)) +
               geom_col(colour = "black", position = "fill") +
               theme_bw() +
+              theme(axis.text.y = element_text(size = 12)) +
               ylab("Research discipline") +
               xlab("Percent of FPEs") + labs(fill = "Ethnicity") +
               scale_x_continuous(labels = percent_format(accuracy = 1)) +
@@ -815,6 +816,21 @@ ethnicity %>% replace(is.na(.), 0)                            %>%
                    col.names = c("Research discipline", "Asian", "Black", "Mixed",
                                  "Other", "Unknown/NA", "White"),
                    align = c("l", rep("r", 6)))
+
+## Overall summary ----
+
+ethnicity %>% replace(is.na(.), 0)                            %>%
+              mutate(
+                Combined = RO_Other + TR_Other + RO_Mixed + TR_Mixed + RO_Black + TR_Black + RO_Asian + TR_Asian,
+                Unknown_NA = RO_Unknown_NA + TR_Unknown_NA,
+                White = RO_White + TR_White
+              )  %>%
+             select(Combined, Unknown_NA, White) %>%
+             mutate(Total = sum(Combined + Unknown_NA + White)) %>%
+             summarise(Combined = percent(sum(Combined)/Total, accuarcy = 1),
+                       Unknown_NA = percent(sum(Unknown_NA)/Total, accuarcy = 1),
+                       White = percent(sum(White)/Total, accuarcy = 1))
+
 
 # Institutions ----
 
