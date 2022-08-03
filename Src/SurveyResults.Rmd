@@ -6130,7 +6130,7 @@ q$id <- 1:nrow(q)
 # manipulate the form of the data - only use data with more than 4 values
 q %>% pivot_longer(cols = num_range("Q18_", 1:7),
                    names_to = NULL,
-                   values_to = "funding") %>% 
+                   values_to = "funding")                  %>% 
             filter(!is.na(funding) & funding != "Retired") %>% 
             group_by(funding) %>% 
             mutate(n = n()) %>% 
@@ -6184,11 +6184,38 @@ funding %>% mutate(nelements = rowSums(!is.na(.)))                             %
                   legend.position = "None")
 ```
 
+### Funding with career stage
+
+```{r funding_career}
+
+bind_cols(funding, data["Q20"])                                                  %>% 
+            select(num_range("Q18_", 1:7), career = Q20)                         %>% 
+            filter(!(career %in% c("-","Other"))) %>% 
+            pivot_longer(cols = num_range("Q18_", 1:7),
+                         names_to = NULL,
+                         values_to =  "funding")                                 %>% 
+            filter(!is.na(funding))                                              %>%
+            group_by(funding)                                                    %>% 
+            mutate(n = n())                                             %>% 
+            filter(n  > 3)                                                       %>%
+            group_by(funding, career)                                            %>% 
+            mutate(N = n())                                             %>% 
+            distinct(funding, N, career)                                         %>% 
+            ggplot(aes(x = reorder(funding, -N), y = N, fill = career)) +
+            geom_col(colour = "black", position = position_dodge2()) +
+            theme_bw() + xlab("Funding body") + ylab("Numbers") +
+            geom_text(aes(x = funding, label = N), 
+                      position = position_dodge2(width = 0.9, preserve = "single"), size = 4, vjust = -0.5) +
+            theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+            scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
 ### Funding distribution normalised with career stage
 
 ```{r funding_norm_career}
 
-bind_cols(funding, data["Q20"]) %>% select(num_range("Q18_", 1:7), career = Q20) %>% 
+bind_cols(funding, data["Q20"])                                                  %>% 
+            select(num_range("Q18_", 1:7), career = Q20)                         %>% 
             mutate(nelements = rowSums(!is.na(select(., -career))))              %>% 
             mutate(contrib = ifelse(nelements == 0, 0, round(1/nelements, 1)))   %>% 
             pivot_longer(cols = num_range("Q18_", 1:7),
