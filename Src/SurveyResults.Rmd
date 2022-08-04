@@ -6811,24 +6811,6 @@ data %>% select(gender = Q21, career = Q20)                     %>%
 
 ### Gender vs Career stage
 
-A different representation of career vs gender.
-
-```{r gender_career_pts}
-
-data %>% select(gender = Q21, career = Q20) %>%
-         group_by(gender, career)           %>%
-         mutate(size = n())                 %>%
-         ggplot(aes(x = gender,
-                    y = career, colour = size)) +
-         geom_point(aes(size = size)) + theme_bw() +
-         geom_text(aes(x = gender,
-                       y = career, label = size), vjust = 2) +
-         xlab("Gender") + ylab("Career stage") + theme(legend.position = "none") +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
-
-```
-
-Same information in a tile diagram.
 
 ```{r gender_career_tile}
 
@@ -6842,7 +6824,8 @@ data %>% select(gender = Q21, career = Q20)             %>%
          geom_tile(aes(fill = size)) + 
          theme_bw() +
          geom_text(aes(x = gender,
-                       y = career, label = paste0(size," (",per,")")), colour = "white") +
+                       y = career, label = paste0(size," (",per,")")), 
+                   colour = "white", size = 4) +
          xlab("Gender") + ylab("Career stage") + 
          scale_fill_continuous(high = "#132B43", low = "#56B1F7") + 
          theme(legend.position = "none") +
@@ -6850,22 +6833,7 @@ data %>% select(gender = Q21, career = Q20)             %>%
 
 ```
 
-```{r gender_career_points}
-
-data %>% select(gender = Q21, career = Q20)             %>%
-         filter(!(career %in% c("-","Other") | 
-                  gender %in% lowstatsgender))          %>% 
-         group_by(gender, career)                       %>%
-         mutate(n = n())                                %>% 
-         ggplot(aes(x = career, y = gender, fill = gender, size = n)) +
-         geom_point() + 
-         theme_bw() +
-         ylab("Gender") + xlab("Career stage") +
-         theme(legend.position = "none") +
-         geom_text(aes(label = n), vjust = -2, size = 3) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
-
-```
+### Correlation between gender and career stage
 
 ```{r gender_career_corr, results='asis'}
 
