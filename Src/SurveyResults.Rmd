@@ -7233,6 +7233,8 @@ Do you consider yourself to have a disability
 
 ```{r dissability}
 
+NN <- data %>% select(URN, "Q23") %>%  n_distinct("Q23")
+
 data %>% select(dis = "Q23")                      %>% 
          mutate(N = n())                          %>% 
          group_by(dis)                            %>% 
@@ -7242,7 +7244,7 @@ data %>% select(dis = "Q23")                      %>%
          geom_bar(colour = "black") +
          theme_bw() +
          geom_text(aes(label = paste0(n, " (", per, ")")), stat = "count", vjust = -0.5, size = 4) +
-         xlab("Disability") + ylab("Numbers")  + theme(legend.position = "None") +
+         xlab(paste0("Disability (N=",NN,")")) + ylab("Numbers")  + theme(legend.position = "None") +
          scale_fill_brewer(palette = "Set3", name = "Disability") +
          theme(axis.title.x = element_text(size = 12))
 ```
