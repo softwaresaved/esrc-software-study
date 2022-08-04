@@ -7004,34 +7004,7 @@ data %>% select(ethnicity =  Q22)                   %>%
 
 ### Ethnicity by career stage
 
-Making the diagram a bit less busy by focusing on the non-White
-component.
-
-```{r ethnicity_career_popper_nonwhite}
-
-data %>% select(ethnicity = "Q22", career = Q20)    %>%
-         filter(!is.na(ethnicity) & !is.na(career)) %>% 
-         group_by(career)                           %>%
-         mutate(N = n())                            %>%
-         group_by(ethnicity, career)                %>% 
-         mutate(per = n()/N)                        %>% 
-         distinct(ethnicity, career, per)           %>%
-         filter(!grepl("^White", ethnicity))        %>% 
-         ggplot(aes(y = ethnicity, x = per, fill = career)) +
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-         theme_bw() +
-         scale_x_continuous(labels = percent_format(accuracy = 1)) +
-         xlab("Percent") + ylab("Ethnicity") +
-         scale_y_discrete(expand = expansion(add = 0.75), 
-                          labels = function(x) stringr::str_wrap(x, width = 35)) + 
-         theme(axis.text.y = element_text(size = 8)) +
-         geom_text(aes(label = percent(per, accuracy = 1)), hjust = -0.5,
-                   position = position_dodge2(width = 0.9, preserve = "single"), size = 2, colour = "black") +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
-
-```
-
-or using a tile diagram:
+Use a tile diagram:
 
 ```{r ethnicity_career_tile}
 
