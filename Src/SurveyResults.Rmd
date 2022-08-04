@@ -7289,24 +7289,6 @@ data %>% select(dis = Q23, career = Q20)           %>%
 
 ### Disability as % of career stage
 
-```{r disability_career_per}
-
-data %>% select(dis = Q23, career = Q20)    %>% 
-         group_by(career)                   %>% 
-         mutate(N = n())                    %>% 
-         group_by(dis, career)              %>% 
-         mutate(per = n()/N)                %>% 
-         distinct(career, dis, per)         %>% 
-         ggplot(aes(x = dis, y = per, fill = career)) +
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-         theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         xlab("Disability") + ylab("Percent") +
-         geom_text(aes(x = dis, label = percent(per, accuracy = 1)),
-                   position = position_dodge2(width = 0.9, preserve = "single"), colour = "black", size = 2, vjust = -0.5) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
-
 As a tile diagram with percentages in relation to each career stage
 population.
 
@@ -7322,30 +7304,13 @@ data %>% select(dis = Q23, career = Q20)           %>%
          geom_tile(colour = "black") +
          theme_bw() +
          xlab("Disability") + ylab("Career stage") +
-         geom_text(aes(label = n), colour = "black", size = 3) +
          theme(legend.position = "None") +
-         geom_text(aes(label = paste0(n," (", per,")")), colour = "white", size = 3) +
-         #geom_text(aes(label = n), colour = "white", size = 3) +
+         geom_text(aes(label = paste0(n," (", per,")")), colour = "white", size = 5) +
          scale_fill_continuous(high = "#132B43", low = "#56B1F7")
 
 ```
 
 ### Disability by gender
-
-```{r disability_gender}
-
-data %>% select(dis = Q23, gender = Q21) %>% 
-         group_by(dis)                   %>% 
-         mutate(n = n())                 %>% 
-         group_by(dis, gender)           %>% 
-         ggplot(aes(x = reorder(dis, -n), fill = gender)) +
-         geom_bar(colour = "black") +
-         theme_bw() +
-         xlab("Disability") + ylab("Numbers") +
-         geom_text(aes(x = dis, label = ..count..),
-                   position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
-         scale_fill_brewer(palette = "Set2", name = "Gender")
-```
 
 As a tile diagram with percentages as a fraction of the entire
 population:
@@ -7361,13 +7326,12 @@ data %>% select(dis = Q23, gender = Q21)           %>%
          geom_tile(colour = "black") +
          theme_bw() +
          xlab("Disability") + ylab("Gender") +
-         geom_text(aes(label = n), colour = "black", size = 3) +
          theme(legend.position = "None") +
-         geom_text(aes(label = paste0(n," (", per,")")), colour = "white", size = 3) +
-         #geom_text(aes(label = n), colour = "white", size = 3) +
+         geom_text(aes(label = paste0(n," (", per,")")), colour = "white", size = 5) +
          scale_fill_continuous(high = "#132B43", low = "#56B1F7")
 
 ```
+
 
 ### Disability vs Institution
 
