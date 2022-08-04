@@ -6747,6 +6747,14 @@ data %>%  select(career = Q20)                       %>%
 
 ```
 
+### Other 
+
+```{r OtherCareerStage, results='asis'}
+
+listOther("Q20_a")
+
+```
+
 ## Q21 Gender
 
 Gender (we are asking this to ensure that we get a balance of the
