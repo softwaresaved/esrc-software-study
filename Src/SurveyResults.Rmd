@@ -6747,24 +6747,6 @@ data %>%  select(career = Q20)                       %>%
 
 ```
 
-### Career stage pie
-
-```{r career_pie}
-
-data %>%  select(career = Q20)     %>%
-          mutate(N = n())          %>% 
-          group_by(career)         %>% 
-          mutate(per =  n()/N)     %>% 
-          distinct(career, per)    %>% 
-          ggplot(aes(x = "", y = per, fill = career)) +
-          geom_bar(stat="identity", width=1, colour = "black") + 
-          coord_polar("y", start = 0) +
-          theme_void() +
-          geom_label_repel(aes(y = per, label = percent(per, accuracy = 1)), colour = "black",
-                    position = position_stack(0.5), size = 2.5) +
-          scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
-
 ## Q21 Gender
 
 Gender (we are asking this to ensure that we get a balance of the
@@ -7029,31 +7011,11 @@ data %>% select(ethnicity = Q22, career = Q20)    %>%
 
 ### Ethnicity and gender
 
-```{r ethnicity_gender}
-
-data %>% select(ethnicity = Q22, gender = Q21)    %>%
-         group_by(gender)                           %>%
-         mutate(N = n())                            %>%
-         group_by(ethnicity, gender)                %>% 
-         ggplot(aes(y = reorder(ethnicity, -N), fill = gender)) +
-         geom_bar(colour = "black") +
-         theme_bw() +
-         xlab("Numbers") + ylab("Ethnicity") +
-         scale_y_discrete(expand = expansion(add = 0.75), 
-                          labels = function(x) stringr::str_wrap(x, width = 35)) + 
-         theme(axis.text.y = element_text(size = 8)) +
-         geom_text(aes(label = ..count..), stat = "count", 
-                   position = position_stack(vjust = 0.5), size = 2, colour = "white") +
-         scale_fill_brewer(palette = "Set2", name = "Gender")
-
-```
-
-or as a tile diagram
+As a tile diagram
 
 ```{r ethnicity_gender_tile}
 
-data %>% select(ethnicity = Q22, gender = Q21)    %>%
-         filter(!is.na(ethnicity) & !is.na(gender)) %>% 
+data %>% select(ethnicity = Q22, gender = Q21)      %>%
          mutate(N = n())                            %>%
          group_by(ethnicity, gender)                %>% 
          mutate(n = n())                            %>% 
@@ -7066,7 +7028,7 @@ data %>% select(ethnicity = Q22, gender = Q21)    %>%
          scale_y_discrete(expand = expansion(add = 0.75), 
                           labels = function(x) stringr::str_wrap(x, width = 35)) + 
          theme(axis.text.y = element_text(size = 8), legend.position = "none") +
-         geom_text(aes(label = paste0(n," (", per,")")), colour = "white", size = 3) +
+         geom_text(aes(label = paste0(n," (", per,")")), colour = "white", size = 4) +
          scale_fill_continuous(high = "#132B43", low = "#56B1F7") 
 
 ```
