@@ -6846,29 +6846,11 @@ data %>% select(gender = Q21, career = Q20)             %>%
 a$stage <-  c(1:4,1:4)
 
 # Correlation between women and career stage
-cat("Correlation between career stage and number of women ", cor(x = a$stage[a$gender == "Woman"], y = a$n[a$gender == "Woman"]),".\n")
+cat("Correlation between career stage and number of women ", cor(x = a$stage[a$gender == "Woman"], y = a$n[a$gender == "Woman"]),".\n", sep = "")
 
 # Correlation between women and career stage
-cat("Correlation between career stage and number of men ", cor(x = a$stage[a$gender == "Man"], y = a$n[a$gender == "Man"]),".\n")
+cat("Correlation between career stage and number of men ", cor(x = a$stage[a$gender == "Man"], y = a$n[a$gender == "Man"]),".\n", sep = "")
 
-
-```
-
-### Gender, career stage and ethnicity
-
-```{r gender_career_ethnicity}
-
-data %>% select(ethnicity = "Q22", career = "Q20", gender = "Q21") %>%
-         group_by(gender, ethnicity, career)                       %>%
-         tally()                                                   %>%
-         ggplot(aes(x = career, y = ethnicity, size = n, colour = gender)) +
-         geom_point(alpha = 0.25) + geom_jitter() + theme_bw() +
-         xlab("Career stage") + ylab("Ethnicity") +
-         labs(colour = "Gender", size = "Numbers") +
-         scale_y_discrete(expand = expansion(add = 0.75), 
-                          labels = function(x) stringr::str_wrap(x, width = 35)) + 
-         theme(axis.text.y = element_text(size = 8)) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 
 ```
 
