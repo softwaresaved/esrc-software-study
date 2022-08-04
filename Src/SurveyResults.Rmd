@@ -6785,20 +6785,7 @@ data %>%  select(gender = Q21)                      %>%
 
 ```
 
-### Gender by career stage
 
-```{r gender_career}
-data %>% select(gender = Q21, career = Q20)                     %>%
-         group_by(gender)                                       %>% 
-         mutate(n = n())                                        %>% 
-         ggplot(aes(x = gender, fill = career)) +
-         geom_bar(colour = "black") +
-         theme_bw() +
-         geom_text(aes(label = ..count..), stat = "count", 
-                   position = position_stack(vjust = 0.5), size = 4, colour = "white") +
-         xlab("Gender") + ylab("Numbers") + labs(fill = "Career stage") +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
-```
 
 ### Gender by career stage percent
 
