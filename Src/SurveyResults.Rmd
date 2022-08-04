@@ -6983,20 +6983,22 @@ listOther("Q21_a")
 
 ```{r ethnicity}
 
-data %>% select(ethnicity =  Q22)                 %>%
-         mutate(N = n())                          %>% 
-         group_by(ethnicity)                      %>%
-         mutate(n = n())                          %>%
-         mutate(per = percent(n/N, accuracy = 1)) %>% 
-         distinct(n, ethnicity, per)              %>% 
+NN <-  data %>% select(URN, ethnicity =  Q22) %>% n_distinct()
+
+data %>% select(ethnicity =  Q22)                   %>%
+         mutate(N = n())                            %>% 
+         group_by(ethnicity)                        %>%
+         mutate(n = n())                            %>%
+         mutate(per = percent(n/N, accuracy = 0.1)) %>% 
+         distinct(n, ethnicity, per)                %>% 
          ggplot(aes(x = n, y = reorder(ethnicity, -n))) +
          geom_col(colour = "black", fill = "light blue") +
          theme_bw() + 
          scale_y_discrete(expand = expansion(add = 0.75), 
                           labels = function(x) stringr::str_wrap(x, width = 35)) + 
          theme(axis.text.y = element_text(size = 8)) +
-         xlab("Numbers") + ylab("Ethnicity") + xlim(0, 96) +
-         geom_text(aes(y = ethnicity, label = paste0(n," (",per,")")), hjust = -0.2, size = 3)
+         xlab(paste0("Numbers (N = ", NN,")")) + ylab("Ethnicity") + xlim(0, 96) +
+         geom_text(aes(y = ethnicity, label = paste0(n," (",per,")")), hjust = -0.2, size = 4)
   
 ```
 
