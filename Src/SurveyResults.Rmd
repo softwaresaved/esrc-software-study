@@ -7295,8 +7295,8 @@ population.
 ```{r disability_career_tile2}
 
 data %>% select(dis = Q23, career = Q20)           %>% 
-         group_by(career)                          %>% 
          mutate(N = n())                           %>% 
+         group_by(career)                          %>% 
          group_by(dis, career)                     %>% 
          mutate(n = n())                           %>% 
          mutate(per = percent(n/N, accuracy = 1))  %>% 
@@ -7335,6 +7335,9 @@ data %>% select(dis = Q23, gender = Q21)           %>%
 
 ### Disability vs Institution
 
+Respondents were allowed to pick more than one research disciplines hence the numbers do not 
+add up to the totals.
+
 ```{r disability_institution_tile}
 
 data %>% select(dis = Q23, institution = CleanLocs)    %>%
@@ -7354,13 +7357,17 @@ data %>% select(dis = Q23, institution = CleanLocs)    %>%
                axis.text.x = element_text(size = 6, angle = -90, vjust = 0.15, hjust=0),
                legend.position = "none") +
          #geom_text(aes(label = paste0(n," (", per,")")), colour = "white", size = 3) +
-         geom_text(aes(label = n), colour = "white", size = 3) +
+         geom_text(aes(label = n), colour = "white", size = 4) +
          scale_fill_continuous(high = "#132B43", low = "#56B1F7") 
 ```
 
 ### Disability by discipline
 
+Folks were allowed to select more than one research discipline. If a person selected N research disciplines
+then each will contribute 1/N to the count (which effectively becomes a sum).
+
 ```{r research_dis_tile}
+
 data %>%  select(dis = Q23, num_range("Q19_", 1:22))      %>%
           pivot_longer(cols = num_range("Q19_", 1:22),
                        names_to = NULL,
@@ -7374,8 +7381,29 @@ data %>%  select(dis = Q23, num_range("Q19_", 1:22))      %>%
           geom_tile(aes(fill = n), colour = "black") +
           theme_bw() +
           xlab("Discipline") + ylab("Disability") +
-          #geom_text(aes(label = paste0(n, " (",per,")")), colour = "white", size = 2) +
-          geom_text(aes(label = n), colour = "white", size = 2) +
+          geom_text(aes(label = n), colour = "white", size = 4) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0),
+                legend.position = "None")  +
+         scale_fill_continuous(high = "#132B43", low = "#56B1F7")
+```
+
+```{r research_dis_norm_tile}
+
+data %>%  select(URN, dis = Q23, num_range("Q19_", 1:22)) %>%
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = NULL,
+                      values_to = "disciplines")          %>%
+          filter(disciplines != 0)                        %>%
+          group_by(URN)                                   %>% 
+          mutate(N = n())                                 %>% 
+          mutate(contrib = 1/N)                           %>% 
+          group_by(dis, disciplines)                      %>% 
+          mutate(n = round(sum(contrib),1))               %>% 
+          ggplot(aes(x = reorder(disciplines, -n), y = dis)) +
+          geom_tile(aes(fill = n), colour = "black") +
+          theme_bw() +
+          xlab("Discipline") + ylab("Disability") +
+          geom_text(aes(label = n), colour = "white", size = 4) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0),
                 legend.position = "None")  +
          scale_fill_continuous(high = "#132B43", low = "#56B1F7")
