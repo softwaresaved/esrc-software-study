@@ -6624,9 +6624,12 @@ data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
+Normalise contributions - if N research disciplines are specified then each contributes 1/N.
 
 ```{r research_disc_gender_per2_norm}
 
+# Adding 0.005 to the percent to round up as accuracy = 1 seems to truncate to
+# th nearest percent.
 data %>%  select(URN, num_range("Q19_", 1:22), gender = Q21)      %>%
           group_by(gender)                                        %>% 
           mutate(N = n())                                         %>% 
@@ -6640,16 +6643,15 @@ data %>%  select(URN, num_range("Q19_", 1:22), gender = Q21)      %>%
           group_by(disciplines, gender)                           %>%
           mutate(contrib = sum(1/nn))                             %>% 
           mutate(y = contrib/N)                                   %>%
-          mutate(per = percent(contrib/N, accuracy = 0.1))        %>%
-          distinct(disciplines, gender, per, y)                   %>%
+          distinct(disciplines, gender, y)                        %>%
           ggplot(aes(x = disciplines, y = y, fill = gender)) +
           geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-          geom_text(aes(x = disciplines, y = y, label = percent(y, accuracy = 1)), 
+          geom_text(aes(x = disciplines, y = y, label = percent(y + 0.005, accuracy = 1)), 
                         position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
-                        size = 2) +
+                        size = 4) +
           theme_bw() + scale_y_continuous(labels = percent) +
           xlab("Discipline") + ylab("Percentage") + labs(fill = "Gender") +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10)) +
           scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 ### Discipline by dissability
@@ -6705,14 +6707,14 @@ data %>%  select(URN, num_range("Q19_", 1:22), disability = Q23) %>%
 
 ```{r research_disc_disability_per2}
 
-data %>%  select(num_range("Q19_", 1:22), dis = Q23)             %>%
+data %>%  select(num_range("Q19_", 1:22), dis = Q23)              %>%
+          group_by(dis)                                           %>% 
+          filter(dis != "-")                                      %>% 
+          mutate(N = n())                                         %>% 
           pivot_longer(cols = num_range("Q19_", 1:22),
                        names_to = "questions",
                        values_to = "disciplines")                 %>%
           filter(disciplines != 0)                                %>%
-          group_by(dis)                                           %>% 
-          filter(dis != "-")                                      %>% 
-          mutate(N = n())                                         %>% 
           group_by(disciplines, dis)                              %>%
           mutate(n = n())                                         %>%
           mutate(y = n/N)                                         %>%
