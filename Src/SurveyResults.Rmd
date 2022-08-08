@@ -6538,6 +6538,37 @@ data %>%  select(num_range("Q19_", 1:22), career = "Q20")         %>%
           scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
+Normalise the research disciplines - if one contributed N research disciplines then
+each of these contributes 1/N.
+
+```{r research_disc_careers_per2_norm}
+
+data %>%  select(URN, num_range("Q19_", 1:22), career = "Q20")    %>%
+          group_by(career)                                        %>% 
+          filter(!(career %in% c("Other", "-")))                  %>% 
+          mutate(N = n())                                         %>% 
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = NULL,
+                       values_to = "disciplines")                 %>%
+          filter(disciplines != 0)                                %>%
+          group_by(URN)                                           %>%
+          mutate(nn = n())                                        %>% 
+          group_by(disciplines, career)                           %>%
+          mutate(contrib = sum(1/nn))                             %>%
+          mutate(y = contrib/N)                                   %>%
+          mutate(per = percent(contrib/N, accuracy = 0.1))        %>%
+          distinct(disciplines, career, per, y)                   %>%
+          ggplot(aes(x = disciplines, y = y, fill = career)) +
+          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+          geom_text(aes(x = disciplines, y = y, label = percent(y, accuracy = 1)), 
+                        position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
+                        size = 4) +
+          theme_bw() + scale_y_continuous(labels = percent) +
+          xlab("Discipline") + ylab("Percentage") + labs(fill = "Career stage") +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+          scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
 ### Discipline by gender
 
 ```{r research_gender}
