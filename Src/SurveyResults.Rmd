@@ -6656,8 +6656,9 @@ data %>%  select(URN, num_range("Q19_", 1:22), gender = Q21)      %>%
 
 ```{r research_disc_dissability}
 data %>%  select(num_range("Q19_", 1:22), disability = Q23) %>%
+          filter(disability != "-")                         %>% 
           pivot_longer(cols = num_range("Q19_", 1:22),
-                       names_to = "questions",
+                       names_to = NULL,
                       values_to = "disciplines")            %>%
           filter(disciplines != 0)                          %>%
           group_by(disciplines)                             %>% 
@@ -6670,6 +6671,32 @@ data %>%  select(num_range("Q19_", 1:22), disability = Q23) %>%
           xlab("Discipline") + ylab("Numbers") +
           geom_text(aes(x = disciplines, label = n), position = position_stack(vjust = 0.5), 
                                  stat = "count", size = 2) +
+          scale_fill_brewer(palette = "Set3", name = "Disability") +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+```
+
+Normalise numbers.
+
+```{r research_disc_dissability_norm}
+data %>%  select(URN, num_range("Q19_", 1:22), disability = Q23) %>%
+          filter(disability != "-")                         %>% 
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = NULL,
+                      values_to = "disciplines")            %>%
+          filter(disciplines != 0)                          %>%
+          group_by(URN)                                     %>% 
+          mutate(nn = n())                                  %>% 
+          group_by(disciplines)                             %>% 
+          mutate(N = round(sum(1/nn),1))                    %>% 
+          group_by(disciplines, disability)                 %>% 
+          mutate(n = round(sum(1/nn),1))                    %>% 
+          distinct(n, N, disciplines)                       %>% 
+          ggplot(aes(x = reorder(disciplines, -N), y = n, fill = disability)) +
+          geom_col(colour = "black") +
+          theme_bw() +
+          xlab("Discipline") + ylab("Numbers") +
+          geom_text(aes(x = disciplines, label = n), position = position_stack(vjust = 0.5), 
+                                 size = 3) +
           scale_fill_brewer(palette = "Set3", name = "Disability") +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
 ```
