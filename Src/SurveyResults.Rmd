@@ -6278,7 +6278,43 @@ data %>%  select(num_range("Q19_", 1:22))               %>%
           xlab(my$lab) + ylab("Numbers") +
           scale_fill_distiller(palette = "Blues", direction = 1) +
           geom_text(aes(label = n), stat = "count", vjust = -0.5, size = 4) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10), legend.position = "None")
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10), 
+                legend.position = "None")
+
+```
+
+### Discipline of respondents normalised
+
+```{r research_disc_norm}
+
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, num_range("Q19_", 1:22))         %>% 
+         pivot_longer(cols = num_range("Q19_", 1:22),
+                      names_to = NULL,
+                      values_to = "disciplines")      %>%
+          filter(disciplines != 0)                    %>%
+          summarise(lab = paste0("Research discipline (N=", n_distinct(URN),")")) -> my
+
+data %>%  select(URN, num_range("Q19_", 1:22))          %>%
+          mutate(N = n())                               %>% 
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = NULL,
+                      values_to = "disciplines")        %>%
+          filter(disciplines != 0)                      %>%
+          group_by(URN)                                 %>% 
+          mutate(M = n())                               %>% 
+          mutate(contrib = 1/M)                         %>% 
+          group_by(disciplines)                         %>% 
+          mutate(ns = round(sum(contrib), 1))           %>% 
+          distinct(disciplines, ns)                      %>% 
+          ggplot(aes(x = reorder(disciplines, -ns), y = ns, fill = ns)) +
+          geom_col(colour = "black") +
+          theme_bw() + 
+          xlab(my$lab) + ylab("Numbers") +
+          scale_fill_distiller(palette = "Blues", direction = 1) +
+          geom_text(aes(label = ns), vjust = -0.5, size = 4) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10), 
+                legend.position = "None")
 
 ```
 
