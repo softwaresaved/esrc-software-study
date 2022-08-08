@@ -6487,17 +6487,17 @@ data %>%  select(num_range("Q19_", 1:22), career = Q20) %>%
 Percentages are in relation to a given career stage.
 
 ```{r research_disc_careers_per}
-data %>%  select(num_range("Q19_", 1:22), career = "Q20") %>%
+data %>%  select(num_range("Q19_", 1:22), career = "Q20")         %>%
+          group_by(career)                                        %>% 
+          mutate(N = n())                                         %>% 
           pivot_longer(cols = num_range("Q19_", 1:22),
                        names_to = "questions",
                        values_to = "disciplines")                 %>%
           filter(disciplines != 0)                                %>%
-          group_by(career)                                        %>% 
-          mutate(N = n())                                         %>% 
           group_by(disciplines, career)                           %>%
           mutate(n = n())                                         %>%
           mutate(y = n/N)                                         %>%
-          mutate(per = percent(n/N, accuracy = 0.1))      %>%
+          mutate(per = percent(n/N, accuracy = 0.1))              %>%
           distinct(disciplines, career, per, y)                   %>%
           ggplot(aes(x = disciplines, y = y, fill = career)) +
           geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
@@ -6514,14 +6514,14 @@ Remove "Other" and "-"
 
 ```{r research_disc_careers_per2}
 
-data %>%  select(num_range("Q19_", 1:22), career = "Q20") %>%
-          pivot_longer(cols = num_range("Q19_", 1:22),
-                       names_to = "questions",
-                       values_to = "disciplines")                 %>%
-          filter(disciplines != 0)                                %>%
+data %>%  select(num_range("Q19_", 1:22), career = "Q20")         %>%
           group_by(career)                                        %>% 
           filter(!(career %in% c("Other", "-")))                  %>% 
           mutate(N = n())                                         %>% 
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = NULL,
+                       values_to = "disciplines")                 %>%
+          filter(disciplines != 0)                                %>%
           group_by(disciplines, career)                           %>%
           mutate(n = n())                                         %>%
           mutate(y = n/N)                                         %>%
@@ -6531,7 +6531,7 @@ data %>%  select(num_range("Q19_", 1:22), career = "Q20") %>%
           geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
           geom_text(aes(x = disciplines, y = y, label = percent(y, accuracy = 1)), 
                         position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
-                        size = 2) +
+                        size = 3) +
           theme_bw() + scale_y_continuous(labels = percent) +
           xlab("Discipline") + ylab("Percentage") + labs(fill = "Career stage") +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
