@@ -6459,58 +6459,10 @@ corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 
 ```
 
-### Discipline by career stage
-
-```{r research_disc_careers}
-data %>%  select(num_range("Q19_", 1:22), career = Q20) %>%
-          pivot_longer(cols = num_range("Q19_", 1:22),
-                       names_to = "questions",
-                      values_to = "disciplines")        %>%
-          filter(disciplines != 0)                      %>%
-          group_by(disciplines)                         %>% 
-          mutate(N = n())                               %>% 
-          group_by(disciplines, career)                 %>% 
-          mutate(n = n())                               %>% 
-          ggplot(aes(x = reorder(disciplines, -N), fill = career)) +
-          geom_bar(colour = "black") +
-          theme_bw() +
-          xlab("Discipline") + ylab("Numbers") +
-          geom_text(aes(x = disciplines, label = n), 
-                    position = position_stack(vjust = 0.5), 
-                                 stat = "count", size = 2) +
-          scale_fill_brewer(palette = "Set1", name = "Career stage") +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
-```
 
 ### Discipline by percentage career stage
 
 Percentages are in relation to a given career stage.
-
-```{r research_disc_careers_per}
-data %>%  select(num_range("Q19_", 1:22), career = "Q20")         %>%
-          group_by(career)                                        %>% 
-          mutate(N = n())                                         %>% 
-          pivot_longer(cols = num_range("Q19_", 1:22),
-                       names_to = "questions",
-                       values_to = "disciplines")                 %>%
-          filter(disciplines != 0)                                %>%
-          group_by(disciplines, career)                           %>%
-          mutate(n = n())                                         %>%
-          mutate(y = n/N)                                         %>%
-          mutate(per = percent(n/N, accuracy = 0.1))              %>%
-          distinct(disciplines, career, per, y)                   %>%
-          ggplot(aes(x = disciplines, y = y, fill = career)) +
-          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-          geom_text(aes(x = disciplines, y = y, label = percent(y, accuracy = 1)), 
-                        position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
-                        size = 2) +
-          theme_bw() + scale_y_continuous(labels = percent) +
-          xlab("Discipline") + ylab("Percentage") + labs(fill = "Career stage") +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-          scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
-
-Remove "Other" and "-"
 
 ```{r research_disc_careers_per2}
 
@@ -6567,6 +6519,34 @@ data %>%  select(URN, num_range("Q19_", 1:22), career = "Q20")    %>%
           xlab("Discipline") + ylab("Percentage") + labs(fill = "Career stage") +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
           scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
+```{r research_disc_careers_tile_norm}
+
+data %>%  select(URN, num_range("Q19_", 1:22), career = "Q20")    %>%
+          group_by(career)                                        %>% 
+          filter(!(career %in% c("Other", "-")))                  %>% 
+          mutate(N = n())                                         %>% 
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = NULL,
+                       values_to = "disciplines")                 %>%
+          filter(disciplines != 0)                                %>%
+          group_by(URN)                                           %>%
+          mutate(nn = n())                                        %>% 
+          group_by(disciplines, career)                           %>%
+          mutate(contrib = sum(1/nn))                             %>%
+          mutate(y = contrib/N)                                   %>%
+          distinct(disciplines, career, y, contrib)               %>%
+          ggplot(aes(x = disciplines, y = career, fill = contrib)) +
+          geom_tile(colour = "black") +
+          geom_text(aes(x = disciplines, y = career, 
+                        label = round(contrib, 1)),
+                        size = 4, colour = "black") +
+          theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
+          xlab("Discipline") + ylab("Career stage") + 
+          theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 10), 
+                axis.text.y = element_text(size = 10),
+                legend.position = "None") 
 ```
 
 ### Discipline by gender
@@ -6644,7 +6624,7 @@ data %>%  select(URN, num_range("Q19_", 1:22), gender = Q21)      %>%
           theme_bw() + scale_y_continuous(labels = percent) +
           xlab("Discipline") + ylab("Percentage") + labs(fill = "Gender") +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         scale_fill_brewer(palette = "Set2", name = "Gender")
+          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 ### Discipline by dissability
 
