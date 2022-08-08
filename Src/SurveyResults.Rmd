@@ -6594,32 +6594,6 @@ data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
 
 Percentages are in relation to a given gender.
 
-```{r research_disc_gender_per}
-data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
-          group_by(gender)                                        %>% 
-          mutate(N = n())                                         %>% 
-          pivot_longer(cols = num_range("Q19_", 1:22),
-                       names_to = NULL,
-                       values_to = "disciplines")                 %>%
-          filter(disciplines != 0)                                %>%
-          group_by(disciplines, gender)                           %>%
-          mutate(n = n())                                         %>%
-          mutate(y = n/N)                                         %>%
-          mutate(per = percent(n/N, accuracy = 0.1))      %>%
-          distinct(disciplines, gender, per, y)                   %>%
-          ggplot(aes(x = disciplines, y = y, fill = gender)) +
-          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-          geom_text(aes(x = disciplines, y = y, label = percent(y, accuracy = 1)), 
-                        position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
-                        size = 2) +
-          theme_bw() + scale_y_continuous(labels = percent) +
-          xlab("Discipline") + ylab("Percentage") + labs(fill = "Gender") +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         scale_fill_brewer(palette = "Set2", name = "Gender")
-```
-
-Remove the low statistic components.
-
 ```{r research_disc_gender_per2}
 data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
           group_by(gender)                                        %>% 
@@ -6645,6 +6619,33 @@ data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
+```{r research_disc_gender_per2_norm}
+
+data %>%  select(URN, num_range("Q19_", 1:22), gender = Q21)      %>%
+          group_by(gender)                                        %>% 
+          mutate(N = n())                                         %>% 
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = NULL,
+                       values_to = "disciplines")                 %>%
+          filter(disciplines != 0)                                %>%
+          filter(!(gender %in% lowstatsgender))                   %>%
+          group_by(URN)                                           %>% 
+          mutate(nn = n())                                        %>% 
+          group_by(disciplines, gender)                           %>%
+          mutate(contrib = sum(1/nn))                             %>% 
+          mutate(y = contrib/N)                                   %>%
+          mutate(per = percent(contrib/N, accuracy = 0.1))        %>%
+          distinct(disciplines, gender, per, y)                   %>%
+          ggplot(aes(x = disciplines, y = y, fill = gender)) +
+          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+          geom_text(aes(x = disciplines, y = y, label = percent(y, accuracy = 1)), 
+                        position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
+                        size = 2) +
+          theme_bw() + scale_y_continuous(labels = percent) +
+          xlab("Discipline") + ylab("Percentage") + labs(fill = "Gender") +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+```
 ### Discipline by dissability
 
 ```{r research_disc_dissability}
