@@ -6470,7 +6470,7 @@ data %>%  select(num_range("Q19_", 1:22), career = Q20) %>%
           group_by(disciplines)                         %>% 
           mutate(N = n())                               %>% 
           group_by(disciplines, career)                 %>% 
-          mutate( n = n())                              %>% 
+          mutate(n = n())                               %>% 
           ggplot(aes(x = reorder(disciplines, -N), fill = career)) +
           geom_bar(colour = "black") +
           theme_bw() +
@@ -6531,7 +6531,7 @@ data %>%  select(num_range("Q19_", 1:22), career = "Q20")         %>%
           geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
           geom_text(aes(x = disciplines, y = y, label = percent(y, accuracy = 1)), 
                         position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
-                        size = 3) +
+                        size = 4) +
           theme_bw() + scale_y_continuous(labels = percent) +
           xlab("Discipline") + ylab("Percentage") + labs(fill = "Career stage") +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
@@ -6544,7 +6544,7 @@ data %>%  select(num_range("Q19_", 1:22), career = "Q20")         %>%
 
 data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
           pivot_longer(cols = num_range("Q19_", 1:22),
-                       names_to = "questions",
+                       names_to = NULL,
                        values_to = "disciplines")                 %>%
           filter(disciplines != 0)                                %>%
           ggplot(aes(x = disciplines, fill = gender)) +
@@ -6565,12 +6565,12 @@ Percentages are in relation to a given gender.
 
 ```{r research_disc_gender_per}
 data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
-          pivot_longer(cols = num_range("Q19_", 1:22),
-                       names_to = "questions",
-                       values_to = "disciplines")                 %>%
-          filter(disciplines != 0)                                %>%
           group_by(gender)                                        %>% 
           mutate(N = n())                                         %>% 
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = NULL,
+                       values_to = "disciplines")                 %>%
+          filter(disciplines != 0)                                %>%
           group_by(disciplines, gender)                           %>%
           mutate(n = n())                                         %>%
           mutate(y = n/N)                                         %>%
@@ -6591,13 +6591,13 @@ Remove the low statistic components.
 
 ```{r research_disc_gender_per2}
 data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
+          group_by(gender)                                        %>% 
+          mutate(N = n())                                         %>% 
           pivot_longer(cols = num_range("Q19_", 1:22),
-                       names_to = "questions",
+                       names_to = NULL,
                        values_to = "disciplines")                 %>%
           filter(disciplines != 0)                                %>%
           filter(!(gender %in% lowstatsgender))                   %>% 
-          group_by(gender)                                        %>% 
-          mutate(N = n())                                         %>% 
           group_by(disciplines, gender)                           %>%
           mutate(n = n())                                         %>%
           mutate(y = n/N)                                         %>%
