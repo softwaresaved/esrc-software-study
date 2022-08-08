@@ -6553,7 +6553,8 @@ data %>%  select(URN, num_range("Q19_", 1:22), career = "Q20")    %>%
 
 ```{r research_gender}
 
-data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
+data %>%  select(URN, num_range("Q19_", 1:22), gender = Q21)           %>%
+          filter(!(gender %in% lowstatsgender))                        %>% 
           pivot_longer(cols = num_range("Q19_", 1:22),
                        names_to = NULL,
                        values_to = "disciplines")                 %>%
@@ -6563,7 +6564,32 @@ data %>%  select(num_range("Q19_", 1:22), gender = Q21)           %>%
           theme_bw() +
           xlab("Discipline") + ylab("Numbers") + labs(fill = "Gender") +
           geom_text(aes(x = disciplines, label = ..count..),
-                   position = position_stack(vjust = 0.5), stat = "count", colour = "white", size = 2) +
+                   position = position_stack(vjust = 0.5), stat = "count", colour = "white", size = 4) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set2", name = "Gender")
+
+
+```
+
+```{r research_gender_norm}
+
+data %>%  select(URN, num_range("Q19_", 1:22), gender = Q21)    %>%
+          filter(!(gender %in% lowstatsgender))                 %>% 
+          pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = NULL,
+                       values_to = "disciplines")               %>%
+          filter(disciplines != 0)                              %>%
+          group_by(URN)                                         %>% 
+          mutate(nn = n())                                      %>% 
+          group_by(gender, disciplines)                         %>% 
+          mutate(contrib = round(sum(1/nn),1))                  %>% 
+          distinct(disciplines, contrib, gender)                %>% 
+          ggplot(aes(x = disciplines, y = contrib, fill = gender)) +
+          geom_col(colour = "black") +
+          theme_bw() +
+          xlab("Discipline") + ylab("Numbers") + labs(fill = "Gender") +
+          geom_text(aes(x = disciplines, label = contrib),
+                   position = position_stack(vjust = 0.5), colour = "white", size = 4) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
 
