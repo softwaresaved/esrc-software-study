@@ -6206,17 +6206,18 @@ bind_cols(funding, data["Q20"])                                                 
                          values_to =  "funding")                                 %>% 
             filter(!is.na(funding))                                              %>%
             group_by(funding)                                                    %>% 
-            mutate(n = n())                                             %>% 
+            mutate(n = n())                                                      %>% 
             filter(n  > 3)                                                       %>%
             group_by(funding, career)                                            %>% 
-            mutate(N = n())                                             %>% 
+            mutate(N = n())                                                      %>% 
             distinct(funding, N, career)                                         %>% 
             ggplot(aes(x = reorder(funding, -N), y = N, fill = career)) +
             geom_col(colour = "black", position = position_dodge2()) +
             theme_bw() + xlab("Funding body") + ylab("Numbers") +
             geom_text(aes(x = funding, label = N), 
                       position = position_dodge2(width = 0.9, preserve = "single"), size = 4, vjust = -0.5) +
-            theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+            theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0),
+                  axis.text.y = element_text(size = 12)) +
             scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
