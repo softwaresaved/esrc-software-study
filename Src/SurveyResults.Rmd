@@ -1224,6 +1224,38 @@ data %>% select(URN, num_range("Q2_",1:2))                                   %>%
          scale_fill_continuous(high = "#132B43", low = "#56B1F7")
 ```
 
+```{r datause_discipline_norm_tile}
+
+data %>% select(URN, num_range("Q2_",1:2))                                   %>% # creation of data sets
+         pivot_longer(cols = starts_with("Q2_"),
+                      names_to = NULL,
+                      values_to = "ds")                                      %>%
+         filter(ds != 0)                                                     %>%
+         group_by(URN)                                                       %>% 
+         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))         %>% 
+         distinct(URN, choices)                                              %>% 
+         left_join(select(data, URN, num_range("Q19_", 1:22)), by = "URN")   %>% # Research discipline
+         pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = NULL,
+                      values_to = "disciplines")                             %>%                  
+         filter(disciplines != 0)                                            %>%
+         group_by(URN)                                                       %>% 
+         mutate(nn = n())                                                    %>% 
+         ungroup()                                                           %>% 
+         select(-URN)                                                        %>% 
+         group_by(choices, disciplines)                                      %>%
+         mutate(n = round(sum(1/nn), 1))                                     %>% 
+         distinct(choices, disciplines, n)                                   %>% 
+         ggplot(aes(x = choices, y = disciplines)) + 
+         geom_tile(aes(fill = n)) + 
+         theme_bw() +
+         xlab("Data use") + ylab("Disciplines") +
+         theme(axis.text.y = element_text(size = 12), legend.position = "None") +
+         geom_text(aes(label = n), size = 4, colour = "white") +
+         scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
+         scale_fill_continuous(high = "#132B43", low = "#56B1F7")
+```
+
 ## Q2a most important sources of data
 
 What are your most important data source(s)?
