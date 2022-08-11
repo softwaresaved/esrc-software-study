@@ -1849,29 +1849,6 @@ data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
 
 ### Data sharing by percentage at each career stage
 
-```{r sharing_data_career_per}
-
-data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
-        group_by(career)                                                   %>% 
-        mutate(N = n())                                                    %>%
-        pivot_longer(cols = starts_with("Q3_"), 
-                     names_to = NULL,
-                     values_to = "DataSharing")                            %>%
-        filter(DataSharing != 0)                                           %>%
-        group_by(DataSharing, career)                                      %>% 
-        mutate(per = n()/N)                                                %>% 
-        distinct(career, DataSharing, per)                                 %>% 
-        ggplot(aes(x = DataSharing, y= per,fill = career)) +
-        geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
-        theme_bw() +
-        theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.text=element_text(size = 8)) +
-        xlab("Data sharing habits") + ylab("Numbers") +
-        scale_y_continuous(labels = percent_format(accuracy = 1)) +
-        geom_text(aes(x = DataSharing, label = percent(per, accuracy = 1)), vjust = -0.5,
-                      position = position_dodge2(width = 0.9, preserve = "single"), 
-                      colour = "black", size = 2) +
-        scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
 
 Removing "Other" and "-" as they have low stats.
 
@@ -1895,6 +1872,7 @@ data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
                  colour = "black", na.rm = TRUE) + 
         theme_bw() + 
         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), 
+              axis.text.y = element_text(size = 12),
               legend.text=element_text(size = 8)) +
         xlab("Data sharing habits") + ylab("Percent") +
         scale_y_continuous(labels = percent_format(accuracy = 1)) +
