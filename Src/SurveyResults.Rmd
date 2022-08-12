@@ -1955,28 +1955,7 @@ corrplot(cor(q), method="circle", type= "lower", diag = FALSE, number.cex = 6)
 
 ```
 
-### Software used with responses segmented by career
 
-```{r sw_used_career}
-
-data %>% select(num_range("Q4_",1:26), career = Q20)                        %>%
-         pivot_longer(cols = starts_with("Q4"),
-                      names_to = NULL,
-                      values_to = "software")                                %>%
-         filter(software != 0)                                               %>%
-         group_by(career, software)                                          %>% 
-         mutate(n = n())                                                     %>%   
-         ggplot(aes(x = reorder(software,-n), fill = career)) +
-         geom_bar(colour = "black") +
-         theme_bw() +
-         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0, size = 8),
-               legend.text=element_text(size = 8)) +
-         ylab("Numbers") + xlab("Software used") +
-         geom_text(aes(x = software, label = ..count..),
-                position = position_stack(vjust = 0.5), 
-                stat = "count", colour = "black", size = 2) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
 
 ### Software used by career percent of software use
 
