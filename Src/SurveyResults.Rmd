@@ -1827,26 +1827,6 @@ corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 
 ```
 
-### Data sharing by career stage
-
-```{r sharing_data_career}
-
-data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
-        pivot_longer(cols = starts_with("Q3_"), values_to = "DataSharing") %>%
-        filter(DataSharing != 0)                                           %>%
-        group_by(DataSharing)                                              %>% 
-        mutate(n = n())                                                    %>% 
-        ggplot(aes(x = reorder(DataSharing, -n), fill = career)) +
-        geom_bar(colour = "black") + 
-        theme_bw() +
-        theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), 
-              legend.text=element_text(size = 8)) +
-        xlab("Data sharing habits") + ylab("Numbers") +
-        geom_text(aes(x = DataSharing, label = ..count..),
-                    position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
-        scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
-
 ### Data sharing by percentage at each career stage
 
 
