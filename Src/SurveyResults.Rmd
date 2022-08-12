@@ -1959,33 +1959,6 @@ corrplot(cor(q), method="circle", type= "lower", diag = FALSE, number.cex = 6)
 
 ### Software used by career percent of software use
 
-```{r sw_used_career_per1}
-
-data %>% select(num_range("Q4_",1:26), career = Q20)                         %>%
-         group_by(career)                                                    %>% 
-         mutate(N = n())                                                     %>% 
-         pivot_longer(cols = starts_with("Q4"), 
-                      names_to = NULL,
-                      values_to = "software")                                %>%
-         filter(software != 0)                                               %>%
-         group_by(software)                                                  %>% 
-         mutate(M = n())                                                     %>% 
-         group_by(software, career)                                          %>% 
-         mutate(per = n()/N)                                                 %>% 
-         distinct(software, career, per, N, M)                               %>% 
-         ggplot(aes(x = reorder(software,-M), y = per, fill = career)) +
-         geom_col(position = "fill", colour = "black") +
-         theme_bw() +
-         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0, size = 8),
-               legend.text=element_text(size = 8)) +
-         ylab("Percent") + xlab("Software used") +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         geom_text(aes(x = software, y = per, label = percent(per, accuracy = 1)), 
-                 position = position_fill(vjust = 0.5),
-                 size = 2) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage") 
-```
-
 Missing out "Other" and "-".
 
 ```{r sw_used_career_per1b}
