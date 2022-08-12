@@ -2209,8 +2209,6 @@ aa  %>%  select(URN, num_range("OtherSw_", 1:13))            %>%
         arrange(desc(n))                                     %>% 
         kbl(format="pipe", align = c("l","r"), col.names = c("Other software used", "Numbers"))
 
-
-
 ```
 
 ```{r other_software_used, results = 'asis'}
@@ -2291,43 +2289,7 @@ bind_cols(data["Q20"], important_software)                        %>%
 
 ### Software used by % career stage
 
-Only show software that has more than 2 entries.
-
-```{r important_sw_bar_career_per}
-
-bind_cols(data["Q20"], important_software)                        %>% 
-                       select(starts_with("Q5"), career = Q20)    %>%
-                       group_by(career)                           %>% 
-                       mutate(N = n())                            %>%
-                       pivot_longer(cols =  starts_with("Q5"),
-                                    names_to = NULL,
-                                    values_to = "software")       %>%
-                       filter(!is.na(software))                   %>%
-                       group_by(software)                         %>% 
-                       mutate(M = n())                            %>%
-                       filter(M > 2)                              %>% 
-                       group_by(career, software)                 %>%
-                       mutate(n = n())                            %>%
-                       mutate(per = n/N)                          %>% 
-                       distinct(career, software, n, N, per)      %>% 
-                       ggplot(aes(x = reorder(software, -n), y = per, fill = career)) +
-                       geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
-                                colour = "black") + 
-                       scale_y_continuous(labels = percent_format(accuracy = 1)) +
-                       theme_bw() +
-                       theme(axis.text.x = element_text(angle = -90, vjust = 0.5,
-                                                        hjust=0)) +
-                       geom_text(aes(x = software, y = per, 
-                                     label = percent(per, accuracy = 1)), 
-                                 position = position_dodge2(width = 0.9, preserve = "single"),
-                                 size = 2.5) +
-                       ylab("Percentage") + xlab("Most important software") +
-                       scale_fill_brewer(palette = "Set1", name = "Career stage") +
-                       theme(axis.text.x = element_text(size = 8),
-                             legend.text=element_text(size = 8))  
-
-```
-
+Only show software that has more than 5 entries.
 Removing "Other" and "-".
 
 ```{r important_sw_bar_career_per2}
