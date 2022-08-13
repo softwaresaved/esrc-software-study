@@ -2362,50 +2362,6 @@ bind_cols(data["Q21"], important_software)                        %>%
 
 ```
 
-### Most important software as a percentage at a given career stage
-
-The percentages here are taken as a percentage of the responses from
-each career stage. Only software that has been nominated more than five
-times are shown otherwise the graph becomes very busy. Note that an
-individual may have suggested more than one piece of software - this has
-not been normalised.
-
-```{r important_sw_bar_career_per3}
-
-bind_cols(data["Q20"], important_software)                        %>% 
-                       select(starts_with("Q5"), career = "Q20")  %>%
-                       pivot_longer(cols =  starts_with("Q5"),
-                                    names_to = NULL,
-                                    values_to = "software")       %>%
-                       filter(!is.na(software))                   %>% 
-  
-                       group_by(career)                           %>% 
-                       mutate(N = n())                            %>%
-                       group_by(software)                         %>% 
-                       mutate(Ns = n())                           %>%  
-                       filter(Ns > 5)                             %>%
-                       group_by(career, software)                 %>%
-                       mutate(n = n())                            %>%
-                       mutate(per = n/N)                          %>% 
-                       distinct(career, software, per, N)         %>% 
-                       ggplot(aes(x = reorder(software, N), y = per, fill = career)) +
-                       geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
-                                colour = "black") + 
-                       theme_bw() +
-                       scale_y_continuous(labels = percent_format(accuracy = 1)) +
-                       theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0)) +
-                       geom_text(aes(x = software, label = percent(per, accuracy = 1)), 
-                                 position = position_dodge2(width = 0.9, preserve = "single"), 
-                                 vjust = -0.5,
-                                 size = 2) +
-                       ylab("percentage") + xlab("Most important software") +
-                       scale_fill_brewer(palette = "Set1", name = "Career stage") +
-                       theme(axis.text.x = element_text(size = 8), 
-                             legend.text=element_text(size = 8))  
-
-
-```
-
 ### List of choices
 
 ```{r important_software, results = 'asis'}
