@@ -83,10 +83,21 @@ important_software$count <- rowSums(!is.na(important_software))
 # Add the identifier to the data frame.
 important_software$URN <- data0$URN
 
-# Read funding "cleaned" funding bodies.
-funding <- read_csv("../Data/Q18-Other-funding.csv", show_col_types = FALSE)
+# Column types.
+coltypes <-  cols(
+                    Q18_1 = col_character(),
+                    Q18_2 = col_character(),
+                    Q18_3 = col_character(),
+                    Q18_4 = col_character(),
+                    Q18_5 = col_character(),
+                    Q18_6 = col_character(),
+                    Q18_7 = col_character()
+                  )
 
-# Attach the funding to the tibble
+# Read funding "cleaned" funding bodies.
+funding <- read_csv("../Data/Q18-Other-funding.csv", col_types = coltypes)
+
+# Attach the funding to URN the tibble 
 funding$URN <- data0$URN
 
 # Cleaned up locations (Q17) (used OpenRefine to cluster some of the data)
@@ -97,6 +108,7 @@ data0$CleanLocs <- cleanlocs[[1]]
 
 # Add some slightly simplified version of other disciplines for Q19
 otherdis <- read_csv("../Data/q19-other-disciplines.csv", show_col_types = FALSE)
+
 # Join with the current data
 data0 <-  data0 %>% left_join(otherdis, by = "URN")
 
@@ -114,9 +126,11 @@ uids <-  c("839822-839804-89766209", "839822-839804-90413512", "839822-839804-91
 # Remove one of two entries from the same person
 uids <- c(uids, "839822-839804-91021028")
 
-data0 <- data0 %>% filter(!(URN %in% uids))
+# Filter out the data we do not want
 funding <- funding %>% filter(!(URN %in% uids))
 important_software <- important_software %>% filter(!(URN %in% uids))
+data0 <- data0 %>% filter(!(URN %in% uids))
+
 
 ```
 
@@ -5952,6 +5966,36 @@ funding body - each of these is given a count of 1 regardless of how
 many were provided.
 
 ```{r funding}
+
+# Calculate an x label with the folks that filled in this question.
+funding %>% select(URN, num_range("Q18_", 1:7))          %>% 
+            pivot_longer(cols = num_range("Q18_", 1:7),
+                         names_to = NULL,
+                         values_to =  "funding")         %>% 
+            filter(!is.na(funding))                      %>%
+            summarise(lab = paste0("Funding body (N=", n_distinct(URN),")")) -> my
+
+funding %>% pivot_longer(cols = num_range("Q18_", 1:7),
+                         names_to = NULL,
+                         values_to =  "funding")         %>% 
+            filter(!is.na(funding))                      %>%
+            group_by(funding)                            %>% 
+            tally()                                      %>% 
+            filter(n > 2)                                %>%
+            ggplot(aes(x = reorder(funding, -n), y = n, fill = n)) +
+            geom_col(colour = "black") + ylim(0,115) +
+            theme_bw() + xlab(my$lab) + ylab("Numbers") +
+            scale_fill_distiller(palette = "Blues", direction = 1) +
+            geom_text(aes(x = funding, label = n), vjust = -0.5, size = 4) +
+            theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12),
+                  legend.position = "None")
+```
+
+Look at non-ESRC funding sources.
+
+```{r non_esrc_funding}
+
+funding %>% filter(across(funding %>% select(starts_with("Q")), ~ !grepl("ESRC", .)))
 
 # Calculate an x label with the folks that filled in this question.
 funding %>% select(URN, num_range("Q18_", 1:7))          %>% 
