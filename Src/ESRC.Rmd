@@ -27,6 +27,7 @@ library(leaflet)      # For geographical maps
 library(viridis)      # For more colour maps
 library(scales)       # For various scaling functions
 library(ggrepel)      # For non-overlapping labels
+library(tidyr)        # For pivot_longer
 
 # Do not use scientific notation
 options(scipen=999)
@@ -1787,12 +1788,23 @@ for(i in 1:7){
   subjs[i, 2] <- subjs[i, 2]/i
 }
 
+# # Plot the result
+# subjs %>% left_join(tops, by = c("Nsub" = "Ntop")) %>% 
+#           ggplot(aes(x = Nsub)) + 
+#           geom_col(aes(y = Ns, fill = "red"), alpha = 0.5, colour = "black") +
+#           geom_col(aes(y = Nt, fill = "blue"), alpha = 0.5, colour = "black") + 
+#           theme_bw() + scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red")) +
+#           scale_y_log10(labels = comma) + labs(fill = "Research") +
+#           ylab("Number of entries") + xlab("Number of research subjects/topics per project")
+
 # Plot the result
 subjs %>% left_join(tops, by = c("Nsub" = "Ntop")) %>% 
-          ggplot(aes(x = Nsub)) + 
-          geom_col(aes(y = Ns, fill = "red"), alpha = 0.5, colour = "black") +
-          geom_col(aes(y = Nt, fill = "blue"), alpha = 0.5, colour = "black") + 
-          theme_bw() + scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red")) +
+          pivot_longer(cols = c("Ns","Nt"),
+                       names_to = "CatType",
+                       values_to = "Values") %>% 
+          ggplot(aes(x = Nsub, y = Values, fill = CatType)) + 
+          geom_col(alpha = 0.5, colour = "black", position = position_dodge2()) +
+          theme_bw() + scale_fill_manual(labels = c("Subject", "Topic"), values = c("red", "blue")) +
           scale_y_log10(labels = comma) + labs(fill = "Research") +
           ylab("Number of entries") + xlab("Number of research subjects/topics per project")
 ```
@@ -1994,45 +2006,86 @@ Removing the `Other` and `Unclassified` categories:
 
 ```{r compare_number2, echo=FALSE}
 
-combined %>% filter(!(category %in% c("Other", "Uncategorised"))) %>% 
-             ggplot(aes(x = reorder(category, -Contribution.subject))) + 
-             geom_col(aes(y = Contribution.subject, fill = "red"), colour = "black", alpha = 0.25) + 
-             geom_col(aes(y = Contribution.topic, fill = "blue"), colour = "black", alpha = 0.25) +  
+# combined %>% filter(!(category %in% c("Other", "Uncategorised"))) %>% 
+#              ggplot(aes(x = reorder(category, -Contribution.subject))) + 
+#              geom_col(aes(y = Contribution.subject, fill = "red"), colour = "black", alpha = 0.25) + 
+#              geom_col(aes(y = Contribution.topic, fill = "blue"), colour = "black", alpha = 0.25) +  
+#              scale_y_log10(labels = comma) +
+#              theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
+#              xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
+#              scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
+
+combined %>% filter(!(category %in% c("Other", "Uncategorised"))) %>%
+             mutate(NN = Contribution.subject)                    %>% 
+             pivot_longer(cols = c("Contribution.subject", "Contribution.topic"),
+                          names_to = "Contribution",
+                          values_to = "Values")                   %>% 
+             ggplot(aes(x = reorder(category, -NN), y = Values, fill = Contribution)) + 
+             geom_col(colour = "black", alpha = 0.25, position = position_dodge2()) + 
              scale_y_log10(labels = comma) +
              theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
              xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
-             scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
+             scale_fill_manual(labels = c("Subject", "Topic"), values = c("red", "blue"))
+
 ```
 
 and for only active projects
 
 ```{r active_compare_number2, echo=FALSE}
 
+# a_combined %>% filter(!(category %in% c("Other", "Uncategorised"))) %>% 
+#              ggplot(aes(x = reorder(category, -Contribution.subject))) + 
+#              geom_col(aes(y = Contribution.subject, fill = "red"), colour = "black", alpha = 0.25) + 
+#              geom_col(aes(y = Contribution.topic, fill = "blue"), colour = "black", alpha = 0.25) +  
+#              scale_y_log10(labels = comma) +
+#              theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
+#              xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
+#              scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
+
 a_combined %>% filter(!(category %in% c("Other", "Uncategorised"))) %>% 
-             ggplot(aes(x = reorder(category, -Contribution.subject))) + 
-             geom_col(aes(y = Contribution.subject, fill = "red"), colour = "black", alpha = 0.25) + 
-             geom_col(aes(y = Contribution.topic, fill = "blue"), colour = "black", alpha = 0.25) +  
-             scale_y_log10(labels = comma) +
-             theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
-             xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
-             scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
+               mutate(NN = Contribution.subject)                    %>% 
+               pivot_longer(cols = c("Contribution.subject", "Contribution.topic"),
+                            names_to = "Contribution",
+                            values_to = "Values")                   %>% 
+               ggplot(aes(x = reorder(category, -NN), y = Values, fill = Contribution)) + 
+               geom_col(colour = "black", alpha = 0.25, position = position_dodge2()) + 
+               scale_y_log10(labels = comma) +
+               theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
+               xlab("Category") + ylab("Number of awards") + labs(fill = "Research") +
+               scale_fill_manual(labels = c("Subject", "Topic"), values = c("red", "blue"))
+
 ```
 
 Normalising the quantities without the `Other` and `Unclassified`:
 
 ```{r compare_number2_norm, echo=FALSE}
 
+# combined %>% select(category, Contribution.subject, Contribution.topic)           %>% 
+#              filter(!(category %in% c("Other", "Uncategorised")))                 %>% 
+#              mutate(Nt = sum(Contribution.topic), Ns = sum(Contribution.subject)) %>% 
+#              mutate(cs = Contribution.subject/Ns, ct = Contribution.topic/Nt)     %>%  
+#              ggplot(aes(x = reorder(category, -Contribution.subject))) + 
+#              geom_col(aes(y = cs, fill = "red"), colour = "black", alpha = 0.25) + 
+#              geom_col(aes(y = ct, fill = "blue"), colour = "black", alpha = 0.25) +  
+#              scale_y_continuous(labels = percent_format(accuracy = 1)) +
+#              theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
+#              xlab("Category") + ylab("Percentage") + labs(fill = "Research") +
+#              scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
+
 combined %>% select(category, Contribution.subject, Contribution.topic)           %>% 
              filter(!(category %in% c("Other", "Uncategorised")))                 %>% 
              mutate(Nt = sum(Contribution.topic), Ns = sum(Contribution.subject)) %>% 
-             mutate(cs = Contribution.subject/Ns, ct = Contribution.topic/Nt)     %>%  
-             ggplot(aes(x = reorder(category, -Contribution.subject))) + 
-             geom_col(aes(y = cs, fill = "red"), colour = "black", alpha = 0.25) + 
-             geom_col(aes(y = ct, fill = "blue"), colour = "black", alpha = 0.25) +  
+             mutate(cs = Contribution.subject/Ns, ct = Contribution.topic/Nt)     %>% 
+             pivot_longer(cols = c("cs", "ct"),
+                          names_to = "PerNames",
+                          values_to = "PerValues")                                %>% 
+             ggplot(aes(x = reorder(category, -Contribution.subject), y = PerValues, fill = PerNames)) + 
+             geom_col(colour = "black", alpha = 0.25, position = position_dodge2()) + 
              scale_y_continuous(labels = percent_format(accuracy = 1)) +
              theme_bw() + theme(axis.text.x = element_text(angle = -90, hjust = 0)) +
              xlab("Category") + ylab("Percentage") + labs(fill = "Research") +
-             scale_fill_manual(labels = c("Topic", "Subject"), values = c("blue", "red"))
+             scale_fill_manual(labels = c("Subject", "Topic"), values = c("red", "blue"))
+
 ```
 
 And for only active projects:

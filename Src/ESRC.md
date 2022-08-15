@@ -1,71 +1,71 @@
 Economic and Social Research Council (ESRC) Data
 ================
 **Author**: Mario Antonioletti.<br/>
-**Last updated**: 28/06/22.
+**Last updated**: 15/08/22.
 
--   <a href="#introduction" id="toc-introduction">Introduction</a>
--   <a href="#overall-expenditure" id="toc-overall-expenditure">Overall
-    expenditure</a>
-    -   <a href="#expenditure-for-all-ukri-projects"
-        id="toc-expenditure-for-all-ukri-projects">Expenditure for all UKRI
-        projects</a>
-    -   <a href="#expenditure-for-active-ukri-projects-only"
-        id="toc-expenditure-for-active-ukri-projects-only">Expenditure for
-        active UKRI projects only</a>
--   <a href="#esrc-data" id="toc-esrc-data">ESRC data</a>
-    -   <a href="#project-category-awards"
-        id="toc-project-category-awards">Project category awards</a>
-        -   <a href="#all-projects-category-awards"
-            id="toc-all-projects-category-awards">All projects category awards</a>
-        -   <a href="#active-projects-category-awards-only"
-            id="toc-active-projects-category-awards-only">Active projects category
-            awards only</a>
-    -   <a href="#award-length-distribution"
-        id="toc-award-length-distribution">Award length distribution</a>
-        -   <a href="#award-length-distribution-for-all-projects"
-            id="toc-award-length-distribution-for-all-projects">Award length
-            distribution for all projects</a>
-        -   <a href="#active-projects-award-length-distribution"
-            id="toc-active-projects-award-length-distribution">Active projects award
-            length distribution</a>
-    -   <a href="#regional-distribution-of-awards"
-        id="toc-regional-distribution-of-awards">Regional distribution of
-        awards</a>
-        -   <a href="#region-distributions-of-awards-for-all-projects"
-            id="toc-region-distributions-of-awards-for-all-projects">Region
-            distributions of awards for all projects</a>
-        -   <a href="#regional-distributions-of-awards-for-active-projects-only"
-            id="toc-regional-distributions-of-awards-for-active-projects-only">Regional
-            distributions of awards for active projects only</a>
-    -   <a href="#funding-by-lead-organisation"
-        id="toc-funding-by-lead-organisation">Funding by lead organisation</a>
-        -   <a href="#funding-by-lead-organisation-for-all-projects"
-            id="toc-funding-by-lead-organisation-for-all-projects">Funding by lead
-            organisation for all projects</a>
-        -   <a href="#funding-by-lead-organisation-for-active-projects-only"
-            id="toc-funding-by-lead-organisation-for-active-projects-only">Funding
-            by lead organisation for active projects only</a>
-    -   <a href="#department-awards" id="toc-department-awards">Department
-        awards</a>
-        -   <a href="#department-awards-for-all-projects"
-            id="toc-department-awards-for-all-projects">Department awards for all
-            projects</a>
-        -   <a href="#department-awards-for-active-projects-only"
-            id="toc-department-awards-for-active-projects-only">Department awards
-            for active projects only</a>
-    -   <a href="#doctoral-training-partnerships"
-        id="toc-doctoral-training-partnerships">Doctoral Training
-        Partnerships</a>
-        -   <a href="#active-partnerships" id="toc-active-partnerships">Active
-            Partnerships</a>
-    -   <a href="#award-titles" id="toc-award-titles">Award Titles</a>
-    -   <a href="#classification-by-category-using-research-subjects"
-        id="toc-classification-by-category-using-research-subjects">Classification
-        by category using research subjects</a>
-    -   <a href="#classification-by-category-using-research-topics"
-        id="toc-classification-by-category-using-research-topics">Classification
-        by category using research topics</a>
--   <a href="#todo-items" id="toc-todo-items">ToDo Items</a>
+- <a href="#introduction" id="toc-introduction">Introduction</a>
+- <a href="#overall-expenditure" id="toc-overall-expenditure">Overall
+  expenditure</a>
+  - <a href="#expenditure-for-all-ukri-projects"
+    id="toc-expenditure-for-all-ukri-projects">Expenditure for all UKRI
+    projects</a>
+  - <a href="#expenditure-for-active-ukri-projects-only"
+    id="toc-expenditure-for-active-ukri-projects-only">Expenditure for
+    active UKRI projects only</a>
+- <a href="#esrc-data" id="toc-esrc-data">ESRC data</a>
+  - <a href="#project-category-awards"
+    id="toc-project-category-awards">Project category awards</a>
+    - <a href="#all-projects-category-awards"
+      id="toc-all-projects-category-awards">All projects category awards</a>
+    - <a href="#active-projects-category-awards-only"
+      id="toc-active-projects-category-awards-only">Active projects category
+      awards only</a>
+  - <a href="#award-length-distribution"
+    id="toc-award-length-distribution">Award length distribution</a>
+    - <a href="#award-length-distribution-for-all-projects"
+      id="toc-award-length-distribution-for-all-projects">Award length
+      distribution for all projects</a>
+    - <a href="#active-projects-award-length-distribution"
+      id="toc-active-projects-award-length-distribution">Active projects award
+      length distribution</a>
+  - <a href="#regional-distribution-of-awards"
+    id="toc-regional-distribution-of-awards">Regional distribution of
+    awards</a>
+    - <a href="#region-distributions-of-awards-for-all-projects"
+      id="toc-region-distributions-of-awards-for-all-projects">Region
+      distributions of awards for all projects</a>
+    - <a href="#regional-distributions-of-awards-for-active-projects-only"
+      id="toc-regional-distributions-of-awards-for-active-projects-only">Regional
+      distributions of awards for active projects only</a>
+  - <a href="#funding-by-lead-organisation"
+    id="toc-funding-by-lead-organisation">Funding by lead organisation</a>
+    - <a href="#funding-by-lead-organisation-for-all-projects"
+      id="toc-funding-by-lead-organisation-for-all-projects">Funding by lead
+      organisation for all projects</a>
+    - <a href="#funding-by-lead-organisation-for-active-projects-only"
+      id="toc-funding-by-lead-organisation-for-active-projects-only">Funding
+      by lead organisation for active projects only</a>
+  - <a href="#department-awards" id="toc-department-awards">Department
+    awards</a>
+    - <a href="#department-awards-for-all-projects"
+      id="toc-department-awards-for-all-projects">Department awards for all
+      projects</a>
+    - <a href="#department-awards-for-active-projects-only"
+      id="toc-department-awards-for-active-projects-only">Department awards
+      for active projects only</a>
+  - <a href="#doctoral-training-partnerships"
+    id="toc-doctoral-training-partnerships">Doctoral Training
+    Partnerships</a>
+    - <a href="#active-partnerships" id="toc-active-partnerships">Active
+      Partnerships</a>
+  - <a href="#award-titles" id="toc-award-titles">Award Titles</a>
+  - <a href="#classification-by-category-using-research-subjects"
+    id="toc-classification-by-category-using-research-subjects">Classification
+    by category using research subjects</a>
+  - <a href="#classification-by-category-using-research-topics"
+    id="toc-classification-by-category-using-research-topics">Classification
+    by category using research topics</a>
+- <a href="#todo-items" id="toc-todo-items">ToDo Items</a>
 
 # Introduction
 
@@ -82,7 +82,7 @@ and covers the period from 01/01/73 to 01/01/30.
 
 The R markdown that generated this analysis is available at:
 
--   <https://github.com/softwaresaved/esrc-software-study/blob/main/Src/ESRC.Rmd>
+- <https://github.com/softwaresaved/esrc-software-study/blob/main/Src/ESRC.Rmd>
 
 The entire data set consists of 128,238 rows for all research councils,
 where each row corresponds to a record of an award. Within this data set
@@ -3356,26 +3356,26 @@ different trenches of funding before the original award has expired.
 
 We want to classify projects under the following base categories:
 
--   Area Studies
--   Demography
--   Development studies
--   Economics
--   Education
--   Environmental planning
--   History
--   Human Geography
--   Law & legal studies
--   Linguistics
--   Management & business studies
--   Political science. & international studies
--   Psychology
--   Science and Technology Studies
--   Social anthropology
--   Social policy
--   Social work
--   Sociology
--   Tools, technologies & methods
--   Other
+- Area Studies
+- Demography
+- Development studies
+- Economics
+- Education
+- Environmental planning
+- History
+- Human Geography
+- Law & legal studies
+- Linguistics
+- Management & business studies
+- Political science. & international studies
+- Psychology
+- Science and Technology Studies
+- Social anthropology
+- Social policy
+- Social work
+- Sociology
+- Tools, technologies & methods
+- Other
 
 These categories are derived from the decomposition of previous ESRC
 expenditure reports at [ESRC application and success rate data and
@@ -3394,44 +3394,44 @@ categories described above plus the `Uncategorised` type for the cases
 where this information has not been provided. The GtR subjects for ESRC
 projects have been mapped to categories according to:
 
--   **Area Studies**: Area Studies
--   **Demography**: Demography, Demography & human geography
--   **Development studies**: Development studies
--   **Economics**: Economics
--   **Education**: Education
--   **Environmental planning**: Environmental planning
--   **History**: History
--   **Human Geography**: Human Geography
--   **Law & legal studies**: Law & legal studies
--   **Linguistics**: Linguistics, Languages & Literature
--   **Management & business studies**: Management & Business Studies
--   **Political science. & international studies**: Pol. sci. &
-    internat. studies
--   **Psychology**: Psychology
--   **Science and Technology Studies**: Science and Technology Studies
--   **Social anthropology**: Social Anthropology
--   **Social policy**: Social Policy
--   **Social work**: Social Work
--   **Sociology**: Sociology
--   **Tools, technologies & methods**: “Tools, technologies & methods”
--   **Other**: RCUK Programmes, Genetics & development, Climate &
-    Climate Change, Media, “Ecol, biodivers. & systematics”, Civil eng.
-    & built environment, Info. & commun. Technol., Medical & health
-    interface, Visual arts, Design, Complexity Science, “Pollution,
-    waste & resources”, Terrest. & freshwater environ.,
-    Agri-environmental science, Food science & nutrition, Environmental
-    Engineering, Manufacturing, Drama & theatre studies, Cultural &
-    museum studies, Philosophy, Animal Science, Energy, Mathematical
-    sciences, Archaeology, Music, “Theology, divinity & religion”,
-    Library & information studies, Astronomy - observation, Astronomy -
-    theory, Particle Astrophysics, Bioengineering, Cell biology, Process
-    engineering, Omic sciences & technologies, Systems engineering,
-    Marine environments, Atmospheric phys. & chemistry, Plant & crop
-    science, Electrical Engineering, Dance, Chemical measurement,
-    Geosciences, Microbial sciences, Mechanical Engineering, Classics,
-    Catalysis & surfaces, Materials sciences, Instrument. sensor &
-    detectors, Materials Processing
--   **Uncategorised**: NA
+- **Area Studies**: Area Studies
+- **Demography**: Demography, Demography & human geography
+- **Development studies**: Development studies
+- **Economics**: Economics
+- **Education**: Education
+- **Environmental planning**: Environmental planning
+- **History**: History
+- **Human Geography**: Human Geography
+- **Law & legal studies**: Law & legal studies
+- **Linguistics**: Linguistics, Languages & Literature
+- **Management & business studies**: Management & Business Studies
+- **Political science. & international studies**: Pol. sci. & internat.
+  studies
+- **Psychology**: Psychology
+- **Science and Technology Studies**: Science and Technology Studies
+- **Social anthropology**: Social Anthropology
+- **Social policy**: Social Policy
+- **Social work**: Social Work
+- **Sociology**: Sociology
+- **Tools, technologies & methods**: “Tools, technologies & methods”
+- **Other**: RCUK Programmes, Genetics & development, Climate & Climate
+  Change, Media, “Ecol, biodivers. & systematics”, Civil eng. & built
+  environment, Info. & commun. Technol., Medical & health interface,
+  Visual arts, Design, Complexity Science, “Pollution, waste &
+  resources”, Terrest. & freshwater environ., Agri-environmental
+  science, Food science & nutrition, Environmental Engineering,
+  Manufacturing, Drama & theatre studies, Cultural & museum studies,
+  Philosophy, Animal Science, Energy, Mathematical sciences,
+  Archaeology, Music, “Theology, divinity & religion”, Library &
+  information studies, Astronomy - observation, Astronomy - theory,
+  Particle Astrophysics, Bioengineering, Cell biology, Process
+  engineering, Omic sciences & technologies, Systems engineering, Marine
+  environments, Atmospheric phys. & chemistry, Plant & crop science,
+  Electrical Engineering, Dance, Chemical measurement, Geosciences,
+  Microbial sciences, Mechanical Engineering, Classics, Catalysis &
+  surfaces, Materials sciences, Instrument. sensor & detectors,
+  Materials Processing
+- **Uncategorised**: NA
 
 In the GtR, a project might be classified under more than one research
 subject. If this is the case then if the project has been associated
@@ -4077,8 +4077,8 @@ Plot the average award against research subject.
 
 # ToDo Items
 
--   [ ] Reconcile DTPs from what was scraped from the [ESRC
-    DTP](https://esrc.ukri.org/skills-and-careers/doctoral-training/doctoral-training-partnerships/doctoral-training-partnership-dtp-contacts/)
-    web page and what is in the GtR data file (there are more).
--   [ ] Research title looks interesting for further examination but
-    will require processing to be comprehensible.
+- [ ] Reconcile DTPs from what was scraped from the [ESRC
+  DTP](https://esrc.ukri.org/skills-and-careers/doctoral-training/doctoral-training-partnerships/doctoral-training-partnership-dtp-contacts/)
+  web page and what is in the GtR data file (there are more).
+- [ ] Research title looks interesting for further examination but will
+  require processing to be comprehensible.
