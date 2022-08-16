@@ -1336,30 +1336,6 @@ data %>% select(num_range("ImportantDS_", 1:7), career = Q20)  %>%
 
 ```
 
-### Important data sources by gender
-
-```{r importantDS_gender}
-
-data %>% select(num_range("ImportantDS_", 1:7), gender = Q21)  %>% 
-         filter(!(gender %in% lowstatsgender))                 %>% 
-         pivot_longer(cols = num_range("ImportantDS_", 1:7),
-                      names_to = NULL,
-                      values_to = "importantDS")               %>%
-         filter(!is.na(importantDS))                           %>%
-         group_by(importantDS, gender)                         %>% 
-         mutate(n = n())                                       %>% 
-         distinct(importantDS, n, gender)                      %>% 
-         filter(n > 2)                                         %>% 
-         ggplot(aes(x = reorder(importantDS, -n), y = n, fill = gender)) +
-         geom_col( colour = "black") +
-         theme_bw() + ylim(0, 36.5) +
-         geom_text(aes(label = n), position = position_stack(0.5),  size = 3) +
-         theme(axis.text.x = element_text(angle = -45, hjust=0, size = 8)) +
-         xlab("Data sources") + ylab("Numbers") +
-         scale_fill_brewer(palette = "Set2", name = "Gender")
-
-```
-
 ### Important data sources by % gender
 
 ```{r importantDS_gender_per}
