@@ -1307,29 +1307,6 @@ data %>% select(URN, num_range("ImportantDS_", 1:7))          %>%
 
 ```
 
-### Important data sources by career
-
-```{r importantDS_career}
-
-data %>% select(num_range("ImportantDS_", 1:7), career = Q20)  %>% 
-         filter(!(career %in% c("-", "Other")))                %>% 
-         pivot_longer(cols = num_range("ImportantDS_", 1:7),
-                      names_to = NULL,
-                      values_to = "importantDS")               %>%
-         filter(!is.na(importantDS))                           %>%
-         group_by(importantDS, career)                         %>% 
-         mutate(n = n())                                       %>% 
-         distinct(importantDS, n, career)                      %>% 
-         filter(n > 2)                                         %>% 
-         ggplot(aes(x = reorder(importantDS, -n), y = n, fill = career)) +
-         geom_col( colour = "black") +
-         theme_bw() + ylim(0, 36.5) +
-         geom_text(aes(label = n), position = position_stack(0.5),  size = 3) +
-         theme(axis.text.x = element_text(angle = -45, hjust=0, size = 8)) +
-         xlab("Data sources") + ylab("Numbers") +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
-
-```
 
 ### Important data sources by % career
 
