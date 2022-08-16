@@ -1313,19 +1313,21 @@ data %>% select(URN, num_range("ImportantDS_", 1:7))          %>%
 ```{r importantDS_career_per}
 
 data %>% select(num_range("ImportantDS_", 1:7), career = Q20)  %>% 
-         filter(!(career %in% c("-", "Other")))                 %>% 
+         filter(!(career %in% c("-", "Other")))                %>% 
          group_by(career)                                      %>% 
          mutate(N = n())                                       %>% 
          pivot_longer(cols = num_range("ImportantDS_", 1:7),
                       names_to = NULL,
                       values_to = "importantDS")               %>%
          filter(!is.na(importantDS))                           %>%
+         group_by(importantDS)                                 %>% 
+         mutate(m = n())                                       %>% 
          group_by(importantDS, career)                         %>% 
          mutate(n = n())                                       %>% 
-         distinct(importantDS, n, career, N)                   %>%
-         mutate(per = percent(n/N, accuracy = 1))              %>% 
-         filter(n > 2)                                         %>% 
-         ggplot(aes(x = reorder(importantDS, -n), y = n/N, fill = career)) +
+         distinct(importantDS, n, career, N, m)                %>%
+         mutate(per = percent(n/N + 0.005, accuracy = 1))      %>% 
+         filter(m > 2)                                         %>% 
+         ggplot(aes(x = reorder(importantDS, -m), y = n/N, fill = career)) +
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() +  scale_y_continuous(labels = percent_format(accuracy = 1)) +
          geom_text(aes(label = per), position = position_dodge2(width = 1.0, preserve = "single"), 
@@ -1348,12 +1350,14 @@ data %>% select(num_range("ImportantDS_", 1:7), gender = Q21)  %>%
                       names_to = NULL,
                       values_to = "importantDS")               %>%
          filter(!is.na(importantDS))                           %>%
+         group_by(importantDS)                                 %>% 
+         mutate(m = n())                                       %>% 
          group_by(importantDS, gender)                         %>% 
          mutate(n = n())                                       %>% 
-         distinct(importantDS, n, gender, N)                   %>%
+         distinct(importantDS, n, gender, N, m)                %>%
          mutate(per = percent(n/N, accuracy = 1))              %>% 
-         filter(n > 2)                                         %>% 
-         ggplot(aes(x = reorder(importantDS, -n), y = n/N, fill = gender)) +
+         filter(m > 2)                                         %>% 
+         ggplot(aes(x = reorder(importantDS, -m), y = n/N, fill = gender)) +
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() +  scale_y_continuous(labels = percent_format(accuracy = 1)) +
          geom_text(aes(label = per), position = position_dodge2(width = 0.9, preserve = "single"), 
