@@ -928,19 +928,40 @@ combined choices.
 
 ```{r datause_choices}
 
-data %>% select(id = URN, num_range("Q2_",1:2))                       %>%
+data %>% select(URN, num_range("Q2_",1:2))                             %>%
          pivot_longer(cols = starts_with("Q2_"),
                       names_to = NULL,
                       values_to = "ds")                                %>%
-         group_by(id)                                                  %>% 
+         group_by(URN)                                                 %>% 
          mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         distinct(id, choices)                                         %>% 
+         distinct(URN, choices)                                        %>% 
          ungroup()                                                     %>% 
-         select(-id)                                                   %>% 
+         select(-URN)                                                  %>% 
          group_by(choices)                                             %>% 
          tally()                                                       %>% 
          arrange(desc(n))                                              %>% 
          kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
+```
+
+```{r datause_label_data}
+
+# Add a column, datause with the type of data user
+data %>% select(URN, num_range("Q2_",1:2))                             %>%
+         pivot_longer(cols = starts_with("Q2_"),
+                      names_to = NULL,
+                      values_to = "ds")                                %>%
+         group_by(URN)                                                 %>% 
+         mutate(datause = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
+         mutate(datause = case_when(datause == "create_reuse" ~ "Create-Reuse", 
+                                    datause == "create_0" ~ "Create", 
+                                    datause == "0_reuse" ~ "Reuse", 
+                                    datause == "0_0" ~ "None"))       %>% 
+         select(-ds)                                                  %>% 
+         distinct(URN, datause) -> dd
+
+# Add it back to the original data set
+data <- data %>% left_join(dd, by = "URN")
+
 ```
 
 ### Combined plot
