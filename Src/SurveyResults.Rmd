@@ -6118,7 +6118,7 @@ funding %>% mutate(nelements = rowSums(!is.na(.)))                             %
                   legend.position = "None")
 ```
 
-### Funding with career stage
+### Funding by career stage
 
 ```{r funding_career}
 
@@ -6145,7 +6145,32 @@ bind_cols(funding, data["Q20"])                                                 
             scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
+### Funding by gender
 
+```{r funding_gender}
+
+bind_cols(funding, data["Q21"])                                                  %>% 
+            select(num_range("Q18_", 1:7), gender = Q21)                         %>% 
+            filter(!(gender %in% lowstatsgender))                                %>% 
+            pivot_longer(cols = num_range("Q18_", 1:7),
+                         names_to = NULL,
+                         values_to =  "funding")                                 %>% 
+            filter(!is.na(funding))                                              %>%
+            group_by(funding)                                                    %>% 
+            mutate(n = n())                                                      %>% 
+            filter(n  > 3)                                                       %>%
+            group_by(funding, gender)                                            %>% 
+            mutate(N = n())                                                      %>% 
+            distinct(funding, N, gender)                                         %>% 
+            ggplot(aes(x = reorder(funding, -N), y = N, fill = gender)) +
+            geom_col(colour = "black", position = position_dodge2()) +
+            theme_bw() + xlab("Funding body") + ylab("Numbers") +
+            geom_text(aes(x = funding, label = N), 
+                      position = position_dodge2(width = 0.9, preserve = "single"), size = 4, vjust = -0.5) +
+            theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0),
+                  axis.text.y = element_text(size = 12)) +
+            scale_fill_brewer(palette = "Set2", name = "Gender stage")
+```
 
 ### Listing of funding over the last 5 years
 
