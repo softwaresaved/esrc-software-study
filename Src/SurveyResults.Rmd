@@ -5995,30 +5995,59 @@ Look at non-ESRC funding sources.
 
 ```{r non_esrc_funding}
 
-funding %>% filter(across(funding %>% select(starts_with("Q")), ~ !grepl("ESRC", .)))
+# Filter out any row that has ESRC in it
+# funding %>% rowwise() %>% filter(any(!is.na(c_across(Q18_1:Q18_7))), all(!grepl("ESRC", c_across(Q18_1:Q18_7))))
 
-# Calculate an x label with the folks that filled in this question.
-funding %>% select(URN, num_range("Q18_", 1:7))          %>% 
-            pivot_longer(cols = num_range("Q18_", 1:7),
-                         names_to = NULL,
-                         values_to =  "funding")         %>% 
-            filter(!is.na(funding))                      %>%
-            summarise(lab = paste0("Funding body (N=", n_distinct(URN),")")) -> my
 
-funding %>% pivot_longer(cols = num_range("Q18_", 1:7),
+# # Plot non-ESRC funded projects
+funding %>% rowwise()                                         %>%
+           filter(any(!is.na(c_across(Q18_1:Q18_7))),
+                  all(!grepl("ESRC", c_across(Q18_1:Q18_7)))) %>%
+           pivot_longer(cols = num_range("Q18_", 1:7),
                          names_to = NULL,
-                         values_to =  "funding")         %>% 
-            filter(!is.na(funding))                      %>%
-            group_by(funding)                            %>% 
-            tally()                                      %>% 
-            filter(n > 2)                                %>%
+                         values_to =  "funding")              %>%
+            filter(!is.na(funding))                           %>%
+            group_by(funding)                                 %>%
+            tally()                                           %>%
+            filter(n > 2)                                     %>%
             ggplot(aes(x = reorder(funding, -n), y = n, fill = n)) +
             geom_col(colour = "black") + ylim(0,115) +
-            theme_bw() + xlab(my$lab) + ylab("Numbers") +
+            theme_bw() + xlab("Non-ESRC funding") + ylab("Numbers") +
             scale_fill_distiller(palette = "Blues", direction = 1) +
             geom_text(aes(x = funding, label = n), vjust = -0.5, size = 4) +
             theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12),
                   legend.position = "None")
+
+# Create table of non-ESRC funded projects
+# funding %>% rowwise()                                         %>% 
+#            filter(any(!is.na(c_across(Q18_1:Q18_7))), 
+#                   all(!grepl("ESRC", c_across(Q18_1:Q18_7)))) %>% 
+#            pivot_longer(cols = num_range("Q18_", 1:7),
+#                          names_to = NULL,
+#                          values_to =  "funding")              %>% 
+#             filter(!is.na(funding))                           %>%
+#             group_by(URN)                                     %>% 
+#             mutate(N = n())                                   %>% 
+#             group_by(URN, funding)                            %>% 
+#             tally()                                           %>% 
+#             filter(N > 2)                                     %>% 
+#             pivot_wider(names_from = funding, values_from = n, values_fill = 0) -> otherfunding
+
+# Collapse choices to see combined choices of non-ESRC funding
+# funding %>% rowwise()                                                                       %>% 
+#            filter(any(!is.na(c_across(Q18_1:Q18_7))), 
+#                   all(!grepl("ESRC", c_across(Q18_1:Q18_7))))                               %>% 
+#            group_by(URN)                                                                    %>% 
+#            mutate(choices = paste0(gsub(" ","-", c_across(Q18_1:Q18_7)), collapse = "_"))   %>%
+#            ungroup()                                                                        %>% 
+#            select(choices, -URN)                                                            %>% 
+#            mutate(choices = gsub("_NA", "", choices))                                       %>% 
+#            group_by(choices)                                                                %>% 
+#            tally()                                                                          %>% 
+#            arrange(desc(n))
+
+
+
 ```
 
 ### Funding correlation
