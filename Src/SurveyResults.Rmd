@@ -1328,7 +1328,37 @@ data %>% select(URN, num_range("ImportantDS_", 1:7))          %>%
 
 ```
 
+Looking by data creation/reuse according to Q2.
 
+```{r importantDS_datause}
+
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, num_range("ImportantDS_", 1:7))           %>% 
+         pivot_longer(cols = num_range("ImportantDS_", 1:7),
+                      names_to = NULL,
+                      values_to = "importantDS")               %>%
+         filter(!is.na(importantDS))                           %>%
+         summarise(lab = paste0("Data sources (N=", n_distinct(URN),")")) -> my
+
+data %>% select(URN, num_range("ImportantDS_", 1:7), datause)  %>% 
+         pivot_longer(cols = num_range("ImportantDS_", 1:7),
+                      names_to = NULL,
+                      values_to = "importantDS")               %>%
+         filter(!is.na(importantDS))                           %>%
+         group_by(importantDS)                                 %>% 
+         mutate(m = n())                                       %>% 
+         group_by(importantDS, datause)                        %>% 
+         mutate(n = n_distinct(URN))                           %>% 
+         distinct(importantDS, n, datause, m)                  %>% 
+         filter(m > 2)                                         %>% 
+         ggplot(aes(x = reorder(importantDS, -m), y = n, fill = datause)) +
+         geom_col(colour = "black") +
+         theme_bw() + ylim(0, 33) + 
+         geom_text(aes(label = n), position = position_stack(vjust = 0.5), size = 4) + 
+         theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0, size = 12)) +
+         xlab(my$lab) + ylab("Numbers") + labs(fill = "Data use")
+
+```
 ### Important data sources by % career
 
 ```{r importantDS_career_per}
