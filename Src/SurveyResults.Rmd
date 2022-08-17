@@ -998,7 +998,7 @@ Filter out the "Other" and "-" categories.
 
 ```{r datause_choices_career_per2}
 
-data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
+data %>% select(URN, num_range("Q2_",1:2), career = Q20)               %>%
          filter(career != "Other" & career != "-")                     %>% 
          group_by(career)                                              %>% 
          mutate(N = n())                                               %>% 
@@ -1006,13 +1006,13 @@ data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
                       names_to = NULL,
                       values_to = "ds")                                %>%
          filter(ds != 0)                                               %>% 
-         group_by(id)                                                  %>% 
-         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         distinct(id, choices, career, N)                              %>%
-         ungroup()                                                     %>% 
-         select(-id)                                                   %>% 
+         group_by(URN)                                                 %>% 
+         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>%
+         distinct(URN, choices, career, N)                             %>%
          group_by(choices, career)                                     %>%
          mutate(n = n())                                               %>% 
+         ungroup()                                                     %>% 
+         select(-URN)                                                  %>%
          mutate(per = percent(n/N, accuracy = 1))                      %>% 
          distinct(choices, career, per, n, N)                          %>% 
          ggplot(aes(x = choices, y = n/N, fill = career)) + 
@@ -1085,7 +1085,7 @@ data %>% select(id = URN, num_range("Q2_",1:2), career = Q20, gender = Q21)  %>%
          scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0,0.3)) +
          xlab("Data use") + ylab("Percent") +
          geom_text(aes(label = per), position = position_dodge2(width = 0.9, preserve = "single"), 
-                   vjust = -0.5, size = 3) +
+                   vjust = -0.5, size = 4) +
          scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
          scale_fill_brewer(palette = "Set2", name = "Gender") +
          facet_wrap(~ career)
@@ -1139,9 +1139,9 @@ data %>% select(URN, num_range("Q2_",1:2))                                   %>%
          distinct(URN, choices)                                              %>% 
          left_join(select(data, URN, num_range("Q19_", 1:22)), by = "URN")   %>% 
          pivot_longer(cols = num_range("Q19_", 1:22),
-                       names_to = NULL,
+                      names_to = NULL,
                       values_to = "disciplines")                             %>%                  
-          filter(disciplines != 0)                                           %>%
+         filter(disciplines != 0)                                            %>%
          ungroup()                                                           %>% 
          select(-URN)                                                        %>% 
          group_by(choices, disciplines)                                      %>%
@@ -1155,7 +1155,6 @@ data %>% select(URN, num_range("Q2_",1:2))                                   %>%
          scale_fill_discrete(name = "Data use", labels = c("Create", "Create and Reuse", "Reuse")) +
          geom_text(aes(label = n), size = 2, position = position_stack(0.5), colour = "black") 
 ```
-
 or as a tile diagram - I do not think this is clearer.
 
 ```{r datause_discipline_tile}
@@ -1188,6 +1187,74 @@ data %>% select(URN, num_range("Q2_",1:2))                                   %>%
          geom_text(aes(label = n), size = 4, colour = "white") +
          scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
          scale_fill_continuous(high = "#132B43", low = "#56B1F7")
+```
+
+Normalising the research disciplines to take into account that more than one can be selected by the respondent.
+
+```{r datause_discipline_bar_norm}
+
+data %>% select(URN, num_range("Q2_",1:2))                                   %>% # creation of data sets
+         pivot_longer(cols = starts_with("Q2_"),
+                      names_to = NULL,
+                      values_to = "ds")                                      %>%
+         filter(ds != 0)                                                     %>%
+         group_by(URN)                                                       %>% 
+         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))         %>% 
+         distinct(URN, choices)                                              %>% 
+         left_join(select(data, URN, num_range("Q19_", 1:22)), by = "URN")   %>% # Research discipline
+         pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = NULL,
+                      values_to = "disciplines")                             %>%                  
+         filter(disciplines != 0)                                            %>%
+         group_by(URN)                                                       %>% 
+         mutate(nn = n())                                                    %>% 
+         ungroup()                                                           %>% 
+         select(-URN)                                                        %>% 
+         group_by(choices, disciplines)                                      %>%
+         mutate(n = round(sum(1/nn), 1))                                     %>% 
+         distinct(choices, disciplines, n)                                   %>% 
+         ggplot(aes(x = n, y = disciplines, fill = choices)) + 
+         geom_col(colour = "black") + 
+         theme_bw() +
+         xlab("Numbers") + ylab("Disciplines") +
+         theme(axis.text.y = element_text(size = 8)) + 
+         scale_fill_discrete(name = "Data use", labels = c("Create", "Create and Reuse", "Reuse")) +
+         geom_text(aes(label = n), size = 3, position = position_stack(0.5), colour = "black") 
+```
+Percent by research discipline
+
+```{r datause_discipline_bar_norm_per}
+
+data %>% select(URN, num_range("Q2_",1:2))                                   %>% # creation of data sets
+         pivot_longer(cols = starts_with("Q2_"),
+                      names_to = NULL,
+                      values_to = "ds")                                      %>%
+         filter(ds != 0)                                                     %>%
+         group_by(URN)                                                       %>% 
+         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))         %>% 
+         distinct(URN, choices)                                              %>% 
+         left_join(select(data, URN, num_range("Q19_", 1:22)), by = "URN")   %>% # Research discipline
+         pivot_longer(cols = num_range("Q19_", 1:22),
+                       names_to = NULL,
+                      values_to = "disciplines")                             %>%                  
+         filter(disciplines != 0)                                            %>%
+         group_by(URN)                                                       %>% 
+         mutate(nn = n())                                                    %>% 
+         group_by(disciplines) %>% 
+         mutate(N = sum(1/nn)) %>% 
+         ungroup()                                                           %>% 
+         select(-URN)                                                        %>% 
+         group_by(choices, disciplines)                                      %>%
+         mutate(n = sum(1/nn))                                     %>% 
+         distinct(choices, disciplines, n, N)                                   %>% 
+         ggplot(aes(x = n/N, y = disciplines, fill = choices)) + 
+         geom_col(colour = "black") + 
+         theme_bw() +
+         xlab("Numbers") + ylab("Disciplines") +
+         theme(axis.text.y = element_text(size = 8)) + 
+         scale_fill_discrete(name = "Data use", labels = c("Create", "Create and Reuse", "Reuse")) +
+         scale_x_continuous(labels = percent_format(accuracy = 1)) +
+         geom_text(aes(label = percent(n/N, accuracy = 1)), size = 3, position = position_stack(0.5), colour = "black") 
 ```
 
 ```{r datause_discipline_norm_tile}
