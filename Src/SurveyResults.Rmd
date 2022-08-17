@@ -1458,14 +1458,15 @@ Number of responses by career stage.
 
 ```{r important_srcs_resp_career}
 
-data %>% select(Q2_a, career = Q20) %>% 
-         group_by(career)           %>% 
-         mutate(N = n())            %>% 
-         distinct(career, N)        %>% 
+data %>% select(Q2_a, career = Q20)               %>% 
+         filter(!(career %in% c("-", "Other")))   %>% 
+         group_by(career)                         %>% 
+         mutate(N = n())                          %>% 
+         distinct(career, N)                      %>% 
          ggplot(aes(x = career, y = N, fill = career)) +
          geom_col(colour = "black") +
          theme_bw() + theme(legend.position = "none") +
-         xlab("Career stage") + ylab("Number of responses") +
+         xlab("Career stage") + ylab("Number") +
          geom_text(aes(x = career, label = N), vjust = -0.5,  colour = "black", size = 3) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
@@ -1541,13 +1542,14 @@ corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 ```{r data_sources_career}
 
 data %>% select(num_range("Q2_b_",1:6), career = Q20)      %>%
+         filter(!(career %in% c("-", "Other")))                %>% 
          pivot_longer(cols = starts_with("Q2_b_"),
                       names_to = NULL,
                       values_to = "ds")                    %>%
          filter(ds != 0)                                   %>%
          group_by(ds, career)                              %>% 
          mutate(n = n())                                   %>% 
-         ggplot(aes(x = ds, fill = career)) + 
+         ggplot(aes(x = reorder(ds, -n), fill = career)) + 
          geom_bar(colour = "black") +
          theme_bw() + ylab("Numbers") +
          geom_text(aes(label = ..count..), position = position_stack(0.5), stat = "count", size = 3)  +
@@ -1558,32 +1560,6 @@ data %>% select(num_range("Q2_b_",1:6), career = Q20)      %>%
 ```
 
 ### Reusing existing data by % career stage
-
-```{r data_sources_career_per}
-
-data %>% select(num_range("Q2_b_",1:6), career = Q20)      %>%
-         group_by(career)                                  %>% 
-         mutate(N = n())                                   %>% 
-         pivot_longer(cols = starts_with("Q2_b_"),
-                      names_to = NULL,
-                      values_to = "ds")                    %>%
-         filter(ds != 0)                                   %>%
-         group_by(ds, career)                              %>% 
-         mutate(per = n()/ N)                              %>% 
-         distinct(ds, career, per)                         %>% 
-         ggplot(aes(x = ds, y = per, fill = career)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
-                  colour = "black") +
-         theme_bw() + ylab("Percent") +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         geom_text(aes(label = percent(per, accuracy = 1)), 
-                   position = position_dodge2(width = 0.9, preserve = "single"), 
-                   vjust = -0.35, size = 2)  +
-         xlab("Data sources") + 
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 8),
-               legend.text=element_text(size = 6)) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
 
 Removing the "Other" and "-" (not specified) choices:
 
@@ -1622,13 +1598,14 @@ data %>% select(num_range("Q2_b_",1:6), career = Q20)      %>%
 ```{r data_sources_gender}
 
 data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
+         filter(!(gender %in% lowstatsgender))             %>% 
          pivot_longer(cols = starts_with("Q2_b_"),
                       names_to = NULL,
                       values_to = "ds")                    %>%
          filter(ds != 0)                                   %>%
          group_by(ds, gender)                              %>% 
          mutate(n = n())                                   %>% 
-         ggplot(aes(x = ds, fill = gender)) + 
+         ggplot(aes(x = reorder(ds, -n), fill = gender)) + 
          geom_bar(colour = "black") +
          theme_bw() + ylab("Numbers") +
          geom_text(aes(label = ..count..), position = position_stack(0.5), stat = "count", size = 3)  +
@@ -1640,29 +1617,6 @@ data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
 
 ### Reusing existing data by gender %
 
-```{r data_sources_gender_per}
-
-data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
-         group_by(gender)                                  %>% 
-         mutate(N = n())                                   %>% 
-         pivot_longer(cols = starts_with("Q2_b_"),
-                      names_to = NULL,
-                      values_to = "ds")                    %>%
-         filter(ds != 0)                                   %>%
-         group_by(ds, gender)                              %>% 
-         mutate(per = n()/N)                               %>% 
-         distinct(ds, gender, per)                         %>% 
-         ggplot(aes(x = ds, y = per, fill = gender)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-         theme_bw() + ylab("Percent") +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         geom_text(aes(label = percent(per, accuracy = 1)), 
-                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.35, size = 2)  +
-         xlab("Data sources") + 
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0, size = 8),
-               legend.text=element_text(size = 6)) +
-         scale_fill_brewer(palette = "Set2", name = "Gender")
-```
 
 Removing low stat components
 
@@ -1692,6 +1646,8 @@ data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
                legend.text=element_text(size = 6)) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
+
+Career stage and gender.
 
 ```{r data_sources_gender_per3}
 
