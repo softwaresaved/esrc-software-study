@@ -1257,6 +1257,8 @@ data %>% select(URN, num_range("Q2_",1:2))                                   %>%
          geom_text(aes(label = percent(n/N, accuracy = 1)), size = 3, position = position_stack(0.5), colour = "black") 
 ```
 
+A normalised tile diagram.
+
 ```{r datause_discipline_norm_tile}
 
 data %>% select(URN, num_range("Q2_",1:2))                                   %>% # creation of data sets
@@ -1357,6 +1359,7 @@ data %>% select(URN, num_range("ImportantDS_", 1:7), datause)  %>%
          xlab(my$lab) + ylab("Numbers") + labs(fill = "Data use")
 
 ```
+
 ### Important data sources by % career
 
 ```{r importantDS_career_per}
@@ -1423,17 +1426,20 @@ data %>% select(num_range("ImportantDS_", 1:7), gender = Q21)  %>%
 
 data %>% select(num_range("ImportantDS_", 1:7), career = Q20, gender = Q21)  %>% 
          filter(!(gender %in% lowstatsgender))                               %>% 
+         filter(!(career %in% c("-", "Other")))                              %>% 
          group_by(gender)                                                    %>% 
          mutate(N = n())                                                     %>% 
          pivot_longer(cols = num_range("ImportantDS_", 1:7),
                       names_to = NULL,
                       values_to = "importantDS")                             %>%
          filter(!is.na(importantDS))                                         %>%
+         group_by(importantDS)                                               %>% 
+         mutate(m = n())                                                     %>% 
+         filter(m > 2)                                                       %>% 
          group_by(importantDS, gender, career)                               %>% 
          mutate(n = n())                                                     %>% 
          distinct(importantDS, n, gender, N, career)                         %>%
          mutate(per = percent(n/N, accuracy = 1))                            %>% 
-         filter(n > 2)                                                       %>% 
          ggplot(aes(x = reorder(importantDS, -n), y = n/N, fill = gender)) +
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() +  scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.14)) +
