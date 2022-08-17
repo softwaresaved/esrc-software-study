@@ -856,8 +856,7 @@ data %>% select(num_range("Q2_", 1:2), institution = CleanLocs)              %>%
          theme(axis.text.y = element_text(size = 6)) 
 ```
 
-As with the previous diagram only institutions that have more than 2
-entries are shown.
+As in the previous diagram but only showing institutions with more than 2 entries.
 
 ```{r datause_institution_bar}
 
@@ -927,7 +926,7 @@ data <- data %>% left_join(dd, by = "URN")
 
 ### Combined plot
 
-Can produce a plot of the above table. N = 163.
+Can produce a plot showing creation and reuse only and creation and reuse. N = 163.
 
 ```{r datause_choices_plot}
 
@@ -994,41 +993,13 @@ data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
 Adding career stage. Percentages may not add to 100% as values that do
 not contribute are not shown.
 
-```{r datause_choices_career_per}
-
-data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
-         group_by(career)                                              %>% 
-         mutate(N = n())                                               %>% 
-         pivot_longer(cols = starts_with("Q2_"),
-                      names_to = NULL,
-                      values_to = "ds")                                %>%
-         filter(ds != 0)                                               %>%  
-         group_by(id)                                                  %>% 
-         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         distinct(id, choices, career, N)                              %>%
-         ungroup()                                                     %>% 
-         select(-id)                                                   %>% 
-         group_by(choices, career)                                     %>%
-         mutate(n = n())                                               %>% 
-         mutate(per = percent(n/N, accuracy = 1))                      %>% 
-         distinct(choices, career, per, n, N)                          %>% 
-         ggplot(aes(x = choices, y = n/N, fill = career)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
-         theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         xlab("Data use") + ylab("Percentage") +
-         geom_text(aes(label = paste0(n," (",per,")")), 
-                   position = position_dodge2(width = 0.9, preserve = "single"), 
-                   vjust = -0.5, size = 2) +
-         scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
 
 Filter out the "Other" and "-" categories.
 
 ```{r datause_choices_career_per2}
 
 data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
+         filter(career != "Other" & career != "-")                     %>% 
          group_by(career)                                              %>% 
          mutate(N = n())                                               %>% 
          pivot_longer(cols = starts_with("Q2_"),
@@ -1043,7 +1014,6 @@ data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
          group_by(choices, career)                                     %>%
          mutate(n = n())                                               %>% 
          mutate(per = percent(n/N, accuracy = 1))                      %>% 
-         filter(career != "Other" & career != "-")                     %>% 
          distinct(choices, career, per, n, N)                          %>% 
          ggplot(aes(x = choices, y = n/N, fill = career)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
