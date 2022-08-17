@@ -737,19 +737,18 @@ data %>% select(num_range("Q2_", 1:2), career = Q20)        %>%
 
 ### Use of data as % of career stage population
 
-Leave out low stat components
+Leaving out low stat components
 
 ```{r use_of_data_career_per2}
 
 data %>% select(num_range("Q2_", 1:2), career = Q20)                          %>%
-         group_by(career)                                                     %>% 
          filter(!(career %in% c("-","Other")))                                %>% 
+         group_by(career)                                                     %>% 
          mutate(N = n())                                                      %>% 
          pivot_longer(cols = num_range("Q2_", 1:2), 
                       names_to = NULL,
                       values_to = "datause")                                  %>%
          filter(datause != 0)                                                 %>%
-
          group_by(datause, career)                                            %>% 
          mutate(per = n()/N)                                                  %>%
          distinct(datause, career, per)                                       %>% 
@@ -767,8 +766,10 @@ data %>% select(num_range("Q2_", 1:2), career = Q20)                          %>
 
 ```{r use_of_data_gender_num}
 data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>%
+         filter(!(gender %in% lowstatsgender))                                %>% 
          pivot_longer(cols = num_range("Q2_", 1:2), 
-                      names_to = NULL, values_to = "datause")                 %>%
+                      names_to = NULL, 
+                      values_to = "datause")                                  %>%
          filter(datause != 0)                                                 %>%
          group_by(datause, gender)                                            %>% 
          ggplot(aes(x = datause, fill = gender)) +
@@ -782,27 +783,7 @@ data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>
 
 ### Use of data by % of gender population
 
-```{r use_of_data_gender_per}
-
-data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>%
-         group_by(gender)                                                     %>% 
-         mutate(N = n())                                                      %>% 
-         pivot_longer(cols = num_range("Q2_", 1:2), 
-                      names_to = NULL, values_to = "datause")                 %>%
-         filter(datause != 0)                                                 %>%
-         group_by(datause, gender)                                            %>%
-         mutate(per = n()/N)                                                  %>% 
-         distinct(datause, gender, per)                                       %>% 
-         ggplot(aes(x = datause, y = per, fill = gender)) +
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-         theme_bw() + scale_y_continuous(labels = percent_format(accuarcy = 1)) +
-         xlab("Use of data") + ylab("Percentage") +
-         geom_text(aes(x = datause, label = percent(per, accuracy = 1 )), vjust = -0.5,
-                position = position_dodge2(width = 0.9, preserve = "single"), colour = "black", size = 2) +
-         scale_fill_brewer(palette = "Set2", name = "Gender")
-```
-
-Remove the low statistic components
+Removing the low statistic components
 
 ```{r use_of_data_gender_per2}
 
@@ -811,7 +792,8 @@ data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>
          group_by(gender)                                                     %>% 
          mutate(N = n())                                                      %>% 
          pivot_longer(cols = num_range("Q2_", 1:2), 
-                      names_to = NULL, values_to = "datause")                 %>%
+                      names_to = NULL, 
+                      values_to = "datause")                                  %>%
          filter(datause != 0)                                                 %>%
          group_by(datause, gender)                                            %>%
          mutate(per = n()/N)                                                  %>% 
