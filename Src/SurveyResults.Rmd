@@ -832,6 +832,27 @@ data %>% select(num_range("Q2_", 1:2), career = Q20, gender = Q21)            %>
          facet_wrap(~career)
 ```
 
+```{r datause_gender_career_per}
+
+data %>% select(datause, career = Q20, gender = Q21)              %>%
+         filter(!(career %in% c("-", "Other")))                   %>% 
+         filter(!(gender %in% lowstatsgender))                    %>% 
+         filter(datause != "None")                                %>% 
+         group_by(gender)                                         %>% 
+         mutate(N = n())                                          %>% 
+         group_by(datause, gender, career)                        %>%
+         mutate(per = n()/N)                                      %>% 
+         distinct(datause, gender, per, career)                   %>% 
+         ggplot(aes(x = datause, y = per, fill = gender)) +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() + scale_y_continuous(labels = percent_format(accuarcy = 1), limits = c(0, 0.25)) +
+         xlab("Use of data") + ylab("Percentage") +
+         geom_text(aes(x = datause, label = percent(per, accuracy = 1 )), vjust = -0.5,
+                position = position_dodge2(width = 0.9, preserve = "single"), colour = "black", size = 2) +
+         scale_fill_brewer(palette = "Set2", name = "Gender") +
+         facet_wrap(~career)
+```
+
 ### Data use by institution
 
 In order to make the diagram less busy only institutions that have more
@@ -905,22 +926,28 @@ data %>% select(URN, num_range("Q2_",1:2))                             %>%
 
 ```{r datause_label_data}
 
-# Add a column, datause with the type of data user
-data %>% select(URN, num_range("Q2_",1:2))                             %>%
-         pivot_longer(cols = starts_with("Q2_"),
-                      names_to = NULL,
-                      values_to = "ds")                                %>%
-         group_by(URN)                                                 %>% 
-         mutate(datause = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         mutate(datause = case_when(datause == "create_reuse" ~ "Create-Reuse", 
-                                    datause == "create_0" ~ "Create", 
-                                    datause == "0_reuse" ~ "Reuse", 
-                                    datause == "0_0" ~ "None"))       %>% 
-         select(-ds)                                                  %>% 
-         distinct(URN, datause) -> dd
+# Add a column, datause with the type of data user - do this only if not already there
+if(!("datause" %in% colnames(data))){
 
-# Add it back to the original data set
-data <- data %>% left_join(dd, by = "URN")
+    data %>% select(URN, num_range("Q2_",1:2))                             %>%
+             pivot_longer(cols = starts_with("Q2_"),
+                          names_to = NULL,
+                          values_to = "ds")                                %>%
+             group_by(URN)                                                 %>% 
+             mutate(datause = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
+             mutate(datause = case_when(datause == "create_reuse" ~ "Create-Reuse", 
+                                        datause == "create_0" ~ "Create", 
+                                        datause == "0_reuse" ~ "Reuse", 
+                                        datause == "0_0" ~ "None"))       %>% 
+             select(-ds)                                                  %>% 
+             distinct(URN, datause) -> dd
+}
+
+# Add datause back to the original data set if not already there
+if(!("datause" %in% colnames(data))){
+  data <- data %>% left_join(dd, by = "URN")
+}
+
 
 ```
 
@@ -1675,6 +1702,32 @@ data %>% select(num_range("Q2_b_",1:6), career = Q20, gender = Q21)      %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0, size = 8),
                legend.text=element_text(size = 6)) + facet_wrap(~ career) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+### Reusing data by data type
+
+```{r data_sources_datause}
+
+data %>% select(num_range("Q2_b_",1:6), datause)      %>%
+         pivot_longer(cols = starts_with("Q2_b_"),
+                      names_to = NULL,
+                      values_to = "ds")                    %>%
+         filter(ds != 0)                                   %>%
+         group_by(ds)                                      %>% 
+         mutate(M = n())                                   %>% 
+         group_by(ds, datause)                             %>% 
+         mutate(n = n())                                   %>% 
+         distinct(ds, datause, n, M)                        %>% 
+         ggplot(aes(x = reorder(ds, -M), y = n, fill = datause)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
+                  colour = "black") +
+         theme_bw() + ylab("Number") +
+         geom_text(aes(label = n), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), 
+                   vjust = -0.35, size = 4)  +
+         xlab("Data sources") + labs(fill = "Data use") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10),
+               legend.text=element_text(size = 6)) 
 ```
 
 ### Reusing existing data by Institution
