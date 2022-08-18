@@ -948,7 +948,6 @@ if(!("datause" %in% colnames(data))){
   data <- data %>% left_join(dd, by = "URN")
 }
 
-
 ```
 
 ### Combined plot
@@ -1588,7 +1587,6 @@ data %>% select(num_range("Q2_b_",1:6), career = Q20)      %>%
 
 ### Reusing existing data by % career stage
 
-Removing the "Other" and "-" (not specified) choices:
 
 ```{r data_sources_career_per2}
 
@@ -1645,8 +1643,6 @@ data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
 ### Reusing existing data by gender %
 
 
-Removing low stat components
-
 ```{r data_sources_gender_per2}
 
 data %>% select(num_range("Q2_b_",1:6), gender = Q21)      %>%
@@ -1680,22 +1676,22 @@ Career stage and gender.
 
 data %>% select(num_range("Q2_b_",1:6), career = Q20, gender = Q21)      %>%
          filter(!(career %in% c("-", "Other")))                          %>% 
+         filter(!(gender %in% lowstatsgender))                           %>% 
+         group_by(gender)                                                %>% 
+         mutate(N = n())                                                 %>% 
          pivot_longer(cols = starts_with("Q2_b_"),
                       names_to = NULL,
                       values_to = "ds")                                  %>%
          filter(ds != 0)                                                 %>%
          group_by(ds)                                                    %>% 
          mutate(M = n())                                                 %>% 
-         group_by(gender)                                                %>% 
-         mutate(N = n())                                                 %>% 
-         filter(!(gender %in% lowstatsgender))                           %>% 
-         group_by(ds, gender)                                            %>% 
+         group_by(ds, gender, career)                                    %>% 
          mutate(per = n()/N)                                             %>% 
-         distinct(ds, gender, per, M, career)                             %>% 
+         distinct(ds, gender, per, M, career)                            %>% 
          ggplot(aes(x = reorder(ds, -M), y = per, fill = gender)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() + ylab("Percent") +
-         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.35)) +
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.21)) +
          geom_text(aes(label = percent(per, accuracy = 1)), 
                    position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.35, size = 3)  +
          xlab("Data sources") + 
