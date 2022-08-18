@@ -1702,7 +1702,7 @@ data %>% select(num_range("Q2_b_",1:6), career = Q20, gender = Q21)      %>%
 
 ### Reusing data by data type
 
-```{r data_sources_datause}
+```{r ds_datause}
 
 data %>% select(num_range("Q2_b_",1:6), datause)      %>%
          pivot_longer(cols = starts_with("Q2_b_"),
@@ -1724,6 +1724,129 @@ data %>% select(num_range("Q2_b_",1:6), datause)      %>%
          xlab("Data sources") + labs(fill = "Data use") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10),
                legend.text=element_text(size = 6)) 
+```
+
+```{r ds_datause_gender}
+
+data %>% select(num_range("Q2_b_",1:6), datause, gender = Q21)  %>%
+         filter(!(gender %in% lowstatsgender))                  %>% 
+         pivot_longer(cols = starts_with("Q2_b_"),
+                      names_to = NULL,
+                      values_to = "ds")                        %>%
+         filter(ds != 0)                                       %>%
+         group_by(ds)                                          %>% 
+         mutate(M = n())                                       %>% 
+         group_by(ds, datause, gender)                         %>% 
+         mutate(n = n())                                       %>% 
+         distinct(ds, datause, n, M)                           %>% 
+         ggplot(aes(x = reorder(ds, -M), y = n, fill = datause)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
+                  colour = "black") +
+         theme_bw() + ylab("Number") +
+         geom_text(aes(label = n), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), 
+                   vjust = -0.35, size = 4)  +
+         xlab("Data sources") + labs(fill = "Data use") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10),
+               legend.text=element_text(size = 6)) +
+        facet_wrap(~ gender)
+```
+
+```{r ds_datause_career}
+
+data %>% select(num_range("Q2_b_",1:6), datause, career = Q20)  %>%
+         filter(!(career %in% c("-", "Other")))                  %>% 
+         pivot_longer(cols = starts_with("Q2_b_"),
+                      names_to = NULL,
+                      values_to = "ds")                        %>%
+         filter(ds != 0)                                       %>%
+         group_by(ds)                                          %>% 
+         mutate(M = n())                                       %>% 
+         group_by(ds, datause, career)                         %>% 
+         mutate(n = n())                                       %>% 
+         distinct(ds, datause, n, M)                           %>% 
+         ggplot(aes(x = reorder(ds, -M), y = n, fill = datause)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
+                  colour = "black") +
+         theme_bw() + ylab("Number") +
+         geom_text(aes(label = n), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), 
+                   vjust = -0.35, size = 4)  +
+         xlab("Data sources") + labs(fill = "Data use") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10),
+               legend.text=element_text(size = 6)) +
+        facet_wrap(~ career)
+```
+### Reusing data by research discipline
+
+```{r datareuse_discipline}
+
+# Q2_b - date source for reuse
+# Q19 - research discipline
+data %>% select(URN, num_range("Q2_b_",1:6), num_range("Q19_", 1:22))        %>%
+         pivot_longer(cols = num_range("Q19_", 1:22),
+                      names_to = NULL,
+                      values_to = "disciplines")                             %>% 
+         filter(disciplines != 0)                                            %>% 
+         group_by(URN)                                                       %>% 
+         mutate(nn = n())                                                    %>% 
+         distinct(across())                                                  %>% 
+         pivot_longer(cols = starts_with("Q2_b_"),
+                      names_to = NULL,
+                      values_to = "ds")                                      %>%
+         filter(ds != 0)                                                     %>%
+         distinct(across())                                                  %>% 
+         ungroup()                                                           %>% 
+         select(-URN)                                                        %>% 
+         group_by(ds)                                                        %>% 
+         mutate(m = n())                                                     %>% 
+         group_by(ds, disciplines)                                           %>%
+         mutate(n = round(sum(1/nn) + 0.05, 1))                              %>% 
+         ggplot(aes(x = reorder(ds, -m), y = disciplines, fill = n)) + 
+         geom_tile(colour = "black") + 
+         theme_bw() +
+         xlab("Data source") + ylab("Research discipline") +
+         theme(axis.text.y = element_text(size = 8)) + 
+         geom_text(aes(label = n), size = 3, colour = "black")  +
+         scale_fill_distiller(palette = "Blues", direction = 1) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10),
+               legend.position = "None") 
+```
+ Percentages work vertically.
+ 
+```{r datareuse_discipline_per}
+
+# Q2_b - date source for reuse
+# Q19 - research discipline
+data %>% select(URN, num_range("Q2_b_",1:6), num_range("Q19_", 1:22))        %>%
+         pivot_longer(cols = num_range("Q19_", 1:22),
+                      names_to = NULL,
+                      values_to = "disciplines")                             %>% 
+         filter(disciplines != 0)                                            %>% 
+         group_by(URN)                                                       %>% 
+         mutate(nn = n())                                                    %>% 
+         distinct(across())                                                  %>% 
+         pivot_longer(cols = starts_with("Q2_b_"),
+                      names_to = NULL,
+                      values_to = "ds")                                      %>%
+         filter(ds != 0)                                                     %>%
+         distinct(across())                                                  %>% 
+         ungroup()                                                           %>% 
+         select(-URN)                                                        %>%
+         group_by(ds)                                                        %>%
+         mutate(NN = sum(1/nn))                                              %>% 
+         mutate(m = n())                                                     %>% 
+         group_by(ds, disciplines)                                           %>%
+         mutate(n = sum(1/nn)/NN )                                           %>% 
+         ggplot(aes(x = reorder(ds, -m), y = disciplines, fill = n)) + 
+         geom_tile(colour = "black") + 
+         theme_bw() +
+         xlab("Data source") + ylab("Research discipline") +
+         theme(axis.text.y = element_text(size = 8)) + 
+         geom_text(aes(label = percent(n, accuracy = 0.1)), size = 4, colour = "black")  +
+         scale_fill_distiller(palette = "Blues", direction = 1) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10),
+               legend.position = "None") 
 ```
 
 ### Reusing existing data by Institution
