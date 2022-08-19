@@ -2278,7 +2278,7 @@ data %>% select(num_range("Q4_",1:26), career = Q20, gender = Q21)              
          group_by(software)                                                  %>% 
          mutate(M = n())                                                     %>% 
          filter(!(gender %in% lowstatsgender))                               %>% 
-         filter(M > 10)                                                      %>%
+         filter(M > 25)                                                      %>%
          group_by(software,gender, career)                                   %>%
          mutate(per = n()/N)                                                 %>% 
          distinct(software, gender, per, M, career)                                  %>% 
@@ -2290,7 +2290,7 @@ data %>% select(num_range("Q4_",1:26), career = Q20, gender = Q21)              
          theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0, size = 8),
                legend.text=element_text(size = 8)) +
          geom_text(aes(label = percent(per, accuracy = 1)), position = position_dodge2(width = 0.9, preserve = "single"), 
-                   size = 2, vjust = -0.5) +
+                   size = 4, vjust = -0.5) +
          ylab("Percent") + xlab("Software used") + 
          scale_fill_brewer(palette = "Set2", name = "Gender") + facet_wrap(~career)
 ```
