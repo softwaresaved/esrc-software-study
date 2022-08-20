@@ -1837,13 +1837,13 @@ data %>% select(URN, num_range("Q2_b_",1:6), num_range("Q19_", 1:22))        %>%
          mutate(NN = sum(1/nn))                                              %>% 
          mutate(m = n())                                                     %>% 
          group_by(ds, disciplines)                                           %>%
-         mutate(n = sum(1/nn)/NN )                                           %>% 
-         ggplot(aes(x = reorder(ds, -m), y = disciplines, fill = n)) + 
+         mutate(n = sum(1/nn) )                                              %>% 
+         ggplot(aes(x = reorder(ds, -m), y = disciplines, fill = n/NN)) + 
          geom_tile(colour = "black") + 
          theme_bw() +
          xlab("Data source") + ylab("Research discipline") +
          theme(axis.text.y = element_text(size = 8)) + 
-         geom_text(aes(label = percent(n, accuracy = 0.1)), size = 4, colour = "black")  +
+         geom_text(aes(label = percent(n/NN, accuracy = 0.1)), size = 4, colour = "black")  +
          scale_fill_distiller(palette = "Blues", direction = 1) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10),
                legend.position = "None") 
@@ -1874,13 +1874,14 @@ data %>% select(URN, num_range("Q2_b_",1:6), num_range("Q19_", 1:22))        %>%
          mutate(NN = sum(1/nn))                                              %>% 
          mutate(m = n())                                                     %>% 
          group_by(ds, disciplines)                                           %>%
-         mutate(n = sum(1/nn)/NN )                                           %>% 
-         ggplot(aes(x = reorder(ds, -m), y = disciplines, fill = n)) + 
+         mutate(n = sum(1/nn))                                               %>% 
+         distinct(across()) %>% 
+         ggplot(aes(x = reorder(ds, -m), y = disciplines, fill = n/NN)) + 
          geom_tile(colour = "black") + 
          theme_bw() +
          xlab("Data source") + ylab("Research discipline") +
          theme(axis.text.y = element_text(size = 8)) + 
-         geom_text(aes(label = percent(n, accuracy = 0.1)), size = 4, colour = "black")  +
+         geom_text(aes(label = percent(n/NN, accuracy = 0.1)), size = 4, colour = "black")  +
          scale_fill_distiller(palette = "Blues", direction = 1) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10),
                legend.position = "None") 
@@ -2379,7 +2380,7 @@ data %>% select(URN, num_range("Q4_",1:26), num_range("Q19_", 1:22))         %>%
          ggplot(aes(x = reorder(software, -m), y = discipline, fill = n)) +
          geom_tile(colour = "black") + 
          scale_fill_distiller(palette = "Blues", direction = 1) +
-         theme_minimal() +
+         theme_bw() +
          theme(legend.text=element_text(size = 8)) +
          geom_text(aes(label = n), colour = "black", size = 4) +
          theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0),
@@ -2409,7 +2410,7 @@ data %>% select(URN, num_range("Q4_",1:26), num_range("Q19_", 1:22))         %>%
          ggplot(aes(x = reorder(software, -m), y = discipline, fill = n)) +
          geom_tile(colour = "black") + 
          scale_fill_distiller(palette = "Blues", direction = 1) +
-         theme_minimal() +
+         theme_bw() +
          theme(legend.text=element_text(size = 8)) +
          geom_text(aes(label = percent(n, accuracy = 0.1)), colour = "black", size = 3) +
          theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0),
@@ -2495,7 +2496,7 @@ important_software  %>% select(URN, starts_with("Q5"))  %>%
 
 important_software %>% select(starts_with("Q5"))             %>%
                        pivot_longer(cols =  starts_with("Q5"),
-                                    names_to = "name",
+                                    names_to = NULL,
                                     values_to = "software")  %>%
                        filter(!is.na(software))              %>%
                        group_by(software)                    %>%
@@ -2517,6 +2518,7 @@ important_software %>% select(starts_with("Q5"))             %>%
 
 bind_cols(data["Q20"], important_software)                        %>% 
                        select(starts_with("Q5"), career = "Q20")  %>%
+                       filter(career != "Other" & career != "-")  %>% 
                        pivot_longer(cols =  starts_with("Q5"),
                                     names_to = NULL,
                                     values_to = "software")       %>%
@@ -2549,6 +2551,7 @@ Removing "Other" and "-".
 
 bind_cols(data["Q20"], important_software)                        %>% 
                        select(starts_with("Q5"), career = Q20)    %>%
+                       filter(career != "Other" & career != "-")  %>% 
                        group_by(career)                           %>% 
                        mutate(N = n())                            %>%
                        pivot_longer(cols =  starts_with("Q5"),
@@ -2557,7 +2560,6 @@ bind_cols(data["Q20"], important_software)                        %>%
                        filter(!is.na(software))                   %>%
                        group_by(software)                         %>%
                        mutate(M = n())                            %>% 
-                       filter(career != "Other" & career != "-")  %>% 
                        filter(M > 5)                              %>% 
                        group_by(career, software)                 %>%
                        mutate(n = n())                            %>%
@@ -2584,6 +2586,7 @@ bind_cols(data["Q20"], important_software)                        %>%
 
 bind_cols(data["Q21"], important_software)                        %>% 
                        select(starts_with("Q5"), gender = Q21)    %>%
+                       filter(!(gender %in% lowstatsgender))      %>% 
                        group_by(gender)                           %>% 
                        mutate(N = n())                            %>%
                        pivot_longer(cols =  starts_with("Q5"),
@@ -2592,7 +2595,6 @@ bind_cols(data["Q21"], important_software)                        %>%
                        filter(!is.na(software))                   %>%
                        group_by(software)                         %>%
                        mutate(M = n())                            %>% 
-                       filter(!(gender %in% lowstatsgender))      %>% 
                        filter(M > 5)                              %>% 
                        group_by(gender, software)                 %>%
                        mutate(n = n())                            %>%
@@ -2613,6 +2615,81 @@ bind_cols(data["Q21"], important_software)                        %>%
                        theme(axis.text.x = element_text(size = 8),
                              legend.text=element_text(size = 6))  
 
+```
+
+### Important software by career and gender
+
+```{r important_sw_bar_car_ender_per2}
+
+bind_cols(data[, c("Q20", "Q21")], important_software)                         %>% 
+                       select(starts_with("Q5"), career = Q20, gender = Q21)   %>%
+                       filter(!(gender %in% lowstatsgender))                   %>% 
+                       filter(!(career %in% c("-", "Other")))                  %>% 
+                       group_by(gender)                                        %>% 
+                       mutate(N = n())                                         %>%
+                       pivot_longer(cols =  starts_with("Q5"),
+                                    names_to = NULL,
+                                    values_to = "software")                   %>%
+                       filter(!is.na(software))                               %>%
+                       group_by(software)                                     %>%
+                       mutate(M = n())                                        %>% 
+                       filter(M > 5)                                          %>% 
+                       group_by(gender, career, software)                     %>%
+                       mutate(n = n())                                        %>%
+                       mutate(per = n/N)                                      %>% 
+                       distinct(gender, software, n, N, per, M, career)       %>% 
+                       ggplot(aes(x = reorder(software, -M), y = per, fill = gender)) +
+                       geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
+                       scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.14)) +
+                       theme_bw() +
+                       theme(axis.text.x = element_text(angle = -90, vjust = 0.5,
+                                                        hjust=0)) +
+                       geom_text(aes(x = software, y = per, 
+                                     label = percent(per, accuracy = 1)), vjust = -0.5,
+                                 position = position_dodge2(width = 0.9, preserve = "single"),
+                                 size = 3) +
+                       ylab("Percentage") + xlab("Most important software") +
+                       scale_fill_brewer(palette = "Set2", name = "Gender") +
+                       theme(axis.text.x = element_text(size = 8),
+                             legend.text=element_text(size = 6))  +
+                       facet_wrap( ~ career)
+
+```
+
+### Important software by research discipline
+
+```{r imporant_sw_rd}
+
+important_software %>% left_join(data, by = "URN")                                 %>% 
+                       select(URN, starts_with("Q5_"), num_range("Q19_", 1:22))    %>% 
+                       pivot_longer(cols =  starts_with("Q5_"),
+                                    names_to = NULL,
+                                    values_to = "software")                         %>%
+                      filter(!is.na(software))                                      %>%
+                      group_by(software)                                            %>% 
+                      mutate(m = n())                                               %>% 
+                      distinct(across())                                            %>% 
+                       pivot_longer(cols = num_range("Q19_", 1:22),
+                                    names_to = NULL,
+                                    values_to = "disciplines")                     %>%
+                       filter(disciplines != 0)                                    %>% 
+                       distinct(across())                                          %>% 
+                      group_by(disciplines)                                         %>% 
+                      mutate(N = n())                                               %>% 
+                      group_by(URN)                                                 %>% 
+                      mutate(nn = n())                                              %>% 
+                      group_by(disciplines, software)                               %>% 
+                      mutate(n = round(sum(1/nn) + 0.005, 1))                       %>% 
+                      filter(m > 5)                                                 %>% 
+                      ggplot(aes(x = reorder(software, -m), y = disciplines, fill = n/N)) +
+                      geom_tile(colour = "black") + 
+                      scale_fill_distiller(palette = "Blues", direction = 1) +
+                      theme_bw() +
+                      theme(legend.text=element_text(size = 8)) +
+                      geom_text(aes(label = percent(n/N + 0.005, accuracy = 0.1)), colour = "black", size = 3) +
+                      theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0),
+                            legend.position = "None") +
+                      ylab("Research discipline") + xlab("Software used")
 ```
 
 ### List of choices
