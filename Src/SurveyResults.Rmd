@@ -3763,12 +3763,12 @@ Removing "Other" and "-" in career stages.
 ```{r develop_sw_career_per2}
 
 data %>% select(Q9, career = Q20)                  %>%
-         mutate(Q9 = ifelse(!is.na(Q9), Q9, "-"))  %>% 
+         mutate(Q9 = ifelse(!is.na(Q9), Q9, "-"))  %>%
+         group_by(career)                          %>% 
+         mutate(N = n())                           %>% 
          filter(!(career %in% c("-", "Other")))    %>% 
          group_by(Q9)                              %>% 
          mutate(M = n())                           %>% 
-         group_by(career)                          %>% 
-         mutate(N = n())                           %>% 
          group_by(Q9, career)                      %>% 
          mutate(per = n()/N)                       %>%
          distinct(Q9, career, per, M)              %>% 
@@ -3789,12 +3789,12 @@ data %>% select(Q9, career = Q20)                  %>%
 ```{r develop_sw_gender_per2}
 
 data %>% select(Q9, gender = Q21)                  %>%
-         group_by(Q9)                              %>%
-         mutate(M = n())                           %>% 
-         mutate(Q9 = ifelse(!is.na(Q9), Q9, "-"))  %>% 
          filter(!(gender %in% lowstatsgender))     %>% 
          group_by(gender)                          %>% 
          mutate(N = n())                           %>% 
+         group_by(Q9)                              %>%
+         mutate(M = n())                           %>% 
+         mutate(Q9 = ifelse(!is.na(Q9), Q9, "-"))  %>% 
          group_by(Q9, gender)                      %>% 
          mutate(per = n()/N)                       %>%
          distinct(Q9, gender, per, M)              %>% 
@@ -3803,10 +3803,37 @@ data %>% select(Q9, gender = Q21)                  %>%
          theme_bw() +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          xlab("Do you develop software?") + ylab("Percent") +
-         geom_text(aes(label = percent(per, accuracy = 1)),
+         geom_text(aes(label = percent(per, accuracy = 0.1)),
                    position = position_dodge2(width = 0.9, preserve = "single"),  
                    vjust = -0.5, size = 4) +
          scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+### Responses by % gender
+
+```{r develop_sw_gender_career}
+
+data %>% select(Q9, career = Q20, gender = Q21)    %>%
+         filter(!(gender %in% lowstatsgender))     %>%
+         filter(!(career %in% c("-", "Other")))    %>%
+         group_by(gender)                          %>% 
+         mutate(N = n())                           %>% 
+         group_by(Q9)                              %>%
+         mutate(M = n())                           %>% 
+         mutate(Q9 = ifelse(!is.na(Q9), Q9, "-"))  %>% 
+         group_by(Q9, gender, career)              %>% 
+         mutate(per = n()/N)                       %>%
+         distinct(Q9, gender, per, M, career)      %>% 
+         ggplot(aes(x = reorder(Q9, -M), y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() +
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.4)) +
+         xlab("Do you develop software?") + ylab("Percent") +
+         geom_text(aes(label = percent(per, accuracy = 0.1)),
+                   position = position_dodge2(width = 0.9, preserve = "single"),  
+                   vjust = -0.5, size = 4) +
+         scale_fill_brewer(palette = "Set2", name = "Gender") +
+         facet_wrap(~ career)
 ```
 
 ### Develop software by discipline
