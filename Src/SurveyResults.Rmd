@@ -3741,9 +3741,11 @@ data %>% select(Q9)                              %>%
 ### Responses by career stage
 
 ```{r develop_sw_career}
-data %>% select("Q9", career = Q20)    %>%
-         group_by(Q9, career)          %>% 
-         mutate(n = n())               %>% 
+
+data %>% select("Q9", career = Q20)             %>%
+         group_by(Q9, career)                   %>% 
+         filter(!(career %in% c("-", "Other"))) %>% 
+         mutate(n = n())                        %>% 
          ggplot(aes(x = reorder(Q9, -n), fill = career)) + 
          geom_bar(colour = "black") +
          theme_bw() +
@@ -3751,39 +3753,21 @@ data %>% select("Q9", career = Q20)    %>%
          geom_text(aes(label = ..count..), stat = "count", 
                    position = position_stack(0.5), size = 3) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
+
 ```
 
 ### Responses by % career stage
 
-```{r develop_sw_career_per}
-data %>% select(Q9, career = Q20)      %>%
-         group_by(career)              %>% 
-         mutate(N = n())               %>% 
-         group_by(Q9, career)          %>% 
-         mutate(per = n()/N)           %>%
-         distinct(Q9, career, per)     %>% 
-         ggplot(aes(x = Q9, y = per, fill = career)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-         theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         xlab("Do you develop software?") + ylab("Percent") +
-         geom_text(aes(label = percent(per, accuracy = 1)),
-                   position = position_dodge2(width = 0.9, preserve = "single"),  
-                   vjust = -0.5, size = 4) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
-
-Removing "Other" and "-".
+Removing "Other" and "-" in career stages.
 
 ```{r develop_sw_career_per2}
 
 data %>% select(Q9, career = Q20)                  %>%
          mutate(Q9 = ifelse(!is.na(Q9), Q9, "-"))  %>% 
+         filter(!(career %in% c("-", "Other")))    %>% 
          group_by(Q9)                              %>% 
          mutate(M = n())                           %>% 
          group_by(career)                          %>% 
-         filter(career != "Other" &
-                career != "-")                     %>% 
          mutate(N = n())                           %>% 
          group_by(Q9, career)                      %>% 
          mutate(per = n()/N)                       %>%
