@@ -2607,7 +2607,7 @@ bind_cols(data["Q21"], important_software)                        %>%
                        theme(axis.text.x = element_text(angle = -90, vjust = 0.5,
                                                         hjust=0)) +
                        geom_text(aes(x = software, y = per, 
-                                     label = percent(per, accuracy = 1)), vjust = -0.5,
+                                     label = percent(per, accuracy = 0.1)), vjust = -0.5,
                                  position = position_dodge2(width = 0.9, preserve = "single"),
                                  size = 3) +
                        ylab("Percentage") + xlab("Most important software") +
@@ -2645,7 +2645,7 @@ bind_cols(data[, c("Q20", "Q21")], important_software)                         %
                        theme(axis.text.x = element_text(angle = -90, vjust = 0.5,
                                                         hjust=0)) +
                        geom_text(aes(x = software, y = per, 
-                                     label = percent(per, accuracy = 1)), vjust = -0.5,
+                                     label = percent(per, accuracy = 0.1)), vjust = -0.5,
                                  position = position_dodge2(width = 0.9, preserve = "single"),
                                  size = 3) +
                        ylab("Percentage") + xlab("Most important software") +
