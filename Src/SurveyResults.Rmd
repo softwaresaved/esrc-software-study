@@ -3786,26 +3786,6 @@ data %>% select(Q9, career = Q20)                  %>%
 
 ### Responses by % gender
 
-```{r develop_sw_gender_per}
-
-data %>% select(Q9, gender = Q21)    %>%
-         mutate(Q9 = ifelse(!is.na(Q9), Q9, "-"))  %>% 
-         group_by(gender)              %>% 
-         mutate(N = n())               %>% 
-         group_by(Q9, gender)          %>% 
-         mutate(per = n()/N)           %>%
-         distinct(Q9, gender, per)     %>% 
-         ggplot(aes(x = Q9, y = per, fill = gender)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-         theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         xlab("Do you develop software?") + ylab("Percent") +
-         geom_text(aes(label = percent(per, accuracy = 1)),
-                   position = position_dodge2(width = 0.9, preserve = "single"),  
-                   vjust = -0.5, size = 2) +
-         scale_fill_brewer(palette = "Set2", name = "Gender")
-```
-
 ```{r develop_sw_gender_per2}
 
 data %>% select(Q9, gender = Q21)                  %>%
