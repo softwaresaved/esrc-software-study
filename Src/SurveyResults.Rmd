@@ -3840,23 +3840,28 @@ data %>% select(Q9, career = Q20, gender = Q21)    %>%
 
 ```{r swdev_dist_per_tile}
 
-data %>% select(Q9, num_range("Q19_", 1:22))                             %>%
-         mutate(Q9 = ifelse(!is.na(Q9), Q9, "-"))                        %>% 
+data %>% select(URN, Q9, num_range("Q19_", 1:22))                        %>%
+         filter(!is.na(Q9))                                              %>% 
          pivot_longer(cols = starts_with("Q19"),
                       names_to = NULL,
                       values_to ="discipline")                           %>%
          filter(discipline != 0)                                         %>%
+         group_by(URN)                                                   %>%
+         mutate(nn = n())                                                %>% 
+         group_by(discipline)                                            %>% 
+         mutate(NN = sum(1/nn))                                          %>%                                
          group_by(discipline, Q9)                                        %>%
-         mutate(n = n())                                                 %>%
-         #mutate(per = percent(n/N, accuracy = 1))                        %>% 
-         ggplot(aes(x = discipline, y = Q9)) +
+         mutate(n = sum(1/nn))                                           %>%
+         ggplot(aes(y = discipline, x = Q9)) +
          theme_bw() +
-         geom_tile(aes(fill = n)) +
+         geom_tile(aes(fill = n/NN)) +
          theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0),
                axis.text.y = element_text(size = 8), legend.position = "None") +
-         geom_text(aes(label = n), size = 3, colour = "white") +
-         ylab("Do you develop software?") + xlab("Discipline") +
+         geom_text(aes(label = paste0(round(n, 2),"/",round(NN +0.05, 1)," (",percent(n/NN, accuracy = 0.1),")")), 
+                   size = 4, colour = "white") +
+         xlab("Do you develop software?") + ylab("Research discipline") +
          scale_fill_continuous(high = "#132B43", low = "#56B1F7")
+
 ```
 
 ### How you extend software
