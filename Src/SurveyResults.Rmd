@@ -4573,7 +4573,7 @@ research software are sufficiently recognised or rewarded?
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, Q12)    %>% 
          filter(Q12 != "-")  %>% 
-         summarise(lab = paste0("Development/Maintenance of rsearch software rewarded/recognised (N=",
+         summarise(lab = paste0("Development/Maintenance of research software rewarded/recognised (N=",
                                 n_distinct(URN),")")) -> my
 
 data %>%  select(URN, rew = Q12)                   %>%
@@ -4606,7 +4606,7 @@ data %>%  select(rew = Q12, career = Q20)       %>%
           ggplot(aes(x = reorder(rew, -n), fill = career)) + 
           geom_bar(colour = "black") +
           theme_bw() +
-          xlab("Development/Maintenance of rsearch software rewarded/recognised") +
+          xlab("Development/Maintenance of research software rewarded/recognised") +
           ylab("Numbers") +
           geom_text(aes(label = ..count..), position = position_stack(vjust = 0.5), 
                    stat = "count", size = 3) +
@@ -4635,7 +4635,7 @@ data %>%  select(rew = Q12, career = Q20)       %>%
           ggplot(aes(x = reorder(rew, -M), y = per, fill = career)) + 
           geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
           theme_bw() +
-          xlab("Development/Maintenance of rsearch software rewarded/recognised") +
+          xlab("Development/Maintenance of research software rewarded/recognised") +
           ylab("Percentage") +
           scale_y_continuous(labels = percent_format(accuracy = 1)) +
           geom_text(aes(label = percent(per, accuracy = 1)), 
@@ -4658,7 +4658,7 @@ data %>%  select(rew = Q12, gender = Q21)        %>%
           ggplot(aes(x = reorder(rew, -n), fill = gender)) + 
           geom_bar(colour = "black") +
           theme_bw() +
-          xlab("Development/Maintenance of rsearch software rewarded/recognised") +
+          xlab("Development/Maintenance of research software rewarded/recognised") +
           ylab("Numbers") +
           geom_text(aes(label = ..count..), position = position_stack(vjust = 0.5), 
                    stat = "count", size = 3) +
@@ -4687,7 +4687,7 @@ data %>%  select(rew = Q12, gender = Q21)        %>%
           ggplot(aes(x = reorder(rew, -M), y = per, fill = gender)) + 
           geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
           theme_bw() +
-          xlab("Development/Maintenance of rsearch software rewarded/recognised") +
+          xlab("Development/Maintenance of research software rewarded/recognised") +
           ylab("Percentage") +
           scale_y_continuous(labels = percent_format(accuracy = 1)) +
           geom_text(aes(label = percent(per, accuracy = 1)), 
@@ -4698,22 +4698,25 @@ data %>%  select(rew = Q12, gender = Q21)        %>%
 
 ```
 
+### Recognition segmented by gender and career stage
+
 ```{r recognition_gender_per2_career}
 
-data %>%  select(rew = Q12, career= Q20, gender = Q21)  %>%
-          group_by(rew)                          %>% 
-          mutate(M = n())                        %>% 
-          filter(!(gender %in% lowstatsgender))  %>% 
-          filter(!(career %in% c("-", "Other"))) %>% 
-          group_by(gender)                       %>% 
-          mutate(N = n())                        %>% 
+data %>%  select(rew = Q12, career = Q20, gender = Q21)  %>%
+          filter(rew != "-")                             %>% 
+          group_by(rew)                                  %>% 
+          mutate(M = n())                                %>% 
+          filter(!(gender %in% lowstatsgender))          %>% 
+          filter(!(career %in% c("-", "Other")))         %>% 
+          group_by(gender)                               %>% 
+          mutate(N = n())                                %>% 
           group_by(rew, gender, career)                  %>% 
-          mutate(per = n()/N)                    %>% 
+          mutate(per = n()/N)                            %>% 
           distinct(rew, gender, per, M, career)          %>% 
           ggplot(aes(x = reorder(rew, -M), y = per, fill = gender)) + 
           geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black", na.rm = TRUE) +
           theme_bw() +
-          xlab("Development/Maintenance of rsearch software rewarded/recognised") +
+          xlab("Development/Maintenance of research software rewarded/recognised") +
           ylab("Percentage") +
           scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.32)) +
           geom_text(aes(label = percent(per, accuracy = 1)), 
