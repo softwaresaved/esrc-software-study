@@ -6021,48 +6021,26 @@ plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
 
 ```{r barriers_careeer}
 
-data %>%  select(num_range("Q16_", 1:13), career = Q20) %>%
-  pivot_longer(cols = num_range("Q16_", 1:13),
-               names_to = NULL,
-               values_to = "barriers")                  %>%
-  filter(barriers != 0)                                 %>%
-  group_by(barriers)                                    %>%
-  mutate(n = n())                                       %>% 
-  ggplot(aes(x = reorder(barriers, -n), fill  = career)) +
-  geom_bar(colour = "black") +
-  theme_bw() +
-  xlab("Barriers to software use") + ylab("Numbers") +
-  geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 2) +
-  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
-  scale_fill_brewer(palette = "Set1", name = "Career stage")
+data %>%  select(num_range("Q16_", 1:13), career = Q20)         %>%
+          filter(!(career %in% c("Other", "-")))                %>% 
+
+          pivot_longer(cols = num_range("Q16_", 1:13),
+                       names_to = NULL,
+                       values_to = "barriers")                  %>%
+          filter(barriers != 0)                                 %>%
+          group_by(barriers)                                    %>%
+          mutate(n = n())                                       %>% 
+          ggplot(aes(x = reorder(barriers, -n), fill  = career)) +
+          geom_bar(colour = "black") +
+          theme_bw() +
+          xlab("Barriers to software use") + ylab("Numbers") +
+          geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 2) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
+          scale_fill_brewer(palette = "Set1", name = "Career stage")
 
 ```
 
 ### Barriers as % of careers
-
-```{r barriers_careeer_per}
-
-data %>%  select(num_range("Q16_", 1:13), career = Q20) %>%
-  group_by(career)                                      %>%
-  mutate(N = n())                                       %>% 
-  pivot_longer(cols = num_range("Q16_", 1:13),
-               names_to = NULL,
-               values_to = "barriers")                  %>%
-  filter(barriers != 0)                                 %>%
-  group_by(career, barriers)                            %>%
-  mutate(per = n()/N)                                   %>% 
-  distinct(career, barriers, per)                       %>% 
-  ggplot(aes(x =barriers, y = per, fill  = career)) +
-  geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-  theme_bw() +
-  scale_y_continuous(labels = percent_format(accuracy = 1)) +
-  xlab("Barriers to software use") + ylab("Percentage") +
-  geom_text(aes(label = percent(per, accuracy = 1)), 
-            position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 2) +
-  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
-  scale_fill_brewer(palette = "Set1", name = "Career stage")
-
-```
 
 Removing "Other" and "-"
 
@@ -6098,125 +6076,84 @@ data %>%  select(num_range("Q16_", 1:13), career = Q20)         %>%
 
 ```{r barriers_gender}
 
-data %>%  select(num_range("Q16_", 1:13), gender = Q21) %>%
-  pivot_longer(cols = num_range("Q16_", 1:13),
-               names_to = NULL,
-               values_to = "barriers")                  %>%
-  filter(barriers != 0)                                 %>%
-  group_by(barriers)                                    %>%
-  mutate(n = n())                                       %>% 
-  ggplot(aes(x = reorder(barriers, -n), fill  = gender)) +
-  geom_bar(colour = "black") +
-  theme_bw() +
-  xlab("Barriers to software use") + ylab("Numbers") +
-  geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 2) +
-  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
-  scale_fill_brewer(palette = "Set2", name = "Gender")
+data %>%  select(num_range("Q16_", 1:13), gender = Q21)         %>%
+          filter(!(gender %in% lowstatsgender))                 %>% 
+          pivot_longer(cols = num_range("Q16_", 1:13),
+                       names_to = NULL,
+                       values_to = "barriers")                  %>%
+          filter(barriers != 0)                                 %>%
+          group_by(barriers)                                    %>%
+          mutate(n = n())                                       %>% 
+          ggplot(aes(x = reorder(barriers, -n), fill  = gender)) +
+          geom_bar(colour = "black") +
+          theme_bw() +
+          xlab("Barriers to software use") + ylab("Numbers") +
+          geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 2) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
+          scale_fill_brewer(palette = "Set2", name = "Gender")
 
 ```
 
 ### Barriers as % of gender
-
-```{r barriers_gender_per}
-
-data %>%  select(num_range("Q16_", 1:13), gender = Q21) %>%
-  group_by(gender)                                      %>%
-  mutate(N = n())                                       %>% 
-  pivot_longer(cols = num_range("Q16_", 1:13),
-               names_to = NULL,
-               values_to = "barriers")                  %>%
-  filter(barriers != 0)                                 %>%
-  group_by(gender, barriers)                            %>%
-  mutate(per = n()/N)                                   %>% 
-  distinct(gender, barriers, per)                       %>% 
-  ggplot(aes(x =barriers, y = per, fill  = gender)) +
-  geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-  theme_bw() +
-  scale_y_continuous(labels = percent_format(accuracy = 1)) +
-  xlab("Barriers to software use") + ylab("Percentage") +
-  geom_text(aes(label = percent(per, accuracy = 1)), 
-            position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 2) +
-  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
-  scale_fill_brewer(palette = "Set2", name = "Gender")
-
-```
 
 Remove the low stat components
 
 ```{r barriers_gender_per2}
 
 data %>%  select(num_range("Q16_", 1:13), gender = Q21) %>%
-  group_by(gender)                                      %>%
-  filter(!(gender %in% lowstatsgender))                 %>% 
-  mutate(N = n())                                       %>% 
-  pivot_longer(cols = num_range("Q16_", 1:13),
-               names_to = NULL,
-               values_to = "barriers")                  %>%
-  filter(barriers != 0)                                 %>%
-  group_by(barriers)                                    %>% 
-  mutate(M = n())                                       %>% 
-  group_by(gender, barriers)                            %>%
-  mutate(per = n()/N)                                   %>% 
-  distinct(gender, barriers, per, M)                    %>% 
-  ggplot(aes(x = reorder(barriers, -M), y = per, fill  = gender)) +
-  geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-  theme_bw() +
-  scale_y_continuous(labels = percent_format(accuracy = 1)) +
-  xlab("Barriers to software use") + ylab("Percentage") +
-  geom_text(aes(label = percent(per, accuracy = 0.1)), 
-            position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 4) +
-  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
-  scale_fill_brewer(palette = "Set2", name = "Gender")
+          group_by(gender)                                      %>%
+          filter(!(gender %in% lowstatsgender))                 %>% 
+          mutate(N = n())                                       %>% 
+          pivot_longer(cols = num_range("Q16_", 1:13),
+                       names_to = NULL,
+                       values_to = "barriers")                  %>%
+          filter(barriers != 0)                                 %>%
+          group_by(barriers)                                    %>% 
+          mutate(M = n())                                       %>% 
+          group_by(gender, barriers)                            %>%
+          mutate(per = n()/N)                                   %>% 
+          distinct(gender, barriers, per, M)                    %>% 
+          ggplot(aes(x = reorder(barriers, -M), y = per, fill  = gender)) +
+          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+          theme_bw() +
+          scale_y_continuous(labels = percent_format(accuracy = 1)) +
+          xlab("Barriers to software use") + ylab("Percentage") +
+          geom_text(aes(label = percent(per, accuracy = 0.1)), 
+                    position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 4) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
+          scale_fill_brewer(palette = "Set2", name = "Gender")
 
 ```
 
 ### Barriers and dissability
 
-```{r barriers_dis}
-
-data %>%  select(num_range("Q16_", 1:13), dis = Q23)    %>%
-  pivot_longer(cols = num_range("Q16_", 1:13),
-               names_to = NULL,
-               values_to = "barriers")                  %>%
-  filter(barriers != 0)                                 %>%
-  group_by(barriers)                                    %>%
-  mutate(n = n())                                       %>% 
-  ggplot(aes(x = reorder(barriers, -n), fill  = dis)) +
-  geom_bar(colour = "black") +
-  theme_bw() +
-  xlab("Barriers to software use") + ylab("Numbers") +
-  geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 3) +
-  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0))  +
-  scale_fill_brewer(palette = "Set3", name = "Dissability")
-
-```
 
 ```{r barriers_dis_per}
 
-data %>%  select(num_range("Q16_", 1:13), dis = Q23)    %>%
-  filter(dis != "-")                                    %>% 
-  group_by(dis)                                         %>% 
-  mutate(N = n())                                       %>% 
-  pivot_longer(cols = num_range("Q16_", 1:13),
-               names_to = NULL,
-               values_to = "barriers")                  %>%
-  filter(barriers != 0)                                 %>%
-  group_by(barriers)                                    %>%
-  mutate(M = n())                                       %>% 
-  group_by(dis, barriers)                               %>% 
-  mutate(n = n())                                       %>% 
-  mutate(per = percent(n/N, accuracy = 1))              %>% 
-  distinct(dis, M, N, n, per, barriers)                 %>% 
-  ggplot(aes(x = reorder(barriers, -M), y = n/N, fill = dis)) +
-  geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
-           colour = "black") +
-  theme_bw() + scale_y_continuous(labels = percent_format(accuarcy = 1)) +
-  xlab("Barriers to software use") + ylab("Percent") +
-  geom_text(aes(y = n/N, label = per), 
-            position = position_dodge2(width = 0.9, preserve = "single"),
-            vjust = -0.5, size = 4) +
-  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0, size = 12))  +
-  scale_fill_brewer(palette = "Set3", name = "Dissability")
+data %>%  select(num_range("Q16_", 1:13), dis = Q23)            %>%
+          filter(dis != "-")                                    %>% 
+          group_by(dis)                                         %>% 
+          mutate(N = n())                                       %>% 
+          pivot_longer(cols = num_range("Q16_", 1:13),
+                       names_to = NULL,
+                       values_to = "barriers")                  %>%
+          filter(barriers != 0)                                 %>%
+          group_by(barriers)                                    %>%
+          mutate(M = n())                                       %>% 
+          group_by(dis, barriers)                               %>% 
+          mutate(n = n())                                       %>% 
+          mutate(per = percent(n/N, accuracy = 1))              %>% 
+          distinct(dis, M, N, n, per, barriers)                 %>% 
+          ggplot(aes(x = reorder(barriers, -M), y = n/N, fill = dis)) +
+          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
+                   colour = "black") +
+          theme_bw() + scale_y_continuous(labels = percent_format(accuarcy = 1)) +
+          xlab("Barriers to software use") + ylab("Percent") +
+          geom_text(aes(y = n/N, label = per), 
+                    position = position_dodge2(width = 0.9, preserve = "single"),
+                    vjust = -0.5, size = 4) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0, size = 12))  +
+          scale_fill_brewer(palette = "Set3", name = "Dissability")
 
 ```
 
