@@ -4571,11 +4571,13 @@ research software are sufficiently recognised or rewarded?
 ```{r recognition}
 
 # Calculate an x label with the folks that filled in this question.
-data %>% select(URN, Q12)  %>% 
+data %>% select(URN, Q12)    %>% 
+         filter(Q12 != "-")  %>% 
          summarise(lab = paste0("Development/Maintenance of rsearch software rewarded/recognised (N=",
                                 n_distinct(URN),")")) -> my
 
 data %>%  select(URN, rew = Q12)                   %>%
+          filter(rew != "-")                       %>% 
           mutate(N = n_distinct(URN))              %>% 
           group_by(rew)                            %>% 
           mutate(n = n())                          %>% 
@@ -4596,7 +4598,8 @@ data %>%  select(URN, rew = Q12)                   %>%
 
 ```{r recognition_careerStage}
 
-data %>%  select(rew = Q12, career = Q20) %>%
+data %>%  select(rew = Q12, career = Q20)       %>%
+          filter(rew != "-")                    %>% 
           filter(!(career %in% c("Other","-"))) %>% 
           group_by(rew)                         %>% 
           mutate(n = n())                       %>% 
@@ -4619,7 +4622,8 @@ population. Removing "Other" and "-".
 
 ```{r recognition_careerStage_per2}
 
-data %>%  select(rew = Q12, career =Q20)        %>%
+data %>%  select(rew = Q12, career = Q20)       %>%
+          filter(rew != "-")                    %>% 
           group_by(rew)                         %>% 
           mutate(M = n())                       %>% 
           group_by(career)                      %>% 
@@ -4646,9 +4650,11 @@ data %>%  select(rew = Q12, career =Q20)        %>%
 
 ```{r recognition_gender}
 
-data %>%  select(rew = Q12, gender = Q21) %>%
-          group_by(rew)       %>% 
-          mutate(n = n())     %>% 
+data %>%  select(rew = Q12, gender = Q21)        %>%
+          filter(rew != "-")                     %>% 
+          filter(!(gender %in% lowstatsgender))  %>% 
+          group_by(rew)                          %>% 
+          mutate(n = n())                        %>% 
           ggplot(aes(x = reorder(rew, -n), fill = gender)) + 
           geom_bar(colour = "black") +
           theme_bw() +
@@ -4666,31 +4672,10 @@ data %>%  select(rew = Q12, gender = Q21) %>%
 The percentages are given as a proportion of the given gender
 population.
 
-```{r recognition_gender_per}
-
-data %>%  select(rew = Q12, gender =Q21) %>%
-          group_by(gender)               %>% 
-          mutate(N = n())                %>% 
-          group_by(rew, gender)          %>% 
-          mutate(per = n()/N)            %>% 
-          distinct(rew, gender, per)     %>% 
-          ggplot(aes(x = rew, y = per, fill = gender)) + 
-          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-          theme_bw() +
-          xlab("Development/Maintenance of rsearch software rewarded/recognised") +
-          ylab("Percentage") +
-          scale_y_continuous(labels = percent_format(accuracy = 1)) +
-          geom_text(aes(label = percent(per, accuracy = 1)), 
-                    position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
-                    size = 2) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-          scale_fill_brewer(palette = "Set2", name = "Gender")
-
-```
-
 ```{r recognition_gender_per2}
 
 data %>%  select(rew = Q12, gender = Q21)        %>%
+          filter(rew != "-")                     %>% 
           group_by(rew)                          %>% 
           mutate(M = n())                        %>% 
           filter(!(gender %in% lowstatsgender))  %>% 
