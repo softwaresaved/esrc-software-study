@@ -4597,8 +4597,9 @@ data %>%  select(URN, rew = Q12)                   %>%
 ```{r recognition_careerStage}
 
 data %>%  select(rew = Q12, career = Q20) %>%
-          group_by(rew)                   %>% 
-          mutate(n = n())                 %>% 
+          filter(!(career %in% c("Other","-"))) %>% 
+          group_by(rew)                         %>% 
+          mutate(n = n())                       %>% 
           ggplot(aes(x = reorder(rew, -n), fill = career)) + 
           geom_bar(colour = "black") +
           theme_bw() +
@@ -4614,31 +4615,7 @@ data %>%  select(rew = Q12, career = Q20) %>%
 ### Recognition segmented by career stage percentage
 
 The percentages are given as a proportion of the given career stage
-population.
-
-```{r recognition_careerStage_per}
-
-data %>%  select(rew = Q12, career =Q20) %>%
-          group_by(career)               %>% 
-          mutate(N = n())                %>% 
-          group_by(rew, career)          %>% 
-          mutate(per = n()/N)            %>% 
-          distinct(rew, career, per)     %>% 
-          ggplot(aes(x = rew, y = per, fill = career)) + 
-          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-          theme_bw() +
-          xlab("Development/Maintenance of rsearch software rewarded/recognised") +
-          ylab("Percentage") +
-          scale_y_continuous(labels = percent_format(accuracy = 1)) +
-          geom_text(aes(label = percent(per, accuracy = 1)), 
-                    position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
-                    size = 2) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-          scale_fill_brewer(palette = "Set1", name = "Career stage")
-
-```
-
-Removing "Other" and "-".
+population. Removing "Other" and "-".
 
 ```{r recognition_careerStage_per2}
 
