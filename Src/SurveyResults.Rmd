@@ -4721,7 +4721,7 @@ data %>%  select(rew = Q12, career = Q20, gender = Q21)  %>%
           scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.32)) +
           geom_text(aes(label = percent(per, accuracy = 1)), 
                     position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5,
-                    size = 3, na.rm = TRUE) +
+                    size = 4, na.rm = TRUE) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
           scale_fill_brewer(palette = "Set2", name = "Gender") +
           facet_wrap(~ career)
@@ -5496,12 +5496,15 @@ data %>%  select(URN, num_range("Q14_", 1:9))         %>%
           mutate(N = n_distinct(URN))                    %>% 
           group_by(runon)                                %>% 
           mutate(n = n())                                %>% 
-  ggplot(aes(x = reorder(runon, -n), fill = n)) +
-  geom_bar(colour = "black") +
-  theme_bw() + ylim(0, 111) +
-  xlab(my$lab) + ylab("Numbers") + scale_fill_distiller(palette = "Blues", direction = 1) +
-  geom_text(aes(y = n, label = paste0(n," (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 4) +
-  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10), legend.position = "None")
+          ggplot(aes(x = reorder(runon, -n), fill = n)) +
+          geom_bar(colour = "black") +
+          theme_bw() + 
+          ylim(0, 111) +
+          xlab(my$lab) + ylab("Numbers") + 
+          scale_fill_distiller(palette = "Blues", direction = 1) +
+          geom_text(aes(y = n, label = paste0(n," (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 4) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10), legend.position = "None")
+
 ```
 
 ### Choice correlations
@@ -5533,21 +5536,22 @@ corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 
 ```{r where_sw_run_career}
 
-data %>%  select(num_range("Q14_", 1:9), career = Q20)         %>%
-  pivot_longer(cols = num_range("Q14_", 1:9),
-               names_to = NULL,
-               values_to = "runon")              %>%
-  filter(runon != 0)                             %>%
-  group_by(runon)                                %>% 
-  mutate(n = n())                                %>% 
-  group_by(career, runon)                        %>% 
-  ggplot(aes(x = reorder(runon, -n), fill  = career)) +
-  geom_bar( colour = "black") +
-  theme_bw() +
-  xlab("Where software is run") + ylab("Numbers") +
-  geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 2) +
-  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-  scale_fill_brewer(palette = "Set1", name = "Career stage")
+data %>%  select(num_range("Q14_", 1:9), career = Q20)  %>%
+          pivot_longer(cols = num_range("Q14_", 1:9),
+                       names_to = NULL,
+                       values_to = "runon")             %>%
+          filter(runon != 0)                            %>%
+          group_by(runon)                               %>% 
+          mutate(n = n())                               %>% 
+          filter(!(career %in% c("-", "Other")))        %>% 
+          group_by(career, runon)                       %>% 
+          ggplot(aes(x = reorder(runon, -n), fill  = career)) +
+          geom_bar( colour = "black") +
+          theme_bw() +
+          xlab("Where software is run") + ylab("Numbers") +
+          geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 2) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+          scale_fill_brewer(palette = "Set1", name = "Career stage")
 
 ```
 
@@ -5556,27 +5560,28 @@ data %>%  select(num_range("Q14_", 1:9), career = Q20)         %>%
 ```{r where_sw_run_career_per2}
 
 data %>%  select(num_range("Q14_", 1:9), career = Q20)         %>%
-  group_by(career)                                             %>% 
-  mutate(N = n())                                              %>% 
-  pivot_longer(cols = num_range("Q14_", 1:9),
-               names_to = NULL,
-               values_to = "runon")                            %>%
-  filter(runon != 0)                                           %>%
-  group_by(runon)                                              %>% 
-  mutate(M = n())                                              %>% 
-  filter(!(career %in% c("Other", "-")))                       %>% 
-  group_by(career, runon)                                      %>% 
-  mutate(n = n())                                              %>% 
-  mutate(per = percent(n/N, accuracy = 1))                     %>% 
-  distinct(M, N, n, per)                                       %>% 
-  ggplot(aes(x = reorder(runon, -M), y = n/N, fill  = career)) +
-  geom_col( position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-  theme_bw() + scale_y_continuous(labels = percent_format(accuracy = 1)) +
-  xlab("Where software is run") + ylab("Percent") +
-  geom_text(aes(label = per), vjust = -0.5,
-            position = position_dodge2(width = 0.9, preserve = "single"), size = 4) +
-  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-  scale_fill_brewer(palette = "Set1", name = "Career stage")
+          group_by(career)                                     %>% 
+          mutate(N = n())                                      %>% 
+          pivot_longer(cols = num_range("Q14_", 1:9),
+                       names_to = NULL,
+                       values_to = "runon")                    %>%
+          filter(runon != 0)                                   %>%
+          group_by(runon)                                      %>% 
+          mutate(M = n())                                      %>% 
+          filter(!(career %in% c("Other", "-")))               %>% 
+          group_by(career, runon)                              %>% 
+          mutate(n = n())                                      %>% 
+          mutate(per = percent(n/N, accuracy = 1))             %>% 
+          distinct(M, N, n, per)                               %>% 
+          ggplot(aes(x = reorder(runon, -M), y = n/N, fill  = career)) +
+          geom_col( position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+          theme_bw() + 
+          scale_y_continuous(labels = percent_format(accuracy = 1)) +
+          xlab("Where software is run") + ylab("Percent") +
+          geom_text(aes(label = per), vjust = -0.5,
+                    position = position_dodge2(width = 0.9, preserve = "single"), size = 4) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+          scale_fill_brewer(palette = "Set1", name = "Career stage")
 
 ```
 
@@ -5584,21 +5589,22 @@ data %>%  select(num_range("Q14_", 1:9), career = Q20)         %>%
 
 ```{r where_sw_run_gender}
 
-data %>%  select(num_range("Q14_", 1:9), gender = Q21)         %>%
-  pivot_longer(cols = num_range("Q14_", 1:9),
-               names_to = NULL,
-               values_to = "runon")              %>%
-  filter(runon != 0)                             %>%
-  group_by(runon)                                %>% 
-  mutate(n = n())                                %>% 
-  group_by(gender, runon)                        %>% 
-  ggplot(aes(x = reorder(runon, -n), fill  = gender)) +
-  geom_bar( colour = "black") +
-  theme_bw() +
-  xlab("Where software is run") + ylab("Numbers") +
-  geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 3) +
-  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-  scale_fill_brewer(palette = "Set2", name = "Gender")
+data %>%  select(num_range("Q14_", 1:9), gender = Q21)  %>%
+          pivot_longer(cols = num_range("Q14_", 1:9),
+                       names_to = NULL,
+                       values_to = "runon")              %>%
+          filter(runon != 0)                             %>%
+          group_by(runon)                                %>% 
+          mutate(n = n())                                %>% 
+          filter(!(gender %in% lowstatsgender))          %>% 
+          group_by(gender, runon)                        %>% 
+          ggplot(aes(x = reorder(runon, -n), fill  = gender)) +
+          geom_bar( colour = "black") +
+          theme_bw() +
+          xlab("Where software is run") + ylab("Numbers") +
+          geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 3) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+          scale_fill_brewer(palette = "Set2", name = "Gender")
 
 ```
 
@@ -5607,27 +5613,58 @@ data %>%  select(num_range("Q14_", 1:9), gender = Q21)         %>%
 ```{r where_sw_run_gender_per}
 
 data %>%  select(num_range("Q14_", 1:9), gender = Q21)         %>%
-  group_by(gender)                                             %>% 
-  mutate(N = n())                                              %>% 
-  pivot_longer(cols = num_range("Q14_", 1:9),
-               names_to = NULL,
-               values_to = "runon")                            %>%
-  filter(runon != 0)                                           %>%
-  group_by(runon)                                              %>% 
-  mutate(M = n())                                              %>% 
-  filter(!(gender %in% lowstatsgender))                        %>% 
-  group_by(gender, runon)                                      %>% 
-  mutate(n = n())                                              %>% 
-  mutate(per = percent(n/N, accuracy = 1))                     %>% 
-  distinct(M, N, n, per)                                       %>% 
-  ggplot(aes(x = reorder(runon, -M), y = n/N, fill  = gender)) +
-  geom_col( position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-  theme_bw() + scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.76)) +
-  xlab("Where software is run") + ylab("Percent") +
-  geom_text(aes(label = per), vjust = -0.5,
-            position = position_dodge2(width = 0.9, preserve = "single"), size = 4) +
-  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-  scale_fill_brewer(palette = "Set2", name = "Gender")
+          group_by(gender)                                     %>% 
+          mutate(N = n())                                      %>% 
+          pivot_longer(cols = num_range("Q14_", 1:9),
+                       names_to = NULL,
+                       values_to = "runon")                    %>%
+          filter(runon != 0)                                   %>%
+          group_by(runon)                                      %>% 
+          mutate(M = n())                                      %>% 
+          filter(!(gender %in% lowstatsgender))                %>% 
+          group_by(gender, runon)                              %>% 
+          mutate(n = n())                                      %>% 
+          mutate(per = percent(n/N, accuracy = 1))             %>% 
+          distinct(M, N, n, per)                               %>% 
+          ggplot(aes(x = reorder(runon, -M), y = n/N, fill  = gender)) +
+          geom_col( position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+          theme_bw() + scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.76)) +
+          xlab("Where software is run") + ylab("Percent") +
+          geom_text(aes(label = per), vjust = -0.5,
+                    position = position_dodge2(width = 0.9, preserve = "single"), size = 4) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+          scale_fill_brewer(palette = "Set2", name = "Gender")
+
+```
+
+### Where software is run by % gender and career
+
+```{r where_sw_run_gender_career_per}
+
+data %>%  select(num_range("Q14_", 1:9), career = Q20, gender = Q21) %>%
+          group_by(gender)                                           %>% 
+          mutate(N = n())                                            %>% 
+          pivot_longer(cols = num_range("Q14_", 1:9),
+                       names_to = NULL,
+                       values_to = "runon")                          %>%
+          filter(runon != 0)                                         %>%
+          group_by(runon)                                            %>% 
+          mutate(M = n())                                            %>% 
+          filter(!(gender %in% lowstatsgender))                      %>% 
+          filter(!(career %in% c("-", "Other")))                     %>% 
+          group_by(gender, runon, career)                            %>% 
+          mutate(n = n())                                            %>% 
+          mutate(per = percent(n/N, accuracy = 1))                   %>% 
+          distinct(M, N, n, per, career)                             %>% 
+          ggplot(aes(x = reorder(runon, -M), y = n/N, fill  = gender)) +
+          geom_col( position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+          theme_bw() + scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.41)) +
+          xlab("Where software is run") + ylab("Percent") +
+          geom_text(aes(label = per), vjust = -0.5,
+                    position = position_dodge2(width = 0.9, preserve = "single"), size = 4) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+          scale_fill_brewer(palette = "Set2", name = "Gender") +
+          facet_wrap(~ career)
 
 ```
 
@@ -5640,23 +5677,65 @@ B and D then that would contribute an A_B\_D then we count all the
 combined choices. Only showing combinations that have a count greater
 than 1.
 
-```{r run_choices}
+```{r barrier_choices}
 
-data %>% select(id = URN, num_range("Q14_", 1:9))                       %>%
-         pivot_longer(cols = num_range("Q14_", 1:9),
+data %>% select(id = URN, num_range("Q16_", 1:13))                       %>%
+         pivot_longer(cols = num_range("Q16_", 1:13),
                       names_to = NULL,
                       values_to = "ds")                                %>%
          filter(ds != 0)                                               %>%  
          group_by(id)                                                  %>% 
          mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         distinct(id, choices)                                         %>% 
+        # distinct(id, choices)                                         %>% 
          ungroup()                                                     %>% 
          select(-id)                                                   %>% 
          group_by(choices)                                             %>% 
          tally()                                                       %>% 
-         filter(n  > 1)                                                %>% 
          arrange(desc(n))                                              %>% 
          kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
+```
+
+```{r run_choices_career}
+
+data %>% select(URN, num_range("Q14_", 1:9), career = Q20)             %>%
+         pivot_longer(cols = num_range("Q14_", 1:9),
+                      names_to = NULL,
+                      values_to = "ds")                                %>%
+         filter(ds != 0)                                               %>%
+         filter(ds == "Own" | ds == "InstitutionallyProvided")         %>% 
+         group_by(URN)                                                 %>% 
+         filter(!(career %in% c("-", "Other"))) %>% 
+         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
+         distinct(URN, choices, career)                                %>% 
+         ungroup()                                                     %>% 
+         select(-URN)                                                  %>% 
+         group_by(career, choices)                                     %>% 
+         tally()                                                       %>%
+         pivot_wider(names_from = "career", 
+                     values_from = "n",
+                     values_fill = 0)
+```
+
+```{r run_choices_gender}
+
+data %>% select(URN, num_range("Q14_", 1:9), gender = Q21)             %>%
+         pivot_longer(cols = num_range("Q14_", 1:9),
+                      names_to = NULL,
+                      values_to = "ds")                                %>%
+         filter(ds != 0)                                               %>%
+         filter(ds == "Own" | ds == "InstitutionallyProvided")         %>% 
+         group_by(URN)                                                 %>% 
+         filter(!(gender %in% lowstatsgender)) %>% 
+         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
+         distinct(URN, choices, gender)                                %>% 
+         ungroup()                                                     %>% 
+         select(-URN)                                                  %>% 
+         group_by(gender, choices)                                     %>% 
+         tally()                                                       %>%
+         pivot_wider(names_from = "gender", 
+                     values_from = "n",
+                     values_fill = 0)
+
 ```
 
 ### Other platforms used
