@@ -5141,7 +5141,7 @@ data %>% select(num_range("Q13_3_",1:5), career = Q20)                          
          ggplot(aes(x = understanding, y = per, fill = career)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
-                       position = position_dodge2(width = 0.9, preserve = "single"), size = 3, vjust = -0.5) +
+                       position = position_dodge2(width = 0.9, preserve = "single"), size = 4, vjust = -0.5) +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          theme_bw() + ylab("Percent") +
          xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community") +
@@ -5214,7 +5214,7 @@ data %>% select(num_range("Q13_3_",1:5), career = Q20, gender = Q21)            
          ggplot(aes(x = understanding, y = per, fill = gender)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
-                   position = position_dodge2(width = 0.9, preserve = "single"), size = 3, vjust = -0.5) +
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 4, vjust = -0.5) +
          scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.22)) +
          theme_bw() + ylab("Percent") +
          xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community") +
@@ -5337,7 +5337,7 @@ data %>% select(num_range("Q13_4_",1:5), career = Q20, gender = Q21)            
          geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
                    position = position_dodge2(width = 0.9, preserve = "single"), 
                    size = 3, vjust = -0.5) +
-         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.20)) +
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.19)) +
          theme_bw() + ylab("Percent") +
          xlab("Insufficient incentive to learn how s/w is funded, managed and licensed") +
          scale_fill_brewer(palette = "Set2", name = "Gender") +
@@ -5362,9 +5362,9 @@ data %>% select(URN, starts_with("Q13_"), career = Q20, gender = Q21)     %>%
                       values_to = "Q13d")                                %>% 
          pivot_longer(cols = c("Q13a", "Q13b","Q13c","Q13d"),
                       names_to = "Q13",
-                      values_to ="Response")                             %>% 
-        filter(Response != 0)                                            %>% 
-        distinct(URN, career, gender, Q13, Response)                     %>% 
+                      values_to ="Response")                                                     %>% 
+        filter(Response != 0)                                                                    %>% 
+        distinct(URN, career, gender, Q13, Response)                                             %>% 
         mutate(Response = factor(Response, 
               levels = c("Strongly agree","Agree","Undecided", "Disagree","Strongly disagree"))) %>% 
         ggplot(aes(x = Response, fill = Q13)) + geom_bar(position = position_dodge2(), colour = "black") +
