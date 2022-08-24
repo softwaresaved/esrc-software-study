@@ -3924,7 +3924,8 @@ q <- apply(q, 2, function(x) as.integer(x))
 my_colors <- brewer.pal(5, "Spectral")
 my_colors <- colorRampPalette(my_colors)(100)
 
-plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
+#plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
+corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 
 ```
 
@@ -5668,7 +5669,7 @@ data %>%  select(num_range("Q14_", 1:9), career = Q20, gender = Q21) %>%
 
 ```
 
-### Counting combined choices
+### Count combined choices
 
 For each multiple choice replace spaces by "-"s and collapse all the
 non-empty choices and join them with an "\_". So, if an individual only
@@ -6013,7 +6014,9 @@ q <- apply(q, 2, function(x) as.integer(x))
 my_colors <- brewer.pal(5, "Spectral")
 my_colors <- colorRampPalette(my_colors)(100)
 
-plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
+#plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
+corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
+corrplot(cor(q), method="number", type= "lower", diag = FALSE)
 
 ```
 
@@ -6023,7 +6026,6 @@ plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
 
 data %>%  select(num_range("Q16_", 1:13), career = Q20)         %>%
           filter(!(career %in% c("Other", "-")))                %>% 
-
           pivot_longer(cols = num_range("Q16_", 1:13),
                        names_to = NULL,
                        values_to = "barriers")                  %>%
@@ -6127,7 +6129,6 @@ data %>%  select(num_range("Q16_", 1:13), gender = Q21) %>%
 
 ### Barriers and dissability
 
-
 ```{r barriers_dis_per}
 
 data %>%  select(num_range("Q16_", 1:13), dis = Q23)            %>%
@@ -6157,7 +6158,7 @@ data %>%  select(num_range("Q16_", 1:13), dis = Q23)            %>%
 
 ```
 
-### Counting combined choices
+### Count combined choices
 
 For each multiple choice replace spaces by "-"s and collapse all the
 non-empty choices and join them with an "\_". So, if an individual only
@@ -6181,6 +6182,51 @@ data %>% select(id = URN, num_range("Q16_", 1:13))                       %>%
          tally()                                                       %>% 
          arrange(desc(n))                                              %>% 
          kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
+```
+
+
+```{r barrier_choices2}
+
+# Create a data frame showing the choices per individual
+data %>% select(URN, num_range("Q16_", 1:13))                   %>%
+         pivot_longer(cols = num_range("Q16_", 1:13),
+                      names_to = NULL,
+                      values_to = "ds")                         %>%
+         filter(ds != 0)                                        %>%  
+         group_by(URN, ds)                                      %>%
+         tally()                                                %>% 
+         pivot_wider(names_from = "ds", 
+                     values_from = "n", 
+                     values_fill = 0)                          %>%
+        ungroup()                                              %>% 
+        select(-URN)  -> cc
+
+# Create a new data frame to store the result
+vc <- data.frame(ConcernAboutValue = rep(0L, ncol(cc)))
+
+# Loop round the choices and count what choices are used in combination 
+# when a particular choices is used.
+for(i in 1:ncol(cc)){
+  
+  n <- names(cc)[[i]]
+  rownames(vc)[i] <-  n
+  vc[n] <- colSums(cc[cc[n]==1,])
+
+}
+
+# Create a tile plot
+tt <- names(vc)
+vc %>% mutate(blocks = tt)    %>% 
+       pivot_longer(cols = all_of(tt),
+                    names_to = "blockers",
+                    values_to = "n")       %>% 
+       ggplot(aes(x = reorder(blockers, -n), y = reorder(blocks, n), fill = n)) +
+       theme_bw() + geom_tile() +
+       scale_fill_distiller(palette = "Blues", direction = 1) +
+       theme(axis.text.x = element_text(angle = -60, hjust = 0),
+            legend.position = "None") +
+       geom_text(aes(label = n), size = 4) +
+       xlab("Blockers") + ylab("Blockers")
 ```
 
 ### Other barriers
