@@ -4879,6 +4879,40 @@ data %>% select(num_range("Q13_1_",1:5), gender = Q21)                          
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
+#### Responses as % of gender and career
+
+Percentages may not add up to 100% as members that have not answered the
+question are not shown.
+
+
+```{r aware_sw_gender_career_per2}
+
+data %>% select(num_range("Q13_1_",1:5), career = Q20, gender = Q21)                    %>%
+         filter(!(gender %in% lowstatsgender))                                          %>% 
+         filter(!(career %in% c("-", "Other")))                                         %>% 
+         group_by(gender)                                                               %>% 
+         mutate(N = n())                                                                %>%
+         pivot_longer(cols = starts_with("Q13"),
+                      names_to = NULL,
+                      values_to = "understanding")                                      %>%
+         filter(understanding != 0)                                                     %>%
+         group_by(understanding, gender, career)                                        %>% 
+         mutate(per = n()/N)                                                            %>% 
+         mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
+         distinct(understanding, gender, per, career)                                   %>% 
+         ggplot(aes(x = understanding, y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), 
+                   size = 3, vjust = -0.5) +
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.15)) +
+         theme_bw() + ylab("Percent") +
+         xlab("Aware of how s/w I use is funded, managed and licensed") +
+         scale_fill_brewer(palette = "Set2", name = "Gender") + 
+         theme(axis.text.x = element_text(angle = -60, hjust = 0)) +
+         facet_wrap(~ career)
+```
+
 ### Q13b Clarity of software funding, managent and licensing
 
 My institution/funder's policies on how software is funded, managed and
