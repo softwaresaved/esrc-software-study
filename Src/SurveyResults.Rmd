@@ -6016,7 +6016,7 @@ my_colors <- colorRampPalette(my_colors)(100)
 
 #plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
 corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
-corrplot(cor(q), method="number", type= "lower", diag = FALSE)
+#corrplot(cor(q), method="number", type= "lower", diag = FALSE)
 
 ```
 
@@ -6102,6 +6102,38 @@ Remove the low stat components
 
 ```{r barriers_gender_per2}
 
+data %>%  select(num_range("Q16_", 1:13), career = Q20, gender = Q21) %>%
+          filter(!(gender %in% lowstatsgender))                       %>% 
+          filter(!(career %in% c("-", "Other")))                      %>% 
+          group_by(gender)                                            %>%
+          mutate(N = n())                                             %>% 
+          pivot_longer(cols = num_range("Q16_", 1:13),
+                       names_to = NULL,
+                       values_to = "barriers")                       %>%
+          filter(barriers != 0)                                      %>%
+          group_by(barriers)                                         %>% 
+          mutate(M = n())                                            %>% 
+          group_by(gender, barriers, career)                         %>%
+          mutate(per = n()/N)                                        %>% 
+          distinct(gender, barriers, per, M, career)                 %>% 
+          ggplot(aes(x = reorder(barriers, -M), y = per, fill  = gender)) +
+          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+          theme_bw() +
+          scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.25)) +
+          xlab("Barriers to software use") + ylab("Percentage") +
+          geom_text(aes(label = percent(per, accuracy = 0.1)), 
+                    position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 3) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0))  +
+          scale_fill_brewer(palette = "Set2", name = "Gender") +
+          facet_wrap(~ career)
+
+```
+
+### Barriers as % of gender and career
+
+
+```{r barriers_gender_per2}
+
 data %>%  select(num_range("Q16_", 1:13), gender = Q21) %>%
           group_by(gender)                                      %>%
           filter(!(gender %in% lowstatsgender))                 %>% 
@@ -6126,7 +6158,6 @@ data %>%  select(num_range("Q16_", 1:13), gender = Q21) %>%
           scale_fill_brewer(palette = "Set2", name = "Gender")
 
 ```
-
 ### Barriers and dissability
 
 ```{r barriers_dis_per}
