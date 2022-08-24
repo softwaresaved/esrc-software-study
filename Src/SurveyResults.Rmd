@@ -4969,8 +4969,6 @@ data %>% select(num_range("Q13_2_",1:5), career = Q20)     %>%
 #### Responses as % of career stage
 
 
-Removing "Other" and "-"
-
 ```{r aware_policies_career_per2}
 
 data %>% select(num_range("Q13_2_",1:5), career = Q20)                                  %>%
@@ -5065,6 +5063,7 @@ data %>% select(num_range("Q13_2_",1:5), career = Q20, gender = Q21)            
          scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.21)) +
          theme_bw() + ylab("Percent") +
          xlab("Aware of how institution/funder's policies on how s/w is funded, managed and licensed") +
+         theme(axis.text.x = element_text(angle = -60, hjust = 0)) +
          scale_fill_brewer(palette = "Set2", name = "Gender") +
          facet_wrap(~ career)
 ```
@@ -5108,6 +5107,7 @@ data %>% select(num_range("Q13_3_",1:5))            %>%
 ```{r insufficient_attention_career}
 
 data %>% select(num_range("Q13_3_",1:5), career = Q20)     %>%
+         filter(!(career %in% c("Other", "-")))            %>% 
          pivot_longer(cols = starts_with("Q13"),
                       names_to = NULL,
                       values_to = "understanding")         %>%
@@ -5123,30 +5123,6 @@ data %>% select(num_range("Q13_3_",1:5), career = Q20)     %>%
 
 #### Responses as % of career stage
 
-```{r insufficient_attention_career_per}
-
-data %>% select(num_range("Q13_3_",1:5), career = Q20)                                  %>%
-         group_by(career)                                                               %>% 
-         mutate(N = n())                                                                %>% 
-         pivot_longer(cols = starts_with("Q13"),
-                      names_to = NULL,
-                      values_to = "understanding")                                      %>%
-         filter(understanding != 0)                                                     %>%
-         group_by(understanding, career)                                                %>% 
-         mutate(per = n()/N)                                                            %>% 
-         mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
-         distinct(understanding, career, per)                                           %>% 
-         ggplot(aes(x = understanding, y = per, fill = career)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-         geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
-                       position = position_dodge2(width = 0.9, preserve = "single"), size = 2, vjust = -0.5) +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         theme_bw() + ylab("Percent") +
-         xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community") +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
-
-Removing "-" and "Other".
 
 ```{r insufficient_attention_career_per2}
 
@@ -5177,6 +5153,7 @@ data %>% select(num_range("Q13_3_",1:5), career = Q20)                          
 ```{r insufficient_attention_gender}
 
 data %>% select(num_range("Q13_3_",1:5), gender = Q21)     %>%
+        filter(!(gender %in% lowstatsgender))              %>% 
          pivot_longer(cols = starts_with("Q13"),
                       names_to = NULL,
                       values_to = "understanding")         %>%
@@ -5192,28 +5169,6 @@ data %>% select(num_range("Q13_3_",1:5), gender = Q21)     %>%
 
 #### Responses as % of gender pop
 
-```{r insufficient_attention_gender_per}
-
-data %>% select(num_range("Q13_3_",1:5), gender = Q21)                                  %>%
-         group_by(gender)                                                               %>% 
-         mutate(N = n())                                                                %>% 
-         pivot_longer(cols = starts_with("Q13"),
-                      names_to = NULL,
-                      values_to = "understanding")                                      %>%
-         filter(understanding != 0)                                                     %>%
-         group_by(understanding, gender)                                                %>% 
-         mutate(per = n()/N)                                                            %>% 
-         mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
-         distinct(understanding, gender, per)                                           %>% 
-         ggplot(aes(x = understanding, y = per, fill = gender)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-         geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
-                   position = position_dodge2(width = 0.9, preserve = "single"), size = 2, vjust = -0.5) +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         theme_bw() + ylab("Percent") +
-         xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community") +
-         scale_fill_brewer(palette = "Set2", name = "Gender")
-```
 
 ```{r insufficient_attention_gender_per2}
 
@@ -5264,6 +5219,7 @@ data %>% select(num_range("Q13_3_",1:5), career = Q20, gender = Q21)            
          theme_bw() + ylab("Percent") +
          xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community") +
          scale_fill_brewer(palette = "Set2", name = "Gender") + 
+         
          facet_wrap(~ career)
 ```
 
