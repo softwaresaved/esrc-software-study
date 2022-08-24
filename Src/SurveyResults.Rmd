@@ -4755,11 +4755,11 @@ I am aware of how the software I use is funded, managed and licensed
 ```{r aware_sw}
 
 # Calculate an x label with the folks that filled in this question.
-data %>% select(URN, num_range("Q13_1_",1:5))  %>% 
+data %>% select(URN, num_range("Q13_1_",1:5))           %>% 
            pivot_longer(cols = num_range("Q13_1_",1:5),
                       names_to = NULL,
-                      values_to = "understanding")  %>%
-         filter(understanding != 0)                 %>%
+                      values_to = "understanding")      %>%
+         filter(understanding != 0)                     %>%
          summarise(lab = paste0("Aware of how s/w I use is funded, managed and licensed (N=",
                                 n_distinct(URN),")")) -> my
 
@@ -4785,7 +4785,7 @@ data %>% select(num_range("Q13_1_",1:5))            %>%
 ```{r aware_sw_career}
 
 data %>% select(num_range("Q13_1_",1:5), career = Q20)     %>%
-         filter(!(career %in% c("-", "Other")))         %>% 
+         filter(!(career %in% c("-", "Other")))            %>% 
          pivot_longer(cols = starts_with("Q13"),
                       names_to = NULL,
                       values_to = "understanding")         %>%
@@ -4834,6 +4834,7 @@ data %>% select(num_range("Q13_1_",1:5), career = Q20)                          
 ```{r aware_sw_gender}
 
 data %>% select(num_range("Q13_1_",1:5), gender = Q21)     %>%
+         filter(!(gender %in% lowstatsgender))             %>% 
          pivot_longer(cols = starts_with("Q13"),
                       names_to = NULL,
                       values_to = "understanding")         %>%
@@ -4852,29 +4853,6 @@ data %>% select(num_range("Q13_1_",1:5), gender = Q21)     %>%
 Percentages may not add up to 100% as members that have not answered the
 question are not shown.
 
-```{r aware_sw_gender_per}
-
-data %>% select(num_range("Q13_1_",1:5), gender = Q21)                                  %>%
-         group_by(gender)                                                               %>% 
-         mutate(N = n())                                                                %>%
-         pivot_longer(cols = starts_with("Q13"),
-                      names_to = NULL,
-                      values_to = "understanding")                                      %>%
-         filter(understanding != 0)                                                     %>%
-         group_by(understanding, gender)                                                %>% 
-         mutate(per = n()/N)                                                            %>% 
-         mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
-         distinct(understanding, gender, per)                                           %>% 
-         ggplot(aes(x = understanding, y = per, fill = gender)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-         geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
-                   position = position_dodge2(width = 0.9, preserve = "single"), 
-                   size = 3, vjust = -0.5) +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         theme_bw() + ylab("Percent") +
-         xlab("Aware of how s/w I use is funded, managed and licensed") +
-         scale_fill_brewer(palette = "Set2", name = "Gender")
-```
 
 ```{r aware_sw_gender_per2}
 
