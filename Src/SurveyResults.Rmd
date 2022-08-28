@@ -4821,7 +4821,7 @@ data %>% select(num_range("Q13_1_",1:5), career = Q20)                          
          distinct(understanding, career, per)                                           %>% 
          ggplot(aes(x = understanding, y = per, fill = career)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-         geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
+         geom_text(aes(y = per, label = percent(per , accuracy = 0.1)), 
                        position = position_dodge2(width = 0.9, preserve = "single"), size = 4, vjust = -0.5) +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          theme_bw() + ylab("Percent") +
@@ -6060,6 +6060,7 @@ data %>%  select(num_range("Q16_", 1:13), gender = Q21) %>%
           scale_fill_brewer(palette = "Set2", name = "Gender")
 
 ```
+
 ### Barriers and dissability
 
 ```{r barriers_dis_per}
