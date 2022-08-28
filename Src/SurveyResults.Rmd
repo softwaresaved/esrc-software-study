@@ -5589,7 +5589,6 @@ data %>% select(id = URN, num_range("Q16_", 1:13))                       %>%
          filter(ds != 0)                                               %>%  
          group_by(id)                                                  %>% 
          mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-        # distinct(id, choices)                                         %>% 
          ungroup()                                                     %>% 
          select(-id)                                                   %>% 
          group_by(choices)                                             %>% 
@@ -5697,6 +5696,7 @@ data %>% select(URN, starts_with("Q15_"), -"Q15_a")                     %>%
 ```{r licensing_career}
 
 data %>% select(starts_with("Q15_"), -"Q15_a", career = Q20)            %>%
+         filter(!(career %in% c("-", "Other")))                         %>% 
          pivot_longer(cols = starts_with("Q15_"),
                       names_to = NULL,
                       values_to ="aware")                               %>%
@@ -5749,6 +5749,7 @@ data %>% select(id = URN, starts_with("Q15_"), -"Q15_a", career = Q20)     %>%
 ```{r licensing_gender}
 
 data %>% select(starts_with("Q15_"), -"Q15_a", gender = Q21)              %>%
+         filter(!(gender %in% lowstatsgender))                            %>% 
          pivot_longer(cols = starts_with("Q15_"),
                       names_to = NULL,
                       values_to ="aware")                                 %>%
@@ -5802,7 +5803,7 @@ data %>% select(id = URN, starts_with("Q15_"), -"Q15_a", gender = Q21)    %>%
 ```{r licensing_gender_per_career}
 
 data %>% select(id = URN, starts_with("Q15_"), -"Q15_a", career = Q20, 
-                gender = Q21)    %>%
+                gender = Q21)                                             %>%
          group_by(gender)                                                 %>%
          mutate(N = n())                                                  %>% 
          pivot_longer(cols = starts_with("Q15_"),
