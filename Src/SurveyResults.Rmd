@@ -2709,12 +2709,14 @@ Do you use open source software?
 ```{r use_os}
 
 # Calculate an x label with the folks that filled in this question.
-data %>% select(URN, Q6)  %>% 
+data %>% select(URN, Q6)      %>% 
+         filter(Q6 != "-")    %>% 
          summarise(lab = paste0("Use of Open Source (N=", n_distinct(URN),")")) -> my
 
-data %>% select(Q6)       %>%
-         group_by(Q6)     %>% 
-         mutate(n = n())  %>% 
+data %>% select(Q6)         %>%
+         filter(Q6 != "-")  %>% 
+         group_by(Q6)       %>% 
+         mutate(n = n())    %>% 
          ggplot(aes(x = reorder(Q6, -n), fill = n)) + 
          geom_bar(colour = "black") + 
          theme_bw() +
@@ -3720,11 +3722,12 @@ spreadsheets)
 ```{r develop_sw}
 
 # Calculate an x label with the folks that filled in this question.
-data %>% select(URN, Q9)  %>% 
+data %>% select(URN, Q9)    %>% 
+         filter(!is.na(Q9)) %>% 
          summarise(lab = paste0("Do you develop software? (N=", n_distinct(URN),")")) -> my
 
-data %>% select(Q9)                              %>%
-         mutate(Q9 = ifelse(!is.na(Q9), Q9, "-"))  %>% 
+data %>% select(Q9)                                %>%
+         filter(!is.na(Q9))                        %>% 
          mutate(N = n())                           %>% 
          group_by(Q9)                              %>% 
          mutate(n = n())                           %>% 
