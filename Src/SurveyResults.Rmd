@@ -1966,6 +1966,19 @@ listOther("Q2_b_i")
 
 ```
 
+```{r other_ds}
+
+data %>% select(starts_with("Q2b_s"))                %>% 
+         pivot_longer(cols = starts_with("Q2b_s"),
+                      names_to = NULL,
+                      values_to = "other_ds")        %>% 
+         filter(!is.na(other_ds))                    %>% 
+         group_by(tolower(other_ds))                 %>%
+         tally()                                     %>% 
+         arrange(desc(n))                            %>%  
+         kbl(format = "pipe", col.names = c("Data source (lower case)", "Count"), align = c("r","r"))
+```
+
 ## Q2c Data processes
 
 If you create, collect or generate your own data, could you briefly
