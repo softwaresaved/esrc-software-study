@@ -57,7 +57,7 @@ listOther <- function(Quest){
 
 ```{r read_data}
 
-# Read in the survey results
+# Read in the base survey results
 data0 <- read_xlsx("../Data/survey-results.xlsx")
 
 # Upload location information - long and lat for institutions
@@ -69,12 +69,12 @@ colTypes <- cols(
 
 locations <- read_csv("../Data/locations.csv", col_types = colTypes)
 
-# Cleaned up software - Q5 most important software - a free text box. Cleaned up
-# in OpenRefine
+# Cleaned up software - Q5 most important software - a free text box.
+# Used OpenRefine
 important_software <- read_csv("../Data/Q5-software-split.csv",
                                show_col_types = FALSE)
 
-# Replace " "s in column names by "_"
+# Replace " "s in column names with "_"
 names(important_software) <- gsub(" ", "_", names(important_software))
 
 # Count non-NA entries per row
@@ -94,7 +94,7 @@ coltypes <-  cols(
                     Q18_7 = col_character()
                   )
 
-# Read funding "cleaned" funding bodies.
+# Read "cleaned" funding bodies (Q18).
 funding <- read_csv("../Data/Q18-Other-funding.csv", col_types = coltypes)
 
 # Attach the funding to URN the tibble 
@@ -106,18 +106,35 @@ cleanlocs <- read_csv("../Data/CleanedLocations.csv", col_types = cols(Q17 = col
 # Attach the cleaned locations to the data set
 data0$CleanLocs <- cleanlocs[[1]]
 
-# Add some slightly simplified version of other disciplines for Q19
+# Add some slightly simplified version of other disciplines for Q19.
 otherdis <- read_csv("../Data/q19-other-disciplines.csv", show_col_types = FALSE)
 
-# Join with the current data
+# Join with the base data.
 data0 <-  data0 %>% left_join(otherdis, by = "URN")
 
-# Important data sources
+# Important data sources (Q2a) processed using open refine.
 importantds <- read_csv("../Data/q2a-mostimportantds.csv", show_col_types = FALSE)
 names(importantds) <-  gsub(" ", "_",names(importantds))
 data0 <- data0 %>% left_join(select(importantds, -Q2_a), by = "URN")
 
-# Workflows
+# Other data sources (specified in Q2b) cleaned up using Open Refine.
+coltyps <-  cols(
+                  URN = col_character(),
+                  Q2_b_i = col_character(),
+                  Q2b_s1 = col_character(),
+                  Q2b_s2 = col_character(),
+                  Q2b_s3 = col_character(),
+                  Q2b_s4 = col_character(),
+                  Q2b_s5 = col_character(),
+                  Q2b_s6 = col_character()
+                )
+
+other_ds <- read_csv("../Data/Q2b-OtherDataSources.csv", col_types = coltyps)
+
+# add the other data sources data to the base data
+data0 <- data0 %>% left_join(select(other_ds, -Q2_b_i), by = "URN")
+
+# Workflows (Q8) - another open text data cleaned up using open refine. 
 workflows <-  read_csv("../Data/q8-workflows.csv", show_col_types = FALSE)
 data0 <- data0 %>% left_join(select(workflows, -Q8), by = "URN")
   
