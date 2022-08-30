@@ -712,26 +712,28 @@ all that apply)
 ```{r use_of_data}
 
 # Calculate an x label with the folks that filled in this question.
-data %>% select(URN, num_range("Q2_", 1:2))                                   %>% 
+data %>% select(URN, num_range("Q2_", 1:2))             %>% 
            pivot_longer(cols = num_range("Q2_", 1:2), 
                       names_to = NULL,
-                      values_to = "datause")                                  %>%
-         filter(datause != 0)                                                 %>%
+                      values_to = "datause")            %>%
+         filter(datause != 0)                           %>%                                              
+         distinct(URN, datause)                         %>%
          summarise(lab = paste0("Use of data (N=", n_distinct(URN),")")) -> my
 
-data %>% select(URN, num_range("Q2_", 1:2)) %>%
+data %>% select(URN, num_range("Q2_", 1:2))                    %>%
          pivot_longer(cols = num_range("Q2_", 1:2), 
                       names_to = NULL,
-                      values_to = "datause")                                  %>%
-         filter(datause != 0)                                                 %>%
-         group_by(datause)                                                    %>% 
-         mutate(n = n_distinct(URN))                                          %>% 
+                      values_to = "datause")                   %>%
+         filter(datause != 0)                                  %>%
+         distinct(URN, datause)                                %>% 
+         group_by(datause)                                     %>% 
+         mutate(n = n())                                       %>%  
          ggplot(aes(x = datause, fill = n)) +
          geom_bar(colour = "black") +
          theme_bw() + theme(legend.position = "None") +
          xlab(my$lab) + ylab("Numbers") + 
-          scale_fill_distiller(palette = "Blues", direction = 1) +
-         geom_text(aes(y = n, label = n), vjust = -0.5, size = 3) 
+         scale_fill_distiller(palette = "Blues", direction = 1) +
+         geom_text(aes(y = n, label = n), vjust = -0.5, size = 4) 
 ```
 
 ### Use of data by career stage
@@ -849,6 +851,32 @@ data %>% select(num_range("Q2_", 1:2), career = Q20, gender = Q21)            %>
          facet_wrap(~career)
 ```
 
+```{r datause_label_data}
+
+# Add a column, datause with the type of data user - do this only if not already there
+if(!("datause" %in% colnames(data))){
+
+    data %>% select(URN, num_range("Q2_",1:2))                             %>%
+             pivot_longer(cols = starts_with("Q2_"),
+                          names_to = NULL,
+                          values_to = "ds")                                %>%
+             group_by(URN)                                                 %>% 
+             mutate(datause = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
+             mutate(datause = case_when(datause == "create_reuse" ~ "Create-Reuse", 
+                                        datause == "create_0" ~ "Create", 
+                                        datause == "0_reuse" ~ "Reuse", 
+                                        datause == "0_0" ~ "None"))       %>% 
+             select(-ds)                                                  %>% 
+             distinct(URN, datause) -> dd
+}
+
+# Add datause back to the original data set if not already there
+if(!("datause" %in% colnames(data))){
+  data <- data %>% left_join(dd, by = "URN")
+}
+
+```
+
 ```{r datause_gender_career_per}
 
 data %>% select(datause, career = Q20, gender = Q21)              %>%
@@ -941,31 +969,6 @@ data %>% select(URN, num_range("Q2_",1:2))                             %>%
          kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
 
-```{r datause_label_data}
-
-# Add a column, datause with the type of data user - do this only if not already there
-if(!("datause" %in% colnames(data))){
-
-    data %>% select(URN, num_range("Q2_",1:2))                             %>%
-             pivot_longer(cols = starts_with("Q2_"),
-                          names_to = NULL,
-                          values_to = "ds")                                %>%
-             group_by(URN)                                                 %>% 
-             mutate(datause = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-             mutate(datause = case_when(datause == "create_reuse" ~ "Create-Reuse", 
-                                        datause == "create_0" ~ "Create", 
-                                        datause == "0_reuse" ~ "Reuse", 
-                                        datause == "0_0" ~ "None"))       %>% 
-             select(-ds)                                                  %>% 
-             distinct(URN, datause) -> dd
-}
-
-# Add datause back to the original data set if not already there
-if(!("datause" %in% colnames(data))){
-  data <- data %>% left_join(dd, by = "URN")
-}
-
-```
 
 ### Combined plot
 
@@ -994,7 +997,7 @@ data %>% select(id = URN, num_range("Q2_",1:2))                        %>%
          mutate(N = n())                                               %>% 
          group_by(choices)                                             %>%
          mutate(n = n())                                               %>%
-         mutate(per = percent(n/N, accuracy = 1))                      %>% 
+         mutate(per = percent(n/N, accuracy = 0.1))                    %>% 
          distinct(n, N, choices, per)                                  %>% 
          ggplot(aes(x = choices, y = n, fill = n)) + 
          geom_col(colour = "black") + theme_bw() +
@@ -2169,18 +2172,20 @@ data %>% select(URN, num_range("Q4_",1:26))  %>%
          filter(software != 0)                                      %>%
          summarise(lab = paste0("Software used (N=", n_distinct(URN),")")) -> my
 
-data %>% select(num_range("Q4_",1:26))                              %>%
+data %>% select(URN, num_range("Q4_",1:26))                         %>%
          pivot_longer(cols = num_range("Q4_",1:26),
                       names_to = NULL,
                       values_to = "software")                       %>%
          filter(software != 0)                                      %>%
+         mutate(N =  n_distinct(URN))                               %>% 
          group_by(software)                                         %>% 
-         mutate(n = n())                                            %>%   
-         ggplot(aes(x = reorder(software,-n), fill = n)) +
-         geom_bar(colour = "black") +
-         theme_bw() + ylim(0, 132) + scale_fill_distiller(palette = "Blues", direction = 1) +
+         mutate(n = n())                                            %>% 
+         distinct(software, n, N)                                   %>% 
+         ggplot(aes(x = reorder(software,-n), y = n, fill = n)) +
+         geom_col(colour = "black") +
+         theme_bw() + ylim(0, 134) + scale_fill_distiller(palette = "Blues", direction = 1) +
          ylab("Numbers") + xlab(my$lab) +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 4) +
+         geom_text(aes(label = paste0(n,"\n(", percent(n/N, accuracy = 0.1),")")), vjust = -0.5, size = 3) +
          theme(axis.text.x = element_text(angle = 60, size = 12, hjust = 1.0), legend.position = "none")
 ```
 
