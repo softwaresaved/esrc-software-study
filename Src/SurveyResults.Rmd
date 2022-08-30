@@ -5983,6 +5983,27 @@ data %>%  select(num_range("Q16_", 1:13), career = Q20)         %>%
 
 ```
 
+### Barriers by data use
+
+```{r barriers_datause}
+
+data %>%  select(num_range("Q16_", 1:13), datause)         %>%
+          pivot_longer(cols = num_range("Q16_", 1:13),
+                       names_to = NULL,
+                       values_to = "barriers")             %>%
+          filter(barriers != 0)                            %>%
+          group_by(barriers)                               %>%
+          mutate(n = n())                                  %>% 
+          ggplot(aes(x = reorder(barriers, -n), fill  = datause)) +
+          geom_bar(colour = "black") +
+          theme_bw() +
+          xlab("Barriers to software use") + ylab("Numbers") +
+          geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 2) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
+          scale_fill_brewer(palette = "PuRd", name = "Data use")
+
+```
+
 ### Barriers as % of careers
 
 Removing "Other" and "-"
