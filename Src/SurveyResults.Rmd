@@ -5782,6 +5782,57 @@ data %>% select(id = URN, starts_with("Q15_"), -"Q15_a", career = Q20)     %>%
 
 ```
 
+### Licensing policies awareness by data use
+
+```{r licensing_datause}
+
+data %>% select(starts_with("Q15_"), -"Q15_a", datause)                %>%
+         pivot_longer(cols = starts_with("Q15_"),
+                      names_to = NULL,
+                      values_to ="aware")                               %>%
+         filter(aware != 0)                                             %>%
+         mutate(aware = factor(aware, ordered = TRUE, levels = licawa)) %>% 
+         group_by(datause, aware)                                       %>% 
+         mutate(n = n())                                                %>% 
+         ggplot(aes(x = aware, fill = datause)) +
+         geom_bar(colour = "black") +
+         theme_bw() +
+         geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 3) +
+         ylab("Numbers") + xlab("Aware of the policy for") +
+         scale_fill_brewer(palette = "PuRd", name = "Data use") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+```
+
+### Licensing policies awareness by % career stage
+
+```{r licensing_datause_per}
+
+data %>% select(URN, starts_with("Q15_"), -"Q15_a", datause)              %>%
+         group_by(datause)                                                %>%
+         mutate(N = n())                                                  %>% 
+         pivot_longer(cols = starts_with("Q15_"),
+                      names_to = NULL,
+                      values_to ="aware")                                 %>%
+         filter(aware != 0)                                               %>%
+         distinct(URN, aware, datause, N)                                 %>% 
+         mutate(aware = factor(aware, ordered = TRUE, levels = licawa))   %>% 
+         group_by(datause, aware)                                         %>% 
+         mutate(n = n())                                                  %>% 
+         mutate(per = percent(n/N, accuracy = 1))                         %>% 
+         distinct(n, N, per, datause, aware)                              %>% 
+         ggplot(aes(x = aware, y = n/N, fill = datause)) +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() + 
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         geom_text(aes(label = per), vjust = -0.5,
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 4) +
+         ylab("Percent") + xlab("Aware of the policy for") +
+         scale_fill_brewer(palette = "PuRd", name = "Data use") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+
+```
+
 ### Licensing policies awareness by gender
 
 ```{r licensing_gender}
