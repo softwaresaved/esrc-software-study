@@ -2354,6 +2354,36 @@ data %>% select(URN, num_range("Q4_",1:26), career = "Q20")                  %>%
          ylab("Percentage") + xlab("Software used") +
          scale_fill_brewer(palette = "Set1", name = "Career stage") 
 ```
+### Software used by data use
+
+
+```{r sw_used_career_per}
+
+data %>% select(num_range("Q4_",1:26), datause)                              %>%
+         group_by(datause)                                                    %>% 
+         mutate(N = n())                                                     %>% 
+         pivot_longer(cols = starts_with("Q4"), 
+                      names_to = NULL,
+                      values_to = "software")                                %>%
+         filter(software != 0)                                               %>%
+         group_by(software)                                                  %>% 
+         mutate(M = n())                                                     %>% 
+         filter(M > 25)                                                      %>% 
+         group_by(software, datause)                                          %>% 
+         mutate(per = n()/N)                                                 %>% 
+         distinct(software, datause, per, N, M)                               %>% 
+         ggplot(aes(x = reorder(software,-M), y = per, fill = datause)) +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.15, hjust=0, size = 10),
+               legend.text=element_text(size = 8)) +
+         ylab("Percent") + xlab("Software used") +
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         geom_text(aes(x = software, y = per, label = percent(per, accuracy = 1)), 
+                 position = position_dodge2(width = 0.9, preserve = "single"), vjust= -0.5,
+                 size = 4) +
+         scale_fill_brewer(palette = "PuRd", name = "Data use") 
+```
 
 ### Software by gender
 
