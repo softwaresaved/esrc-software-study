@@ -5739,17 +5739,37 @@ B and D then that would contribute an A_B\_D then we count all the
 combined choices. Only showing combinations that have a count greater
 than 1.
 
-```{r barrier_choices}
+```{r run_choices}
 
-data %>% select(id = URN, num_range("Q16_", 1:13))                       %>%
-         pivot_longer(cols = num_range("Q16_", 1:13),
+data %>% select(URN, num_range("Q14_", 1:9))                           %>%
+         pivot_longer(cols = num_range("Q14_", 1:9),
                       names_to = NULL,
                       values_to = "ds")                                %>%
          filter(ds != 0)                                               %>%  
-         group_by(id)                                                  %>% 
-         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
+         group_by(URN)                                                 %>% 
+         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>%
+         distinct(URN, choices)                                        %>% 
          ungroup()                                                     %>% 
-         select(-id)                                                   %>% 
+         select(-URN)                                                  %>% 
+         group_by(choices)                                             %>% 
+         tally()                                                       %>% 
+         arrange(desc(n))                                              %>% 
+         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
+```
+
+```{r run_choices2}
+
+data %>% select(URN, num_range("Q14_", 1:9))                           %>%
+         pivot_longer(cols = num_range("Q14_", 1:9),
+                      names_to = NULL,
+                      values_to = "ds")                                %>%
+         filter(ds != 0)                                               %>%  
+         group_by(URN)                                                 %>%
+         filter(ds == "Own" | ds == "InstitutionallyProvided")         %>%
+         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
+         distinct(URN, choices)                                        %>% 
+         ungroup()                                                     %>% 
+         select(-URN)                                                  %>% 
          group_by(choices)                                             %>% 
          tally()                                                       %>% 
          arrange(desc(n))                                              %>% 
