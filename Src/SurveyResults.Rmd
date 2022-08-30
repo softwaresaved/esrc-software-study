@@ -2765,11 +2765,13 @@ data %>% select(Q6)         %>%
 
 ```{r use_os_career}
 
-data %>% select(Q6, career = "Q20")       %>%
-         group_by(Q6)                     %>% 
-         mutate(N = n())                  %>% 
-         group_by(Q6, career)             %>% 
-         mutate(n = n())                  %>% 
+data %>% select(Q6, career = "Q20")             %>%
+         filter(!(career %in% c("-", "Other"))) %>% 
+         filter(Q6 != "-")                      %>% 
+         group_by(Q6)                           %>% 
+         mutate(N = n())                        %>% 
+         group_by(Q6, career)                   %>% 
+         mutate(n = n())                        %>% 
          ggplot(aes(x = reorder(Q6, -N), fill = career)) + 
          geom_bar(colour = "black") + 
          theme_bw() +
@@ -2785,11 +2787,12 @@ data %>% select(Q6, career = "Q20")       %>%
 
 ### OS by % career stage
 
-```{r use_os_caree_per}
+```{r use_os_career_per}
 
 data %>% select(os = Q6, career = Q20)             %>%
          group_by(career)                          %>% 
-         filter(career != "Other" & career != "-") %>% 
+         filter(career != "Other" & career != "-") %>%
+         filter(os != "-")                         %>% 
          mutate(N = n())                           %>% 
          group_by(os, career)                      %>% 
          mutate(n = n())                           %>% 
@@ -2808,16 +2811,66 @@ data %>% select(os = Q6, career = Q20)             %>%
                              legend.text=element_text(size = 6))  
 
 ```
+### OS by data use
+
+```{r use_os_datause}
+
+data %>% select(Q6, datause)                   %>%
+         filter(Q6 != "-")                      %>% 
+         group_by(Q6)                           %>% 
+         mutate(N = n())                        %>% 
+         group_by(Q6, datause)                   %>% 
+         mutate(n = n())                        %>% 
+         ggplot(aes(x = reorder(Q6, -N), fill = datause)) + 
+         geom_bar(colour = "black") + 
+         theme_bw() +
+         xlab("Use of Open Source") + 
+         ylab("Numbers") +
+         geom_text(aes(x = Q6, label = n), position = position_stack(vjust = 0.5), 
+                                 stat = "count", size = 3) +
+         scale_fill_brewer(palette = "PuRd", name = "Data use") +
+         theme(axis.text.x = element_text(size = 8),
+               legend.text=element_text(size = 6))  
+
+```
+
+### OS by % data use
+
+```{r use_os_datause_per}
+
+data %>% select(os = Q6, datause)                 %>%
+         group_by(datause)                        %>% 
+         filter(os != "-")                        %>% 
+         mutate(N = n())                          %>% 
+         group_by(os, datause)                    %>% 
+         mutate(n = n())                          %>% 
+         mutate(per = percent(n/N, accuracy = 1)) %>%
+         distinct(n, N, os, per, datause)         %>% 
+         ggplot(aes(x = reorder(os, -n), y = n/N, fill = datause)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
+         theme_bw() +
+         xlab("Use of Open Source") + scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         ylab("Percent") +
+         geom_text(aes(label = paste0(n," (", per,")")),
+                   position = position_dodge2(width = 0.9, preserve = "single"),
+                   vjust = -0.5, size = 3) +
+         scale_fill_brewer(palette = "PuRd", name = "Data use") +
+         theme(axis.text.x = element_text(size = 8), 
+                             legend.text=element_text(size = 6))  
+
+```
 
 ### OS by gender
 
 ```{r use_os_gender}
 
-data %>% select(Q6, gender = Q21)         %>%
-         group_by(Q6)                     %>% 
-         mutate(N = n())                  %>% 
-         group_by(Q6, gender)             %>% 
-         mutate(n = n())                  %>% 
+data %>% select(Q6, gender = Q21)              %>%
+         filter(Q6 != "-")                     %>% 
+         filter(!(gender %in% lowstatsgender)) %>% 
+         group_by(Q6)                          %>% 
+         mutate(N = n())                       %>% 
+         group_by(Q6, gender)                  %>% 
+         mutate(n = n())                       %>% 
          ggplot(aes(x = reorder(Q6, -N), fill = gender)) + 
          geom_bar(colour = "black") + 
          theme_bw() +
@@ -2833,32 +2886,11 @@ data %>% select(Q6, gender = Q21)         %>%
 
 ### OS by % gender
 
-```{r use_os_gender_per}
-
-data %>% select(os = Q6, gender = Q21)             %>%
-         group_by(gender)                          %>% 
-         mutate(N = n())                           %>% 
-         group_by(os, gender)                      %>% 
-         mutate(n = n())                           %>% 
-         mutate(per = percent(n/N, accuracy = 1))  %>%
-         distinct(n, N, os, per, gender)           %>% 
-         ggplot(aes(x = os, y = n/N, fill = gender)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
-         theme_bw() +
-         xlab("Use of Open Source") + scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         ylab("Percent") +
-         geom_text(aes(label = paste0(n," (", per,")")),
-                   position = position_dodge2(width = 0.9, preserve = "single"),
-                   vjust = -0.5, size = 2) +
-         scale_fill_brewer(palette = "Set2", name = "Gender") +
-         theme(axis.text.x = element_text(size = 8), 
-                             legend.text=element_text(size = 6))  
-
-```
 
 ```{r use_os_gender_per2}
 
 data %>% select(os = Q6, gender = Q21)             %>%
+         filter(os != "-")                         %>% 
          group_by(os)                              %>% 
          mutate(M = n())                           %>% 
          filter(!(gender %in% lowstatsgender))     %>% 
@@ -2887,16 +2919,17 @@ Split by gender and career stage.
 ```{r use_os_gender_per2_career}
 
 data %>% select(os = Q6, career = Q20, gender = Q21)    %>%
-         filter(!(career %in% c("Other", "-")))      %>% 
-         group_by(os)                              %>% 
-         mutate(M = n())                           %>% 
-         filter(!(gender %in% lowstatsgender))     %>% 
-         group_by(gender)                          %>% 
-         mutate(N = n())                           %>% 
-         group_by(os, gender,career)                      %>% 
-         mutate(n = n())                           %>% 
-         mutate(per = percent(n/N, accuracy = 1))  %>%
-         distinct(n, N, os, per, gender, career, M)        %>% 
+         filter(os != "-")                              %>% 
+         filter(!(career %in% c("Other", "-")))         %>% 
+         group_by(os)                                   %>% 
+         mutate(M = n())                                %>% 
+         filter(!(gender %in% lowstatsgender))          %>% 
+         group_by(gender)                               %>% 
+         mutate(N = n())                                %>% 
+         group_by(os, gender,career)                    %>% 
+         mutate(n = n())                                %>% 
+         mutate(per = percent(n/N, accuracy = 1))       %>%
+         distinct(n, N, os, per, gender, career, M)     %>% 
          ggplot(aes(x = reorder(os, -M), y = n/N, fill = gender)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
          theme_bw() +
@@ -2967,7 +3000,6 @@ my_colors <- colorRampPalette(my_colors)(100)
 
 corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 
-
 ```
 
 ### Using OS by career stage
@@ -2975,6 +3007,7 @@ corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 ```{r reason4os_career}
 
 data %>% select(starts_with("Q6_a"), career = Q20)   %>%
+         filter(!(career %in% c("-", "Other")))      %>% 
          pivot_longer(cols = starts_with("Q6_a"),
                       names_to = NULL,
                       values_to = "UseOS")           %>%
@@ -2992,43 +3025,20 @@ data %>% select(starts_with("Q6_a"), career = Q20)   %>%
 
 ### Using OS by % career stage pop
 
-```{r reason4os_career_per}
-
-data %>% select(starts_with("Q6_a"), career = Q20)   %>%
-         pivot_longer(cols = starts_with("Q6_a"),
-                      names_to = NULL,
-                      values_to = "UseOS")           %>%
-         filter(UseOS != 0)                          %>%
-         group_by(career)                            %>% 
-         mutate(N = n())                             %>% 
-         group_by(UseOS, career)                     %>% 
-         mutate(per = n()/N)                         %>%
-         distinct(UseOS, career, per)                %>% 
-         ggplot(aes(x = UseOS, y = per, fill = career)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
-         theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         geom_text(aes(label = percent(per, accuracy = 1)), 
-                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 2) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         xlab("Reasons for using Open Source") + ylab("Numbers") +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
-
 Leaving out "Other" and "-"
 
 ```{r reason4os_career_per2}
 
 data %>% select(starts_with("Q6_a"), career = Q20)   %>%
+         group_by(career)                            %>% 
+         filter(career != "Other" & career != "-")   %>% 
+         mutate(N = n())                             %>% 
          pivot_longer(cols = starts_with("Q6_a"),
                       names_to = NULL,
                       values_to = "UseOS")           %>%
          filter(UseOS != 0)                          %>%
          group_by(UseOS)                             %>% 
          mutate(M = n())                            %>% 
-         group_by(career)                            %>% 
-         filter(career != "Other" & career != "-")   %>% 
-         mutate(N = n())                             %>% 
          group_by(UseOS, career)                     %>% 
          mutate(per = n()/N)                         %>%
          distinct(UseOS, career, per, M)             %>% 
@@ -3037,11 +3047,60 @@ data %>% select(starts_with("Q6_a"), career = Q20)   %>%
          theme_bw() +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          geom_text(aes(label = percent(per, accuracy = 1)), 
-                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 3) +
+                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 4) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("Reasons for using Open Source") + ylab("Percentage") +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
+
+
+### Using OS by data use
+
+```{r reason4os_datause}
+
+data %>% select(starts_with("Q6_a"), datause)        %>%
+         pivot_longer(cols = starts_with("Q6_a"),
+                      names_to = NULL,
+                      values_to = "UseOS")           %>%
+         filter(UseOS != 0)                          %>%
+         group_by(UseOS, datause)                    %>% 
+         mutate(n = n())                             %>% 
+         ggplot(aes(x = reorder(UseOS, -n), fill = datause)) + 
+         geom_bar(colour = "black") + 
+         theme_bw() +
+         geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 3) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("Reasons for using Open Source") + ylab("Numbers") +
+         scale_fill_brewer(palette = "PuRd", name = "Data use")
+```
+### Using OS by % data use
+
+
+```{r reason4os_datause_per2}
+
+data %>% select(starts_with("Q6_a"), datause)        %>%
+         pivot_longer(cols = starts_with("Q6_a"),
+                      names_to = NULL,
+                      values_to = "UseOS")           %>%
+         filter(UseOS != 0)                          %>%
+         group_by(UseOS)                             %>% 
+         mutate(M = n())                             %>% 
+         group_by(datause)                           %>% 
+         mutate(N = n())                             %>% 
+         group_by(UseOS, datause)                    %>% 
+         mutate(per = n()/N)                         %>%
+         distinct(UseOS, datause, per, M)            %>% 
+         ggplot(aes(x = reorder(UseOS, -M), y = per, fill = datause)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
+         theme_bw() +
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         geom_text(aes(label = percent(per, accuracy = 1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 3) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("Reasons for using Open Source") + ylab("Percentage") +
+         scale_fill_brewer(palette = "PuRd", name = "Data use")
+```
+
 
 ### Using OS by gender
 
@@ -3065,41 +3124,21 @@ data %>% select(starts_with("Q6_a"), gender = Q21)   %>%
 
 ### Using OS by % gender pop
 
-```{r reason4os_gender_per}
 
-data %>% select(starts_with("Q6_a"), gender = Q21)   %>%
-         pivot_longer(cols = starts_with("Q6_a"),
-                      names_to = NULL,
-                      values_to = "UseOS")           %>%
-         filter(UseOS != 0)                          %>%
-         group_by(gender)                            %>% 
-         mutate(N = n())                             %>% 
-         group_by(UseOS, gender)                     %>% 
-         mutate(per = n()/N)                         %>%
-         distinct(UseOS, gender, per)                %>% 
-         ggplot(aes(x = UseOS, y = per, fill = gender)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
-         theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         geom_text(aes(label = percent(per, accuracy = 1)), 
-                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 2) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         xlab("Reasons for using Open Source") + ylab("Percentage") +
-         scale_fill_brewer(palette = "Set2", name = "Gender")
-```
 
 ```{r reason4os_gender_per2}
 
 data %>% select(starts_with("Q6_a"), gender = Q21)   %>%
+         filter(!(gender %in% lowstatsgender))       %>% 
+         group_by(gender)                            %>% 
+         mutate(N = n())                             %>% 
          pivot_longer(cols = starts_with("Q6_a"),
                       names_to = NULL,
                       values_to = "UseOS")           %>%
          filter(UseOS != 0)                          %>%
          group_by(UseOS)                             %>% 
          mutate(M = n())                             %>% 
-         filter(!(gender %in% lowstatsgender))       %>% 
-         group_by(gender)                            %>% 
-         mutate(N = n())                             %>% 
+
          group_by(UseOS, gender)                     %>% 
          mutate(per = n()/N)                         %>%
          distinct(UseOS, gender, per, M)             %>% 
@@ -3117,23 +3156,23 @@ data %>% select(starts_with("Q6_a"), gender = Q21)   %>%
 ```{r reason4os_gender_car_per2}
 
 data %>% select(starts_with("Q6_a"), career = Q20, gender = Q21)   %>%
-         filter(!(career %in% c("-","Other"))) %>% 
+         filter(!(gender %in% lowstatsgender))                     %>% 
+         filter(!(career %in% c("-","Other")))                     %>% 
+         group_by(gender)                                          %>% 
+         mutate(N = n())                                           %>% 
          pivot_longer(cols = starts_with("Q6_a"),
                       names_to = NULL,
-                      values_to = "UseOS")           %>%
-         filter(UseOS != 0)                          %>%
-         group_by(UseOS)                             %>% 
-         mutate(M = n())                             %>% 
-         filter(!(gender %in% lowstatsgender))       %>% 
-         group_by(gender)                            %>% 
-         mutate(N = n())                             %>% 
-         group_by(UseOS, gender, career)                     %>% 
-         mutate(per = n()/N)                         %>%
-         distinct(UseOS, gender, per, M, career)             %>% 
+                      values_to = "UseOS")                         %>%
+         filter(UseOS != 0)                                        %>%
+         group_by(UseOS)                                           %>% 
+         mutate(M = n())                                           %>% 
+         group_by(UseOS, gender, career)                           %>% 
+         mutate(per = n()/N)                                       %>%
+         distinct(UseOS, gender, per, M, career)                   %>% 
          ggplot(aes(x = reorder(UseOS, -M), y = per, fill = gender)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
          theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0,.12)) +
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
          geom_text(aes(label = percent(per, accuracy = 1)), 
                    position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
