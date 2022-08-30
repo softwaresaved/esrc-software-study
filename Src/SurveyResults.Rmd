@@ -2052,7 +2052,7 @@ corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 
 ```
 
-### Data sharing by percentage at each career stage
+### Data sharing by % career stage
 
 ```{r sharing_data_career_per2}
 
@@ -2082,6 +2082,37 @@ data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
                       position = position_dodge2(width = 0.9, preserve = "single"), 
                       colour = "black", size = 4) + 
         scale_fill_brewer(palette = "Set1", name = "Career stage")
+```
+
+### Data sharing by % data use
+
+```{r sharing_data_datause_per}
+
+data %>% select(num_range("Q3_", 1:7), datause)                            %>%
+        group_by(datause)                                                  %>% 
+        mutate(N = n())                                                    %>%
+        pivot_longer(cols = starts_with("Q3_"), 
+                     names_to = NULL,
+                     values_to = "DataSharing")                            %>%
+        filter(DataSharing != 0)                                           %>%
+        group_by(DataSharing)                                              %>%
+        mutate(M = n())                                                    %>% 
+        group_by(DataSharing, datause)                                      %>% 
+        mutate(per = n()/N)                                                %>% 
+        distinct(datause, DataSharing, per, M)                              %>% 
+        ggplot(aes(x = reorder(DataSharing, -M), y= per,fill = datause)) +
+        geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
+                 colour = "black", na.rm = TRUE) + 
+        theme_bw() + 
+        theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), 
+              axis.text.y = element_text(size = 12),
+              legend.text=element_text(size = 8)) +
+        xlab("Data sharing habits") + ylab("Percent") +
+        scale_y_continuous(labels = percent_format(accuracy = 1)) +
+        geom_text(aes(x = DataSharing, label = percent(per, accuracy = 1)), vjust = -0.5,
+                      position = position_dodge2(width = 0.9, preserve = "single"), 
+                      colour = "black", size = 4) + 
+        scale_fill_brewer(palette = "PuRd", name = "Data use")
 ```
 
 ### Sharing by gender
@@ -2146,6 +2177,27 @@ data %>% select(num_range("Q3_", 1:7), gender = Q21, career = Q20)         %>%
                       colour = "black", size = 4) + 
         scale_fill_brewer(palette = "Set2", name = "Gender") + 
         facet_wrap( ~ career)
+```
+
+## Counting combined choices
+
+```{r reason4sharing_choices}
+
+data %>% select(URN, num_range("Q3_", 1:7))                          %>%
+         pivot_longer(cols = num_range("Q3_", 1:7),
+                      names_to = NULL,
+                      values_to = "DataSharing")                                %>%
+         filter(DataSharing != 0)                                               %>%  
+         group_by(URN)                                                  %>% 
+         mutate(choices = paste0(gsub(" ","-", DataSharing), collapse = "_"))   %>% 
+         distinct(URN, choices)                                         %>% 
+         ungroup()                                                     %>% 
+         select(-URN)                                                   %>% 
+         group_by(choices)                                             %>% 
+         tally()                                                       %>% 
+         filter(n > 1)                                                 %>% 
+         arrange(desc(n))                                              %>% 
+         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
 
 ### Other ways of sharing data
