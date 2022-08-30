@@ -5716,14 +5716,14 @@ data %>%  select(num_range("Q14_", 1:9), career = Q20, gender = Q21) %>%
           filter(!(career %in% c("-", "Other")))                     %>% 
           group_by(gender, runon, career)                            %>% 
           mutate(n = n())                                            %>% 
-          mutate(per = percent(n/N, accuracy = 1))                   %>% 
+          mutate(per = percent(n/N, accuracy = 0.1))                   %>% 
           distinct(M, N, n, per, career)                             %>% 
           ggplot(aes(x = reorder(runon, -M), y = n/N, fill  = gender)) +
           geom_col( position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
           theme_bw() + scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.41)) +
           xlab("Where software is run") + ylab("Percent") +
           geom_text(aes(label = per), vjust = -0.5,
-                    position = position_dodge2(width = 0.9, preserve = "single"), size = 4) +
+                    position = position_dodge2(width = 0.9, preserve = "single"), size = 3) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
           scale_fill_brewer(palette = "Set2", name = "Gender") +
           facet_wrap(~ career)
