@@ -4293,7 +4293,9 @@ corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 ### Skills acquisition by career stage
 
 ```{r acquiring_skills_career}
+
 data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
+         filter(!(career %in% c("-", "Other")))          %>% 
          pivot_longer(cols = num_range("Q11_", 1:12),
                       names_to = "questions",
                       values_to = "skills")              %>%
@@ -4313,37 +4315,10 @@ data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
 
 ### Skills acquisition by % career stage
 
-```{r acquiring_skills_career_per}
-
-data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
-         group_by(career)                                %>% 
-         mutate(N = n())                                 %>% 
-         pivot_longer(cols = num_range("Q11_", 1:12),
-                      names_to = NULL,
-                      values_to = "skills")              %>%
-         filter(skills != 0)                             %>%
-         group_by(skills)                                %>% 
-         mutate(M = n())                                 %>% 
-         group_by(career, skills)                        %>% 
-         mutate(per = n()/N)                             %>% 
-         distinct(career, skills, per, M)                %>% 
-         ggplot(aes(x = reorder(skills, -M), y = per, fill = career)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"),
-                  colour = "black") +
-         theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         xlab("Where skills are acquired") + ylab("Percent") +
-         geom_text(aes(label = percent(per, accuracy = 1)), 
-                   position = position_dodge2(width = 0.9, preserve = "single"),
-                   vjust = -0.5, size = 2) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0),
-               legend.text=element_text(size = 8)) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
 
 Removing "Other" and "-".
 
-```{r acquiring_skills_career_per2}
+```{r acquiring_skills_career_per}
 
 data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
          group_by(career)                                %>% 
@@ -4377,6 +4352,7 @@ data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
 ```{r acquiring_skills_gender}
 
 data %>% select(num_range("Q11_", 1:12), gender = Q21)   %>%
+         filter(!(gender %in% lowstatsgender))           %>% 
          pivot_longer(cols = num_range("Q11_", 1:12),
                       names_to = "questions",
                       values_to = "skills")              %>%
@@ -4395,34 +4371,8 @@ data %>% select(num_range("Q11_", 1:12), gender = Q21)   %>%
 
 ### Skills acquisition by % gender pop
 
+
 ```{r acquiring_skills_gender_per}
-
-data %>% select(num_range("Q11_", 1:12), gender = Q21)   %>%
-         group_by(gender)                                %>% 
-         mutate(N = n())                                 %>% 
-         pivot_longer(cols = num_range("Q11_", 1:12),
-                      names_to = "questions",
-                      values_to = "skills")              %>%
-         filter(skills != 0)                             %>%
-         group_by(skills)                                %>% 
-         mutate(M = n())                                 %>% 
-         group_by(gender, skills)                        %>% 
-         mutate(per = n()/N)                             %>% 
-         distinct(gender, skills, per, M)                   %>% 
-         ggplot(aes(x = reorder(skills, -M), y = per, fill = gender)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"),
-                  colour = "black") +
-         theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         xlab("Where skills are being acquired") + ylab("Percent") +
-         geom_text(aes(label = percent(per, accuracy = 1)), 
-                   position = position_dodge2(width = 0.9, preserve = "single"),
-                   vjust = -0.5, size = 2) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         scale_fill_brewer(palette = "Set2", name = "Gender")
-```
-
-```{r acquiring_skills_gender_per2}
 
 data %>% select(num_range("Q11_", 1:12), gender = Q21)   %>%
          group_by(gender)                                %>% 
@@ -5540,24 +5490,24 @@ data %>% select(URN, starts_with("Q13_"), career = Q20, gender = Q21)     %>%
 data %>% select(URN, starts_with("Q13_"), datause)                      %>%
          pivot_longer(cols = num_range("Q13_1_",1:5),
                       names_to = NULL,
-                      values_to = "Q13a")                                 %>% 
+                      values_to = "Q13a")                               %>% 
          pivot_longer(cols = num_range("Q13_2_",1:5),
                       names_to = NULL,
-                      values_to = "Q13b")                                 %>% 
+                      values_to = "Q13b")                               %>% 
          pivot_longer(cols = num_range("Q13_3_",1:5),
                       names_to = NULL,
-                      values_to = "Q13c")                                 %>% 
+                      values_to = "Q13c")                               %>% 
          pivot_longer(cols = num_range("Q13_4_",1:5),
                       names_to = NULL,
-                      values_to = "Q13d")                                %>% 
+                      values_to = "Q13d")                               %>% 
          pivot_longer(cols = c("Q13a", "Q13b","Q13c","Q13d"),
                       names_to = "Q13",
-                      values_to ="Response")                                                     %>% 
-        filter(Response != 0)                                                                    %>% 
-        distinct(URN, datause, Q13, Response)                                             %>% 
-        group_by(Q13, Response, datause)  %>% 
-        mutate(n = n()) %>% 
-        distinct(datause, Q13, Response, n) %>% 
+                      values_to ="Response")                            %>% 
+        filter(Response != 0)                                           %>% 
+        distinct(URN, datause, Q13, Response)                           %>% 
+        group_by(Q13, Response, datause)                                %>% 
+        mutate(n = n())                                                 %>% 
+        distinct(datause, Q13, Response, n)                             %>% 
         mutate(Response = factor(Response, 
               levels = c("Strongly agree","Agree","Undecided", "Disagree","Strongly disagree"))) %>% 
         ggplot(aes(x = Response, y = n, fill = Q13)) + 
@@ -5572,20 +5522,20 @@ data %>% select(URN, starts_with("Q13_"), datause)                      %>%
 
 ```{r q13_combined_career}
 
-data %>% select(URN, starts_with("Q13_"), career = Q20)                   %>%
-         filter(!(career %in% c("-", "Other")))                           %>% 
+data %>% select(URN, starts_with("Q13_"), career = Q20)                 %>%
+         filter(!(career %in% c("-", "Other")))                         %>% 
          pivot_longer(cols = num_range("Q13_1_",1:5),
                       names_to = NULL,
-                      values_to = "Q13a")                                 %>% 
+                      values_to = "Q13a")                               %>% 
          pivot_longer(cols = num_range("Q13_2_",1:5),
                       names_to = NULL,
-                      values_to = "Q13b")                                 %>% 
+                      values_to = "Q13b")                               %>% 
          pivot_longer(cols = num_range("Q13_3_",1:5),
                       names_to = NULL,
-                      values_to = "Q13c")                                %>% 
+                      values_to = "Q13c")                               %>% 
          pivot_longer(cols = num_range("Q13_4_",1:5),
                       names_to = NULL,
-                      values_to = "Q13d")                                %>% 
+                      values_to = "Q13d")                               %>% 
          pivot_longer(cols = c("Q13a", "Q13b","Q13c","Q13d"),
                       names_to = "Q13",
                       values_to ="Response")                            %>% 
