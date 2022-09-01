@@ -2208,6 +2208,7 @@ listOther("Q3_a")
 
 ```
 
+
 ## Q4 Software used in research
 
 What software do you use in your research?
@@ -3306,17 +3307,19 @@ data %>% select(URN, starts_with("Q6_b"))  %>%
          filter(UseOS != 0)                 %>%
          summarise(lab = paste0("Reasons for not using Open Source (N=", n_distinct(URN),")")) -> my
 
-data %>% select(starts_with("Q6_b"))        %>%
+data %>% select(URN, starts_with("Q6_b"))         %>%
          pivot_longer(cols = starts_with("Q6_b"),
                       names_to = NULL,
-                      values_to = "UseOS")  %>%
-         filter(UseOS != 0)                 %>%
-         group_by(UseOS)                    %>% 
-         mutate(n = n())                    %>% 
-         ggplot(aes(x = reorder(UseOS, -n), fill = n)) + 
-         geom_bar(colour = "black") + 
+                      values_to = "UseOS")        %>%
+         filter(UseOS != 0)                       %>%
+         mutate(N =  n_distinct(URN))             %>% 
+         group_by(UseOS)                          %>% 
+         mutate(n = n())                          %>% 
+         distinct(UseOS, n, N)                    %>% 
+         ggplot(aes(x = reorder(UseOS, -n), y = n, fill = n)) + 
+         geom_col(colour = "black") + 
          theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 4) +
+         geom_text(aes(label = paste0(n, " (",percent(n/N, accuracy = 0.1),")")), vjust = -0.5, size = 4) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12), legend.position = "None") +
          xlab(my$lab) + ylab("Numbers")
 ```
@@ -5131,8 +5134,8 @@ data %>% select(num_range("Q13_2_",1:5), career = Q20)                          
          distinct(understanding, career, per)                                           %>% 
          ggplot(aes(x = understanding, y = per, fill = career)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-         geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
-                   position = position_dodge2(width = 0.9, preserve = "single"), size = 4, vjust = -0.5) +
+         geom_text(aes(y = per, label = percent(per, accuracy = 0.1)), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 3, vjust = -0.5) +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          theme_bw() + ylab("Percent") +
          xlab("Aware of how institution/funder's policies on how s/w is funded, managed and licensed") +
