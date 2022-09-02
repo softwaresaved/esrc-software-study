@@ -4983,17 +4983,20 @@ data %>% select(URN, num_range("Q13_1_",1:5))           %>%
          summarise(lab = paste0("Aware of how s/w I use is funded, managed and licensed (N=",
                                 n_distinct(URN),")")) -> my
 
-data %>% select(num_range("Q13_1_",1:5))            %>%
+data %>% select(URN, num_range("Q13_1_",1:5))            %>%
          pivot_longer(cols = num_range("Q13_1_",1:5),
                       names_to = NULL,
-                      values_to = "understanding")  %>%
-         filter(understanding != 0)                 %>%
-         group_by(understanding)                    %>% 
-         mutate(n = n())                            %>% 
+                      values_to = "understanding")       %>%
+         filter(understanding != 0)                      %>%
+         mutate(N = n_distinct(URN))                     %>% 
+         group_by(understanding)                         %>% 
+         mutate(n = n())                                 %>% 
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
-         ggplot(aes(x = understanding, fill = n)) + 
-         geom_bar(colour = "black") + scale_fill_distiller(palette = "Blues", direction = 1) +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 4) +
+         distinct(n, N, understanding)                   %>% 
+         ggplot(aes(x = understanding, y = n, fill = n)) + 
+         geom_col(colour = "black") + 
+         scale_fill_distiller(palette = "Blues", direction = 1) +
+         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 4) +
          theme_bw() + ylab("Numbers") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10), 
                legend.position = "None") +
@@ -5151,18 +5154,20 @@ data %>% select(URN, num_range("Q13_2_",1:5))  %>%
          summarise(lab = paste0("Aware of how s/w I use is funded, managed and licensed (N=",
                                 n_distinct(URN),")")) -> my
 
-data %>% select(num_range("Q13_2_",1:5))            %>%
+data %>% select(URN, num_range("Q13_2_",1:5))            %>%
          pivot_longer(cols = num_range("Q13_2_",1:5),
                       names_to = "questions",
-                      values_to = "understanding")  %>%
-         filter(understanding != 0)                 %>%
-         group_by(understanding)                    %>% 
-         mutate(n = n())                            %>% 
+                      values_to = "understanding")       %>%
+         filter(understanding != 0)                      %>%
+         mutate(N = n_distinct(URN))                     %>% 
+         group_by(understanding)                         %>% 
+         mutate(n = n())                                 %>% 
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
-         ggplot(aes(x = understanding, fill = n)) + 
-         geom_bar(colour = "black") + 
+         distinct(understanding, N, n)                   %>% 
+         ggplot(aes(x = understanding, y = n, fill = n)) + 
+         geom_col(colour = "black") + 
         scale_fill_distiller(palette = "Blues", direction = 1) +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 4) +
+         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1), ")")), vjust = -0.5, size = 4) +
          theme_bw() + ylab("Numbers") + theme(legend.position = "None") +
          xlab(my$lab)
 ```
@@ -5307,17 +5312,19 @@ data %>% select(URN, num_range("Q13_3_",1:5))  %>%
               paste0("Insufficient awareness on how s/w is funded, managed and licensed by the community (N=",
                      n_distinct(URN),")")) -> my
 
-data %>% select(num_range("Q13_3_",1:5))            %>%
+data %>% select(URN, num_range("Q13_3_",1:5))           %>%
          pivot_longer(cols = num_range("Q13_3_",1:5),
                       names_to = "questions",
-                      values_to = "understanding")  %>%
-         filter(understanding != 0)                 %>%
-         group_by(understanding)                    %>% 
-         mutate(n = n())                            %>% 
+                      values_to = "understanding")      %>%
+         filter(understanding != 0)                     %>%
+         mutate(N = n_distinct(URN))                    %>% 
+         group_by(understanding)                        %>% 
+         mutate(n = n())                                %>% 
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
-         ggplot(aes(x = understanding, fill = n)) + 
-         geom_bar(colour = "black") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 4) +
+         distinct(understanding, N, n)                  %>%
+         ggplot(aes(x = understanding, y = n, fill = n)) + 
+         geom_col(colour = "black") +
+         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 4) +
          theme_bw() + ylab("Numbers") + scale_fill_distiller(palette = "Blues", direction = 1) +
          xlab(my$lab) + theme(legend.position = "None")
 ```
@@ -5462,17 +5469,19 @@ data %>% select(URN, num_range("Q13_4_",1:5))  %>%
                      paste0("Insufficient incentive learn how s/w is funded, managed and licensed (N=",
                             n_distinct(URN),")")) -> my
 
-data %>% select(num_range("Q13_4_",1:5))            %>%
+data %>% select(URN, num_range("Q13_4_",1:5))            %>%
          pivot_longer(cols = num_range("Q13_4_",1:5),
                       names_to = "questions",
-                      values_to = "understanding")  %>%
-         filter(understanding != 0)                 %>%
-         group_by(understanding)                    %>% 
-         mutate(n = n())                            %>% 
+                      values_to = "understanding")       %>%
+         filter(understanding != 0)                      %>%
+         mutate(N = n_distinct(URN))                     %>% 
+         group_by(understanding)                         %>% 
+         mutate(n = n())                                 %>% 
          mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
-         ggplot(aes(x = understanding, fill = n)) + 
-         geom_bar(colour = "black") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 4) +
+         distinct(understanding, N, n)                   %>%
+         ggplot(aes(x = understanding, y = n, fill = n)) + 
+         geom_col(colour = "black") +
+         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 4) +
          scale_fill_distiller(palette = "Blues", direction = 1) +
          theme_bw() + ylab("Numbers") + theme(legend.position = "None") +
          xlab(my$lab)
