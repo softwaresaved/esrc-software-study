@@ -2833,14 +2833,16 @@ data %>% select(URN, Q6)      %>%
 
 data %>% select(Q6)         %>%
          filter(Q6 != "-")  %>% 
+         mutate(N = n())    %>% 
          group_by(Q6)       %>% 
          mutate(n = n())    %>% 
-         ggplot(aes(x = reorder(Q6, -n), fill = n)) + 
-         geom_bar(colour = "black") + 
+         distinct(Q6, n, N) %>% 
+         ggplot(aes(x = reorder(Q6, -n), y = n, fill = n)) + 
+         geom_col(colour = "black") + 
          theme_bw() +
          xlab(my$lab) + scale_fill_distiller(palette = "Blues", direction = 1) +
          ylab("Numbers") + ylim(0, 110) + theme(legend.position = "None") +
-         geom_text(aes(label = ..count..), stat = "count", vjust = -0.5, size = 4) 
+         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1), ")")), vjust = -0.5, size = 4) 
 
 ```
 
