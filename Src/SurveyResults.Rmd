@@ -6619,14 +6619,16 @@ funding %>% pivot_longer(cols = num_range("Q18_", 1:7),
                          names_to = NULL,
                          values_to =  "funding")         %>% 
             filter(!is.na(funding))                      %>%
+            mutate(N = n_distinct(URN))                  %>% 
             group_by(funding)                            %>% 
             tally()                                      %>% 
             filter(n > 2)                                %>%
             ggplot(aes(x = reorder(funding, -n), y = n, fill = n)) +
-            geom_col(colour = "black") + ylim(0,115) +
+            geom_col(colour = "black") + ylim(0, 120) +
             theme_bw() + xlab(my$lab) + ylab("Numbers") +
             scale_fill_distiller(palette = "Blues", direction = 1) +
-            geom_text(aes(x = funding, label = n), vjust = -0.5, size = 4) +
+            geom_text(aes(x = funding, label = paste0(n,"\n(", percent(n/N, accuracy = 1),")")), 
+                      vjust = -0.5, size = 4) +
             theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0, size = 10),
                   legend.position = "None")
 ```
