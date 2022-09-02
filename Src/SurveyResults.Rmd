@@ -3115,11 +3115,12 @@ data %>% select(URN, starts_with("Q6_a"))         %>%
          filter(UseOS != 0)                       %>%             
          summarise(lab = paste0("Reason for using OS (N=", n_distinct(URN),")")) -> my
 
-data %>% select(starts_with("Q6_a"))              %>%
+data %>% select(URN, starts_with("Q6_a"))         %>%
          pivot_longer(cols = starts_with("Q6_a"),
                       names_to = NULL,
                       values_to = "UseOS")        %>%
          filter(UseOS != 0)                       %>%
+         mutate(N = n_distinct(URN))              %>% 
          group_by(UseOS)                          %>% 
          mutate(n = n())                          %>% 
          ungroup()                                %>% 
@@ -3127,7 +3128,7 @@ data %>% select(starts_with("Q6_a"))              %>%
          ggplot(aes(x = reorder(UseOS, -n), y = n, fill = n)) + 
          geom_col(colour = "black") + xlab(unique(my$lab)) +
          theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +         
-         geom_text(aes(label = n), vjust = -0.5, size = 4) +
+         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 4) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12), legend.position = "None") +
          ylab("Numbers")
 ```
