@@ -2148,6 +2148,39 @@ data %>% select(num_range("Q3_", 1:7), datause, career = Q20)               %>%
         facet_wrap(~ career)
 ```
 
+### Data sharing by % data use and gender
+
+```{r sharing_data_datause_career_per}
+
+data %>% select(num_range("Q3_", 1:7), datause, gender = Q21)               %>%
+         filter(!(gender %in% lowstatsgender))                              %>% 
+         group_by(datause)                                                  %>% 
+         mutate(N = n())                                                    %>%
+         pivot_longer(cols = starts_with("Q3_"), 
+                      names_to = NULL,
+                      values_to = "DataSharing")                            %>%
+         filter(DataSharing != 0)                                           %>%
+         group_by(DataSharing)                                              %>%
+         mutate(M = n())                                                    %>% 
+         group_by(DataSharing, datause, gender)                             %>% 
+         mutate(per = n()/N)                                                %>% 
+         distinct(datause, DataSharing, per, M, gender)                     %>% 
+         ggplot(aes(x = reorder(DataSharing, -M), y = per,fill = datause)) +
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
+                 colour = "black", na.rm = TRUE) + 
+        theme_bw() + 
+        theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), 
+              axis.text.y = element_text(size = 12),
+              legend.text=element_text(size = 8)) +
+        xlab("Data sharing habits") + ylab("Percent") +
+        scale_y_continuous(labels = percent_format(accuracy = 1)) +
+        geom_text(aes(x = DataSharing, label = percent(per, accuracy = 1)), vjust = -0.5,
+                      position = position_dodge2(width = 0.9, preserve = "single"), 
+                      colour = "black", size = 3) + 
+        scale_fill_brewer(palette = "PuRd", name = "Data use") +
+        facet_wrap(~ gender)
+```
+
 ### Sharing by gender
 
 ```{r sharing_data_gender_per2}
