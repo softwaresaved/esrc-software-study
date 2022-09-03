@@ -3967,8 +3967,6 @@ data %>% select("Q9", career = Q20)             %>%
 
 ### Responses by % career stage
 
-Removing "Other" and "-" in career stages.
-
 ```{r develop_sw_career_per2}
 
 data %>% select(Q9, career = Q20)                  %>%
@@ -4018,7 +4016,7 @@ data %>% select(Q9, gender = Q21)                  %>%
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
-### Responses by % gender
+### Responses by % gender and career
 
 ```{r develop_sw_gender_career}
 
