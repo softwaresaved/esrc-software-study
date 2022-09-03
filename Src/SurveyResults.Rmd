@@ -3656,12 +3656,13 @@ plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
 ```{r sw_maintenace_career}
 
 data %>% select(num_range("Q7_", 1:7), career = Q20)  %>%
+         filter(!(career %in% c("-", "Other")))       %>% 
          pivot_longer(cols = num_range("Q7_", 1:7),
                       names_to = NULL,
-                      values_to = "swmaint")        %>%
-         filter(swmaint != 0)                       %>%
-         group_by(swmaint, career)                  %>% 
-         mutate(n = n())                            %>% 
+                      values_to = "swmaint")          %>%
+         filter(swmaint != 0)                         %>%
+         group_by(swmaint, career)                    %>% 
+         mutate(n = n())                              %>% 
          ggplot(aes(x = reorder(swmaint,-n), fill = career)) + 
          geom_bar(colour = "black") +
          theme_bw() +
@@ -3710,12 +3711,13 @@ data %>% select(num_range("Q7_", 1:7), career = Q20) %>%
 ```{r sw_maintenace_gender}
 
 data %>% select(num_range("Q7_", 1:7), gender = Q21)  %>%
+         filter(!(gender %in% lowstatsgender))        %>% 
          pivot_longer(cols = num_range("Q7_", 1:7),
                       names_to = NULL,
-                      values_to = "swmaint")        %>%
-         filter(swmaint != 0)                       %>%
-         group_by(swmaint, gender)                  %>% 
-         mutate(n = n())                            %>% 
+                      values_to = "swmaint")          %>%
+         filter(swmaint != 0)                         %>%
+         group_by(swmaint, gender)                    %>% 
+         mutate(n = n())                              %>% 
          ggplot(aes(x = reorder(swmaint,-n), fill = gender)) + 
          geom_bar(colour = "black") +
          theme_bw() +
@@ -3728,36 +3730,6 @@ data %>% select(num_range("Q7_", 1:7), gender = Q21)  %>%
 ```
 
 ### Software maintainance by % gender
-
-```{r sw_maintenace_gender_per}
-
-data %>% select(num_range("Q7_", 1:7), gender = Q21) %>%
-         group_by(gender)                            %>% 
-         mutate(N = n())                             %>% 
-         pivot_longer(cols = num_range("Q7_", 1:7),
-                      names_to = NULL,
-                      values_to = "swmaint")        %>%
-         filter(swmaint != 0)                       %>%
-         group_by(swmaint)                          %>% 
-         mutate(M = n())                            %>% 
-         filter(gender != "Other" & gender != "-")  %>% 
-         group_by(swmaint, gender)                  %>% 
-         mutate(n = n())                            %>% 
-         mutate(per = percent(n/N, accuracy = 1))   %>% 
-         distinct(swmaint, gender, per, n, N, M)    %>% 
-         ggplot(aes(x = reorder(swmaint,-M), y = n/N, fill = gender)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"),
-                  colour = "black") +
-         theme_bw() + 
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         xlab("How Software is maintained") + ylab("Percent") +
-         geom_text(aes(label = per), 
-                   position = position_dodge2(width = 0.9, preserve = "single"), 
-                   size = 3, vjust = -0.5) +
-         scale_fill_brewer(palette = "Set2", name = "Gender")
-
-```
 
 ```{r sw_maintenace_gender_per2}
 
@@ -3789,6 +3761,8 @@ data %>% select(num_range("Q7_", 1:7), gender = Q21) %>%
          scale_fill_brewer(palette = "Set2", name = "Gender")
 
 ```
+
+### Software maintainance by % gender and career
 
 ```{r sw_maintenace_gender_per2_career}
 
