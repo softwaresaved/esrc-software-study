@@ -4112,7 +4112,7 @@ data %>% select(URN, num_range("Q10_", 1:7))            %>%
          geom_col(colour = "black") + scale_fill_distiller(palette = "Blues", direction = 1) +
          theme_bw() +
          xlab(my$lab) + ylab("Numbers") +
-         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 3) +
+         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 4) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.position = "None")
 
 ```
@@ -4144,13 +4144,16 @@ corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 ```{r extending_career}
 
 data %>% select(num_range("Q10_", 1:7), career = Q20)   %>%
+         filter(!(career %in% c("-", "Other")))         %>% 
          pivot_longer(cols = num_range("Q10_", 1:7),
                       names_to = NULL,
                       values_to = "swuse")              %>%
          filter(swuse != 0)                             %>%
+         group_by(swuse)                                %>% 
+         mutate(M = n())                                %>% 
          group_by(swuse, career)                        %>%
          mutate(n = n())                                %>% 
-         ggplot(aes(x = reorder(swuse, -n), fill = career)) + 
+         ggplot(aes(x = reorder(swuse, -M), fill = career)) + 
          geom_bar(colour = "black") +
          theme_bw() +
          xlab("Who do you share your software with?") + ylab("Numbers") +
@@ -4163,23 +4166,26 @@ data %>% select(num_range("Q10_", 1:7), career = Q20)   %>%
 
 ```{r extending_career_per}
 
-data %>% select(num_range("Q10_", 1:7), career = Q20)   %>%
+data %>% select(URN, num_range("Q10_", 1:7), career = Q20)   %>%
+         filter(!(career %in% c("-", "Other")))              %>% 
+         group_by(career)                                    %>%
+         mutate(N = n())                                     %>%
          pivot_longer(cols = num_range("Q10_", 1:7),
                       names_to = NULL,
-                      values_to = "swuse")              %>%
-         filter(swuse != 0)                             %>%
-         group_by(career)                               %>%
-         mutate(N = n())                                %>% 
-         group_by(swuse, career)                        %>%
-         mutate(per = n()/N)                            %>% 
-         distinct(swuse, career, per)                   %>% 
-         ggplot(aes(x = swuse, y = per, fill = career)) + 
+                      values_to = "swuse")                   %>%
+         filter(swuse != 0)                                  %>%
+         group_by(swuse)                                     %>% 
+         mutate(M = n())                                     %>% 
+         group_by(swuse, career)                             %>%
+         mutate(per = n()/N)                                 %>% 
+         distinct(swuse, career, per, M)                     %>% 
+         ggplot(aes(x = reorder(swuse, -M), y = per, fill = career)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          xlab("Who do you share your software with?") + ylab("Percent") +
          geom_text(aes(label = percent(per, accuracy=1)), vjust = -0.5,
-                   position = position_dodge2(width = 0.9, preserve = "single"),  size = 2) +
+                   position = position_dodge2(width = 0.9, preserve = "single"),  size = 4) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
@@ -4189,6 +4195,7 @@ data %>% select(num_range("Q10_", 1:7), career = Q20)   %>%
 ```{r extending_gender}
 
 data %>% select(num_range("Q10_", 1:7), gender = Q21)   %>%
+         filter(!(gender %in% lowstatsgender))          %>% 
          pivot_longer(cols = num_range("Q10_", 1:7),
                       names_to = NULL,
                       values_to = "swuse")              %>%
@@ -4210,16 +4217,19 @@ data %>% select(num_range("Q10_", 1:7), gender = Q21)   %>%
 ```{r extending_gender_per}
 
 data %>% select(num_range("Q10_", 1:7), gender = Q21)   %>%
+         filter(!(gender %in% lowstatsgender))          %>%
+         group_by(gender)                               %>%
+         mutate(N = n())                                %>% 
          pivot_longer(cols = num_range("Q10_", 1:7),
                       names_to = NULL,
                       values_to = "swuse")              %>%
          filter(swuse != 0)                             %>%
-         group_by(gender)                               %>%
-         mutate(N = n())                                %>% 
+         group_by(swuse)                                %>% 
+         mutate(M = n())                                %>% 
          group_by(swuse, gender)                        %>%
          mutate(per = n()/N)                            %>% 
-         distinct(swuse, gender, per)                   %>% 
-         ggplot(aes(x = swuse, y = per, fill = gender)) + 
+         distinct(swuse, gender, per, M)                %>% 
+         ggplot(aes(x = reorder(swuse, -M), y = per, fill = gender)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
@@ -4227,9 +4237,39 @@ data %>% select(num_range("Q10_", 1:7), gender = Q21)   %>%
          geom_text(aes(label = percent(per, accuracy=1)), vjust = -0.5,
                    position = position_dodge2(width = 0.9, preserve = "single"),  size = 2) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         scale_fill_brewer(palette = "Set2", name = "Gender")
+         scale_fill_brewer(palette = "Set2", name = "Gender") 
+
 ```
 
+### gender and career stage
+
+```{r extending_gender_per}
+
+data %>% select(num_range("Q10_", 1:7), career = Q20, gender = Q21)   %>%
+         group_by(gender)                                             %>%
+         mutate(N = n())                                              %>% 
+         pivot_longer(cols = num_range("Q10_", 1:7),
+                      names_to = NULL,
+                      values_to = "swuse")                            %>%
+         filter(swuse != 0)                                           %>%
+         group_by(swuse)                                              %>% 
+         mutate(M = n())                                              %>% 
+         filter(!(career %in% c("-", "Other")))                       %>% 
+         filter(!(gender %in% lowstatsgender))                        %>%
+         group_by(swuse, gender, career)                              %>%
+         mutate(per = n()/N)                                          %>% 
+         distinct(swuse, gender, per, career, M)                      %>% 
+         ggplot(aes(x = reorder(swuse, -M), y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() +
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         xlab("Who do you share your software with?") + ylab("Percent") +
+         geom_text(aes(label = percent(per, accuracy=1)), vjust = -0.5,
+                   position = position_dodge2(width = 0.9, preserve = "single"),  size = 2) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set2", name = "Gender") +
+         facet_wrap(~career)
+```
 ### Counting combined choices
 
 For each multiple choice replace spaces by "-"s and collapse all the
