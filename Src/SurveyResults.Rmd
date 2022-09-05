@@ -4082,14 +4082,14 @@ listOther("Q9_a")
 
 ```
 
-## Q10 Extending software
+## Q10 Sharing software
 
 If you write or extend software (including scripts, applications, tools,
 codes and formulae in spreadsheets), do you (check all that apply)
 
-### Extending software
+### Sharing software
 
-```{r extending}
+```{r sharing}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, num_range("Q10_", 1:7))  %>% 
@@ -4139,9 +4139,9 @@ corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 
 ```
 
-### Extending software by career
+### Sharing software by career
 
-```{r extending_career}
+```{r sharing_career}
 
 data %>% select(num_range("Q10_", 1:7), career = Q20)   %>%
          filter(!(career %in% c("-", "Other")))         %>% 
@@ -4162,9 +4162,9 @@ data %>% select(num_range("Q10_", 1:7), career = Q20)   %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-### Extending software by % career stage
+### Sharing software by % career stage
 
-```{r extending_career_per}
+```{r sharing_career_per}
 
 data %>% select(URN, num_range("Q10_", 1:7), career = Q20)   %>%
          filter(!(career %in% c("-", "Other")))              %>% 
@@ -4190,9 +4190,9 @@ data %>% select(URN, num_range("Q10_", 1:7), career = Q20)   %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-### Extending software by gender
+### Sharing software by gender
 
-```{r extending_gender}
+```{r sharing_gender}
 
 data %>% select(num_range("Q10_", 1:7), gender = Q21)   %>%
          filter(!(gender %in% lowstatsgender))          %>% 
@@ -4212,9 +4212,9 @@ data %>% select(num_range("Q10_", 1:7), gender = Q21)   %>%
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
-### Extending software by % gender
+### Sharing software by % gender
 
-```{r extending_gender_per}
+```{r sharing_gender_per}
 
 data %>% select(num_range("Q10_", 1:7), gender = Q21)   %>%
          filter(!(gender %in% lowstatsgender))          %>%
@@ -4241,9 +4241,9 @@ data %>% select(num_range("Q10_", 1:7), gender = Q21)   %>%
 
 ```
 
-### gender and career stage
+### Sharing software by gender and career stage
 
-```{r extending_gender_per}
+```{r sharing_gender_per}
 
 data %>% select(num_range("Q10_", 1:7), career = Q20, gender = Q21)   %>%
          group_by(gender)                                             %>%
@@ -4279,7 +4279,7 @@ B and D then that would contribute an A_B\_D then we count all the
 combined choices. Only showing combinations that have a count greater
 than 1.
 
-```{r extendingSW_choices}
+```{r sharingSW_choices}
 
 data %>% select(id = URN, num_range("Q10_", 1:7))                     %>%
          pivot_longer(cols = num_range("Q10_", 1:7),
