@@ -15,4 +15,5 @@ Data/HESA/
 Data/
 Src/TestGraphProblem.R
 *.zip
+*.swp
 Src/03_AnalysisByGenderCareerStageFunderDiscipline.Rmd
