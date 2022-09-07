@@ -1871,7 +1871,7 @@ data %>% select(URN, num_range("Q2_b_",1:6), num_range("Q19_", 1:22))        %>%
 
 Percentages work horizontally (by research discipline)
 
-```{r datareuse_discipline_hor}
+```{r datareuse_discipline_hor2}
 
 # Q2_b - date source for reuse
 # Q19 - research discipline
@@ -2150,7 +2150,7 @@ data %>% select(num_range("Q3_", 1:7), datause, career = Q20)               %>%
 
 ### Data sharing by % data use and gender
 
-```{r sharing_data_datause_career_per}
+```{r sharing_data_datause_career_per2}
 
 data %>% select(num_range("Q3_", 1:7), datause, gender = Q21)               %>%
          filter(!(gender %in% lowstatsgender))                              %>% 
@@ -2685,8 +2685,9 @@ important_software %>% select(URN, starts_with("Q5"))        %>%
                        filter(!is.na(software))              %>%
                        mutate(N = n_distinct(URN))           %>%    
                        group_by(software)                    %>%
-                       tally()                               %>%
+                       mutate(n = n())                       %>%
                        filter(n > 2)                         %>%
+                       distinct(software, n, N)              %>% 
                        ggplot(aes(x = reorder(software, -n), y = n, fill = n)) +
                        geom_col(colour = "black") + scale_fill_distiller(palette = "Blues", direction = 1) +
                        theme_bw() +
@@ -3124,7 +3125,7 @@ data %>% select(URN, starts_with("Q6_a"))         %>%
          group_by(UseOS)                          %>% 
          mutate(n = n())                          %>% 
          ungroup()                                %>% 
-         distinct(UseOS, n)                       %>% 
+         distinct(UseOS, n, N)                    %>% 
          ggplot(aes(x = reorder(UseOS, -n), y = n, fill = n)) + 
          geom_col(colour = "black") + xlab(unique(my$lab)) +
          theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +         
@@ -3846,7 +3847,7 @@ data %>% select(num_range("Q7_", 1:7), num_range("Q19_", 1:22))          %>%
          scale_fill_continuous(high = "#132B43", low = "#56B1F7")
 ```
 
-### Counting combined choices
+### Combined choices
 
 For each multiple choice replace spaces by "-"s and collapse all the
 non-empty choices and join them with an "\_". So, if an individual only
@@ -4243,7 +4244,7 @@ data %>% select(num_range("Q10_", 1:7), gender = Q21)   %>%
 
 ### Sharing software by gender and career stage
 
-```{r sharing_gender_per}
+```{r sharing_gender_per2}
 
 data %>% select(num_range("Q10_", 1:7), career = Q20, gender = Q21)   %>%
          group_by(gender)                                             %>%
@@ -4270,7 +4271,7 @@ data %>% select(num_range("Q10_", 1:7), career = Q20, gender = Q21)   %>%
          scale_fill_brewer(palette = "Set2", name = "Gender") +
          facet_wrap(~career)
 ```
-### Counting combined choices
+### Combined choices
 
 For each multiple choice replace spaces by "-"s and collapse all the
 non-empty choices and join them with an "\_". So, if an individual only
@@ -4281,22 +4282,94 @@ than 1.
 
 ```{r sharingSW_choices}
 
-data %>% select(id = URN, num_range("Q10_", 1:7))                     %>%
+data %>% select(URN, num_range("Q10_", 1:7))                          %>%
          pivot_longer(cols = num_range("Q10_", 1:7),
                       names_to = NULL,
                       values_to = "ds")                                %>%
          filter(ds != 0)                                               %>%  
-         group_by(id)                                                  %>% 
+         group_by(URN)                                                 %>% 
          mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         distinct(id, choices)                                         %>% 
+         distinct(URN, choices)                                        %>% 
          ungroup()                                                     %>% 
-         select(-id)                                                   %>% 
+         select(-URN)                                                  %>% 
          group_by(choices)                                             %>% 
          tally()                                                       %>% 
          filter(n  > 1)                                                %>% 
          arrange(desc(n))                                              %>% 
          kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
+
+```{r sharingsw_contingency}
+
+# Create a data frame showing the choices per individual
+data %>% select(URN, num_range("Q10_", 1:7))                   %>%
+         pivot_longer(cols = num_range("Q10_", 1:7),
+                      names_to = NULL,
+                      values_to = "ds")                        %>%
+         filter(ds != 0)                                       %>%  
+         group_by(URN, ds)                                     %>%
+         tally()                                               %>% 
+         pivot_wider(names_from = "ds", 
+                     values_from = "n", 
+                     values_fill = 0)                          %>%
+        ungroup()                                              %>% 
+        select(-URN)  -> cc
+
+# Create a new data frame to store the result
+# ConcernAboutValue is a dummy column to get the right number of rows.
+vc <- data.frame(ConcernAboutValue = rep(0L, ncol(cc)))
+
+# Loop round the choices and count what choices are used in combination 
+# when a particular choices is used.
+for(i in 1:ncol(cc)){
+  
+  n <- names(cc)[[i]]
+  rownames(vc)[i] <-  n
+  vc[n] <- colSums(cc[cc[n]==1,])
+
+}
+
+# Remove the constructor column
+vc$ConcernAboutValue <-  NULL
+
+# Produce a contingency table
+tt <- names(vc)                                          # Names to be used for the pivot wider
+m <-  names(sort(diag(as.matrix(vc)), decreasing = TRUE)) # Order to be used for the axes
+vc %>% mutate(xx = tt)                  %>% 
+       pivot_longer(cols = all_of(tt),
+                    names_to = "yy",
+                    values_to = "n")    %>% 
+       ggplot(aes(x = factor(xx, levels=m), y = factor(yy, levels = rev(m)), fill = n)) +
+       theme_bw() + geom_tile() +
+       scale_fill_distiller(palette = "Blues", direction = 1) +
+       theme(axis.text.x = element_text(angle = -60, hjust = 0),
+            legend.position = "None") +
+       geom_text(aes(label = n), size = 4) +
+       xlab("Software sharing") + ylab("Software sharing")
+
+```
+
+
+```{r sharingSW_choices2}
+
+data %>% select(URN, career = Q20, num_range("Q10_", 1:7))                  %>%
+         pivot_longer(cols = num_range("Q10_", 1:7),
+                      names_to = NULL,
+                      values_to = "ds")                                %>%
+         filter(ds != 0)                                               %>%  
+         group_by(URN)                                                 %>% 
+         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
+         distinct(career, URN, choices)                                %>% 
+         ungroup()                                                     %>% 
+         select(-URN)                                                  %>% 
+         group_by(career, choices)                                     %>% 
+         tally()                                                       %>% 
+         filter(n  > 1)                                                %>% 
+         arrange(desc(n))                                              %>% 
+         kbl(format="pipe", align = c("l","l", "r"), col.names = c("Career", "Combined choice", "Numbers"))
+```
+
+
 
 ### Other extending mechanisms
 
@@ -6448,7 +6521,7 @@ data %>%  select(num_range("Q16_", 1:13), career = Q20, gender = Q21) %>%
 ### Barriers as % of gender and career
 
 
-```{r barriers_gender_per2}
+```{r barriers_gender_per3}
 
 data %>%  select(num_range("Q16_", 1:13), gender = Q21) %>%
           group_by(gender)                                      %>%
@@ -6533,7 +6606,7 @@ data %>% select(id = URN, num_range("Q16_", 1:13))                       %>%
 ```
 
 
-```{r barrier_choices2}
+```{r barrier_choices_contingency}
 
 # Create a data frame showing the choices per individual
 data %>% select(URN, num_range("Q16_", 1:13))                   %>%
@@ -6650,8 +6723,9 @@ funding %>% pivot_longer(cols = num_range("Q18_", 1:7),
             filter(!is.na(funding))                      %>%
             mutate(N = n_distinct(URN))                  %>% 
             group_by(funding)                            %>% 
-            tally()                                      %>% 
+            mutate(n = n())                              %>% 
             filter(n > 2)                                %>%
+            distinct(n, funding, N)                      %>% 
             ggplot(aes(x = reorder(funding, -n), y = n, fill = n)) +
             geom_col(colour = "black") + ylim(0, 120) +
             theme_bw() + xlab(my$lab) + ylab("Numbers") +
