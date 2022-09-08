@@ -4692,6 +4692,68 @@ data %>% select(sharesw, Q9, career = Q20)         %>%
         facet_wrap(~career)
 ```
 
+### Developing and most important software
+
+```{r dveloping_importantsw}
+
+# Calculate an x label with the folks that filled in this question.
+important_software  %>% select(URN, starts_with("Q5"))                        %>% 
+                       pivot_longer(cols =  starts_with("Q5"),
+                                    names_to = NULL,
+                                    values_to = "software")                   %>%
+                       filter(!is.na(software))                               %>% 
+                       group_by(URN)                                          %>% 
+                       mutate( contrib = 1/n())                               %>% 
+                       left_join(data %>% select(URN, sharesw), by = "URN")   %>% 
+                       filter(!is.na(sharesw))                                %>% 
+                       ungroup()                                              %>% 
+                       mutate(N = sum(contrib))                               %>% 
+                       group_by(software, sharesw)                            %>% 
+                       mutate(n = sum(contrib))                               %>% 
+                       filter(n/N > 0.02)                                     %>% 
+                       distinct(n, N, sharesw, software)                      %>% 
+                       mutate(sharesw = factor(sharesw, ordered = TRUE, 
+                                levels = c("ShareWidely", "ShareOnRequest", "CollaboratorsOnly", "RGUseOnly", "OwnUseOnly"))) %>% 
+                       ggplot(aes(x = sharesw, y = software, fill = n/N)) +
+                       geom_tile(colour = "black", stat = "identity") + 
+                       theme_bw() +
+                       theme(legend.position = "None") +
+                       scale_fill_continuous(type = "viridis") +
+                       geom_text(aes(label = paste0(percent(n/N, accuracy = 0.1))), colour = "white") +
+                       xlab("Share software") + ylab("Software")
+```
+
+### Sharing, developing and most the important software table
+
+```{r dveloping_importantsw_table_yes}
+
+# Calculate an x label with the folks that filled in this question.
+important_software  %>% select(URN, starts_with("Q5"))                   %>% 
+                        pivot_longer(cols =  starts_with("Q5"),
+                                    names_to = NULL,
+                                    values_to = "software")              %>%
+                       filter(!is.na(software))                          %>% 
+                       group_by(URN)                                     %>% 
+                       mutate(contrib = 1/n())                           %>% 
+                       left_join(data %>% select(URN, Q9, sharesw), 
+                                 by = "URN")                             %>% 
+                       filter(Q9 == "Yes")                               %>%
+                       ungroup()                                         %>% 
+                       mutate(N = sum(contrib))                          %>% 
+                       group_by(software, sharesw)                       %>% 
+                       mutate(n = sum(contrib))                          %>% 
+                       mutate(per = n/N)                                 %>% 
+                       filter(per > 0.02)                                %>% 
+                       distinct(software, sharesw, per)                  %>% 
+                       mutate(per = percent(per, accuracy = 0.1))         %>% 
+                       pivot_wider(names_from = sharesw,
+                                   values_from = per,
+                                   values_fill = "0")                     %>%                    
+                       kbl(format="pipe", align = c("l",rep("r", 4)), 
+                           col.names = c("Software", "Share Widely", "Share on Request", "Own Use Only", "Collaborators Only"))
+
+```
+
 ## Q11 Acquiring skills
 
 How did you acquire the skills necessary to utilise software in your
