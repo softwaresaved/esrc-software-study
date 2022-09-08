@@ -4308,9 +4308,35 @@ data %>% select(num_range("Q10_", 1:6), gender = Q21)   %>%
 
 ```
 
-### Sharing software by gender and career stage
+Using the modified sharing data (accept the most liberal policy):
 
 ```{r sharing_gender_per2}
+
+data %>% select(sharesw, gender = Q21)                  %>%
+         filter(!(gender %in% lowstatsgender))          %>%
+         group_by(gender)                               %>%
+         mutate(N = n())                                %>% 
+         filter(!is.na(sharesw))                        %>%
+         group_by(sharesw)                                %>% 
+         mutate(M = n())                                %>% 
+         group_by(sharesw, gender)                        %>%
+         mutate(n = n())                            %>% 
+         distinct(sharesw, gender, n, M)                %>% 
+         ggplot(aes(x = reorder(sharesw, -M), y = n/N, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() +
+         scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         xlab("Who do you share your software with?") + ylab("Percent") +
+         geom_text(aes(label = percent(n/N, accuracy=1)), vjust = -0.5,
+                   position = position_dodge2(width = 0.9, preserve = "single"),  size = 2) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set2", name = "Gender") 
+
+```
+
+### Sharing software by gender and career stage
+
+```{r sharing_gender_per}
 
 data %>% select(num_range("Q10_", 1:6), career = Q20, gender = Q21)   %>%
          group_by(gender)                                             %>%
@@ -4337,6 +4363,33 @@ data %>% select(num_range("Q10_", 1:6), career = Q20, gender = Q21)   %>%
          scale_fill_brewer(palette = "Set2", name = "Gender") +
          facet_wrap(~career)
 ```
+Using the modifed interpritation of the data to take the most liberal data sharing option
+
+```{r sharing_gender_per2}
+
+data %>% select(sharesw, career = Q20, gender = Q21)                  %>%
+         group_by(gender)                                             %>%
+         mutate(N = n())                                              %>% 
+         filter(!is.na(sharesw))                                      %>% 
+         group_by(sharesw)                                            %>% 
+         mutate(M = n())                                              %>% 
+         filter(!(career %in% c("-", "Other")))                       %>% 
+         filter(!(gender %in% lowstatsgender))                        %>%
+         group_by(sharesw, gender, career)                            %>%
+         mutate(n = n())                                              %>% 
+         distinct(sharesw, gender, n, career, M, N)                   %>% 
+         ggplot(aes(x = reorder(sharesw, -M), y = n/N, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
+         theme_bw() +
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.16)) +
+         xlab("Who do you share your software with?") + ylab("Percent") +
+         geom_text(aes(label = percent(n/N, accuracy = 0.1)), vjust = -0.5,
+                   position = position_dodge2(width = 0.9, preserve = "single"),  size = 4) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         scale_fill_brewer(palette = "Set2", name = "Gender") +
+         facet_wrap(~career)
+```
+
 ### Combined choices
 
 For each multiple choice replace spaces by "-"s and collapse all the
@@ -4521,6 +4574,48 @@ vc %>% mutate(xx = tt)                  %>%
 
 listOther("Q10_a")
 
+```
+
+### Developing and sharing software
+
+```{r developing_sharing}
+
+data %>% select(sharesw, Q9)                       %>%
+         filter(!is.na(Q9) & !is.na(sharesw))      %>% 
+         mutate(N = n())                           %>% 
+         group_by(Q9, sharesw)                     %>% 
+         mutate(n = n())                           %>% 
+         mutate(per = percent(n/N, accuracy = 1))  %>%
+         distinct(Q9, N, n, per)                   %>% 
+         ggplot(aes(x = reorder(Q9, -n), y = n, fill = sharesw)) + 
+         geom_col(colour = "black", position = position_dodge2(width = 0.9, preserve = "single")) +
+         theme_bw() + #scale_fill_distiller(palette = "Blues", direction = 1) +
+         xlab("Do you develop software?") + ylab("Numbers") + #theme(legend.position = "None") +
+         geom_text(aes(label = paste0(n," (", per,")")), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 4)
+```
+
+### Developing and sharing software by career stage
+
+```{r developing_sharing_career}
+
+data %>% select(sharesw, Q9, career = Q20)         %>%
+         group_by(career)                            %>% 
+         mutate(N = n())                             %>% 
+         filter(!(career %in% c("-", "Other")))      %>% 
+         filter(!is.na(Q9) & !is.na(sharesw))        %>% 
+         group_by(Q9, sharesw, career)               %>% 
+         mutate(n = n())                             %>% 
+         mutate(per = percent(n/N, accuracy = 0.1))  %>%
+         distinct(Q9, N, n, per, career)             %>% 
+         ggplot(aes(x = reorder(Q9, -n), y = n, fill = sharesw)) + 
+         geom_col(colour = "black", position = position_dodge2(width = 0.9, preserve = "single")) +
+         theme_bw() + 
+         scale_y_continuous(breaks= pretty_breaks(), limits = c(0, 13)) +
+         xlab("Do you develop software?") + ylab("Numbers") + 
+         geom_text(aes(label = paste0(n," (", per,")")), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 3) +
+        facet_wrap(~career)
 ```
 
 ## Q11 Acquiring skills
