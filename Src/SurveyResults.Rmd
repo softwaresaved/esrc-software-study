@@ -4078,6 +4078,80 @@ data %>% select(URN, Q9, num_range("Q19_", 1:22))                        %>%
 
 ```
 
+### Developing and most important software
+
+```{r dveloping_importantsw}
+
+# Calculate an x label with the folks that filled in this question.
+important_software  %>% select(URN, starts_with("Q5"))                   %>% 
+                       pivot_longer(cols =  starts_with("Q5"),
+                                    names_to = NULL,
+                                    values_to = "software")              %>%
+                       filter(!is.na(software))                          %>% 
+                       group_by(URN)                                     %>% 
+                       mutate( contrib = 1/n())                          %>% 
+                       left_join(data %>% select(URN, Q9), by = "URN")   %>% 
+                       group_by(software, Q9)                            %>% 
+                       summarise(N = round(sum(contrib), 1), 
+                                 .groups = "drop")                       %>% 
+                      filter(N > 3)                                      %>% 
+                      ggplot(aes(x = Q9, y = N, fill = software)) +
+                      geom_col(colour = "black", position = position_stack()) + 
+                      theme_bw() +
+                      theme(legend.position = "None") +
+                      geom_text(aes(label = paste0(software)), position = position_stack(vjust = 0.5)) +
+                      xlab("Do you develop software?")
+```
+
+### Developing and most important software table
+
+```{r dveloping_importantsw_table_yes}
+
+# Calculate an x label with the folks that filled in this question.
+important_software  %>% select(URN, starts_with("Q5"))                   %>% 
+                       pivot_longer(cols =  starts_with("Q5"),
+                                    names_to = NULL,
+                                    values_to = "software")              %>%
+                       filter(!is.na(software))                          %>% 
+                       group_by(URN)                                     %>% 
+                       mutate(contrib = 1/n())                           %>% 
+                       left_join(data %>% select(URN, Q9), by = "URN")   %>% 
+                       filter(Q9 == "Yes")                               %>%
+                       ungroup()                                         %>% 
+                       mutate(N = sum(contrib))                          %>% 
+                       group_by(software)                                %>% 
+                       mutate(n = sum(contrib))                          %>% 
+                       mutate(per = n/N)                                 %>% 
+                       filter(per > 0.02)                                %>% 
+                       distinct(software, per)                           %>% 
+                       arrange(desc(per))                                %>% 
+                       mutate(per = percent(per, accuracy = 0.1))        %>% 
+                       kbl(format="pipe", align = c("l","r"), col.names = c("Software", "Percent"))
+```
+
+```{r dveloping_importantsw_table_no}
+
+# Calculate an x label with the folks that filled in this question.
+important_software  %>% select(URN, starts_with("Q5"))                   %>% 
+                       pivot_longer(cols =  starts_with("Q5"),
+                                    names_to = NULL,
+                                    values_to = "software")              %>%
+                       filter(!is.na(software))                          %>% 
+                       group_by(URN)                                     %>% 
+                       mutate(contrib = 1/n())                           %>% 
+                       left_join(data %>% select(URN, Q9), by = "URN")   %>% 
+                       filter(Q9 == "No")                               %>%
+                       ungroup()                                         %>% 
+                       mutate(N = sum(contrib))                          %>% 
+                       group_by(software)                                %>% 
+                       mutate(n = sum(contrib))                          %>% 
+                       mutate(per = n/N)                                 %>% 
+                       filter(per > 0.02)                                %>% 
+                       distinct(software, per)                           %>% 
+                       arrange(desc(per))                                %>% 
+                       mutate(per = percent(per, accuracy = 0.1))        %>% 
+                       kbl(format="pipe", align = c("l","r"), col.names = c("Software", "Percent"))
+```
 ### How you extend software
 
 If you answered yes to the above, could you briefly describe what
