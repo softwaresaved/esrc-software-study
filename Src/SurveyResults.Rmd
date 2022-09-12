@@ -2072,7 +2072,8 @@ data %>% select(URN, num_range("Q3_", 1:7), esrcfunding)                        
          xlab(my$lab) + ylab("Numbers") + ylim(0, 56) +
          geom_text(aes(label = paste0(n, "\n(", per,")")),position = position_dodge2(width = 0.9, preserve = "single"), 
                    vjust = -0.25, size = 3) +
-         labs(fill = "ESRC funding") 
+         scale_fill_manual(name = "ESRC funding", labels = c("no-ESRC funding","ESRC funding", "Unknown"), values = c("red", "green","blue"))
+          
 ```
 ### Choice correlations
 
