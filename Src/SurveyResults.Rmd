@@ -3007,7 +3007,7 @@ data %>% select(os = Q6, career = Q20)             %>%
          ylab("Percent") +
          geom_text(aes(label = paste0(n," (", per,")")),
                    position = position_dodge2(width = 0.9, preserve = "single"),
-                   vjust = -0.5, size = 3) +
+                   vjust = -0.5, size = 4) +
          scale_fill_brewer(palette = "Set1", name = "Career stage") +
          theme(axis.text.x = element_text(size = 8), 
                              legend.text=element_text(size = 6))  
@@ -3116,6 +3116,8 @@ data %>% select(os = Q6, gender = Q21)             %>%
 
 ```
 
+### OS by gender and career
+
 Split by gender and career stage.
 
 ```{r use_os_gender_per2_career}
@@ -3135,11 +3137,12 @@ data %>% select(os = Q6, career = Q20, gender = Q21)    %>%
          ggplot(aes(x = reorder(os, -M), y = n/N, fill = gender)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
          theme_bw() +
-         xlab("Use of Open Source") + scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         xlab("Use of Open Source") + 
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.28)) +
          ylab("Percent") +
          geom_text(aes(label = paste0(n," (", per,")")),
                    position = position_dodge2(width = 0.9, preserve = "single"),
-                   vjust = -0.5, size = 3) +
+                   vjust = -0.5, size = 4) +
          scale_fill_brewer(palette = "Set2", name = "Gender") +
          theme(axis.text.x = element_text(size = 8), 
                              legend.text=element_text(size = 6))  + 
