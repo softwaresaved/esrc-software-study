@@ -3961,6 +3961,7 @@ data %>% select(Q9)                                %>%
 data %>% select("Q9", career = Q20)             %>%
          group_by(Q9, career)                   %>% 
          filter(!(career %in% c("-", "Other"))) %>% 
+         filter(!is.na(Q9))                     %>% 
          mutate(n = n())                        %>% 
          ggplot(aes(x = reorder(Q9, -n), fill = career)) + 
          geom_bar(colour = "black") +
@@ -3977,7 +3978,7 @@ data %>% select("Q9", career = Q20)             %>%
 ```{r develop_sw_career_per2}
 
 data %>% select(Q9, career = Q20)                  %>%
-         mutate(Q9 = ifelse(!is.na(Q9), Q9, "-"))  %>%
+         filter(!is.na(Q9))                        %>% 
          group_by(career)                          %>% 
          mutate(N = n())                           %>% 
          filter(!(career %in% c("-", "Other")))    %>% 
@@ -4003,12 +4004,12 @@ data %>% select(Q9, career = Q20)                  %>%
 ```{r develop_sw_gender_per2}
 
 data %>% select(Q9, gender = Q21)                  %>%
+         filter(!is.na(Q9))                        %>% 
          filter(!(gender %in% lowstatsgender))     %>% 
          group_by(gender)                          %>% 
          mutate(N = n())                           %>% 
          group_by(Q9)                              %>%
          mutate(M = n())                           %>% 
-         mutate(Q9 = ifelse(!is.na(Q9), Q9, "-"))  %>% 
          group_by(Q9, gender)                      %>% 
          mutate(per = n()/N)                       %>%
          distinct(Q9, gender, per, M)              %>% 
@@ -4028,13 +4029,13 @@ data %>% select(Q9, gender = Q21)                  %>%
 ```{r develop_sw_gender_career}
 
 data %>% select(Q9, career = Q20, gender = Q21)    %>%
+         filter(!is.na(Q9))                        %>% 
          filter(!(gender %in% lowstatsgender))     %>%
          filter(!(career %in% c("-", "Other")))    %>%
          group_by(gender)                          %>% 
          mutate(N = n())                           %>% 
          group_by(Q9)                              %>%
          mutate(M = n())                           %>% 
-         mutate(Q9 = ifelse(!is.na(Q9), Q9, "-"))  %>% 
          group_by(Q9, gender, career)              %>% 
          mutate(per = n()/N)                       %>%
          distinct(Q9, gender, per, M, career)      %>% 
