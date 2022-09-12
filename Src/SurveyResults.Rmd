@@ -698,6 +698,13 @@ data$Q23[is.na(data$Q23)] <-  "-"
 data["Q23"] <- gsub(1, "Yes", data[["Q23"]])
 data["Q23"] <- gsub(2, "No", data[["Q23"]])
 
+# Add a flag to indicate whther funding has come from the ESRC
+funding %>% rowwise()                                                        %>%
+            filter(any(!is.na(c_across(Q18_1:Q18_7))))                       %>% 
+            mutate(esrcfunding = any(grepl("ESRC", c_across(Q18_1:Q18_7))))  %>% 
+            select(URN, esrcfunding)                                         %>% 
+            right_join(data, by = "URN") -> data
+
 ```
 
 ```{r internal_document, child = 'internal/contents.Rmd'}
@@ -2034,6 +2041,38 @@ data %>% select(URN, num_range("Q3_", 1:7))                           %>%
          theme(legend.position = "none") 
 ```
 
+### Response distribution indicating ESRC funding
+
+```{r sharing_data_esrc}
+
+# Calculate an x label with the folks that filled in this question.
+data %>% select(URN, num_range("Q3_", 1:7))                           %>% 
+         pivot_longer(cols = num_range("Q3_", 1:7),
+                      names_to = NULL,
+                      values_to = "DataSharing")                      %>%
+         filter(DataSharing != 0)                                     %>%
+         summarise(lab = paste0("Data sharing habits (N=", n_distinct(URN),")")) -> my
+
+data %>% select(URN, num_range("Q3_", 1:7), esrcfunding)                          %>%
+         mutate(esrcfunding = as.character(esrcfunding)) %>% 
+         pivot_longer(cols = num_range("Q3_", 1:7),
+                      names_to = NULL,
+                      values_to = "DataSharing")                                  %>%
+         filter(DataSharing != 0)                                                 %>%
+         mutate(N = n_distinct(URN))                                              %>% 
+         group_by(DataSharing, esrcfunding)                                       %>% 
+         mutate(n = n())                                                          %>% 
+         mutate(per = percent(n/N, accuracy = 1))                                       %>% 
+         mutate(esrcfunding = ifelse(is.na(esrcfunding), "Unknown", esrcfunding)) %>% 
+         distinct(n, per, DataSharing, esrcfunding)                   %>% 
+         ggplot(aes(x = reorder(DataSharing, -n), y = n, fill = esrcfunding)) +
+         geom_col(colour = "black", position = position_stack(vjust = 0.5)) + 
+         theme_bw() + 
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12)) +
+         xlab(my$lab) + ylab("Numbers") + ylim(0,83) +
+         geom_text(aes(label = paste0(n, " (", per,")")), position = position_stack(vjust = 0.5), size = 4) +
+         labs(fill = "ESRC funding") 
+```
 ### Choice correlations
 
 My interpretation of this graph is that obtuse angles are negatively
