@@ -699,11 +699,37 @@ data["Q23"] <- gsub(1, "Yes", data[["Q23"]])
 data["Q23"] <- gsub(2, "No", data[["Q23"]])
 
 # Add a flag to indicate whther funding has come from the ESRC
-funding %>% rowwise()                                                        %>%
-            filter(any(!is.na(c_across(Q18_1:Q18_7))))                       %>% 
-            mutate(esrcfunding = any(grepl("ESRC", c_across(Q18_1:Q18_7))))  %>% 
-            select(URN, esrcfunding)                                         %>% 
-            right_join(data, by = "URN") -> data
+if(!("esrcfunding" %in% colnames(data))){
+
+  funding %>% rowwise()                                                        %>%
+              filter(any(!is.na(c_across(Q18_1:Q18_7))))                       %>% 
+              mutate(esrcfunding = any(grepl("ESRC", c_across(Q18_1:Q18_7))))  %>% 
+              select(URN, esrcfunding)                                         %>% 
+              right_join(data, by = "URN") -> data
+
+}
+
+# Add a column, datause with the type of data user - do this only if not already there
+if(!("datause" %in% colnames(data))){
+
+    data %>% select(URN, num_range("Q2_",1:2))                             %>%
+             pivot_longer(cols = starts_with("Q2_"),
+                          names_to = NULL,
+                          values_to = "ds")                                %>%
+             group_by(URN)                                                 %>% 
+             mutate(datause = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
+             mutate(datause = case_when(datause == "create_reuse" ~ "Create-Reuse", 
+                                        datause == "create_0" ~ "Create", 
+                                        datause == "0_reuse" ~ "Reuse", 
+                                        datause == "0_0" ~ "None"))       %>% 
+             select(-ds)                                                  %>% 
+             distinct(URN, datause) -> dd
+  
+    # Add datause to the original data set if not already there
+    data <- data %>% left_join(dd, by = "URN")
+
+}
+
 
 ```
 
@@ -864,31 +890,6 @@ data %>% select(num_range("Q2_", 1:2), career = Q20, gender = Q21)            %>
          facet_wrap(~career)
 ```
 
-```{r datause_label_data}
-
-# Add a column, datause with the type of data user - do this only if not already there
-if(!("datause" %in% colnames(data))){
-
-    data %>% select(URN, num_range("Q2_",1:2))                             %>%
-             pivot_longer(cols = starts_with("Q2_"),
-                          names_to = NULL,
-                          values_to = "ds")                                %>%
-             group_by(URN)                                                 %>% 
-             mutate(datause = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-             mutate(datause = case_when(datause == "create_reuse" ~ "Create-Reuse", 
-                                        datause == "create_0" ~ "Create", 
-                                        datause == "0_reuse" ~ "Reuse", 
-                                        datause == "0_0" ~ "None"))       %>% 
-             select(-ds)                                                  %>% 
-             distinct(URN, datause) -> dd
-}
-
-# Add datause back to the original data set if not already there
-if(!("datause" %in% colnames(data))){
-  data <- data %>% left_join(dd, by = "URN")
-}
-
-```
 
 ```{r datause_gender_career_per}
 
@@ -6523,7 +6524,7 @@ are aware of)?
 ```{r licensing}
 
 # Calculate an x label with the folks that filled in this question.
-data %>% select(URN, starts_with("Q15_"), -"Q15_a")  %>% 
+data %>% select(URN, starts_with("Q15_"), -"Q15_a")                     %>% 
          pivot_longer(cols = starts_with("Q15_"),
                       names_to = NULL,
                       values_to ="aware")                               %>%
