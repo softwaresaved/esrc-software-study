@@ -6536,12 +6536,12 @@ data %>% select(URN, starts_with("Q15_"), -"Q15_a")                     %>%
                       names_to = NULL,
                       values_to ="aware")                               %>%
          filter(aware != 0)                                             %>%
-         mutate(N = n_distinct(URN))                                    %>% 
+         mutate(N = n_distinct(URN))                                    %>%
          mutate(aware = factor(aware, ordered = TRUE, levels = licawa)) %>% 
          group_by(aware)                                                %>%
-         mutate(n = n_distinct(URN))                                    %>% 
+         mutate(n = n())                                                %>% 
          mutate(per = percent(n/N, accuracy = 1))                       %>% 
-         ggplot(aes(x = aware, fill = n)) + 
+         ggplot(aes(x = reorder(aware, -n), fill = n)) + 
          geom_bar(colour = "black") +
          theme_bw() + ylim(0,76) + scale_fill_distiller(palette = "Blues", direction = 1) +
          geom_text(aes(y = n, label = paste0(n, " (", per, ")")),  
@@ -6578,21 +6578,23 @@ data %>% select(starts_with("Q15_"), -"Q15_a", career = Q20)            %>%
 
 ```{r licensing_career_per}
 
-data %>% select(id = URN, starts_with("Q15_"), -"Q15_a", career = Q20)     %>%
+data %>% select(URN, starts_with("Q15_"), -"Q15_a", career = Q20)          %>%
          group_by(career)                                                  %>%
-         mutate(N = n())                                                  %>% 
+         mutate(N = n())                                                   %>% 
          pivot_longer(cols = starts_with("Q15_"),
                       names_to = NULL,
-                      values_to ="aware")                                 %>%
-         filter(aware != 0)                                               %>%
-         distinct(id, aware, career,N)                                    %>% 
-         filter(!(career %in% c("Other","-")))                            %>% 
-         mutate(aware = factor(aware, ordered = TRUE, levels = licawa))   %>% 
-         group_by(career, aware)                                          %>% 
-         mutate(n = n())                                                  %>% 
-         mutate(per = percent(n/N, accuracy = 1))                         %>% 
-         distinct(n, N, per, career, aware)                               %>% 
-         ggplot(aes(x = aware, y = n/N, fill = career)) +
+                      values_to ="aware")                                  %>%
+         filter(aware != 0)                                                %>%
+         distinct(URN, aware, career, N)                                   %>% 
+         filter(!(career %in% c("Other","-")))                             %>% 
+         mutate(aware = factor(aware, ordered = TRUE, levels = licawa))    %>% 
+         group_by(aware)                                                   %>% 
+         mutate(m = n())                                                   %>% 
+         group_by(career, aware)                                           %>% 
+         mutate(n = n())                                                   %>% 
+         mutate(per = percent(n/N, accuracy = 1))                          %>% 
+         distinct(n, N, per, career, aware, m)                             %>% 
+         ggplot(aes(x = reorder(aware, -m), y = n/N, fill = career)) +
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() + 
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
@@ -6613,10 +6615,12 @@ data %>% select(starts_with("Q15_"), -"Q15_a", datause)                %>%
                       names_to = NULL,
                       values_to ="aware")                               %>%
          filter(aware != 0)                                             %>%
+         group_by(aware)                                                %>% 
+         mutate(m = n())                                                %>% 
          mutate(aware = factor(aware, ordered = TRUE, levels = licawa)) %>% 
          group_by(datause, aware)                                       %>% 
          mutate(n = n())                                                %>% 
-         ggplot(aes(x = aware, fill = datause)) +
+         ggplot(aes(x = reorder(aware, -m), fill = datause)) +
          geom_bar(colour = "black") +
          theme_bw() +
          geom_text(aes(label = ..count..), stat = "count", position = position_stack(0.5), size = 3) +
@@ -6626,7 +6630,7 @@ data %>% select(starts_with("Q15_"), -"Q15_a", datause)                %>%
 
 ```
 
-### Licensing policies awareness by % career stage
+### Licensing policies awareness by % data use
 
 ```{r licensing_datause_per}
 
@@ -6639,11 +6643,13 @@ data %>% select(URN, starts_with("Q15_"), -"Q15_a", datause)              %>%
          filter(aware != 0)                                               %>%
          distinct(URN, aware, datause, N)                                 %>% 
          mutate(aware = factor(aware, ordered = TRUE, levels = licawa))   %>% 
+         group_by(aware)                                                %>% 
+         mutate(m = n())                                                %>% 
          group_by(datause, aware)                                         %>% 
          mutate(n = n())                                                  %>% 
          mutate(per = percent(n/N, accuracy = 1))                         %>% 
-         distinct(n, N, per, datause, aware)                              %>% 
-         ggplot(aes(x = aware, y = n/N, fill = datause)) +
+         distinct(n, N, per, datause, aware, m)                              %>% 
+         ggplot(aes(x = reorder(aware, -m), y = n/N, fill = datause)) +
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() + 
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
@@ -6690,14 +6696,16 @@ data %>% select(id = URN, starts_with("Q15_"), -"Q15_a", gender = Q21)    %>%
                       names_to = NULL,
                       values_to ="aware")                                 %>%
          filter(aware != 0)                                               %>%
-         distinct(id, aware, gender,N)                                    %>% 
+         group_by(aware)                                                  %>% 
+         mutate(m = n())                                                  %>% 
+         distinct(id, aware, gender, N, m)                                %>% 
          filter(!(gender %in% lowstatsgender))                            %>% 
          mutate(aware = factor(aware, ordered = TRUE, levels = licawa))   %>% 
          group_by(gender, aware)                                          %>% 
          mutate(n = n())                                                  %>% 
          mutate(per = percent(n/N, accuracy = 1))                         %>% 
-         distinct(n, N, per, gender, aware)                               %>% 
-         ggplot(aes(x = aware, y = n/N, fill = gender)) +
+         distinct(n, N, per, gender, aware, m)                            %>% 
+         ggplot(aes(x = reorder(aware, -m), y = n/N, fill = gender)) +
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() + 
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
@@ -6721,20 +6729,21 @@ data %>% select(id = URN, starts_with("Q15_"), -"Q15_a", career = Q20,
                       names_to = NULL,
                       values_to ="aware")                                 %>%
          filter(aware != 0)                                               %>%
-         distinct(id, aware, gender,N, career)                            %>% 
          filter(!(gender %in% lowstatsgender))                            %>% 
          filter(!(career %in% c("-", "Other")))                           %>% 
          mutate(aware = factor(aware, ordered = TRUE, levels = licawa))   %>% 
+         group_by(aware)                                                  %>% 
+         mutate(m = n())                                                  %>% 
          group_by(gender, aware, career)                                  %>% 
          mutate(n = n())                                                  %>% 
          mutate(per = percent(n/N, accuracy = 1))                         %>% 
-         distinct(n, N, per, gender, aware, career)                       %>% 
-         ggplot(aes(x = aware, y = n/N, fill = gender)) +
+         distinct(n, N, per, gender, aware, career, m)                    %>% 
+         ggplot(aes(x = reorder(aware, -m), y = n/N, fill = gender)) +
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() + 
          scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.23)) +
          geom_text(aes(label = per), vjust = -0.5,
-                   position = position_dodge2(width = 0.9, preserve = "single"), size = 3) +
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 4) +
          ylab("Percent") + xlab("Aware of the policy for") +
          scale_fill_brewer(palette = "Set2", name = "Gender") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
@@ -6756,7 +6765,6 @@ data %>% select(Institutions = CleanLocs, starts_with("Q15_"), -"Q15_a") %>%
                       values_to ="aware")                                %>%
          filter(aware != 0)                                              %>%
          mutate(aware = factor(aware, ordered = TRUE, levels = licawa))  %>% 
- 
          group_by(aware, Institutions)                                   %>%
          mutate(n = n())                                                 %>%
          ggplot(aes(x = aware, y = Institutions, size = n/N)) +
