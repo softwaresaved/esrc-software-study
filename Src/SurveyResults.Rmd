@@ -3017,7 +3017,7 @@ data %>% select(os = Q6, career = Q20)             %>%
 
 ```{r use_os_datause}
 
-data %>% select(Q6, datause)                   %>%
+data %>% select(Q6, datause)                    %>%
          filter(Q6 != "-")                      %>% 
          group_by(Q6)                           %>% 
          mutate(N = n())                        %>% 
@@ -3287,7 +3287,7 @@ data %>% select(starts_with("Q6_a"), career = Q20)   %>%
 
 data %>% select(starts_with("Q6_a"), career = Q20)   %>%
          group_by(career)                            %>% 
-         filter(career != "Other" & career != "-")   %>% 
+         filter(!(career %in% c("-", "Other")))      %>% 
          mutate(N = n())                             %>% 
          pivot_longer(cols = starts_with("Q6_a"),
                       names_to = NULL,
@@ -3329,6 +3329,7 @@ data %>% select(starts_with("Q6_a"), datause)        %>%
          xlab("Reasons for using Open Source") + ylab("Numbers") +
          scale_fill_brewer(palette = "PuRd", name = "Data use")
 ```
+
 ### Using OS by % data use
 
 
@@ -3411,7 +3412,7 @@ data %>% select(starts_with("Q6_a"), gender = Q21)   %>%
 
 ### Using OS by % gender and career
 
-```{r reason4os_gender_car_per2}
+```{r reason4os_gender_car_per}
 
 data %>% select(starts_with("Q6_a"), career = Q20, gender = Q21)   %>%
          filter(!(gender %in% lowstatsgender))                     %>% 
@@ -3437,6 +3438,64 @@ data %>% select(starts_with("Q6_a"), career = Q20, gender = Q21)   %>%
          xlab("Reasons for using Open Source") + ylab("Percentage") +
          scale_fill_brewer(palette = "Set2", name = "Gender") + facet_wrap(~career)
 ```
+
+Showing numbers instead of percentages.
+
+```{r reason4os_gender_car_num}
+
+data %>% select(starts_with("Q6_a"), career = Q20, gender = Q21)   %>%
+         filter(!(gender %in% lowstatsgender))                     %>% 
+         filter(!(career %in% c("-","Other")))                     %>% 
+         group_by(gender)                                          %>% 
+         mutate(N = n())                                           %>% 
+         pivot_longer(cols = starts_with("Q6_a"),
+                      names_to = NULL,
+                      values_to = "UseOS")                         %>%
+         filter(UseOS != 0)                                        %>%
+         group_by(UseOS)                                           %>% 
+         mutate(M = n())                                           %>% 
+         group_by(UseOS, gender, career)                           %>% 
+         mutate(n = n())                                           %>%
+         distinct(UseOS, gender, n, M, career)                     %>% 
+         ggplot(aes(x = reorder(UseOS, -M), y = n, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
+         theme_bw() + ylim(0, 18) +
+         #scale_y_continuous(labels = percent_format(accuracy = 1)) +
+         geom_text(aes(label = n), 
+                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 4) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("Reasons for using Open Source") + ylab("Percentage") +
+         scale_fill_brewer(palette = "Set2", name = "Gender") + facet_wrap(~career)
+```
+
+Tabulate aggregates.
+
+```{r os_num_gender}
+
+# Temp resassignment
+careero <- career
+
+data %>% select(URN, starts_with("Q6_a"), career = Q20, gender = Q21)      %>%
+         filter(!(gender %in% lowstatsgender))                             %>% 
+         filter(!(career %in% c("-","Other")))                             %>% 
+         group_by(gender)                                                  %>% 
+         mutate(N = n())                                                   %>% 
+         group_by(gender, career)                                          %>% 
+         mutate(nn = n())                                                  %>% 
+         pivot_longer(cols = starts_with("Q6_a"),
+                      names_to = NULL,
+                      values_to = "UseOS")                                 %>%
+         filter(UseOS != 0)                                                %>%
+         group_by(gender, career)                                          %>% 
+         mutate(n = n_distinct(URN))                                       %>% 
+         mutate(career = factor(career, ordered = TRUE, levels = careero)) %>% 
+         mutate(p = percent(n/nn, accuracy = 0.1))                         %>% 
+         distinct(career, gender, n, N, nn, p)                             %>% 
+         arrange(gender, career)                                           %>% 
+         kbl(format = "pipe", 
+             col.names = c("Career stage", "Gender", "Gender Tot","Gender in career stage", "Answered", "Percent"))
+```
+
 
 ### Counting combined choices
 
