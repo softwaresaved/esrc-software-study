@@ -5069,6 +5069,61 @@ corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 
 ```
 
+### Contingency table
+
+```{r q11_contingency}
+
+# Create a data frame showing the choices per individual
+data %>% select(URN, num_range("Q11_", 1:12))                   %>%
+         pivot_longer(cols = num_range("Q11_", 1:12),
+                      names_to = NULL,
+                      values_to = "ds")                        %>%
+         filter(ds != 0)                                       %>%  
+         group_by(URN, ds)                                     %>%
+         tally()                                               %>% 
+         pivot_wider(names_from = "ds", 
+                     values_from = "n", 
+                     values_fill = 0)                          %>%
+        ungroup()                                              %>% 
+        select(-URN)  -> cc
+
+# Create a new data frame to store the result
+# ConcernAboutValue is a dummy column to get the right number of rows.
+vc <- data.frame(ConcernAboutValue = rep(0L, ncol(cc)))
+
+# Loop round the choices and count what choices are used in combination 
+# when a particular choices is used.
+for(i in 1:ncol(cc)){
+  
+  n <- names(cc)[[i]]
+  rownames(vc)[i] <-  n
+  vc[n] <- colSums(cc[cc[n]==1,])
+
+}
+
+# Remove the constructor column
+vc$ConcernAboutValue <-  NULL
+
+# Label for chart
+lab <- "Acquiring skills"
+
+# Produce a contingency table
+tt <- names(vc)                                          # Names to be used for the pivot wider
+m <-  names(sort(diag(as.matrix(vc)), decreasing = TRUE)) # Order to be used for the axes
+vc %>% mutate(xx = tt)                  %>% 
+       pivot_longer(cols = all_of(tt),
+                    names_to = "yy",
+                    values_to = "n")    %>% 
+       ggplot(aes(x = factor(xx, levels=m), y = factor(yy, levels = rev(m)), fill = n)) +
+       theme_bw() + geom_tile() +
+       scale_fill_distiller(palette = "Blues", direction = 1) +
+       theme(axis.text.x = element_text(angle = -60, hjust = 0),
+            legend.position = "None") +
+       geom_text(aes(label = n), size = 4) +
+       xlab(lab) + ylab(lab)
+
+```
+
 ### Skills acquisition by career stage
 
 ```{r acquiring_skills_career}
