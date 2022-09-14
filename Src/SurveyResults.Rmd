@@ -3591,13 +3591,16 @@ corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 ```{r reasons4NotOS_career}
 
 data %>% select(starts_with("Q6_b"), career = Q20)        %>%
+         filter(!(career %in% c("-", "Other")))           %>% 
          pivot_longer(cols = starts_with("Q6_b"),
                       names_to = NULL,
                       values_to = "UseOS")                %>%
          filter(UseOS != 0)                               %>%
+         group_by(UseOS)                                  %>% 
+         mutate(m = n())                                  %>% 
          group_by(UseOS, career)                          %>% 
          mutate(n = n())                                  %>% 
-         ggplot(aes(x = reorder(UseOS, -n), fill = career)) + 
+         ggplot(aes(x = reorder(UseOS, -m), fill = career)) + 
          geom_bar(colour = "black") + 
          theme_bw() +
          geom_text(aes(label = ..count..), stat = "count", 
@@ -3609,32 +3612,8 @@ data %>% select(starts_with("Q6_b"), career = Q20)        %>%
 
 ### Responses by % career stage
 
+
 ```{r reasons4NotOS_career_per}
-
-data %>% select(starts_with("Q6_b"), career = Q20)  %>%
-         group_by(career)                          %>% 
-         mutate(N = n())                           %>% 
-         pivot_longer(cols = starts_with("Q6_b"),
-                      names_to = NULL,
-                      values_to = "UseOS")         %>%
-         filter(UseOS != 0)                        %>%
-         group_by(UseOS, career)                   %>% 
-         mutate(per = n()/N)                       %>% 
-         distinct(UseOS, career, per)              %>% 
-         ggplot(aes(x = UseOS, y = per, fill = career)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
-         theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         geom_text(aes(label = percent(per, accuracy = 1)), vjust = -0.5,
-                   position = position_dodge2(width = 0.9, preserve = "single"), size = 2) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         xlab("Reasons for not using Open Source") + ylab("Percent") +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
-
-Without "Other" and "-"
-
-```{r reasons4NotOS_career_per2}
 
 data %>% select(starts_with("Q6_b"), career = Q20)  %>%
          group_by(career)                           %>% 
@@ -3666,6 +3645,7 @@ data %>% select(starts_with("Q6_b"), career = Q20)  %>%
 ```{r reasons4NotOS_gender}
 
 data %>% select(starts_with("Q6_b"), gender = Q21)        %>%
+          filter(!(gender %in% lowstatsgender))           %>% 
          pivot_longer(cols = starts_with("Q6_b"),
                       names_to = NULL,
                       values_to = "UseOS")                %>%
@@ -3682,34 +3662,9 @@ data %>% select(starts_with("Q6_b"), gender = Q21)        %>%
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
-### Responses by % Gender
+### Responses by % gender
 
 ```{r reasons4NotOS_gender_per}
-
-data %>% select(starts_with("Q6_b"), gender = Q21)  %>%
-         pivot_longer(cols = starts_with("Q6_b"),
-                      names_to = NULL,
-                      values_to = "UseOS")         %>%
-         filter(UseOS != 0)                        %>%
-         group_by(UseOS)                           %>% 
-         mutate(M = n())                           %>% 
-         group_by(gender)                          %>% 
-         mutate(N = n())                           %>% 
-         group_by(UseOS, gender)                   %>% 
-         mutate(per = n()/N)                       %>% 
-         distinct(UseOS, gender, per, M)           %>% 
-         ggplot(aes(x = reorder(UseOS, -M), y = per, fill = gender)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
-         theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         geom_text(aes(label = percent(per, accuracy = 1)), vjust = -0.5,
-                   position = position_dodge2(width = 0.9, preserve = "single"), size = 2) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         xlab("Reasons for not using Open Source") + ylab("Percent") +
-         scale_fill_brewer(palette = "Set2", name = "Gender")
-```
-
-```{r reasons4NotOS_gender_per2}
 
 data %>% select(starts_with("Q6_b"), gender = Q21) %>%
          filter(!(gender %in% lowstatsgender))     %>% 
@@ -3733,6 +3688,36 @@ data %>% select(starts_with("Q6_b"), gender = Q21) %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("Reasons for not using Open Source") + ylab("Percent") +
          scale_fill_brewer(palette = "Set2", name = "Gender")
+```
+
+### Responses by % gender and career
+
+```{r reasons4NotOS_gender_career_per}
+
+data %>% select(starts_with("Q6_b"), career = Q20, gender = Q21) %>%
+         filter(!(gender %in% lowstatsgender))                   %>% 
+         filter(!(career %in% c("-", "Other")))                  %>% 
+         group_by(gender)                                        %>% 
+         mutate(N = n())                                         %>% 
+         pivot_longer(cols = starts_with("Q6_b"),
+                      names_to = NULL,
+                      values_to = "UseOS")                       %>%
+         filter(UseOS != 0)                                      %>%
+         group_by(UseOS)                                         %>% 
+         mutate(M = n())                                         %>% 
+         group_by(UseOS, gender, career)                         %>% 
+         mutate(per = n()/N)                                     %>% 
+         distinct(UseOS, gender, per, M, career)                 %>% 
+         ggplot(aes(x = reorder(UseOS, -M), y = per, fill = gender)) + 
+         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
+         theme_bw() +
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.09)) +
+         geom_text(aes(label = percent(per, accuracy = 0.1)), vjust = -0.5,
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 4) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
+         xlab("Reasons for not using Open Source") + ylab("Percent") +
+         scale_fill_brewer(palette = "Set2", name = "Gender") +
+         facet_wrap(~ career)
 ```
 
 ### Counting combined choices
