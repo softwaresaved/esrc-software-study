@@ -5329,13 +5329,13 @@ listOther("Q11_a")
 
 ```
 
-### Q11b NCRM courses
+## Q11b NCRM courses
 
 If you have participated in National Centre for Research Methods
 training at any point please indicate which training course(s) you have
 taken here: (Check all that apply)
 
-#### NCRM courses overview stats
+### NCRM courses overview stats
 
 The table below specifies the courses taken from the list we gave in the
 survey.
@@ -5345,28 +5345,28 @@ survey.
 # These variables are used in the summary paragraph after the code section.
 
 # Count the number of NCRM courses taken by individuals and their career stage.
-data %>% select(id = URN, num_range("Q11_b_", 1:22), career = Q20) %>%
+data %>% select(URN, num_range("Q11_b_", 1:22), career = Q20)      %>%
          pivot_longer(cols = num_range("Q11_b_", 1:22),
                       names_to = NULL,
                       values_to = "ncrm")                          %>%
          filter(ncrm != 0)                                         %>%
-         group_by(id)                                              %>%
+         group_by(URN)                                              %>%
          mutate(N = n())                                           %>%
          ungroup()                                                 %>%
-         distinct(id, career, N) -> a
+         distinct(URN, career, N) -> a
 
 # This takes into account the "Other" category - previous code section only looks
 # at 1 too 22, this one also includes "i" for (other) NCRM courses not on the list.
 
-data %>% select(id = URN, starts_with("Q11_b_"), career = Q20) %>%
+data %>% select(URN, starts_with("Q11_b_"), career = Q20)      %>%
          pivot_longer(cols = starts_with("Q11_b_"),
                       names_to = NULL,
                       values_to = "ncrm")                      %>%
          filter(ncrm != 0)                                     %>%
-         group_by(id)                                          %>%
+         group_by(URN)                                         %>%
          mutate(N = n())                                       %>%
          ungroup()                                             %>%
-         distinct(id, career, N) -> b
+         distinct(URN, career, N) -> b
 
 
 ```
@@ -5383,11 +5383,11 @@ provided by the NCRM. What we can say though is that out of the
 `r percent(nrow(b)/nrow(data), accuracy = 0.1)` respectively have taken
 NCRM courses.
 
-#### List of NCRM courses taken
+### List of NCRM courses taken
 
 ```{r ncrm_courses, results = 'asis'}
 
-data %>% select(num_range("Q11_b_", 1:22)) %>%
+data %>% select(num_range("Q11_b_", 1:22))             %>%
          pivot_longer(cols = num_range("Q11_b_", 1:22),
                       names_to = NULL,
                       values_to = "ncrm")              %>%
@@ -5399,18 +5399,18 @@ data %>% select(num_range("Q11_b_", 1:22)) %>%
                 col.names = c("NCRM course", "Numbers"))
 ```
 
-#### NCRM courses by career stage
+### NCRM courses by career stage
 
 ```{r ncrm_courses_career}
 
-data %>% select(id = URN, starts_with("Q11_b_"), career = Q20) %>%
+data %>% select(URN, starts_with("Q11_b_"), career = Q20)      %>%
          pivot_longer(cols = starts_with("Q11_b_"),
                       names_to = NULL,
                       values_to = "ncrm")                      %>%
          filter(ncrm != 0)                                     %>%
-         distinct(id, ncrm, career)                            %>% 
+         distinct(URN, ncrm, career)                           %>% 
          group_by(career)                                      %>% 
-         mutate(n = n(), nid = n_distinct(id))                 %>%
+         mutate(n = n(), nid = n_distinct(URN))                %>%
          distinct(career, n, nid)                              %>% 
          ggplot(aes(x = career, y = n, fill = career)) +
          geom_col(colour = "black") + theme_bw() +
@@ -5421,20 +5421,19 @@ data %>% select(id = URN, starts_with("Q11_b_"), career = Q20) %>%
 
 ```
 
-#### NCRM courses by gender
+### NCRM courses by gender
 
 ```{r ncrm_courses_gender}
 
-data %>% select(id = URN, starts_with("Q11_b_"), gender = Q21) %>%
+data %>% select(URN, starts_with("Q11_b_"), gender = Q21) %>%
          pivot_longer(cols = starts_with("Q11_b_"),
                       names_to = NULL,
-                      values_to = "ncrm")              %>%
-         filter(ncrm != 0)                             %>%
-         distinct(id, ncrm, gender)                    %>% 
-         group_by(gender)                              %>% 
-         mutate(n = n(), nid = n_distinct(id))         %>%
-         ungroup()                                     %>% 
-         distinct(gender, n, nid)                      %>% 
+                      values_to = "ncrm")                 %>%
+         filter(ncrm != 0)                                %>%
+         group_by(gender)                                 %>% 
+         mutate(n = n(), nid = n_distinct(URN))           %>%
+         ungroup()                                        %>% 
+         distinct(gender, n, nid)                         %>% 
          ggplot(aes(x = gender, y = n, fill = gender)) +
          geom_col(colour = "black") + theme_bw() +
          scale_fill_brewer(palette = "Set2", name = "Career stage") +
@@ -5446,17 +5445,17 @@ data %>% select(id = URN, starts_with("Q11_b_"), gender = Q21) %>%
 
 ```{r ncrm_courses_gender2}
 
-data %>% select(id = URN, starts_with("Q11_b_"), gender = Q21) %>%
+data %>% select(URN, starts_with("Q11_b_"), gender = Q21) %>%
          pivot_longer(cols = starts_with("Q11_b_"),
                       names_to = NULL,
-                      values_to = "ncrm")              %>%
-         filter(ncrm != 0)                             %>%
-         filter(!(gender %in% lowstatsgender))         %>% 
-         distinct(id, ncrm, gender)                    %>% 
-         group_by(gender)                              %>% 
-         mutate(n = n(), nid = n_distinct(id))         %>%
-         ungroup()                                     %>% 
-         distinct(gender, n, nid)                      %>% 
+                      values_to = "ncrm")                 %>%
+         filter(ncrm != 0)                                %>%
+         filter(!(gender %in% lowstatsgender))            %>% 
+         distinct(URN, ncrm, gender)                      %>% 
+         group_by(gender)                                 %>% 
+         mutate(n = n(), nid = n_distinct(URN))           %>%
+         ungroup()                                        %>% 
+         distinct(gender, n, nid)                         %>% 
          ggplot(aes(x = gender, y = n, fill = gender)) +
          geom_col(colour = "black") + theme_bw() +
          scale_fill_brewer(palette = "Set2", name = "Career stage") +
@@ -5466,26 +5465,25 @@ data %>% select(id = URN, starts_with("Q11_b_"), gender = Q21) %>%
 
 ```
 
-#### Number of NCRM courses by individuals by career stage
+### Number of NCRM courses by individuals by career stage
 
 Need to be slightly careful with this measure - it counts an entry in
 "Other" as a course even if a list is given there.
 
 ```{r ncrm_courses_individual_career}
 
-data %>% select(id = URN, starts_with("Q11_b_"), career = Q20) %>%
+data %>% select(URN, starts_with("Q11_b_"), career = Q20) %>%
          pivot_longer(cols = starts_with("Q11_b_"),
                       names_to = NULL,
-                      values_to = "ncrm")              %>%
-         filter(ncrm != 0)                             %>%
-         distinct(id, ncrm, career)                   %>% 
-         group_by(id)                                  %>% 
-         mutate(N = n())                               %>% # Number of courses taken by individuals
-         distinct(career, N) %>% 
-         group_by(career, N)                           %>% 
-         mutate(n = n())                               %>% # Number of individuals that have taken N courses
-         ungroup()                                     %>% 
-         distinct(career, n, N)                        %>% 
+                      values_to = "ncrm")                 %>%
+         filter(ncrm != 0)                                %>%
+         distinct(URN, ncrm, career)                      %>% 
+         group_by(URN)                                    %>% 
+         mutate(N = n())                                  %>% # Number of courses taken by individuals
+         group_by(career, N)                              %>% 
+         mutate(n = n_distinct(URN))                      %>% # Number of individuals that have taken N courses
+         ungroup()                                        %>% 
+         distinct(career, n, N)                           %>% 
          ggplot(aes(x = N, y = n, fill = career)) +
          geom_col(colour = "black") + theme_bw() +
          scale_fill_brewer(palette = "Set1", name = "Career stage") +
@@ -5496,24 +5494,24 @@ data %>% select(id = URN, starts_with("Q11_b_"), career = Q20) %>%
 
 ```
 
-#### Number of NCRM courses by individuals by gender
+### Number of NCRM courses by individuals by gender
 
 ```{r ncrm_courses_individual_gender}
 
-data %>% select(id = URN, starts_with("Q11_b_"), gender = Q21) %>%
+data %>% select(URN, starts_with("Q11_b_"), gender = Q21)   %>%
          pivot_longer(cols = starts_with("Q11_b_"),
                       names_to = NULL,
-                      values_to = "ncrm")                      %>%
-         filter(ncrm != 0)                                     %>%
-         filter(!(gender %in% lowstatsgender))                 %>% 
-         distinct(id, ncrm, gender)                            %>% 
-         group_by(id)                                          %>% 
-         mutate(N = n())                                       %>% # Number of courses taken by individuals
-         distinct(gender, N)                                   %>% 
-         group_by(gender, N)                                   %>% 
-         mutate(n = n())                                       %>% # Number of individuals that have taken N courses
-         ungroup()                                             %>% 
-         distinct(gender, n, N)                                %>% 
+                      values_to = "ncrm")                   %>%
+         filter(ncrm != 0)                                  %>%
+         filter(!(gender %in% lowstatsgender))              %>% 
+         distinct(URN, ncrm, gender)                        %>% 
+         group_by(URN)                                      %>% 
+         mutate(N = n())                                    %>% # Number of courses taken by individuals
+         distinct(gender, N)                                %>% 
+         group_by(gender, N)                                %>% 
+         mutate(n = n())                                    %>% # Number of individuals that have taken N courses
+         ungroup()                                          %>% 
+         distinct(gender, n, N)                             %>% 
          ggplot(aes(x = N, y = n, fill = gender)) +
          geom_col(colour = "black") + theme_bw() +
          scale_fill_brewer(palette = "Set2", name = "Gender") +
@@ -5522,6 +5520,29 @@ data %>% select(id = URN, starts_with("Q11_b_"), gender = Q21) %>%
          xlab("Number of courses taken") + 
          geom_text(aes(x = N, label = n), position = position_stack(0.5),  size = 4)
 
+```
+
+### NCRM and development
+
+Do those that NCRM courses develop software (from the result from Q9)?
+
+```{r ncrm_development}
+
+data %>% select(URN, starts_with("Q11_b_"), dev = Q9)      %>%
+         pivot_longer(cols = starts_with("Q11_b_"),
+                      names_to = NULL,
+                      values_to = "ncrm")                  %>%
+         filter(ncrm != 0)                                 %>%
+         distinct(URN, dev)                                %>% 
+         group_by(dev)                                     %>% 
+         mutate(n = n())                                   %>% 
+         distinct(dev, n)                                  %>% 
+         ggplot(aes(x = dev, y = n, fill = n)) + geom_col(colour = "black") + 
+         scale_fill_distiller(palette = "Blues", direction = 1) +
+         theme_bw() + xlab("Develop software") + ylab("Number") +
+         geom_text(aes(label = n), vjust = -0.5) + 
+         theme(legend.position = "None")
+  
 ```
 
 ### Other NCRM courses
