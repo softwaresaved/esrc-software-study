@@ -730,14 +730,25 @@ if(!("datause" %in% colnames(data))){
 
 }
 
+# Write information about sharing software back to the data tibble
+# Take the option that has the the widest scope (in this instance 
+# the rightmost value in the list) - this is picked up by the 
+# slice(n()) line.
+if(!("sharesw" %in% colnames(data))){
+
+    data %>% select(URN, num_range("Q10_", 1:5))         %>% 
+             pivot_longer(cols = num_range("Q10_", 1:5),
+                          names_to = NULL,
+                          values_to = "sharesw")         %>% 
+             filter(sharesw != 0)                        %>% 
+             group_by(URN)                               %>% 
+             slice(n())                                  %>% 
+             ungroup()                                   %>% 
+             right_join(data, by = "URN") -> data
+    }
 
 ```
 
-```{r internal_document, child = 'internal/contents.Rmd'}
-
-# This file will not be included in the repo until after the report is completed
-
-```
 
 # Survey results
 
@@ -4280,7 +4291,7 @@ data %>% select(URN, Q9, num_range("Q19_", 1:22))                        %>%
 
 ### Developing and most important software
 
-```{r dveloping_importantsw}
+```{r developing_importantsw}
 
 # Calculate an x label with the folks that filled in this question.
 important_software  %>% select(URN, starts_with("Q5"))                   %>% 
@@ -4305,7 +4316,7 @@ important_software  %>% select(URN, starts_with("Q5"))                   %>%
 ```
 Restrict to programming languages.
 
-```{r dveloping_importantsw_prog}
+```{r developing_importantsw_prog}
 
 # Programming languages
 proglan <- c("R", ".NET", "Excel", "VBA","Python", "FORTRAN", "Oxmetrics",
@@ -4450,16 +4461,6 @@ data %>% select(URN, num_range("Q10_", 1:5))         %>%
          geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 4) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.position = "None")
 
-# Write this information back to the data tibble
-data %>% select(URN, num_range("Q10_", 1:5))         %>% 
-         pivot_longer(cols = num_range("Q10_", 1:5),
-                      names_to = NULL,
-                      values_to = "sharesw")         %>% 
-         filter(sharesw != 0)                        %>% 
-         group_by(URN)                               %>% 
-         slice(n())                                  %>% 
-         ungroup()                                   %>% 
-         right_join(data, by = "URN") -> data
 ```
 
 ### Choice correlations
@@ -4614,18 +4615,18 @@ data %>% select(num_range("Q10_", 1:6), gender = Q21)   %>%
 
 Using the modified sharing data (accept the most liberal policy):
 
-```{r sharing_gender_per2}
+```{r sharing_gender_per5}
 
 data %>% select(sharesw, gender = Q21)                  %>%
          filter(!(gender %in% lowstatsgender))          %>%
          group_by(gender)                               %>%
          mutate(N = n())                                %>% 
          filter(!is.na(sharesw))                        %>%
-         group_by(sharesw)                                %>% 
+         group_by(sharesw)                              %>% 
          mutate(M = n())                                %>% 
-         group_by(sharesw, gender)                        %>%
-         mutate(n = n())                            %>% 
-         distinct(sharesw, gender, n, M)                %>% 
+         group_by(sharesw, gender)                      %>%
+         mutate(n = n())                                %>% 
+         distinct(sharesw, gender, n, M, N)             %>% 
          ggplot(aes(x = reorder(sharesw, -M), y = n/N, fill = gender)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() +
@@ -4640,7 +4641,7 @@ data %>% select(sharesw, gender = Q21)                  %>%
 
 ### Sharing software by gender and career stage
 
-```{r sharing_gender_per}
+```{r sharing_gender_per3}
 
 data %>% select(num_range("Q10_", 1:6), career = Q20, gender = Q21)   %>%
          group_by(gender)                                             %>%
@@ -4924,7 +4925,7 @@ data %>% select(sharesw, Q9, career = Q20)         %>%
 
 ### Developing and most important software
 
-```{r dveloping_importantsw}
+```{r q10_developing_importantsw}
 
 # Calculate an x label with the folks that filled in this question.
 important_software  %>% select(URN, starts_with("Q5"))                        %>% 
@@ -4955,7 +4956,7 @@ important_software  %>% select(URN, starts_with("Q5"))                        %>
 
 ### Sharing, developing and most the important software table
 
-```{r dveloping_importantsw_table_yes}
+```{r q9_developing_importantsw_table_yes}
 
 # Calculate an x label with the folks that filled in this question.
 important_software  %>% select(URN, starts_with("Q5"))                   %>% 
