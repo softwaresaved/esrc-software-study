@@ -5569,7 +5569,7 @@ data %>% select(URN, starts_with("Q11_b_"), datause)       %>%
   
 ```
 
-### NCRM and datause
+### NCRM and institutions
 
 ```{r ncrm_institution}
 
@@ -5602,7 +5602,7 @@ research software are sufficiently recognised or rewarded?
 
 ### Recognition responses
 
-```{r recognition}
+```{r q12_recognition}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, Q12)    %>% 
@@ -5630,7 +5630,7 @@ data %>%  select(URN, rew = Q12)                   %>%
 
 ### Recognition segmented by career stage
 
-```{r recognition_careerStage}
+```{r q12_recognition_careerStage}
 
 data %>%  select(rew = Q12, career = Q20)       %>%
           filter(rew != "-")                    %>% 
@@ -5654,7 +5654,7 @@ data %>%  select(rew = Q12, career = Q20)       %>%
 The percentages are given as a proportion of the given career stage
 population. Removing "Other" and "-".
 
-```{r recognition_careerStage_per2}
+```{r q12_recognition_careerStage_per}
 
 data %>%  select(rew = Q12, career = Q20)       %>%
           filter(rew != "-")                    %>% 
@@ -5682,7 +5682,7 @@ data %>%  select(rew = Q12, career = Q20)       %>%
 
 ### Recognition segmented by gender
 
-```{r recognition_gender}
+```{r q12_recognition_gender}
 
 data %>%  select(rew = Q12, gender = Q21)        %>%
           filter(rew != "-")                     %>% 
@@ -5692,7 +5692,7 @@ data %>%  select(rew = Q12, gender = Q21)        %>%
           ggplot(aes(x = reorder(rew, -n), fill = gender)) + 
           geom_bar(colour = "black") +
           theme_bw() +
-          xlab("Development/Maintenance of research software rewarded/recognised") +
+          xlab("Development/Maintenance of research software is rewarded/recognised") +
           ylab("Numbers") +
           geom_text(aes(label = ..count..), position = position_stack(vjust = 0.5), 
                    stat = "count", size = 3) +
@@ -5706,7 +5706,7 @@ data %>%  select(rew = Q12, gender = Q21)        %>%
 The percentages are given as a proportion of the given gender
 population.
 
-```{r recognition_gender_per2}
+```{r q12_recognition_gender_per}
 
 data %>%  select(rew = Q12, gender = Q21)        %>%
           filter(rew != "-")                     %>% 
@@ -5734,7 +5734,7 @@ data %>%  select(rew = Q12, gender = Q21)        %>%
 
 ### Recognition segmented by gender and career stage
 
-```{r recognition_gender_per2_career}
+```{r q12_recognition_gender_per_career}
 
 data %>%  select(rew = Q12, career = Q20, gender = Q21)  %>%
           filter(rew != "-")                             %>% 
@@ -5759,6 +5759,27 @@ data %>%  select(rew = Q12, career = Q20, gender = Q21)  %>%
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
           scale_fill_brewer(palette = "Set2", name = "Gender") +
           facet_wrap(~ career)
+
+```
+
+### Recognition and software development
+
+```{r q12_recognition_swdev}
+
+data %>%  select(rew = Q12, dev = Q9)  %>%
+          filter(rew != "-")           %>%
+          filter(!is.na(dev))          %>% 
+          mutate(N = n())              %>% 
+          group_by(rew, dev)           %>% 
+          mutate(n = n())              %>% 
+          distinct(n, N, rew, dev)     %>% 
+          ggplot(aes(x = rew, y = n, fill = dev)) +
+          geom_col(colour = "black")       +
+          theme_bw() +
+          xlab("Is software development recognised/rewarded?") +
+          ylab("Number") + labs(fill="Develop software") +
+          geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), 
+                    position = position_stack(vjust = 0.5))
 
 ```
 
