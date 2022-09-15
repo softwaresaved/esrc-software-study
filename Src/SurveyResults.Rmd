@@ -5545,6 +5545,28 @@ data %>% select(URN, starts_with("Q11_b_"), dev = Q9)      %>%
   
 ```
 
+
+### NCRM and datause
+
+```{r ncrm_datause}
+
+data %>% select(URN, starts_with("Q11_b_"), datause)      %>%
+         pivot_longer(cols = starts_with("Q11_b_"),
+                      names_to = NULL,
+                      values_to = "ncrm")                  %>%
+         filter(ncrm != 0)                                 %>%
+         distinct(URN, datause)                                %>% 
+         group_by(datause)                                     %>% 
+         mutate(n = n())                                   %>% 
+         distinct(datause, n)                                  %>% 
+         ggplot(aes(x = datause, y = n, fill = n)) + geom_col(colour = "black") + 
+         scale_fill_distiller(palette = "Blues", direction = 1) +
+         theme_bw() + xlab("datause") + ylab("Number") +
+         geom_text(aes(label = n), vjust = -0.5) + 
+         theme(legend.position = "None")
+  
+```
+
 ### Other NCRM courses
 
 ```{r other_ncrm_courses, results='asis'}
