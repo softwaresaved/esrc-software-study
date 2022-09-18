@@ -5788,7 +5788,7 @@ data %>%  select(rew = Q12, dev = Q9)  %>%
 If you answered yes or no can you briefly state your reasons for
 answering this way
 
-```{r recognition_rationale, results = 'asis'}
+```{r q12_recognition_rationale, results = 'asis'}
 
 listOther("Q12_a")
 
