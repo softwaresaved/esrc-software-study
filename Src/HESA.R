@@ -309,7 +309,22 @@ gender %>% mutate(N = sum(FPE_Total)) %>%
            position = "identity", inherit.aes = FALSE, size = 3) +
            scale_fill_viridis(option="magma") + theme(legend.position = "None")
 
-## Gender stats ----
+## Gender stats numbers ----
+# Calculate proportions (there will be rounding effects).
+# The Other values are hitting rounding issues.
+gender %>% summarise(RO_F_Tot = sum(FPE_Female_RO, na.rm = TRUE),
+                     RO_M_Tot = sum(FPE_Male_RO, na.rm = TRUE),
+                     RO_O_Tot = sum(FPE_Other_RO, na.rm = TRUE),
+                     TR_F_Tot = sum(FPE_Female_TR, na.rm = TRUE),
+                     TR_M_Tot = sum(FPE_Male_TR, na.rm = TRUE),
+                     TR_O_Tot = sum(FPE_Other_TR, na.rm = TRUE),
+                     Tot_F_all = sum(FPE_Female_RO + FPE_Female_TR, na.rm = TRUE),
+                     Tot_M_all = sum(FPE_Male_RO + FPE_Male_TR, na.rm = TRUE),
+                     Tot_O_all = sum(FPE_Other_RO + FPE_Other_TR, na.rm = TRUE),
+                     Tot = sum(FPE_Female_RO + FPE_Female_TR + FPE_Male_RO + FPE_Male_TR + FPE_Other_RO + FPE_Other_TR, na.rm = TRUE), # Does not add up!
+                     Tot2 = sum(FPE_Total))
+
+## Gender stats percentages ----
 # Calculate proportions (there will be rounding effects).
 # The Other values are hitting rounding issues.
 gender %>% summarise(RO_F_Tot = sum(FPE_Female_RO, na.rm = TRUE),
