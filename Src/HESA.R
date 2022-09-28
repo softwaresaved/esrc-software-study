@@ -352,12 +352,6 @@ gender %>% summarise(RO_F_Tot = sum(FPE_Female_RO, na.rm = TRUE),
 
 ## Read the disability data ----
 
-
-# Map cost centres to a new column of subjects
-dis$discipline <- unname(cc2subjects[dis[["Cost_centre_v2"]]])
-
-dis %>% select(!ends_with("%")) %>%  View()
-
 # Do not appear to be able to read non-adjacent columns and do not want all
 # the detail so will have to read in separately and then put back together
 disability <- read_xlsx("../Data/hesa.xlsx", range = "Disability!A5:C54")
@@ -435,13 +429,15 @@ disability$discipline <-unname(cc2subjects[disability[["Cost_centre_v2"]]])
 ## Plot aggregated disabilities ----
 # Plot the graph for Research Only (RO) and Training & Research (TR)
 disability %>% pivot_longer(
-                           cols = c("dis_RO",	"no_dis_RO",	"dis_TR",	"no_dis_TR"),
-                           names_to = "disability",
+                            cols = c("dis_RO",	"no_dis_RO",	"dis_TR",	"no_dis_TR"),
+                            names_to = "disability",
                             values_to = "percent"
-                            )                        %>%
-                group_by(discipline)                 %>%
-                mutate(pos = sum(percent))           %>%
-                mutate(disability = factor(disability, levels = c("dis_RO",	"no_dis_RO",	"dis_TR",	"no_dis_TR"), ordered = TRUE)) %>%
+                            )                               %>%
+                group_by(discipline)                        %>%
+                mutate(pos = sum(percent))                  %>%
+                mutate(disability = factor(disability,
+                                           levels = c("dis_RO",	"no_dis_RO",	"dis_TR",	"no_dis_TR"),
+                                           ordered = TRUE)) %>%
                 ggplot(aes(y = discipline, x = percent, fill = disability)) +
                 geom_col(colour = "black") +
                 theme_bw() +
@@ -452,35 +448,11 @@ disability %>% pivot_longer(
                           position = "identity", inherit.aes = FALSE, size = 3) +
                 scale_fill_manual(labels = c("RO disability", "RO no known disability" , "TR disability", "TR no known disability"),
                                   values = c("green","red","blue","yellow"))
-## Plot RO only aggregated disabilities ----
-# Plot the graph for Research Only (RO)
-dis %>% pivot_longer(
-  cols = c("dis",	"no_dis"),
-  names_to = "disability",
-  values_to = "percent"
-)                        %>%
-  group_by(discipline)                 %>%
-  mutate(pos = sum(percent))           %>%
-  ggplot(aes(y = discipline, x = percent, fill = disability)) +
-  geom_col(colour = "black") +
-  theme_bw() +
-  scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.38)) +
-  ylab("Research discipline") +
-  xlab("Number") + labs(fill = "Disability") +
-  geom_text(aes(y = discipline, x = pos, label = comma(Total_num)), hjust = -0.25,
-            position = "identity", inherit.aes = FALSE, size = 3) +
-  scale_fill_manual(labels = c("RO disability", "RO no known disability"),
-                    values = c("blue","yellow"))
-
-# Percentages are calculated in the spreadsheet.
-
-
-## Aggregated TR and RO numbers ----
 
 # Have to read the data in again to capture the numeric data
 # Read the disability data. Note the original data set is
 # modified in the processes below. If you try  rerunning
-# the code without realoading the original data set they
+# the code without re-loading the original data set they
 # will fail.
 dis <- read_xlsx("../Data/hesa.xlsx", range = "Disability!A5:AW55")
 
@@ -541,6 +513,8 @@ dis <- dis                                         %>%
        filter(Cost_centre_v2 %in% esrc_cc)         %>%
        fill(Academic_Year, Cost_centre_group_v2)
 
+# Sum across the rows to obtain the population that has a disaility (dis) or no
+# known disability (no_dis).
 dis <- dis                                                                %>%
        mutate(discipline = unname(cc2subjects[dis[["Cost_centre_v2"]]]))  %>%
        select(-Academic_Year, -Cost_centre_group_v2)                      %>%
@@ -548,8 +522,40 @@ dis <- dis                                                                %>%
        mutate(dis = sum(c_across(c(RO_a_long_standing_illness_or_health_condition:RO_Two_or_more_conditions,
                                   TR_a_long_standing_illness_or_health_condition:TR_Two_or_more_conditions)),
                        na.rm = TRUE),
-              no_dis = sum(c_across(c(RO_No_known_disability_unknown, TR_No_known_disability_unknown)),
-                           na.rm = TRUE))
+             no_dis = sum(c_across(c(RO_No_known_disability_unknown, TR_No_known_disability_unknown)),
+                          na.rm = TRUE))
+
+# Map cost centres to a new column of subjects
+dis$discipline <- unname(cc2subjects[dis[["Cost_centre_v2"]]])
+
+
+## Plot RO only aggregated disabilities ----
+# Plot the graph for Research Only (RO)
+dis %>% pivot_longer(
+        cols = c("dis",	"no_dis"),
+        names_to = "disability",
+        values_to = "percent"
+        )                                    %>%
+        group_by(discipline)                 %>%
+        mutate(pos = sum(percent))           %>%
+        ggplot(aes(y = discipline, x = percent, fill = disability)) +
+        geom_col(colour = "black") +
+        theme_bw() +
+        scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.38)) +
+        ylab("Research discipline") +
+        xlab("Number") + labs(fill = "Disability") +
+        geom_text(aes(y = discipline, x = pos, label = comma(Total_num)), hjust = -0.25,
+                  position = "identity", inherit.aes = FALSE, size = 3) +
+        scale_fill_manual(labels = c("RO disability", "RO no known disability"),
+                          values = c("blue","yellow"))
+
+# View the data
+#dis %>% select(!ends_with("%")) %>%  View()
+
+# Percentages are calculated in the spreadsheet.
+
+
+## Aggregated TR and RO numbers ----
 
 # Plot the numbers data - CAVEAT - data will not add up, that is rounding is
 # applied to the original data 1,2 and 3 get rounded up and above this they
