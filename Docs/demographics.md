@@ -13,6 +13,7 @@ We asked a number of demographic-based questions to determine coverage of the ES
 
 We asked (Q17, N = 152) people to specify their institutional affiliation (the organisation/company that directly paid their salary or one or more institutions they were affiliated with). 58 unique organisations were specified. Institutions with more than three responses are shown in Table 1 below, the hyphen (-) signifies that no institution was specified or could not be determined from the answer or associated data, e.g. “University”. The remainder with three or fewer responses for a given organisation are aggregated in the “Other” category to make the table manageable.
 
+<center>
 <table>
   <tr>
    <td><strong>Institutions</strong></td>
@@ -97,8 +98,9 @@ We asked (Q17, N = 152) people to specify their institutional affiliation (the o
    </td>
   </tr>
 </table>
-
+</center>
 <center><strong>Table 1</strong>: Responses from institutions where they are provided. Organisations with a count greater than three are shown. Those with three or less have been aggregated as “Others”. The hyphen signifies that no value was given or what was provided did not uniquely identify the institution.</center>
+
 
 Locations that could be geographically identified are shown in Fig 1 below. The size of the blue disks is proportionally representative to the number of responses received from that location.
 
@@ -106,7 +108,6 @@ Locations that could be geographically identified are shown in Fig 1 below. The 
 ![Map with UK institutions sampled by the survey,](images/image1.png "map plotting institutional  representation in the survey")
 
 <center><strong>Figure 1</strong>: A map locating the institutions where they were provided and could be geolocated. The bigger the disk the higher the value of responses from that institution.</center>
-
 
 ## Research disciplines
 
@@ -141,18 +142,20 @@ However, respondents were allowed to pick more than one discipline which, retros
 
 <center><strong>Figure 2</strong>: Research discipline the respondents identified as. Values are normalised - if a person picked N research disciplines then each contributes 1/N to the total.</center>
 
+
 We can see that most of the people who answered though self-identified as “Sociologists”. Three individuals did not specify any academic discipline. A few people did not find an academic discipline they thought fitted them so they filled in the “Other” choice - nine of these were health-related areas, a few were crossover disciplines such as computer science, statistics and medicine; others were on the boundary with other work funded by other research councils like cultural studies. As opposed to introducing more categories these were left in the “Other” category.
 
 Fig 3 shows how the distribution of research disciplines picked by individuals. 
 
-
+<center>
 ![Number of research disciplines picked by individuals.](images/image3.png "Number of research disciplines picked by individuals")
-
+</center>
 
 <center><strong>Figure 3</strong>: The number of research disciplines chosen by individuals. Three individuals did not choose any academic discipline or specify another category.</center>
 
 Discipline combinations are shown in the table below with a count greater than one.
 
+<center>
 <table>
   <tr>
    <td>Combined disciplines
@@ -222,8 +225,10 @@ Discipline combinations are shown in the table below with a count greater than o
    </td>
   </tr>
 </table>
+</center>
 
 <center><strong>Table 2</strong>: Count of the combined choices that have more than one occurrence.</center>
+
 
 From this, we can see that certain disciplines correlate and were probably picked in conjunction, for instance, _Social Policy and Sociology were picked in combination, Sociology was combined with an Other research discipline_ and so on. 
 
@@ -239,6 +244,7 @@ We asked people to self-identify their gender (Q21, N = 164). Fig 4 summarises t
 <strong>Figure 4</strong>: How people self-identified their gender. The “-” means no value was given.
 </center>
 
+
 For the survey, we got a slightly higher response from women. In four cases, indicated by a dash, the gender was not specified. For the other category, some expressed unhappiness about being asked about their gender or stated that their sex was female but they had no gender identity. Two people did not disclose their gender and one self-identified as being non-binary. For most of the analysis of the survey results, the low statistic components were not considered when partitioning the data by gender.
 
 Fig 5 shows how gender is distributed across the academic disciplines. Numbers are normalised as individuals could pick more than one research disciplines (if a person chose N disciplines then each contributes 1/N). The percentages shown are given in relation to the number of responses to the particular gender population, e.g. 18% of all the women that answered said they were (in part) from sociology. 
@@ -247,6 +253,7 @@ Fig 5 shows how gender is distributed across the academic disciplines. Numbers a
 ![Academic disciplines by gender.](images/image5.png "Academic disciplines by gender")
 
 <center><strong>Figure 5</strong>: Academic disciplines are decomposed by gender. Percentages correspond to the number of answers in relation to the corresponding gender population.</center>
+
 
 From this diagram, we can see that for some disciplines we have more answers from specific genders. For instance, Sociology, Education, Social Work, Linguistics, Management and business studies and Science and Technology Studies have more responses from women while Human Geography, History, Information Science, Data Science and Artificial Intelligence and Tools, technologies & methods have more answers from male respondents.
 
@@ -262,9 +269,12 @@ We also asked about the career stage the respondee came from (Q20, N = 164). For
 
 We added an additional  “Other” category for respondents who could not place themselves in any of the LERU categories, e.g. retired. The items in bold indicated in the list above is the labelling that we used to identify the different phases for the summary of the survey results. Fig 6 shows the number of respondents in each category as well as showing the percentage of the number in relation to all respondents. The “-” indicates that no value was given.
 
+<center>
 ![Career stages of respondents](images/image6.png "Career stages of resondents")
+</center>
 
 <center><strong>Figure 6</strong>: how people self-identified their LERU career stage. The “-” means no value was given.</center>
+
 
 In most graphs, we miss out the “Other” and “-” categories when partitioning the data by career stage because of their low statistics. In the survey most responses came from Junior researchers but with a fair representation of Early, Mid and senior career stages. For the “Other” responses we got: “retired as Senior Research Fellow”, “phase 3 but still on temporary contracts” and “in the process of applying for a PhD”.
 
@@ -278,6 +288,7 @@ We can see how gender and career stage relate in the tile diagram in Fig 7. The 
 ![Barchart with the percentage gender composition for each career stage.](images/image8.png "Percentage gender composition for each career stage")
 
 <center><strong>Figure 8</strong>: Career stages by gender percentages composition.</center>
+
 
 Fig 9 shows how the academic disciplines are distributed across the different career stages. Numbers have been normalised (if respondent provided N research disciplines each contributes 1/N). From this we see that mid and early career stage sociologists had the top and third highest representation and junior career psychologists have the second highest representation.
 
