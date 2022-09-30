@@ -147,9 +147,10 @@ We can see that most of the people who answered though self-identified as “Soc
 
 Fig 3 shows how the distribution of research disciplines picked by individuals. 
 
-<center>
-![Number of research disciplines picked by individuals.](images/image3.png "Number of research disciplines picked by individuals")
-</center>
+<p align="center">
+<img src="images/image3.png " alt="Number of research disciplines picked by individuals" />
+</p>
+
 
 <center><strong>Figure 3</strong>: The number of research disciplines chosen by individuals. Three individuals did not choose any academic discipline or specify another category.</center>
 
@@ -269,9 +270,10 @@ We also asked about the career stage the respondee came from (Q20, N = 164). For
 
 We added an additional  “Other” category for respondents who could not place themselves in any of the LERU categories, e.g. retired. The items in bold indicated in the list above is the labelling that we used to identify the different phases for the summary of the survey results. Fig 6 shows the number of respondents in each category as well as showing the percentage of the number in relation to all respondents. The “-” indicates that no value was given.
 
-<center>
-![Career stages of respondents](images/image6.png "Career stages of resondents")
-</center>
+<p align="center">
+<img src="images/image6.png" alt="Career stages of resondents"/>
+</p>
+
 
 <center><strong>Figure 6</strong>: how people self-identified their LERU career stage. The “-” means no value was given.</center>
 
