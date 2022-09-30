@@ -30,3 +30,4 @@ Src/TestGraphProblem.R
 *.swp
 Src/03_AnalysisByGenderCareerStageFunderDiscipline.Rmd
 Src/SurveyResults_files/
+*~
