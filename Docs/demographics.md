@@ -16,8 +16,8 @@ We asked (Q17, N = 152) people to specify their institutional affiliation (the o
 <p align="center">
 <table>
   <tr>
-   <td><strong>Institutions</strong></td>
-   <td><strong>Responses</strong></td>
+   <th><strong>Institutions</strong></th>
+   <th><strong>Responses</strong></th>
   </tr>
   <tr>
    <td>University of Essex
