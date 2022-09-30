@@ -13,7 +13,6 @@ We asked a number of demographic-based questions to determine coverage of the ES
 
 We asked (Q17, N = 152) people to specify their institutional affiliation (the organisation/company that directly paid their salary or one or more institutions they were affiliated with). 58 unique organisations were specified. Institutions with more than three responses are shown in Table 1 below, the hyphen (-) signifies that no institution was specified or could not be determined from the answer or associated data, e.g. “University”. The remainder with three or fewer responses for a given organisation are aggregated in the “Other” category to make the table manageable.
 
-<p align="center">
 <table style="margin-left:auto;margin-right:auto;">
   <tr>
    <th><strong>Institutions</strong></th>
@@ -98,7 +97,7 @@ We asked (Q17, N = 152) people to specify their institutional affiliation (the o
    </td>
   </tr>
 </table>
-</p>
+
 <p align="center"><strong>Table 1</strong>: Responses from institutions where they are provided. Organisations with a count greater than three are shown. Those with three or less have been aggregated as “Others”. The hyphen signifies that no value was given or what was provided did not uniquely identify the institution.</p>
 
 Locations that could be geographically identified are shown in Fig 1 below. The size of the blue disks is proportionally representative to the number of responses received from that location.
