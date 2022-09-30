@@ -330,9 +330,7 @@ We also asked the respondents whether they considered themselves to have a disab
 <p align="center">
 <img src="images/image13.png" alt="Respondents self-identifying as having a disability" />
 </p>
-<center><strong>Figure 13</strong>: Whether a respondent self-identifies as having a disability.</center>
-
-
+<p align="center"><strong>Figure 13</strong>: Whether a respondent self-identifies as having a disability.</p>
 
 The majority (83%) did not consider themselves to have a disability but 15% did self identify as having some form of disability which would be higher than what is observed in the ESRC community (4.6%) from the HESA data analysis in the main report. Six people (4%) did not fill in this question. Despite the fact that the survey obtained a higher representation of the community with some form of disability than what is observed by the HESA data the sample size (25) is relatively low so not much multivariate analysis has been done based on disability.
 
