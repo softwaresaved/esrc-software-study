@@ -268,8 +268,6 @@ Fig 5 shows how gender is distributed across the academic disciplines. Numbers a
 From this diagram, we can see that for some disciplines we have more answers from specific genders. For instance, Sociology, Education, Social Work, Linguistics, Management and business studies and Science and Technology Studies have more responses from women while Human Geography, History, Information Science, Data Science and Artificial Intelligence and Tools, technologies & methods have more answers from male respondents.
 
 
-
-
 ## Career stages
 
 We also asked about the career stage the respondee came from (Q20, N = 164). For this, we used a scale[^2] developed by the _League of European Research Universities_ (LERU) mainly:
@@ -291,8 +289,9 @@ In most graphs, we miss out the “Other” and “-” categories when partitio
 
 We can see how gender and career stage relate in the tile diagram in Fig 7. The percentages shown are in relation to the whole population. For gender we only consider male, female populations as the other gender components have low statistics. In Fig 8 we see that for early, mid and senior career researchers we have a reasonable male and female balance. However, for the junior career researchers there is a much higher representation of women (80%) to men (20%) - percentages here are in relation to each career stage population. We thus need to take care when interpreting results as women and junior career researchers can act as aliases for each other. From the responses in this survey, more women at an earlier career stage answered the survey but numbers gradually decreased as one progressed up the career stages (negatively correlated (-0.856)) while for men the distribution was much flatter (but positively correlated (0.673)).
 
-![Tile diagram of the gender by career stage distribution.](images/image7.png "Gender and career stage")
-
+<p align="center">
+<img src="images/image7.png" alt="Gender and career stage"/>
+</p>
 <p align="center"><strong>Figure 7</strong>: How gender is related to career stages.</p>
 
 
@@ -303,8 +302,9 @@ We can see how gender and career stage relate in the tile diagram in Fig 7. The 
 
 Fig 9 shows how the academic disciplines are distributed across the different career stages. Numbers have been normalised (if respondent provided N research disciplines each contributes 1/N). From this we see that mid and early career stage sociologists had the top and third highest representation and junior career psychologists have the second highest representation.
 
-
-![Tile diagram of career stages by research discipline.](images/image9.png "career stage by research discipline")
+<p align="center">
+<img src="images/image9.png" alt="career stage by research discipline"/>
+</p>
 
 <p align="center"><strong>Figure 9</strong>: Research disciplines split by career stage. Numbers have been normalised - if a researcher said they were involved in N research disciplines they each contribute 1/N.</p>
 
@@ -313,8 +313,9 @@ Fig 9 shows how the academic disciplines are distributed across the different ca
 Using the 2021 census definition for ethnicity[^3] we asked the respondents (Q22, N = 164) to self-identify to which ethnic group they belonged to. The results are shown in Fig 10.
 
 
-
-![alt_text](images/image10.png "image_tooltip")
+<p align="center">
+<img src="images/image10.png" alt="Ethnicity of respondents."/>
+</p>
 
 <p align="center"><strong>Figure 10</strong>: the distribution of ethnicities where this was provided. The “-” means that no value was given.</p>
 
@@ -322,13 +323,17 @@ From which we see that 79% of the respondents are white, 5% did not want to disc
 
 Fig 11 shows ethnicity splits across the different career stages. Other than for the white ethnic group representation across the different career stages is a little bit patchy.
 
-![Tile diagram of ethnicity by career stage.](images/image11.png "Ethnicity by career stage")
+<p align="center">
+<img src="images/image11.png" alt="Ethnicity by career stage"/>
+</p>
 
 <p align="center"><strong>Figure 11</strong>: Ethnicity and career stage.</p>
 
 The gender decomposition of the ethnicities is given by Fig 12. Coverage in the non-white ethnicities is a little bit patchy and seems to flip-flop a little bit by there being male or female in some cases. There are no instances of anything other than male or female outside the white ethnicities when specified.
 
-![Tile diagram of ethnicity by gender.](images/image12.png "Ethnicity by gender")
+<p align="center">
+<img src="images/image12.png" alt="Ethnicity by gender"/>
+</p>
 
 <p align="center"><strong>Figure 12</strong>: Ethnicity vs gender.</p>
 
@@ -349,19 +354,24 @@ The majority (83%) did not consider themselves to have a disability but 15% did 
 
 Fig 14 shows that those that identify as being disabled are farily evenly distributed across the different genders. 
 
-![Tile diagram of gender by disability.](images/image14.png "Gender by disability")
+<p align="center">
+<img src="images/image14.png" alt="Gender by disability"/>
+</p>
 
 <p align="center"><strong>Figure 14</strong>:  Disability is represented across all the gender options. Percentages are in relation to the whole population that answered the survey.</p>
 
 Fig 15 shows the representation by career stage - we have representation from all four career stages though the senior career stage is rather small with a count of 1.
 
-![Tile diagran if career stages by disability.](images/image15.png "Career stage by disability")
-
+<p align="center">
+<img src="images/image15.png" alt="Career stage by disability"/>
+</p>
 <p align="center"><strong>Figure 15</strong>: Mid-career and below have higher disability representation. Percentages are in relation to the whole population.</p>
 
 Finally. Fig 16 gives a break down across research domain but as individuals were able to select more than one research domain the numbers have been normalised, i.e. if a person selected N research disciplines then each will contribute 1/N to the count.
 
-![Tile diagram of normalised research discipline by disability.](images/image16.png "Normalised research discipline by disability")
+<p align="center">
+<img src="images/image16.png" alt="Normalised research discipline by disability"/>
+</p>
 
 <p align="center"><strong>Figure 16</strong>: Research disciplines split according to whether respondents self-identify as having a disability.</p>
 
