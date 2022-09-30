@@ -4312,7 +4312,7 @@ important_software  %>% select(URN, starts_with("Q5"))                   %>%
                       theme(legend.position = "None") +
                       geom_text(aes(label = paste0(software)), 
                                 position = position_stack(vjust = 0.5)) +
-                      xlab("Do you develop software?")
+                      xlab("Do you develop software?") + ylab("Number")
 ```
 Restrict to programming languages.
 
