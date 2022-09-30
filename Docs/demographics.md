@@ -101,24 +101,16 @@ We asked (Q17, N = 152) people to specify their institutional affiliation (the o
 </p>
 <p align="center"><strong>Table 1</strong>: Responses from institutions where they are provided. Organisations with a count greater than three are shown. Those with three or less have been aggregated as “Others”. The hyphen signifies that no value was given or what was provided did not uniquely identify the institution.</p>
 
-
-
 Locations that could be geographically identified are shown in Fig 1 below. The size of the blue disks is proportionally representative to the number of responses received from that location.
 
-
-
-
-![Map with UK institutions sampled by the survey,](images/image1.png "map plotting institutional  representation in the survey")
-
+<p align="center">
+<img src="images/image1.png " alt="Map plotting institutional  representation in the survey"/>
+</p>
 <p align="center"><strong>Figure 1</strong>: A map locating the institutions where they were provided and could be geolocated. The bigger the disk the higher the value of responses from that institution.</p>
-
-
 
 ## Research disciplines
 
 We asked people to identify the academic disciplines they belonged to (Q19, N = 161). From the list below. Where the disciplines[^1] have been abbreviated for the purposes of the graph - the abbreviation used is shown in the bold term in brackets at the end of the line:
-
-
 
 * Area Studies (**AreaStudies**)
 * Data science and artificial intelligence (**DS_AI**)
@@ -145,8 +137,9 @@ We asked people to identify the academic disciplines they belonged to (Q19, N = 
 
 However, respondents were allowed to pick more than one discipline which, retrospectively, making it slightly harder to combine this category with other survey choices in a meaningful way. We can normalise the contributions so if a person suggested N research disciplines were appropriate for them then each will contribute 1/N to the total. The results are summarised in Fig 2.
 
-![Normalised research discipline responses.](images/image2.png "Normalised research discipline responses")
-
+<p align="center">
+<img src="images/image2.png " alt="Normalised research discipline responses"/>
+</p>
 <p align="center"><strong>Figure 2</strong>: Research discipline the respondents identified as. Values are normalised - if a person picked N research disciplines then each contributes 1/N to the total.</p>
 
 
@@ -157,8 +150,6 @@ Fig 3 shows how the distribution of research disciplines picked by individuals.
 <p align="center">
 <img src="images/image3.png " alt="Number of research disciplines picked by individuals" />
 </p>
-
-
 <p align="center"><strong>Figure 3</strong>: The number of research disciplines chosen by individuals. Three individuals did not choose any academic discipline or specify another category.</p>
 
 Discipline combinations are shown in the table below with a count greater than one.
@@ -237,20 +228,15 @@ Discipline combinations are shown in the table below with a count greater than o
 
 <p align="center"><strong>Table 2</strong>: Count of the combined choices that have more than one occurrence.</p>
 
-
-
 From this, we can see that certain disciplines correlate and were probably picked in conjunction, for instance, _Social Policy and Sociology were picked in combination, Sociology was combined with an Other research discipline_ and so on. 
-
-
-
 
 ## Gender
 
 We asked people to self-identify their gender (Q21, N = 164). Fig 4 summarises the responses.
 
-
-![Gender respnses in the survey](images/image4.png "Gender respnses in the survey")
-
+<p align="center">
+<img src="images/image4.png" alt="Gender respnses in the survey"/>
+</p>
 <p align="center">
 <strong>Figure 4</strong>: How people self-identified their gender. The “-” means no value was given.
 </p>
@@ -260,9 +246,9 @@ For the survey, we got a slightly higher response from women. In four cases, ind
 
 Fig 5 shows how gender is distributed across the academic disciplines. Numbers are normalised as individuals could pick more than one research disciplines (if a person chose N disciplines then each contributes 1/N). The percentages shown are given in relation to the number of responses to the particular gender population, e.g. 18% of all the women that answered said they were (in part) from sociology. 
 
-
-![Academic disciplines by gender.](images/image5.png "Academic disciplines by gender")
-
+<p align="center">
+<img src="images/image5.png" alt="Academic disciplines by gender"/>
+</p>
 <p align="center"><strong>Figure 5</strong>: Academic disciplines are decomposed by gender. Percentages correspond to the number of answers in relation to the corresponding gender population.</p>
 
 From this diagram, we can see that for some disciplines we have more answers from specific genders. For instance, Sociology, Education, Social Work, Linguistics, Management and business studies and Science and Technology Studies have more responses from women while Human Geography, History, Information Science, Data Science and Artificial Intelligence and Tools, technologies & methods have more answers from male respondents.
@@ -272,8 +258,8 @@ From this diagram, we can see that for some disciplines we have more answers fro
 
 We also asked about the career stage the respondee came from (Q20, N = 164). For this, we used a scale[^2] developed by the _League of European Research Universities_ (LERU) mainly:
 
-* Phase 1 - **Junior **(e.g. PhD candidate, Junior Research Software Engineer)
-* Phase 2 - **Early **(e.g Research Assistant/Associate, first grant holder, Lecturer, Research Software Engineer)
+* Phase 1 - **Junior**(e.g. PhD candidate, Junior Research Software Engineer)
+* Phase 2 - **Early**(e.g Research Assistant/Associate, first grant holder, Lecturer, Research Software Engineer)
 * Phase 3 - **Mid** / Recognised (e.g. Senior Lecturer, Reader, Senior Researcher, Senior Research Software Engineer, Research Software Group Leader)
 * Phase 4 - Established / Experienced / **Senior** (e.g. Professor, Director of Research Computing, Distinguished Engineer, Chief Data Scientist)
 
@@ -287,15 +273,18 @@ We added an additional  “Other” category for respondents who could not place
 
 In most graphs, we miss out the “Other” and “-” categories when partitioning the data by career stage because of their low statistics. In the survey most responses came from Junior researchers but with a fair representation of Early, Mid and senior career stages. For the “Other” responses we got: “retired as Senior Research Fellow”, “phase 3 but still on temporary contracts” and “in the process of applying for a PhD”.
 
-We can see how gender and career stage relate in the tile diagram in Fig 7. The percentages shown are in relation to the whole population. For gender we only consider male, female populations as the other gender components have low statistics. In Fig 8 we see that for early, mid and senior career researchers we have a reasonable male and female balance. However, for the junior career researchers there is a much higher representation of women (80%) to men (20%) - percentages here are in relation to each career stage population. We thus need to take care when interpreting results as women and junior career researchers can act as aliases for each other. From the responses in this survey, more women at an earlier career stage answered the survey but numbers gradually decreased as one progressed up the career stages (negatively correlated (-0.856)) while for men the distribution was much flatter (but positively correlated (0.673)).
+We can see how gender and career stage relate in the tile diagram in Fig 7. The percentages shown are in relation to the whole population. For gender we only consider male, female populations as the other gender components have low statistics. 
 
 <p align="center">
 <img src="images/image7.png" alt="Gender and career stage"/>
 </p>
 <p align="center"><strong>Figure 7</strong>: How gender is related to career stages.</p>
 
+In Fig 8 we see that for early, mid and senior career researchers we have a reasonable male and female balance. However, for the junior career researchers there is a much higher representation of women (80%) to men (20%) - percentages here are in relation to each career stage population. We thus need to take care when interpreting results as women and junior career researchers can act as aliases for each other. From the responses in this survey, more women at an earlier career stage answered the survey but numbers gradually decreased as one progressed up the career stages (negatively correlated (-0.856)) while for men the distribution was much flatter (but positively correlated (0.673)).
 
-![Barchart with the percentage gender composition for each career stage.](images/image8.png "Percentage gender composition for each career stage")
+<p align="center">
+<img src="images/image8.png" alt="Percentage gender composition for each career stage"/>
+</p>
 
 <p align="center"><strong>Figure 8</strong>: Career stages by gender percentages composition.</p>
 
