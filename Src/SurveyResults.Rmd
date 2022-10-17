@@ -2325,6 +2325,28 @@ data %>% select(URN, num_range("Q3_", 1:7))                          %>%
          kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
 ```
 
+### Sharing data and sharing s/w
+
+```{r sharing_swVsdata}
+
+data %>% select(URN, sharesw, num_range("Q3_", 1:7))        %>%
+         pivot_longer(cols = num_range("Q3_", 1:7),
+                      names_to = NULL,
+                      values_to = "DataSharing")            %>%
+         filter(DataSharing != 0)                           %>% 
+         distinct(URN, DataSharing, sharesw)                %>% 
+         group_by(DataSharing, sharesw)                    %>% 
+         tally()                                            %>%
+         ggplot(aes(x = sharesw, y = DataSharing, fill = n)) +
+         theme_bw() + 
+         geom_tile() +
+         theme(legend.position = "None", axis.text.x = element_text(angle = -90, hjust = 0)) +
+         ylab("Data sharing") + xlab("Software sharing") + 
+         scale_fill_distiller(palette = "Blues", direction = 1) +
+         geom_text(aes(label = n), size = 5)
+```
+
+
 ### Other ways of sharing data
 
 ```{r other_sharing_data, results = 'asis'}
@@ -4763,7 +4785,7 @@ data %>% select(URN, num_range("Q10_", 1:6))            %>%
 ```
 
 
-### Contingency table
+### Sharing software contingency table
 
 ```{r sharingsw_contingency}
 
