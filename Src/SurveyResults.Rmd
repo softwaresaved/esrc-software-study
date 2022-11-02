@@ -698,8 +698,8 @@ data$Q23[is.na(data$Q23)] <-  "-"
 data["Q23"] <- gsub(1, "Yes", data[["Q23"]])
 data["Q23"] <- gsub(2, "No", data[["Q23"]])
 
-# Add a flag to indicate whther funding has come from the ESRC
-if(!("esrcfunding" %in% colnames(data))){
+# Add a flag to indicate whether funding has come from the ESRC
+if(!("esrcfunding" %in% colnames(data))){ # Check the column does not already exist
 
   funding %>% rowwise()                                                        %>%
               filter(any(!is.na(c_across(Q18_1:Q18_7))))                       %>% 
@@ -708,6 +708,16 @@ if(!("esrcfunding" %in% colnames(data))){
               right_join(data, by = "URN") -> data
 
 }
+
+# Count instances that only state having ESRC funding and no other
+# funding %>% pivot_longer(cols = starts_with("Q18"),
+#                          names_to = NULL,
+#                          values_to = "fund")      %>% 
+#             filter(!is.na(fund))                  %>% 
+#             group_by(URN)                         %>% 
+#             mutate(N = n())                       %>% 
+#             filter(N == 1)                        %>% 
+#             filter(fund == "ESRC")
 
 # Add a column, datause with the type of data user - do this only if not already there
 if(!("datause" %in% colnames(data))){
@@ -7693,11 +7703,11 @@ bind_cols(funding, data["Q20"])                                                 
             mutate(N = n())                                                      %>% 
             distinct(funding, N, career)                                         %>% 
             ggplot(aes(x = reorder(funding, -N), y = N, fill = career)) +
-            geom_col(colour = "black", position = position_dodge2()) +
+            geom_col(colour = "black", position = position_dodge2(width = 0.9, preserve = "single")) +
             theme_bw() + xlab("Funding body") + ylab("Numbers") +
             geom_text(aes(x = funding, label = N), 
                       position = position_dodge2(width = 0.9, preserve = "single"), size = 4, vjust = -0.5) +
-            theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0),
+            theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0),
                   axis.text.y = element_text(size = 12)) +
             scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
@@ -7720,7 +7730,7 @@ bind_cols(funding, data["Q21"])                                                 
             mutate(N = n())                                                      %>% 
             distinct(funding, N, gender)                                         %>% 
             ggplot(aes(x = reorder(funding, -N), y = N, fill = gender)) +
-            geom_col(colour = "black", position = position_dodge2()) +
+            geom_col(colour = "black", position = position_dodge2(width = 0.9, preserve = "single")) +
             theme_bw() + xlab("Funding body") + ylab("Numbers") +
             geom_text(aes(x = funding, label = N), 
                       position = position_dodge2(width = 0.9, preserve = "single"), size = 4, vjust = -0.5) +
