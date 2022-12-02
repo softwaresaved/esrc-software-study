@@ -85,14 +85,14 @@ gtrdat[!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) > 2050,
        c("GTRProjectUrl","EndDate")]
 gtrdat[!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) < 2050 & year(gtrdat$EndDate) > 2035,
        c("GTRProjectUrl","EndDate")]
-sum(!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) > 2035, na.rm = TRUE) # 51
-sum(is.na(gtrdat$EndDate)) # 250
+sum(!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) > 2035, na.rm = TRUE) # 37
+sum(is.na(gtrdat$EndDate)) # 210
 
 # End dates beyond 2035
 # "2050-03-31" "2121-10-08" "3202-10-31" "2121-03-31" "3023-03-31"
 unique(gtrdat[["EndDate"]][!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) > 2035])
 
-# How many? 51
+# How many? 37
 length(gtrdat[["EndDate"]][!is.na(gtrdat$EndDate) & year(gtrdat$EndDate) > 2035])
 
 # Do the 2050 end dates make sense? No
@@ -194,7 +194,7 @@ subjects %>% select(grantReference)         %>%
 subjects <- subjects                       %>%
             group_by(grantReference)       %>%
             mutate(Nsub = n())             %>%
-            mutate(fracContrib = 1/N)
+            mutate(fracContrib = 1/Nsub)
 
 # decode subject
 subjects$decodedText <- gsub("\\+", " ", URLdecode(subjects$encodedText))
@@ -513,7 +513,7 @@ esrc_topics %>% select(category, AwardPounds, fracContrib)        %>%
         col.names = c("Category", "Number of awards","Number %", "Award (£)",
                       "Award %"))
 
-?## Data and Software Outputs -----------------------------------------------
+## Data and Software Outputs -----------------------------------------------
 
 # Read the software outputs data
 softouts_cols = cols(
@@ -891,7 +891,7 @@ topics <-  c("Area Studies", "Data science and artificial intelligence", "Demogr
 names(topics) <- c("AreaStudies", "DS_AI", "Demography","DevelopmentStudies",
                    "Economics", "Education", "EnvPlanning","History","HumanGeography",
                    "InfoSci","Law","Linguistics","ManBusStud","PolSci_IntStud",
-                   "Pyschology", "SciTechStud",
+                   "Psychology", "SciTechStud",
                    "SocAnth", "SocPol", "SocWork","Sociology","ToolsTechMeth",
                     "Other")
 
@@ -901,9 +901,10 @@ sur_research$rs <-  unname(topics[sur_research[["disciplines"]]])
 # Check we are not missing categories we are missing out the Other and
 # Uncategorised elements
 rs <-  unname(topics[sur_research[["disciplines"]]])
+
 combined %>% select(category)                     %>%
              filter(category != "Uncategorised")  %>%
-             filter(category != "Other")  %>%
+             filter(category != "Other")          %>%
              filter(!(category %in% rs))
 
 # Now join the data together for all projects
@@ -940,7 +941,7 @@ a_combined %>% filter(!(category %in% c("Uncategorised", "Other")))  %>%
                 geom_col(aes(y = percent),
                          position = position_dodge2(width = 0.8, preserve = "single"), colour = "black", alpha = 0.5) +
                 scale_y_continuous(labels = percent_format(accuracy = 1)) +
-                theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+                theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 12)) +
                 xlab("Category") + ylab("Percent") + labs(fill = "Research") +
                 scale_fill_manual(labels = c("Subject", "Topic", "Survey"),
                                   values = c("blue", "red", "green"))
