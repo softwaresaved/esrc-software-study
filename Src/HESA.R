@@ -531,23 +531,23 @@ dis$discipline <- unname(cc2subjects[dis[["Cost_centre_v2"]]])
 
 ## Plot RO only aggregated disabilities ----
 # Plot the graph for Research Only (RO)
-dis %>% pivot_longer(
-        cols = c("dis",	"no_dis"),
-        names_to = "disability",
-        values_to = "percent"
-        )                                    %>%
-        group_by(discipline)                 %>%
-        mutate(pos = sum(percent))           %>%
-        ggplot(aes(y = discipline, x = percent, fill = disability)) +
-        geom_col(colour = "black") +
-        theme_bw() +
-        scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.38)) +
-        ylab("Research discipline") +
-        xlab("Number") + labs(fill = "Disability") +
-        geom_text(aes(y = discipline, x = pos, label = comma(Total_num)), hjust = -0.25,
-                  position = "identity", inherit.aes = FALSE, size = 3) +
-        scale_fill_manual(labels = c("RO disability", "RO no known disability"),
-                          values = c("blue","yellow"))
+# dis %>% pivot_longer(
+#         cols = c("dis",	"no_dis"),
+#         names_to = "disability",
+#         values_to = "percent"
+#         )                                    %>%
+#         group_by(discipline)                 %>%
+#         mutate(pos = sum(percent))           %>%
+#         ggplot(aes(y = discipline, x = percent, fill = disability)) +
+#         geom_col(colour = "black") +
+#         theme_bw() +
+#         scale_x_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.38)) +
+#         ylab("Research discipline") +
+#         xlab("Number") + labs(fill = "Disability") +
+#         geom_text(aes(y = discipline, x = pos, label = comma(Total)), hjust = -0.25,
+#                   position = "identity", inherit.aes = FALSE, size = 3) +
+#         scale_fill_manual(labels = c("RO disability", "RO no known disability"),
+#                           values = c("blue","yellow"))
 
 # View the data
 #dis %>% select(!ends_with("%")) %>%  View()
@@ -1136,7 +1136,7 @@ provider %>%  filter(!is.na(institution))         %>%
 
 ## Total ESRC FPEs per institution ----
 # Threshold to
-N <-  275
+N <-  375
 provider %>% filter(!is.na(institution))         %>%
              group_by(institution)               %>%
              summarise(rTotal = sum(Total))      %>%
@@ -1147,6 +1147,7 @@ provider %>% filter(!is.na(institution))         %>%
              theme(axis.text.y = element_text(size = 8), legend.position = "None") +
              ylab("Institutions") + xlab("Full Person Equivalent Numbers") +
              scale_fill_viridis(option="magma") +
+             theme(axis.text.y = element_text(size = 12)) +
              ggtitle(paste0("ESRC FPE staff for N > ", N))
 
 # Number of unique institutions
