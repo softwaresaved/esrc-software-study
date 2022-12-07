@@ -12,7 +12,11 @@ editor_options:
     wrap: 72
 ---
 
+# Prelimiaries
+
 ## Setup
+
+Read in the packages that are required to read and process the data.
 
 ```{r setup, include = FALSE, warnings = FALSE}
 
@@ -21,7 +25,6 @@ knitr::opts_chunk$set(echo = TRUE, echo = FALSE, dpi = 300)
 
 # Load packages ----------------------------------------------------------
 
-library(readxl, quietly = TRUE)
 library(readr, quietly = TRUE)
 library(dplyr, warn.conflicts = FALSE)
 library(tidyr, quietly = TRUE)
@@ -58,6 +61,8 @@ listOther <- function(Quest){
 ```
 
 ## Read data
+
+Read in the raw data and ancillary files.
 
 ```{r read_data}
 
@@ -373,6 +378,8 @@ data0 <- data0 %>% filter(!(URN %in% uids))
 ```
 
 ## Process data
+
+Process the data to be ready for the output.
 
 ```{r remap_data}
 
