@@ -14,6 +14,11 @@ editor_options:
 
 # Prelimiaries
 
+## Overview
+
+This code analyses the results of the data from "[A survey of digital methods in the economics and social sciences research](https://github.com/softwaresaved/esrc-software-study/blob/main/Docs/esrc-survey.pdf)" and produces a superset of the figures included in a report for the
+ESRC. Analysis and interpretation is carried out in the report and not here.
+
 ## Setup
 
 Read in the packages that are required to read and process the data.
