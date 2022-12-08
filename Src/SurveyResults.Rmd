@@ -988,19 +988,21 @@ if(!("sharesw" %in% colnames(data))){
 
 ## Q2 Use of data
 
-Do you create or re-use data to undertake your research (Please check
-all that apply)
+Question: **Do you create or re-use data to undertake your research (Please check
+all that apply)**
 
 ### Use of data results
+
+Summary of responses.
 
 ```{r use_of_data}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, num_range("Q2_", 1:2))             %>% 
-           pivot_longer(cols = num_range("Q2_", 1:2), 
+         pivot_longer(cols = num_range("Q2_", 1:2), 
                       names_to = NULL,
                       values_to = "datause")            %>%
-         filter(datause != 0)                           %>%                                              
+         filter(datause != 0)                           %>% 
          distinct(URN, datause)                         %>%
          summarise(lab = paste0("Use of data (N=", n_distinct(URN),")")) -> my
 
@@ -1033,14 +1035,14 @@ data %>% select(num_range("Q2_", 1:2), career = Q20)        %>%
          geom_bar(colour = "black") +
          theme_bw() +
          xlab("Use of data") + ylab("Numbers") +
-         geom_text(aes(x = datause, label = ..count..),
+         geom_text(aes(x = datause, label = after_stat(count)),
                 position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
 ### Use of data as % of career stage population
 
-Leaving out low stat components
+Leaving out the low statistic components.
 
 ```{r use_of_data_career_per2}
 
@@ -1086,7 +1088,7 @@ data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>
 
 ### Use of data by % of gender population
 
-Removing the low statistic components
+Removing the low statistic components.
 
 ```{r use_of_data_gender_per2}
 
