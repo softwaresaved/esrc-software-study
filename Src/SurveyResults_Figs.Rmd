@@ -1027,60 +1027,6 @@ data %>% select(URN, num_range("Q2_", 1:2))                    %>%
          geom_text(aes(y = n, label = n), vjust = -0.5, size = 4) 
 ```
 
-```{r use_of_data2}
-
-GraphColours <- c("#264f71", "#37718e", "#d5d3c5", "#c9ced6")
-
-LineColour <- "#3c3c3b"
-
-font <- "Neuzeit Grotesk"
-
-# Calculate an x label with the folks that filled in this question.
-data %>% select(URN, num_range("Q2_", 1:2))             %>% 
-         pivot_longer(cols = num_range("Q2_", 1:2), 
-                      names_to = NULL,
-                      values_to = "datause")            %>%
-         filter(datause != 0)                           %>% 
-         distinct(URN, datause)                         %>%
-         summarise(lab = paste0("Use of data (N=", n_distinct(URN),")")) -> my
-
-data %>% select(URN, num_range("Q2_", 1:2))                    %>%
-         pivot_longer(cols = num_range("Q2_", 1:2), 
-                      names_to = NULL,
-                      values_to = "datause")                   %>%
-         filter(datause != 0)                                  %>%
-         distinct(URN, datause)                                %>% 
-         group_by(datause)                                     %>% 
-         mutate(n = n())                                       %>%  
-         ggplot(aes(x = datause, fill = factor(n))) +
-         geom_bar(colour = LineColour) +
-         theme_minimal() + 
-         theme(line = element_line(color = LineColour), legend.position = "None") +
-         xlab(my$lab) + ylab("Numbers") + 
-         scale_fill_manual(values = GraphColours) +
-         geom_text(aes(y = n, label = n), vjust = -0.5, size = 4) 
-```
-
-### Use of data by career stage
-
-Data segmented by career stage.
-
-```{r use_of_data_career}
-data %>% select(num_range("Q2_", 1:2), career = Q20)        %>%
-         filter(!(career %in% c("-","Other")))              %>% 
-         pivot_longer(cols = num_range("Q2_", 1:2), 
-                      names_to = NULL,
-                      values_to = "datause")                %>%
-         filter(datause != 0)                               %>%
-         ggplot(aes(x = datause, fill = career)) +
-         geom_bar(colour = "black") +
-         theme_bw() +
-         xlab("Use of data") + ylab("Numbers") +
-         geom_text(aes(x = datause, label = after_stat(count)),
-                position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 3) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
-
 ### Use of data as % of career stage population
 
 Displaying the responses as a percentage of each career stage.
@@ -1110,22 +1056,6 @@ data %>% select(num_range("Q2_", 1:2), career = Q20)                          %>
 
 ### Use of data by gender
 
-```{r use_of_data_gender_num}
-data %>% select(num_range("Q2_", 1:2), gender = Q21)                          %>%
-         filter(!(gender %in% lowstatsgender))                                %>% 
-         pivot_longer(cols = num_range("Q2_", 1:2), 
-                      names_to = NULL, 
-                      values_to = "datause")                                  %>%
-         filter(datause != 0)                                                 %>%
-         group_by(datause, gender)                                            %>% 
-         ggplot(aes(x = datause, fill = gender)) +
-         geom_bar(colour = "black") +
-         theme_bw() +
-         xlab("Use of data") + ylab("Numbers") +
-         geom_text(aes(x = datause, label = after_stat(count)),
-                position = position_stack(vjust = 0.5), stat = "count", colour = "black", size = 4) +
-         scale_fill_brewer(palette = "Set2", name = "Gender")
-```
 
 ### Use of data by % of gender population
 
@@ -1308,32 +1238,6 @@ data %>% select(id = URN, num_range("Q2_",1:2))                        %>%
          scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse"))
 ```
 
-### Combined plot by career
-
-Adding career stage.
-
-```{r datause_choices_career}
-
-data %>% select(id = URN, num_range("Q2_",1:2), career = Q20)          %>%
-         pivot_longer(cols = starts_with("Q2_"),
-                      names_to = NULL,
-                      values_to = "ds")                                %>%
-         filter(ds != 0)                                               %>%  
-         group_by(id)                                                  %>% 
-         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         distinct(id, choices, career)                                 %>% 
-         ungroup()                                                     %>% 
-         select(-id)                                                   %>% 
-         group_by(choices, career)                                     %>% 
-         tally()                                                       %>% 
-         arrange(desc(n))                                              %>% 
-         ggplot(aes(x = choices, y = n, fill = career)) + 
-         geom_col(colour = "black") + theme_bw() +
-         xlab("Data use") + ylab("Numbers") +
-         geom_text(aes(label = n), position = position_stack(0.5), size = 3) +
-         scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
 
 ### Combined plot by % career stage
 
@@ -1642,12 +1546,12 @@ data %>% select(URN, num_range("Q2_",1:2))                                   %>%
 
 What are your most important data source(s)?
 
-### Important data sources
+### Fig 10: Important data sources
 
 This is a simplified version of the input provided by the respondents.
 It only shows entries with more than two values.
 
-```{r importantDS}
+```{r Figure10}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, num_range("ImportantDS_", 1:7))  %>% 
@@ -1669,9 +1573,15 @@ data %>% select(URN, num_range("ImportantDS_", 1:7))          %>%
          ggplot(aes(x = reorder(importantDS, -n), y = n, fill = n)) +
          geom_col(colour = "black") +
          theme_bw() + ylim(0, 33) + scale_fill_distiller(palette = "Blues", direction = 1) +
-         geom_text(aes(label = n), vjust = -0.5, size = 4) + 
-         theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0, size = 12), legend.position = "None") +
-         xlab(my$lab) + ylab("Numbers")
+         geom_text(aes(label = n), vjust = -0.5, size = 3) + 
+         theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0, size = 10), legend.position = "None") +
+         xlab(my$lab) + ylab("Numbers") -> Fig10
+
+# Print out the results
+print(Fig10)
+
+# Save the results to file
+ggsave(filename="Figures/Figure10.png", dpi = 360)
 
 ```
 
@@ -7787,7 +7697,7 @@ data %>%
 
 Who has funded your research within the last 5 years?
 
-### Funding distribution
+### Fig 9: Funding distribution
 
 The list given in the listing below has been manipulated to provide some
 level of uniformity. Note that in this instance all contributions are
@@ -7795,7 +7705,7 @@ counted equally, i.e. a respondent may have suggested more than one
 funding body - each of these is given a count of 1 regardless of how
 many were provided.
 
-```{r funding}
+```{r Figure9}
 
 # Calculate an x label with the folks that filled in this question.
 funding %>% select(URN, num_range("Q18_", 1:7))          %>% 
@@ -7815,205 +7725,23 @@ funding %>% pivot_longer(cols = num_range("Q18_", 1:7),
             filter(n > 2)                                %>%
             distinct(n, funding, N)                      %>% 
             ggplot(aes(x = reorder(funding, -n), y = n, fill = n)) +
-            geom_col(colour = "black") + ylim(0, 120) +
+            geom_col(colour = "black") + ylim(0, 125) +
             theme_bw() + xlab(my$lab) + ylab("Numbers") +
             scale_fill_distiller(palette = "Blues", direction = 1) +
             geom_text(aes(x = funding, label = paste0(n,"\n(", percent(n/N, accuracy = 1),")")), 
-                      vjust = -0.5, size = 4) +
+                      vjust = -0.5, size = 3) +
             theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0, size = 10),
-                  legend.position = "None")
-```
+                  legend.position = "None") -> Fig9
 
-Look at non-ESRC funding sources.
+# Print to the display
+print(Fig9)
 
-```{r non_esrc_funding}
-
-# Filter out any row that has ESRC in it
-# funding %>% rowwise() %>% filter(any(!is.na(c_across(Q18_1:Q18_7))), all(!grepl("ESRC", c_across(Q18_1:Q18_7))))
-
-
-# # Plot non-ESRC funded projects
-funding %>% rowwise()                                         %>%
-           filter(any(!is.na(c_across(Q18_1:Q18_7))),
-                  all(!grepl("ESRC", c_across(Q18_1:Q18_7)))) %>%
-           pivot_longer(cols = num_range("Q18_", 1:7),
-                         names_to = NULL,
-                         values_to =  "funding")              %>%
-            filter(!is.na(funding))                           %>%
-            group_by(funding)                                 %>%
-            tally()                                           %>%
-            filter(n > 2)                                     %>%
-            ggplot(aes(x = reorder(funding, -n), y = n, fill = n)) +
-            geom_col(colour = "black") + 
-            scale_y_continuous(breaks = pretty_breaks(), limits = c(0, 10)) +
-            theme_bw() + xlab("Non-ESRC funding") + ylab("Numbers") +
-            scale_fill_distiller(palette = "Blues", direction = 1) +
-            geom_text(aes(x = funding, label = n), vjust = -0.5, size = 4) +
-            theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12),
-                  legend.position = "None")
-
-# Create table of non-ESRC funded projects
-# funding %>% rowwise()                                         %>% 
-#            filter(any(!is.na(c_across(Q18_1:Q18_7))), 
-#                   all(!grepl("ESRC", c_across(Q18_1:Q18_7)))) %>% 
-#            pivot_longer(cols = num_range("Q18_", 1:7),
-#                          names_to = NULL,
-#                          values_to =  "funding")              %>% 
-#             filter(!is.na(funding))                           %>%
-#             group_by(URN)                                     %>% 
-#             mutate(N = n())                                   %>% 
-#             group_by(URN, funding)                            %>% 
-#             tally()                                           %>% 
-#             filter(N > 2)                                     %>% 
-#             pivot_wider(names_from = funding, values_from = n, values_fill = 0) -> otherfunding
-
-# Collapse choices to see combined choices of non-ESRC funding
-# funding %>% rowwise()                                                                       %>% 
-#            filter(any(!is.na(c_across(Q18_1:Q18_7))), 
-#                   all(!grepl("ESRC", c_across(Q18_1:Q18_7))))                               %>% 
-#            group_by(URN)                                                                    %>% 
-#            mutate(choices = paste0(gsub(" ","-", c_across(Q18_1:Q18_7)), collapse = "_"))   %>%
-#            ungroup()                                                                        %>% 
-#            select(choices, -URN)                                                            %>% 
-#            mutate(choices = gsub("_NA", "", choices))                                       %>% 
-#            group_by(choices)                                                                %>% 
-#            tally()                                                                          %>% 
-#            arrange(desc(n))
-
-
+# Save to a file
+ggsave(filename="Figures/Figure9.png", dpi=360)
 
 ```
 
-### Funding correlation
 
-```{r funding_correlation}
-
-# pick out the data that we want
-funding %>% select(num_range("Q18_", 1:7)) -> q
-
-# add an id
-q$id <- 1:nrow(q)
-
-# manipulate the form of the data - only use data with more than 4 values
-q %>% pivot_longer(cols = num_range("Q18_", 1:7),
-                   names_to = NULL,
-                   values_to = "funding")                  %>% 
-            filter(!is.na(funding) & funding != "Retired") %>% 
-            group_by(funding) %>% 
-            mutate(n = n()) %>% 
-            filter(n > 4)   %>% 
-            select(-n)      %>%
-      mutate(val = ifelse(is.na(funding), 0L, 1L)) %>% 
-      filter(!is.na(funding) & funding != "Retired") %>% 
-      pivot_wider(names_from = funding,
-                  values_fill = 0,
-                  values_from = val) %>% 
-      select(-id) -> q
-
-# Remap embedded spaces to underscores
-names(q) <- gsub(" ","_", names(q))
-
-#q <- apply(q, 2, function(x) as.integer(x))
-
-# Colour map
-my_colors <- brewer.pal(5, "Spectral")
-my_colors <- colorRampPalette(my_colors)(100)
-
-# plot the correlation
-#plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
-corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
-
-```
-
-### Funding distribution normalised
-
-The graph below normalises the contributions suggested by the responder,
-i.e. if they made N suggestion then each suggestion contributes 1/N to
-the total.
-
-```{r funding_norm}
-
-funding %>% mutate(nelements = rowSums(!is.na(.)))                             %>% 
-            mutate(contrib = ifelse(nelements == 0, 0, round(1/nelements, 1))) %>% 
-            pivot_longer(cols = num_range("Q18_", 1:7),
-                         names_to = NULL,
-                         values_to =  "funding")                               %>% 
-            filter(!is.na(funding))                                            %>%
-            group_by(funding)                                                  %>% 
-            summarise(N = sum(contrib))                                        %>% 
-            filter(N > 1)                                                      %>%
-            ggplot(aes(x = reorder(funding, -N), y = N, fill = N)) +
-            geom_col(colour = "black") +
-            theme_bw() + xlab("Funding body") + ylab("Numbers") +
-            scale_fill_distiller(palette = "Blues", direction = 1) +
-            geom_text(aes(x = funding, label = N), vjust = -0.6, size = 4) +
-            theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), 
-                  legend.position = "None")
-```
-
-### Funding by career stage
-
-```{r funding_career}
-
-bind_cols(funding, data["Q20"])                                                  %>% 
-            select(num_range("Q18_", 1:7), career = Q20)                         %>% 
-            filter(!(career %in% c("-","Other")))                                %>% 
-            pivot_longer(cols = num_range("Q18_", 1:7),
-                         names_to = NULL,
-                         values_to =  "funding")                                 %>% 
-            filter(!is.na(funding))                                              %>%
-            group_by(funding)                                                    %>% 
-            mutate(n = n())                                                      %>% 
-            filter(n  > 3)                                                       %>%
-            group_by(funding, career)                                            %>% 
-            mutate(N = n())                                                      %>% 
-            distinct(funding, N, career)                                         %>% 
-            ggplot(aes(x = reorder(funding, -N), y = N, fill = career)) +
-            geom_col(colour = "black", position = position_dodge2(width = 0.9, preserve = "single")) +
-            theme_bw() + xlab("Funding body") + ylab("Numbers") +
-            geom_text(aes(x = funding, label = N), 
-                      position = position_dodge2(width = 0.9, preserve = "single"), size = 4, vjust = -0.5) +
-            theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0),
-                  axis.text.y = element_text(size = 12)) +
-            scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
-
-### Funding by gender
-
-```{r funding_gender}
-
-bind_cols(funding, data["Q21"])                                                  %>% 
-            select(num_range("Q18_", 1:7), gender = Q21)                         %>% 
-            filter(!(gender %in% lowstatsgender))                                %>% 
-            pivot_longer(cols = num_range("Q18_", 1:7),
-                         names_to = NULL,
-                         values_to =  "funding")                                 %>% 
-            filter(!is.na(funding))                                              %>%
-            group_by(funding)                                                    %>% 
-            mutate(n = n())                                                      %>% 
-            filter(n  > 3)                                                       %>%
-            group_by(funding, gender)                                            %>% 
-            mutate(N = n())                                                      %>% 
-            distinct(funding, N, gender)                                         %>% 
-            ggplot(aes(x = reorder(funding, -N), y = N, fill = gender)) +
-            geom_col(colour = "black", position = position_dodge2(width = 0.9, preserve = "single")) +
-            theme_bw() + xlab("Funding body") + ylab("Numbers") +
-            geom_text(aes(x = funding, label = N), 
-                      position = position_dodge2(width = 0.9, preserve = "single"), size = 4, vjust = -0.5) +
-            theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0),
-                  axis.text.y = element_text(size = 12)) +
-            scale_fill_brewer(palette = "Set2", name = "Gender stage")
-```
-
-### Listing of funding over the last 5 years
-
-Who has funded your research within the last 5 years?
-
-```{r funding_list, results='asis'}
-
-listOther("Q18")
-
-```
 
 ## Q19 Reserach discipline
 
