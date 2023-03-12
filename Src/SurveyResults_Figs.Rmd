@@ -1135,83 +1135,13 @@ data %>% select(datause, career = Q20, gender = Q21)              %>%
          facet_wrap(~career)
 ```
 
-### Data use by institution
-
-In order to make the diagram less busy only institutions that have more
-than 2 entries are shown.
-
-```{r datause_institution}
-
-data %>% select(num_range("Q2_", 1:2), institution = CleanLocs)              %>%
-         group_by(institution)                                               %>% 
-         mutate(N = n())                                                     %>% 
-         pivot_longer(cols = num_range("Q2_", 1:2), 
-                      names_to = NULL, values_to = "datause")                %>%
-         filter(datause != 0 & !is.na(institution))                          %>% 
-         filter(N > 2)                                                       %>% 
-         group_by(datause, institution)                                      %>% 
-         mutate(per = n()/N)                                                 %>% 
-         filter(per > 0)                                                     %>% 
-         ggplot(aes(x = datause, y = institution, size = per)) + 
-         theme_bw() +
-         geom_point(alpha = 0.25) + xlab("Data use") + ylab("Institutions") + labs(size = "Percent") +
-         scale_size_continuous(labels = percent_format(accuracy = 1)) +
-         theme(axis.text.y = element_text(size = 6)) 
-```
-
-As in the previous diagram but only showing institutions with more than 2 entries.
-
-```{r datause_institution_bar}
-
-data %>% select(num_range("Q2_", 1:2), institution = CleanLocs)              %>%
-         pivot_longer(cols = num_range("Q2_", 1:2), 
-                      names_to = NULL, 
-                      values_to = "datause")                                 %>%
-         filter(datause != 0)                                                %>% 
-         group_by(institution)                                               %>% 
-         filter(n() > 2)                                                     %>% 
-         group_by(datause, institution)                                      %>% 
-         ggplot(aes(x = institution, fill = datause)) + 
-         geom_bar(colour = "black") +
-         theme_bw() +
-         ylab("Numbers") + xlab("Institution") + labs(fill = "Data use") +
-         theme(axis.text.x = element_text(size = 6, angle = -90, vjust = 0.15, hjust=0)) +
-         geom_text(aes(label = after_stat(count)), position = position_stack(),  
-                   stat = "count", vjust = -0.5, size = 2)
-
-```
-
-### Counting combined choices
-
-For each multiple choice replace spaces by "-"s and collapse all the
-non-empty choices and join them with an "\_". So, if an individual only
-chose A then that would only contribute an A, if an individual chose A,
-B and D then that would contribute an A_B\_D then we count all the
-combined choices.
-
-```{r datause_choices}
-
-data %>% select(URN, num_range("Q2_",1:2))                             %>%
-         pivot_longer(cols = starts_with("Q2_"),
-                      names_to = NULL,
-                      values_to = "ds")                                %>%
-         group_by(URN)                                                 %>% 
-         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         distinct(URN, choices)                                        %>% 
-         ungroup()                                                     %>% 
-         select(-URN)                                                  %>% 
-         group_by(choices)                                             %>% 
-         tally()                                                       %>% 
-         arrange(desc(n))                                              %>% 
-         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
-```
 
 
-### Combined plot
+### Fig 13: data reuse
 
 Can produce a plot showing creation and reuse only and creation and reuse. N = 163.
 
-```{r datause_choices_plot}
+```{r Figure13}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, num_range("Q2_", 1:2))                           %>% 
@@ -1239,13 +1169,20 @@ data %>% select(id = URN, num_range("Q2_",1:2))                        %>%
          ggplot(aes(x = choices, y = n, fill = n)) + 
          geom_col(colour = "black") + theme_bw() +
          xlab(my$lab) + ylab("Numbers") + scale_fill_distiller(palette = "Blues", direction = 1) +
-         geom_text(aes(label = paste0(n," (",per,")")), vjust = -0.5, size = 4) + 
+         geom_text(aes(label = paste0(n," (",per,")")), vjust = -0.5, size = 3) + 
          theme(legend.position = "None", axis.text.x = element_text(size = 12)) +
-         scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse"))
+         scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) -> Fig13
+
+# Print the result
+print(Fig13)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure13.png", dpi = 360))
+
 ```
 
 
-### Combined plot by % career stage
+### Fig 15: Combined plot by % career stage
 
 Adding career stage. Percentages may not add to 100% as values that do
 not contribute are not shown.
@@ -1253,7 +1190,7 @@ not contribute are not shown.
 
 Filter out the "Other" and "-" categories.
 
-```{r datause_choices_career_per2}
+```{r Figure15}
 
 data %>% select(URN, num_range("Q2_",1:2), career = Q20)               %>%
          filter(career != "Other" & career != "-")                     %>% 
@@ -1279,9 +1216,16 @@ data %>% select(URN, num_range("Q2_",1:2), career = Q20)               %>%
          xlab("Data use") + ylab("Percent") +
          geom_text(aes(label = per), 
                    position = position_dodge2(width = 0.9, preserve = "single"), 
-                   vjust = -0.5, size = 4) +
+                   vjust = -0.5, size = 3) +
          scale_x_discrete(labels = c("Create", "Create and Reuse", "Reuse")) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
+         scale_fill_brewer(palette = "Set1", name = "Career stage") -> Fig15
+
+# Print the plot
+print(Fig15)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure15.png", dpi = 360))
+
 ```
 
 ### Combined by gender
@@ -1587,13 +1531,15 @@ data %>% select(URN, num_range("ImportantDS_", 1:7))          %>%
 print(Fig10)
 
 # Save the results to file
-ggsave(filename="Figures/Figure10.png", dpi = 360)
+suppressMessages(ggsave(filename="Figures/Figure10.png", dpi = 360))
 
 ```
 
+### Fig 14: important data sources by data use
+
 Looking by data creation/reuse according to Q2.
 
-```{r importantDS_datause}
+```{r Figure14}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, num_range("ImportantDS_", 1:7))           %>% 
@@ -1617,9 +1563,15 @@ data %>% select(URN, num_range("ImportantDS_", 1:7), datause)  %>%
          ggplot(aes(x = reorder(importantDS, -m), y = n, fill = datause)) +
          geom_col(colour = "black") +
          theme_bw() + ylim(0, 33) + 
-         geom_text(aes(label = n), position = position_stack(vjust = 0.5), size = 4) + 
-         theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0, size = 12)) +
-         xlab(my$lab) + ylab("Numbers") + labs(fill = "Data use")
+         geom_text(aes(label = n), position = position_stack(vjust = 0.5), size = 3) + 
+         theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0, size = 10)) +
+         xlab(my$lab) + ylab("Numbers") + labs(fill = "Data use") -> Fig14
+
+# Print the plot
+print(Fig14)
+
+# Save the plot
+suppressMessages(ggsave("Figures/Figure14.png", dpi = 360))
 
 ```
 
