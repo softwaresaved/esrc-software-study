@@ -4,7 +4,7 @@ This is a repository for a UKRI Economic and Social Research Council (ESRC) fund
 
 This is done by:
 
-* Desk research which is examining prior related work and a look at the size of the community by looking at [Gateway to Reserach](https://gtr.ukri.org/) which details work funded by the UK Research Councils (our interest clearly lies with the ESRC) and data from [HESA](https://www.hesa.ac.uk/).
+* Desk research which is examining prior related work and a look at the size of the community by looking at [Gateway to Research](https://gtr.ukri.org/) which details work funded by the UK Research Councils (our interest clearly lies with the ESRC) and data from [HESA](https://www.hesa.ac.uk/).
 * A survey sampling the views and software in the community. The JISC [Online surveys](https://www.onlinesurveys.ac.uk/) was used to this end. A pdf copy of the survey used is available here: [esrc-survey.pdf](Docs/esrc-survey.pdf).
 * A set of interviews with members from the community.
 
