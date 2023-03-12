@@ -1623,7 +1623,7 @@ data %>% select(URN, num_range("ImportantDS_", 1:7), datause)  %>%
 
 ```
 
-### Important data sources by % career
+### Fig 11: Important data sources by % career
 
 ```{r importantDS_career_per}
 
@@ -1646,16 +1646,22 @@ data %>% select(num_range("ImportantDS_", 1:7), career = Q20)  %>%
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() +  scale_y_continuous(labels = percent_format(accuracy = 1)) +
          geom_text(aes(label = per), position = position_dodge2(width = 1.0, preserve = "single"), 
-                   vjust = -0.5, size = 3) +
+                   vjust = -0.5, size = 2) +
          theme(axis.text.x = element_text(angle = -45, hjust=0, size = 8)) +
          xlab("Data sources") + ylab("Percent") +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
+         scale_fill_brewer(palette = "Set1", name = "Career stage") -> Fig11
+
+# Print the plot
+print(Fig11)
+
+# Save the file
+suppressMessages(ggsave("Figures/Figure11.png", dpi = 360))
 
 ```
 
-### Important data sources by % gender
+### Fig 12: Important data sources by % gender
 
-```{r importantDS_gender_per}
+```{r Figure12}
 
 data %>% select(num_range("ImportantDS_", 1:7), gender = Q21)  %>% 
          filter(!(gender %in% lowstatsgender))                 %>% 
@@ -1676,10 +1682,16 @@ data %>% select(num_range("ImportantDS_", 1:7), gender = Q21)  %>%
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() +  scale_y_continuous(labels = percent_format(accuracy = 1)) +
          geom_text(aes(label = per), position = position_dodge2(width = 0.9, preserve = "single"), 
-                   vjust = -0.5, size = 3) +
+                   vjust = -0.5, size = 2) +
          theme(axis.text.x = element_text(angle = -45, hjust=0, size = 8)) +
          xlab("Data sources") + ylab("Percent") +
-         scale_fill_brewer(palette = "Set2", name = "Gender")
+         scale_fill_brewer(palette = "Set2", name = "Gender") -> Fig12
+
+# Print the results to screen
+print(Fig12)
+
+# Save the figure to file
+suppressMessages(ggsave("Figures/Figure12.png", dpi = 360))
 
 ```
 
