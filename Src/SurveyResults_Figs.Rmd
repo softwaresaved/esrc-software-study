@@ -379,7 +379,13 @@ funding <- funding %>% filter(!(URN %in% uids))
 important_software <- important_software %>% filter(!(URN %in% uids))
 data0 <- data0 %>% filter(!(URN %in% uids))
 
+# Make a figures directory if it does not exist
+if(!dir.exists("Figures")){
+  print("Creating a Figures subdirectory.")
+  dir.create("Figures")
 
+}
+  
 ```
 
 ## Process data
