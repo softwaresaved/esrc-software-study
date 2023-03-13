@@ -2204,7 +2204,7 @@ corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 
 ```
 
-### Fig20: data sharing by % career stage
+### Fig 20: data sharing by % career stage
 
 ```{r Figure20}
 
@@ -2243,9 +2243,9 @@ suppressMessages(ggsave("Figures/Figure20.png", dpi = 360))
 
 ```
 
-### Data sharing by % data use
+### Fig 22: data sharing by % data use
 
-```{r sharing_data_datause_per}
+```{r Figure22}
 
 data %>% select(num_range("Q3_", 1:7), datause)                            %>%
         group_by(datause)                                                  %>% 
@@ -2270,8 +2270,15 @@ data %>% select(num_range("Q3_", 1:7), datause)                            %>%
         scale_y_continuous(labels = percent_format(accuracy = 1)) +
         geom_text(aes(x = DataSharing, label = percent(per, accuracy = 1)), vjust = -0.5,
                       position = position_dodge2(width = 0.9, preserve = "single"), 
-                      colour = "black", size = 4) + 
-        scale_fill_brewer(palette = "PuRd", name = "Data use")
+                      colour = "black", size = 3) + 
+        scale_fill_brewer(palette = "PuRd", name = "Data use") -> Figure22
+
+# Plot the diagram
+print(Figure22)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure22.png", dpi = 360))
+
 ```
 
 ### Data sharing by % data use and career
@@ -2411,26 +2418,6 @@ suppressMessages(ggsave("Figures/Figure21.png", dpi = 360))
 
 ```
 
-### Counting combined choices
-
-```{r reason4sharing_choices}
-
-data %>% select(URN, num_range("Q3_", 1:7))                          %>%
-         pivot_longer(cols = num_range("Q3_", 1:7),
-                      names_to = NULL,
-                      values_to = "DataSharing")                                %>%
-         filter(DataSharing != 0)                                               %>%  
-         group_by(URN)                                                  %>% 
-         mutate(choices = paste0(gsub(" ","-", DataSharing), collapse = "_"))   %>% 
-         distinct(URN, choices)                                         %>% 
-         ungroup()                                                     %>% 
-         select(-URN)                                                   %>% 
-         group_by(choices)                                             %>% 
-         tally()                                                       %>% 
-         filter(n > 1)                                                 %>% 
-         arrange(desc(n))                                              %>% 
-         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
-```
 
 ### Sharing data and sharing s/w
 
@@ -2451,15 +2438,6 @@ data %>% select(URN, sharesw, num_range("Q3_", 1:7))        %>%
          ylab("Data sharing") + xlab("Software sharing") + 
          scale_fill_distiller(palette = "Blues", direction = 1) +
          geom_text(aes(label = n), size = 5)
-```
-
-
-### Other ways of sharing data
-
-```{r other_sharing_data, results = 'asis'}
-
-listOther("Q3_a")
-
 ```
 
 
