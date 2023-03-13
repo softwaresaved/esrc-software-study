@@ -2206,7 +2206,7 @@ corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 
 ### Fig20: data sharing by % career stage
 
-```{r sharing_data_career_per2}
+```{r Figure20}
 
 data %>% select(num_range("Q3_", 1:7), career = "Q20")                     %>%
         group_by(career)                                                   %>% 
@@ -2371,9 +2371,9 @@ data %>% select(num_range("Q3_", 1:7), gender = Q21)                       %>%
         scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
-### Sharing by gender and career
+### Fig 21: sharing by gender and career
 
-```{r sharing_data_gender_career}
+```{r Figure21}
 
 data %>% select(num_range("Q3_", 1:7), gender = Q21, career = Q20)         %>%
         filter(!(gender %in% lowstatsgender))                              %>% 
@@ -2399,9 +2399,16 @@ data %>% select(num_range("Q3_", 1:7), gender = Q21, career = Q20)         %>%
         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.42)) +
         geom_text(aes(x = DataSharing, label = percent(per, accuracy = 1)), vjust = -0.5,
                       position = position_dodge2(width = 0.9, preserve = "single"), 
-                      colour = "black", size = 4) + 
+                      colour = "black", size = 3) + 
         scale_fill_brewer(palette = "Set2", name = "Gender") + 
-        facet_wrap( ~ career)
+        facet_wrap( ~ career) -> Figure21
+
+# Print the plot
+print(Figure21)
+
+# Save the plot
+suppressMessages(ggsave("Figures/Figure21.png", dpi = 360))
+
 ```
 
 ### Counting combined choices
