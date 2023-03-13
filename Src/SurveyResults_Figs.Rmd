@@ -1970,81 +1970,12 @@ data %>% select(num_range("Q2_b_",1:6), datause, career = Q20)  %>%
                legend.text=element_text(size = 6)) +
         facet_wrap(~ career)
 ```
-### Reusing data by research discipline
 
-```{r datareuse_discipline}
-
-# Q2_b - date source for reuse
-# Q19 - research discipline
-data %>% select(URN, num_range("Q2_b_",1:6), num_range("Q19_", 1:22))        %>%
-         pivot_longer(cols = num_range("Q19_", 1:22),
-                      names_to = NULL,
-                      values_to = "disciplines")                             %>% 
-         filter(disciplines != 0)                                            %>% 
-         group_by(URN)                                                       %>% 
-         mutate(nn = n())                                                    %>% 
-         distinct(across())                                                  %>% 
-         pivot_longer(cols = starts_with("Q2_b_"),
-                      names_to = NULL,
-                      values_to = "ds")                                      %>%
-         filter(ds != 0)                                                     %>%
-         distinct(across())                                                  %>% 
-         ungroup()                                                           %>% 
-         select(-URN)                                                        %>% 
-         group_by(ds)                                                        %>% 
-         mutate(m = n())                                                     %>% 
-         group_by(ds, disciplines)                                           %>%
-         mutate(n = round(sum(1/nn) + 0.05, 1))                              %>% 
-         ggplot(aes(x = reorder(ds, -m), y = disciplines, fill = n)) + 
-         geom_tile(colour = "black") + 
-         theme_bw() +
-         xlab("Data source") + ylab("Research discipline") +
-         theme(axis.text.y = element_text(size = 8)) + 
-         geom_text(aes(label = n), size = 3, colour = "black")  +
-         scale_fill_distiller(palette = "Blues", direction = 1) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10),
-               legend.position = "None") 
-```
- Percentages work vertically (across a data source).
- 
-```{r datareuse_discipline_hor}
-
-# Q2_b - date source for reuse
-# Q19 - research discipline
-data %>% select(URN, num_range("Q2_b_",1:6), num_range("Q19_", 1:22))        %>%
-         pivot_longer(cols = num_range("Q19_", 1:22),
-                      names_to = NULL,
-                      values_to = "disciplines")                             %>% 
-         filter(disciplines != 0)                                            %>% 
-         group_by(URN)                                                       %>% 
-         mutate(nn = n())                                                    %>% 
-         distinct(across())                                                  %>% 
-         pivot_longer(cols = starts_with("Q2_b_"),
-                      names_to = NULL,
-                      values_to = "ds")                                      %>%
-         filter(ds != 0)                                                     %>%
-         distinct(across())                                                  %>% 
-         ungroup()                                                           %>% 
-         select(-URN)                                                        %>%
-         group_by(ds)                                                        %>%
-         mutate(NN = sum(1/nn))                                              %>% 
-         mutate(m = n())                                                     %>% 
-         group_by(ds, disciplines)                                           %>%
-         mutate(n = sum(1/nn) )                                              %>% 
-         ggplot(aes(x = reorder(ds, -m), y = disciplines, fill = n/NN)) + 
-         geom_tile(colour = "black") + 
-         theme_bw() +
-         xlab("Data source") + ylab("Research discipline") +
-         theme(axis.text.y = element_text(size = 8)) + 
-         geom_text(aes(label = percent(n/NN, accuracy = 0.1)), size = 4, colour = "black")  +
-         scale_fill_distiller(palette = "Blues", direction = 1) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10),
-               legend.position = "None") 
-```
+### Fig 18: reusing data by research discipline
 
 Percentages work horizontally (by research discipline)
 
-```{r datareuse_discipline_hor2}
+```{r Figure18}
 
 # Q2_b - date source for reuse
 # Q19 - research discipline
@@ -2069,15 +2000,22 @@ data %>% select(URN, num_range("Q2_b_",1:6), num_range("Q19_", 1:22))        %>%
          group_by(ds, disciplines)                                           %>%
          mutate(n = sum(1/nn))                                               %>% 
          distinct(across()) %>% 
-         ggplot(aes(x = reorder(ds, -m), y = disciplines, fill = n/NN)) + 
+         ggplot(aes(x = reorder(ds, m), y = disciplines, fill = n/NN)) + 
          geom_tile(colour = "black") + 
          theme_bw() +
          xlab("Data source") + ylab("Research discipline") +
          theme(axis.text.y = element_text(size = 8)) + 
-         geom_text(aes(label = percent(n/NN, accuracy = 0.1)), size = 4, colour = "black")  +
+         geom_text(aes(label = percent(n/NN, accuracy = 0.1)), size = 3, colour = "black")  +
          scale_fill_distiller(palette = "Blues", direction = 1) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10),
-               legend.position = "None") 
+         theme(axis.text.x = element_text(angle = -70, vjust = 0.5, hjust=0, size = 8),
+               legend.position = "None") -> Figure18
+
+# Print the plot
+print(Figure18)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure18.png", dpi = 360))
+
 ```
 
 ### Reusing existing data by Institution
