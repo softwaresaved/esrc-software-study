@@ -1710,9 +1710,9 @@ listOther("Q2_a")
 
 If you re-use existing data, where do you find these?
 
-### Reusing existing data responses
+### Fig16: Reusing existing data responses
 
-```{r data_sources}
+```{r Figure16}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, num_range("Q2_b_",1:6))  %>% 
@@ -1735,10 +1735,17 @@ data %>% select(URN, num_range("Q2_b_",1:6))            %>%
          geom_bar(colour = "black") +
          theme_bw() + ylab("Numbers") + scale_fill_distiller(palette = "Blues", direction = 1) +
          geom_text(aes(label = paste0(n," (", per, ")")), 
-                   stat = "count", vjust = -0.35, size = 4)  +
-         xlab(my$lab) + ylim(0, 75) +
-         theme(axis.text.x = element_text(angle = -50, vjust = 0.5, hjust=0, size = 12)) +
-         theme(legend.position = "none")
+                   stat = "count", vjust = -0.35, size = 3)  +
+         xlab(my$lab) + ylim(0, 80) +
+         theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0, size = 8)) +
+         theme(legend.position = "none") -> Fig16
+
+# Print the plot
+print(Fig16)
+
+# Save the plot
+suppressMessages(ggsave("Figures/Figure16.png", dpi = 360))
+
 ```
 
 ### Choice correlations
@@ -1764,32 +1771,10 @@ corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 
 ```
 
-### Reusing existing data by career
-
-```{r data_sources_career}
-
-data %>% select(num_range("Q2_b_",1:6), career = Q20)      %>%
-         filter(!(career %in% c("-", "Other")))                %>% 
-         pivot_longer(cols = starts_with("Q2_b_"),
-                      names_to = NULL,
-                      values_to = "ds")                    %>%
-         filter(ds != 0)                                   %>%
-         group_by(ds, career)                              %>% 
-         mutate(n = n())                                   %>% 
-         ggplot(aes(x = reorder(ds, -n), fill = career)) + 
-         geom_bar(colour = "black") +
-         theme_bw() + ylab("Numbers") +
-         geom_text(aes(label = after_stat(count)), position = position_stack(0.5), stat = "count", size = 3)  +
-         xlab("Data sources") + 
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 8),
-               legend.text=element_text(size = 6)) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
-
-### Reusing existing data by % career stage
+### Fig17: Reusing existing data by % career stage
 
 
-```{r data_sources_career_per2}
+```{r Figure17}
 
 data %>% select(num_range("Q2_b_",1:6), career = Q20)      %>%
          group_by(career)                                  %>% 
@@ -1812,11 +1797,18 @@ data %>% select(num_range("Q2_b_",1:6), career = Q20)      %>%
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          geom_text(aes(label = percent(per, accuracy = 1)), 
                    position = position_dodge2(width = 0.9, preserve = "single"), 
-                   vjust = -0.35, size = 4)  +
+                   vjust = -0.35, size = 2)  +
          xlab("Data sources") + 
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10),
                legend.text=element_text(size = 6)) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
+         scale_fill_brewer(palette = "Set1", name = "Career stage") -> Fig17
+
+# Print the plot to screen
+print(Fig17)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure17.png", dpi = 360))
+
 ```
 
 ### Reusing existing data by gender
