@@ -2581,42 +2581,13 @@ data %>% select(num_range("Q4_",1:26), datause)                              %>%
          scale_fill_brewer(palette = "PuRd", name = "Data use") 
 ```
 
-### Software by gender
+### Fig 26: software by gender
 
 Removing low stat components and only showing entries with more than 20
 entries.
 
-```{r sw_used_gender_per}
 
-data %>% select(num_range("Q4_",1:26), gender = Q21)                         %>%
-         group_by(gender)                                                    %>% 
-         mutate(N = n())                                                     %>%
-         pivot_longer(cols = starts_with("Q4"), 
-                      names_to = NULL,
-                      values_to = "software")                                %>%
-         filter(software != 0)                                               %>% 
-         group_by(software)                                                  %>% 
-         mutate(M = n())                                                     %>% 
-         filter(!(gender %in% lowstatsgender))                               %>% 
-         filter(M > 25)                                                      %>%
-         group_by(software,gender)                                           %>%
-         mutate(per = n()/N)                                                 %>% 
-         distinct(software, gender, per, M)                                  %>% 
-         ggplot(aes(x = reorder(software, -M), y = per, fill = gender)) +
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
-                  colour = "black") +
-         theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.83)) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.15, hjust=0, size = 10),
-               legend.text=element_text(size = 8)) +
-         geom_text(aes(label = percent(per, accuracy = 1)), 
-                   position = position_dodge2(width = 0.9, preserve = "single"), 
-                   size = 4, vjust = -0.5) +
-         ylab("Percent") + xlab("Software used") + 
-         scale_fill_brewer(palette = "Set2", name = "Gender") 
-```
-
-```{r sw_used_gender_career_per}
+```{r Figure26}
 
 data %>% select(num_range("Q4_",1:26), career = Q20, gender = Q21)                         %>%
          filter(!(career %in% c("-","Other"))) %>% 
@@ -2637,13 +2608,20 @@ data %>% select(num_range("Q4_",1:26), career = Q20, gender = Q21)              
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
                   colour = "black") +
          theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.35)) +
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.36)) +
          theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0, size = 8),
                legend.text=element_text(size = 8)) +
          geom_text(aes(label = percent(per, accuracy = 1)), position = position_dodge2(width = 0.9, preserve = "single"), 
-                   size = 4, vjust = -0.5) +
+                   size = 2, vjust = -0.5) +
          ylab("Percent") + xlab("Software used") + 
-         scale_fill_brewer(palette = "Set2", name = "Gender") + facet_wrap(~career)
+         scale_fill_brewer(palette = "Set2", name = "Gender") + facet_wrap(~career) -> Fig26
+
+# Print file
+print(Fig26)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure26.png", dpi = 360))
+
 ```
 
 ### Software used by discipline
@@ -2760,29 +2738,6 @@ data %>% select(URN, num_range("Q4_",1:26))                 %>%
          # arrange(desc(N))
 ```
 
-### Other software used
-
-```{r other_software_used_cleaned, results = 'asis'}
-
-aa <- read_csv("../Data/q4a.csv", show_col_types = FALSE)
-
-aa  %>%  select(URN, num_range("OtherSw_", 1:13))            %>% 
-         pivot_longer(cols = num_range("OtherSw_", 1:13),
-                         names_to = NULL,
-                         values_to="othersw")                %>%
-        filter(!is.na(othersw))                              %>% 
-        group_by(othersw)                                    %>%
-        tally()                                              %>% 
-        arrange(desc(n))                                     %>% 
-        kbl(format="pipe", align = c("l","r"), col.names = c("Other software used", "Numbers"))
-
-```
-
-```{r other_software_used, results = 'asis'}
-
-listOther("Q4_a")
-
-```
 
 ## Q5 Most important software
 
