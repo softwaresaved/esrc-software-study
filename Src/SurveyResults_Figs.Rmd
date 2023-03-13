@@ -2146,9 +2146,9 @@ suppressMessages(ggsave("Figures/Figure19.png", dpi = 360))
 
 ```
 
-### Response distribution and ESRC funding
+### Fig 23: response distribution and ESRC funding
 
-```{r sharing_data_esrc}
+```{r Figure23}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, num_range("Q3_", 1:7))                           %>% 
@@ -2174,10 +2174,16 @@ data %>% select(URN, num_range("Q3_", 1:7), esrcfunding)                        
          geom_col(colour = "black", position = position_dodge2(width = 0.9, preserve = "single")) + 
          theme_bw() + 
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12)) +
-         xlab(my$lab) + ylab("Numbers") + ylim(0, 56) +
+         xlab(my$lab) + ylab("Numbers") + ylim(0, 60) +
          geom_text(aes(label = paste0(n, "\n(", per,")")),position = position_dodge2(width = 0.9, preserve = "single"), 
-                   vjust = -0.25, size = 3) +
-         scale_fill_manual(name = "ESRC funding", labels = c("no-ESRC funding","ESRC funding", "Unknown"), values = c("red", "green","blue"))
+                   vjust = -0.25, size = 2) +
+         scale_fill_manual(name = "ESRC funding", labels = c("no-ESRC funding","ESRC funding", "Unknown"), values = c("red", "green","blue")) -> Figure23
+
+# Print the plot
+print(Figure23)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure23.png", dpi = 360))
           
 ```
 ### Choice correlations
@@ -2445,9 +2451,9 @@ data %>% select(URN, sharesw, num_range("Q3_", 1:7))        %>%
 
 What software do you use in your research?
 
-### Software used in research chart
+### Fig 24: software used in research chart
 
-```{r sw_used}
+```{r Figure24}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, num_range("Q4_",1:26))  %>% 
@@ -2468,10 +2474,17 @@ data %>% select(URN, num_range("Q4_",1:26))                         %>%
          distinct(software, n, N)                                   %>% 
          ggplot(aes(x = reorder(software,-n), y = n, fill = n)) +
          geom_col(colour = "black") +
-         theme_bw() + ylim(0, 134) + scale_fill_distiller(palette = "Blues", direction = 1) +
+         theme_bw() + ylim(0, 140) + scale_fill_distiller(palette = "Blues", direction = 1) +
          ylab("Numbers") + xlab(my$lab) +
-         geom_text(aes(label = paste0(n,"\n(", percent(n/N, accuracy = 0.1),")")), vjust = -0.5, size = 3) +
-         theme(axis.text.x = element_text(angle = 60, size = 12, hjust = 1.0), legend.position = "none")
+         geom_text(aes(label = paste0(n,"\n(", percent(n/N, accuracy = 0.1),")")), vjust = -0.5, size = 2) +
+         theme(axis.text.x = element_text(angle = 60, size = 10, hjust = 1.0), legend.position = "none") -> Figure24
+
+# Print the plot
+print(Figure24)
+
+# Save the plot to a file
+suppressMessages(ggsave("Figures/Figure24.png", dpi = 360))
+
 ```
 
 ### Choice correlations
