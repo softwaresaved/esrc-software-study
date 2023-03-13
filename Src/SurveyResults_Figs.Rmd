@@ -2487,14 +2487,14 @@ suppressMessages(ggsave("Figures/Figure24.png", dpi = 360))
 
 ```
 
-### Choice correlations
+### Fig 27: choice correlations
 
 My interpretation of this graph is that obtuse angles are negatively
 correlated, acute are positively correlated, circles are not correlated.
 The thinner the ellipse the stronger the correlation or anti
 correlation.
 
-```{r q4_correlations}
+```{r Figure27}
 
 data0 %>% select(num_range("Q4_",1:26)) -> q  
 names(q) <- software
@@ -2504,9 +2504,9 @@ q <- apply(q, 2, function(x) as.integer(x))
 my_colors <- brewer.pal(5, "Spectral")
 my_colors <- colorRampPalette(my_colors)(100)
 
-#plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
+# Had to save this manually by pasting in the console and using the RStudio saving mechanism.
+corrplot(cor(q), method="circle", type= "lower", diag = FALSE, number.cex = 5)
 
-corrplot(cor(q), method="circle", type= "lower", diag = FALSE, number.cex = 6)
 
 ```
 
