@@ -2624,62 +2624,10 @@ suppressMessages(ggsave("Figures/Figure26.png", dpi = 360))
 
 ```
 
-### Software used by discipline
+### Fig 28: software used by discipline
 
-Research discipline counts have been normalised.
 
-```{r software_discipline}
-
-data %>% select(URN, num_range("Q4_",1:26), num_range("Q19_", 1:22))         %>%
-         pivot_longer(cols = starts_with("Q4"),
-                      names_to = NULL,
-                      values_to = "software")                                %>%
-          pivot_longer(cols = num_range("Q19_", 1:22),
-                       names_to = NULL,
-                      values_to = "discipline")                              %>%
-         filter(software != 0 & discipline != 0)                             %>%
-         group_by(URN)                                                       %>% 
-         mutate(nn = n())                                                    %>% 
-         group_by(software, discipline)                                      %>% 
-         mutate(n = round(sum(1/nn), 1))                                     %>%   
-         distinct(software, discipline, n)                                   %>% 
-         ggplot(aes(x = software, y = discipline, size = n)) +
-         geom_point(colour = "black", alpha = 0.25) +
-         theme_bw() +
-         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0), 
-               legend.text=element_text(size = 8)) +
-         ylab("Discipline") + xlab("Software used") + labs(size = "Numbers")
-```
-
-```{r software_discipline2}
-
-data %>% select(URN, num_range("Q4_",1:26), num_range("Q19_", 1:22))         %>%
-         pivot_longer(cols = starts_with("Q4"),
-                      names_to = NULL,
-                      values_to = "software")                                %>%
-          pivot_longer(cols = num_range("Q19_", 1:22),
-                       names_to = NULL,
-                      values_to = "discipline")                              %>%
-         filter(software != 0 & discipline != 0)                             %>%
-         group_by(software)                                                  %>% 
-         mutate(m = n())                                                     %>% 
-         group_by(URN)                                                       %>% 
-         mutate(nn = n())                                                    %>% 
-         group_by(software, discipline)                                      %>% 
-         mutate(n = round(sum(1/nn) + 0.05, 1))                              %>%   
-         distinct(across())                                   %>% 
-         ggplot(aes(x = reorder(software, -m), y = discipline, fill = n)) +
-         geom_tile(colour = "black") + 
-         scale_fill_distiller(palette = "Blues", direction = 1) +
-         theme_bw() +
-         theme(legend.text=element_text(size = 8)) +
-         geom_text(aes(label = n), colour = "black", size = 4) +
-         theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0),
-               legend.position = "None") +
-         ylab("Discipline") + xlab("Software used") + labs(fill = "Numbers")
-```
-
-```{r software_discipline2_per}
+```{r Figure28}
 
 data %>% select(URN, num_range("Q4_",1:26), num_range("Q19_", 1:22))         %>%
          pivot_longer(cols = starts_with("Q4"),
@@ -2703,10 +2651,17 @@ data %>% select(URN, num_range("Q4_",1:26), num_range("Q19_", 1:22))         %>%
          scale_fill_distiller(palette = "Blues", direction = 1) +
          theme_bw() +
          theme(legend.text=element_text(size = 8)) +
-         geom_text(aes(label = percent(n, accuracy = 0.1)), colour = "black", size = 3) +
+         geom_text(aes(label = percent(n, accuracy = 0.1)), colour = "black", size = 2) +
          theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0),
                legend.position = "None") +
-         ylab("Research discipline") + xlab("Software used")
+         ylab("Research discipline") + xlab("Software used") -> Fig28
+
+# Print the plot
+print(Fig28)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure28.png", dpi = 360))
+
 ```
 
 ```{r software_discipline_test, results = 'asis'}
