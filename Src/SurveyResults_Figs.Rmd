@@ -2108,9 +2108,9 @@ listOther("Q2_c")
 
 How do you share your data?
 
-### Response distribution
+### Fig 19: response distribution
 
-```{r sharing_data}
+```{r Figure19}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, num_range("Q3_", 1:7))                           %>% 
@@ -2136,7 +2136,14 @@ data %>% select(URN, num_range("Q3_", 1:7))                           %>%
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12)) +
          xlab(my$lab) + ylab("Numbers") + ylim(0,83) +
          geom_text(aes(label = paste0(n, " (", per,")")), vjust = -0.5, size = 4) +
-         theme(legend.position = "none") 
+         theme(legend.position = "none") -> Figure19
+
+# Print the plot
+print (Figure19)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure19.png", dpi = 360))
+
 ```
 
 ### Response distribution and ESRC funding
