@@ -2664,41 +2664,13 @@ suppressMessages(ggsave("Figures/Figure28.png", dpi = 360))
 
 ```
 
-```{r software_discipline_test, results = 'asis'}
-
-data %>% select(URN, num_range("Q4_",1:26))                 %>%
-         pivot_longer(cols = starts_with("Q4"),
-                      names_to = NULL,
-                      values_to = "software")              %>% 
-         filter(software != 0) %>%
-         distinct(URN, software) %>% 
-         left_join(
-           data %>% select(URN, num_range("Q19_", 1:22) )          %>% 
-                    pivot_longer(cols = num_range("Q19_", 1:22),
-                                 names_to = NULL,
-                                 values_to = "discipline")          %>%
-                    filter(discipline != 0)                        %>%
-                   distinct(URN,  discipline),
-                   by = "URN"
-         )                                                         %>% 
-         distinct(URN, software, discipline)                       %>% 
-         group_by(software, discipline)                            %>% 
-         mutate(n = n())                                           %>%   
-         distinct(software, discipline, n)                         %>%
-         arrange(desc(n))                                          %>% 
-         kbl(format="pipe", align = c("l","l", "r"), col.names = c("Software", "Discipline", "Count"))
-
-         # group_by(software) %>% 
-         # summarise(N = sum(n)) %>% 
-         # arrange(desc(N))
-```
 
 
 ## Q5 Most important software
 
 What software(s) is/are most important to your work?
 
-### Most important software
+### Fig 29: most important software
 
 This chart is derived from the processed data input by the
 interviewees - an interviewee may have input more than one choice - each
@@ -2706,7 +2678,7 @@ of these is counted as an integral choice (could normalise so that if an
 interviewee put in N choices each would contribute 1/N to the count).
 Only values with more than 2 entries are shown.
 
-```{r important_sw_bar}
+```{r Figure29}
 
 # Calculate an x label with the folks that filled in this question.
 important_software  %>% select(URN, starts_with("Q5"))  %>% 
@@ -2732,9 +2704,15 @@ important_software %>% select(URN, starts_with("Q5"))        %>%
                        theme_bw() +
                        theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
                        geom_text(aes(x = software, label = paste0(n, "\n(", percent(n/N, accuracy = 1),")")), 
-                                 vjust = -0.5, size = 4) +
-                       ylab("Numbers") + xlab(my$lab) + ylim(0, 60) +
-                       theme(axis.text.x = element_text(size = 12), legend.position = "None")  
+                                 vjust = -0.5, size = 3) +
+                       ylab("Numbers") + xlab(my$lab) + ylim(0, 63) +
+                       theme(axis.text.x = element_text(size = 8), legend.position = "None")  -> Fig29
+
+# Print the plot to screen
+print(Fig29)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure29.png", dpi = 360))
 
 ```
 
