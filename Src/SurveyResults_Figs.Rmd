@@ -1970,12 +1970,12 @@ suppressMessages(ggsave("Figures/Figure29.png", dpi = 360))
 
 ```
 
-### Software used by % career stage
+### Fig 30: software used by % career stage
 
 Only show software that has more than 5 entries.
-Removing "Other" and "-".
 
-```{r important_sw_bar_career_per2}
+
+```{r Figure30}
 
 bind_cols(data["Q20"], important_software)                        %>% 
                        select(starts_with("Q5"), career = Q20)    %>%
@@ -2003,47 +2003,11 @@ bind_cols(data["Q20"], important_software)                        %>%
                                  size = 3) +
                        ylab("Percentage") + xlab("Most important software") +
                        scale_fill_brewer(palette = "Set1", name = "Career stage") +
-                       theme(axis.text.x = element_text(angle = -45, hjust = 0, size = 12),
+                       theme(axis.text.x = element_text(angle = -45, hjust = 0, size = 10),
                              legend.text=element_text(size = 8))  
 
 ```
 
-### Important software by gender
-
-```{r important_sw_bar_gender_per2}
-
-bind_cols(data["Q21"], important_software)                        %>% 
-                       select(starts_with("Q5"), gender = Q21)    %>%
-                       filter(!(gender %in% lowstatsgender))      %>% 
-                       group_by(gender)                           %>% 
-                       mutate(N = n())                            %>%
-                       pivot_longer(cols =  starts_with("Q5"),
-                                    names_to = NULL,
-                                    values_to = "software")       %>%
-                       filter(!is.na(software))                   %>%
-                       group_by(software)                         %>%
-                       mutate(M = n())                            %>% 
-                       filter(M > 5)                              %>% 
-                       group_by(gender, software)                 %>%
-                       mutate(n = n())                            %>%
-                       mutate(per = n/N)                          %>% 
-                       distinct(gender, software, n, N, per, M)   %>% 
-                       ggplot(aes(x = reorder(software, -M), y = per, fill = gender)) +
-                       geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
-                       scale_y_continuous(labels = percent_format(accuracy = 1)) +
-                       theme_bw() +
-                       theme(axis.text.x = element_text(angle = -90, vjust = 0.5,
-                                                        hjust=0)) +
-                       geom_text(aes(x = software, y = per, 
-                                     label = percent(per, accuracy = 0.1)), vjust = -0.5,
-                                 position = position_dodge2(width = 0.9, preserve = "single"),
-                                 size = 3) +
-                       ylab("Percentage") + xlab("Most important software") +
-                       scale_fill_brewer(palette = "Set2", name = "Gender") +
-                       theme(axis.text.x = element_text(size = 8),
-                             legend.text=element_text(size = 6))  
-
-```
 
 ### Important software by career and gender
 
@@ -2084,24 +2048,24 @@ bind_cols(data[, c("Q20", "Q21")], important_software)                         %
 
 ```
 
-### Important software by research discipline
+### Fig 32: important software by research discipline
 
-```{r imporant_sw_rd}
+```{r Figure32}
 
-important_software %>% left_join(data, by = "URN")                                 %>% 
-                       select(URN, starts_with("Q5_"), num_range("Q19_", 1:22))    %>% 
+important_software %>% left_join(data, by = "URN")                                  %>% 
+                       select(URN, starts_with("Q5_"), num_range("Q19_", 1:22))     %>% 
                        pivot_longer(cols =  starts_with("Q5_"),
                                     names_to = NULL,
                                     values_to = "software")                         %>%
                       filter(!is.na(software))                                      %>%
                       group_by(software)                                            %>% 
                       mutate(m = n())                                               %>% 
+                      distinct()                                                    %>% 
+                      pivot_longer(cols = num_range("Q19_", 1:22),
+                                   names_to = NULL,
+                                   values_to = "disciplines")                       %>%
+                      filter(disciplines != 0)                                      %>% 
                       distinct(across())                                            %>% 
-                       pivot_longer(cols = num_range("Q19_", 1:22),
-                                    names_to = NULL,
-                                    values_to = "disciplines")                     %>%
-                       filter(disciplines != 0)                                    %>% 
-                       distinct(across())                                          %>% 
                       group_by(disciplines)                                         %>% 
                       mutate(N = n())                                               %>% 
                       group_by(URN)                                                 %>% 
@@ -2117,7 +2081,14 @@ important_software %>% left_join(data, by = "URN")                              
                       geom_text(aes(label = percent(n/N + 0.005, accuracy = 0.1)), colour = "black", size = 3) +
                       theme(axis.text.x = element_text(angle = -90, vjust = 0.15, hjust=0),
                             legend.position = "None") +
-                      ylab("Research discipline") + xlab("Software used")
+                      ylab("Research discipline") + xlab("Software used") -> Fig32
+
+# Print the diagram to screen
+print(Fig32)
+
+# Save the diagram to file
+suppressMessages(ggsave("Figures/Figure32.png", dpi = 360))
+
 ```
 
 
