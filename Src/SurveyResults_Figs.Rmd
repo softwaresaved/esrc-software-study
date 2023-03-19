@@ -3277,9 +3277,9 @@ data %>% select("Q9", career = Q20)             %>%
 
 ```
 
-### Responses by % career stage
+### Fig 48: responses by % career stage
 
-```{r develop_sw_career_per2}
+```{r Figure48}
 
 data %>% select(Q9, career = Q20)                  %>%
          filter(!is.na(Q9))                        %>% 
@@ -3299,8 +3299,15 @@ data %>% select(Q9, career = Q20)                  %>%
          xlab("Do you develop software?") + ylab("Percent") +
          geom_text(aes(label = percent(per, accuracy = 1)),
                    position = position_dodge2(width = 0.9, preserve = "single"),  
-                   vjust = -0.5, size = 4) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
+                   vjust = -0.5, size = 3) +
+         scale_fill_brewer(palette = "Set1", name = "Career stage") -> Fig48
+
+# Print the plot to screen
+print(Fig48)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure48.png", dpi = 360))
+
 ```
 
 ### Responses by % gender
@@ -3328,9 +3335,9 @@ data %>% select(Q9, gender = Q21)                  %>%
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
-### Responses by % gender and career
+### Fig 49: responses by % gender and career
 
-```{r develop_sw_gender_career}
+```{r Figure49}
 
 data %>% select(Q9, career = Q20, gender = Q21)    %>%
          filter(!is.na(Q9))                        %>% 
@@ -3346,13 +3353,20 @@ data %>% select(Q9, career = Q20, gender = Q21)    %>%
          ggplot(aes(x = reorder(Q9, -M), y = per, fill = gender)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.4)) +
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.42)) +
          xlab("Do you develop software?") + ylab("Percent") +
          geom_text(aes(label = percent(per, accuracy = 0.1)),
                    position = position_dodge2(width = 0.9, preserve = "single"),  
-                   vjust = -0.5, size = 4) +
+                   vjust = -0.5, size = 3) +
          scale_fill_brewer(palette = "Set2", name = "Gender") +
-         facet_wrap(~ career)
+         facet_wrap(~ career) -> Fig49
+
+# Print the plot to screen
+print(Fig49)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure49.png", dpi = 360))
+
 ```
 
 ### Develop software by discipline
