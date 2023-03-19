@@ -2128,31 +2128,7 @@ suppressMessages(ggsave("Figures/Figure36.png", dpi = 360))
 
 ```
 
-### OS by career stage
-
-```{r use_os_career}
-
-data %>% select(Q6, career = "Q20")             %>%
-         filter(!(career %in% c("-", "Other"))) %>% 
-         filter(Q6 != "-")                      %>% 
-         group_by(Q6)                           %>% 
-         mutate(N = n())                        %>% 
-         group_by(Q6, career)                   %>% 
-         mutate(n = n())                        %>% 
-         ggplot(aes(x = reorder(Q6, -N), fill = career)) + 
-         geom_bar(colour = "black") + 
-         theme_bw() +
-         xlab("Use of Open Source") + 
-         ylab("Numbers") +
-         geom_text(aes(x = Q6, label = n), position = position_stack(vjust = 0.5), 
-                                 stat = "count", size = 3) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage") +
-         theme(axis.text.x = element_text(size = 8),
-               legend.text=element_text(size = 6))  
-
-```
-
-### Fig37: OS by % career stage
+### Fig 37: OS by % career stage
 
 ```{r Figure37}
 
@@ -2642,99 +2618,14 @@ suppressMessages(ggsave("Figures/Figure42.png", dpi = 360))
 
 ```
 
-Showing numbers instead of percentages.
-
-```{r reason4os_gender_car_num}
-
-data %>% select(starts_with("Q6_a"), career = Q20, gender = Q21)   %>%
-         filter(!(gender %in% lowstatsgender))                     %>% 
-         filter(!(career %in% c("-","Other")))                     %>% 
-         group_by(gender)                                          %>% 
-         mutate(N = n())                                           %>% 
-         pivot_longer(cols = starts_with("Q6_a"),
-                      names_to = NULL,
-                      values_to = "UseOS")                         %>%
-         filter(UseOS != 0)                                        %>%
-         group_by(UseOS)                                           %>% 
-         mutate(M = n())                                           %>% 
-         group_by(UseOS, gender, career)                           %>% 
-         mutate(n = n())                                           %>%
-         distinct(UseOS, gender, n, M, career)                     %>% 
-         ggplot(aes(x = reorder(UseOS, -M), y = n, fill = gender)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") + 
-         theme_bw() + ylim(0, 18) +
-         #scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         geom_text(aes(label = n), 
-                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 4) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         xlab("Reasons for using Open Source") + ylab("Percentage") +
-         scale_fill_brewer(palette = "Set2", name = "Gender") + facet_wrap(~career)
-```
-
-Tabulate aggregates.
-
-```{r os_num_gender}
-
-# Temp resassignment
-careero <- career
-
-data %>% select(URN, starts_with("Q6_a"), career = Q20, gender = Q21)      %>%
-         filter(!(gender %in% lowstatsgender))                             %>% 
-         filter(!(career %in% c("-","Other")))                             %>% 
-         group_by(gender)                                                  %>% 
-         mutate(N = n())                                                   %>% 
-         group_by(gender, career)                                          %>% 
-         mutate(nn = n())                                                  %>% 
-         pivot_longer(cols = starts_with("Q6_a"),
-                      names_to = NULL,
-                      values_to = "UseOS")                                 %>%
-         filter(UseOS != 0)                                                %>%
-         group_by(gender, career)                                          %>% 
-         mutate(n = n_distinct(URN))                                       %>% 
-         mutate(career = factor(career, ordered = TRUE, levels = careero)) %>% 
-         mutate(p = percent(n/nn, accuracy = 0.1))                         %>% 
-         distinct(career, gender, n, N, nn, p)                             %>% 
-         arrange(gender, career)                                           %>% 
-         kbl(format = "pipe", 
-             col.names = c("Career stage", "Gender", "Gender Tot","Gender in career stage", "Answered", "Percent"))
-```
-
-
-### Counting combined choices
-
-For each multiple choice replace spaces by "-"s and collapse all the
-non-empty choices and join them with an "\_". So, if an individual only
-chose A then that would only contribute an A, if an individual chose A,
-B and D then that would contribute an A_B\_D then we count all the
-combined choices. Only counting values that have a count greater than 1.
-
-```{r reason4os_choices}
-
-data %>% select(id = URN, starts_with("Q6_a"))                         %>%
-         pivot_longer(cols = starts_with("Q6_a"),
-                      names_to = NULL,
-                      values_to = "ds")                                %>%
-         filter(ds != 0)                                               %>%  
-         group_by(id)                                                  %>% 
-         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         distinct(id, choices)                                         %>% 
-         ungroup()                                                     %>% 
-         select(-id)                                                   %>% 
-         group_by(choices)                                             %>% 
-         tally()                                                       %>% 
-         filter(n > 1)                                                 %>% 
-         arrange(desc(n))                                              %>% 
-         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
-```
-
 ## Q6b Reasons for not using OS
 
 If you answered no to the previous question, what are your main reasons
 for not using open source software?
 
-### Responses
+### Fig 43: responses
 
-```{r reasons4NotOS}
+```{r Figure43}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, starts_with("Q6_b"))  %>% 
@@ -2756,9 +2647,16 @@ data %>% select(URN, starts_with("Q6_b"))         %>%
          ggplot(aes(x = reorder(UseOS, -n), y = n, fill = n)) + 
          geom_col(colour = "black") + 
          theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
-         geom_text(aes(label = paste0(n, " (",percent(n/N, accuracy = 0.1),")")), vjust = -0.5, size = 4) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12), legend.position = "None") +
-         xlab(my$lab) + ylab("Numbers")
+         geom_text(aes(label = paste0(n, " (",percent(n/N, accuracy = 0.1),")")), vjust = -0.5, size = 3) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10), legend.position = "None") +
+         xlab(my$lab) + ylab("Numbers") -> Fig43
+
+# Print the plot to screen
+print(Fig43)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure43.png", dpi = 360))
+
 ```
 
 ### Choice correlations
