@@ -2096,9 +2096,9 @@ suppressMessages(ggsave("Figures/Figure32.png", dpi = 360))
 
 Do you use open source software?
 
-### OS responses
+### Fig 36: OS responses
 
-```{r use_os}
+```{r Figure36}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, Q6)      %>% 
@@ -2118,7 +2118,13 @@ data %>% select(URN, Q6)             %>%
          theme_bw() +
          xlab(my$lab) + scale_fill_distiller(palette = "Blues", direction = 1) +
          ylab("Numbers") + ylim(0, 110) + theme(legend.position = "None") +
-         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1), ")")), vjust = -0.5, size = 4) 
+         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1), ")")), vjust = -0.5, size = 4) -> Fig36
+
+# Print the plot to screen
+print(Fig36)
+
+# Save the file to file
+suppressMessages(ggsave("Figures/Figure36.png", dpi = 360))
 
 ```
 
@@ -2146,9 +2152,9 @@ data %>% select(Q6, career = "Q20")             %>%
 
 ```
 
-### OS by % career stage
+### Fig37: OS by % career stage
 
-```{r use_os_career_per}
+```{r Figure37}
 
 data %>% select(os = Q6, career = Q20)             %>%
          group_by(career)                          %>% 
@@ -2166,10 +2172,16 @@ data %>% select(os = Q6, career = Q20)             %>%
          ylab("Percent") +
          geom_text(aes(label = paste0(n," (", per,")")),
                    position = position_dodge2(width = 0.9, preserve = "single"),
-                   vjust = -0.5, size = 4) +
+                   vjust = -0.5, size = 3) +
          scale_fill_brewer(palette = "Set1", name = "Career stage") +
          theme(axis.text.x = element_text(size = 8), 
-                             legend.text=element_text(size = 6))  
+                             legend.text=element_text(size = 6))  -> Fig37
+
+# Plot the graph to screen
+print(Fig37)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure37.png", dpi = 360))
 
 ```
 ### OS by data use
