@@ -2332,9 +2332,9 @@ suppressMessages(ggsave("Figures/Figure38.png", dpi = 360))
 If you answered yes to the previous question, what are your main reasons
 for using open source software?
 
-### Using OS
+### Fig 39: using OS
 
-```{r reason4os}
+```{r Figure39}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, starts_with("Q6_a"))         %>% 
@@ -2357,9 +2357,16 @@ data %>% select(URN, starts_with("Q6_a"))         %>%
          ggplot(aes(x = reorder(UseOS, -n), y = n, fill = n)) + 
          geom_col(colour = "black") + xlab(unique(my$lab)) +
          theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +         
-         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 4) +
+         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12), legend.position = "None") +
-         ylab("Numbers")
+         ylab("Numbers") -> Fig39
+
+# Print the plot to screen
+print (Fig39)
+
+# Print the plot to file
+suppressMessages(ggsave("Figures/Figure39.png", dpi = 360))
+
 ```
 
 ### Choice correlations
