@@ -3517,9 +3517,9 @@ listOther("Q9_a")
 If you write or extend software (including scripts, applications, tools,
 codes and formulae in spreadsheets), do you (check all that apply)
 
-### Sharing software
+### Fig 50: sharing software
 
-```{r sharing}
+```{r Figure50}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, num_range("Q10_", 1:6))  %>% 
@@ -3543,8 +3543,15 @@ data %>% select(URN, num_range("Q10_", 1:6))            %>%
          geom_col(colour = "black") + scale_fill_distiller(palette = "Blues", direction = 1) +
          theme_bw() +
          xlab(my$lab) + ylab("Numbers") +
-         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 4) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.position = "None")
+         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 3) +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0), legend.position = "None") -> Fig50
+
+# Print the plot to screen
+print(Fig50)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure50.png", dpi = 360))
+
 
 ```
 
