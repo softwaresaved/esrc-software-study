@@ -2820,9 +2820,9 @@ data %>% select(starts_with("Q6_b"), career = Q20, gender = Q21) %>%
 ```
 
 
-### Contingency table
+### Fig 44: contingency table
 
-```{r q6b_contingency}
+```{r Figure44}
 
 # Create a data frame showing the choices per individual
 data %>% select(URN, num_range("Q6_b_", 1:8))                   %>%
@@ -2871,7 +2871,13 @@ vc %>% mutate(xx = tt)                  %>%
        theme(axis.text.x = element_text(angle = -60, hjust = 0),
             legend.position = "None") +
        geom_text(aes(label = n), size = 4) +
-       xlab(lab) + ylab(lab)
+       xlab(lab) + ylab(lab) -> Fig44
+
+# Print the plot to screen
+print(Fig44)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure44.png", dpi = 360))
 
 ```
 
