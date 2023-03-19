@@ -2287,11 +2287,11 @@ data %>% select(os = Q6, gender = Q21)             %>%
 
 ```
 
-### OS by gender and career
+### Fig 38: OS by gender and career
 
 Split by gender and career stage.
 
-```{r use_os_gender_per2_career}
+```{r Figure38}
 
 data %>% select(os = Q6, career = Q20, gender = Q21)    %>%
          filter(os != "-")                              %>% 
@@ -2313,11 +2313,17 @@ data %>% select(os = Q6, career = Q20, gender = Q21)    %>%
          ylab("Percent") +
          geom_text(aes(label = paste0(n," (", per,")")),
                    position = position_dodge2(width = 0.9, preserve = "single"),
-                   vjust = -0.5, size = 4) +
+                   vjust = -0.5, size = 3) +
          scale_fill_brewer(palette = "Set2", name = "Gender") +
          theme(axis.text.x = element_text(size = 8), 
                              legend.text=element_text(size = 6))  + 
-         facet_wrap(~career)
+         facet_wrap(~career) -> Fig38
+
+# Print the plot to screen
+print(Fig38)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure38.png", dpi = 360))
 
 ```
 
