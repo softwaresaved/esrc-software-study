@@ -2471,9 +2471,9 @@ data %>% select(starts_with("Q6_a"), career = Q20)   %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-### Using OS by % career stage pop
+### Fig 41: using OS by % career stage pop
 
-```{r reason4os_career_per2}
+```{r Figure41}
 
 data %>% select(starts_with("Q6_a"), career = Q20)   %>%
          group_by(career)                            %>% 
@@ -2493,10 +2493,16 @@ data %>% select(starts_with("Q6_a"), career = Q20)   %>%
          theme_bw() +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          geom_text(aes(label = percent(per, accuracy = 1)), 
-                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 4) +
+                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 2) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("Reasons for using Open Source") + ylab("Percentage") +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
+         scale_fill_brewer(palette = "Set1", name = "Career stage") -> Fig41
+
+# Print the plot to screen
+print(Fig41)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure41.png", dpi = 360))
 ```
 
 
