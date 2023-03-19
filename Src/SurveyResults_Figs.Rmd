@@ -3228,9 +3228,9 @@ Do you develop or extend software yourself? (As described above,
 software includes scripts, applications, tools, codes and formulae in
 spreadsheets)
 
-### Responses
+### Fig 47: responses
 
-```{r develop_sw}
+```{r Figure47}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, Q9)    %>% 
@@ -3248,7 +3248,13 @@ data %>% select(Q9)                                %>%
          geom_col(colour = "black") +
          theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
          xlab(my$lab) + ylab("Numbers") + theme(legend.position = "None") +
-         geom_text(aes(label = paste0(n," (", per,")")), vjust = -0.5, size = 4)
+         geom_text(aes(label = paste0(n," (", per,")")), vjust = -0.5, size = 3) -> Fig47
+
+# Print the plot to screen
+print(Fig47)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure47.png", dpi = 360))
 
 ```
 
