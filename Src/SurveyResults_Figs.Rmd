@@ -2964,9 +2964,9 @@ vc %>% mutate(xx = tt)                  %>%
 
 How is the software you use currently being supported and maintained?
 
-### How software is maintained
+### Fig 33: how software is maintained
 
-```{r sw_maintenace}
+```{r Figure33}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, num_range("Q7_", 1:7))  %>% 
@@ -2988,9 +2988,16 @@ data %>% select(URN, num_range("Q7_", 1:7))             %>%
          ggplot(aes(x = reorder(swmaint,-n), y = n, fill = n)) + 
          geom_col(colour = "black") +
          theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12), legend.position = "None") +
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10), legend.position = "None") +
          xlab(my$lab) + ylab("Numbers") +
-         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 4)
+         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 3) -> Fig33
+
+# Print the plot to screen
+print(Fig33)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure33.png", dpi = 360))
+
 ```
 
 ### Choice correlations
