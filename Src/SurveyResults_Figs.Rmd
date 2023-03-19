@@ -2606,9 +2606,9 @@ data %>% select(starts_with("Q6_a"), gender = Q21)   %>%
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
-### Using OS by % gender and career
+### Fig 42: using OS by % gender and career
 
-```{r reason4os_gender_car_per}
+```{r Figure42}
 
 data %>% select(starts_with("Q6_a"), career = Q20, gender = Q21)   %>%
          filter(!(gender %in% lowstatsgender))                     %>% 
@@ -2629,10 +2629,17 @@ data %>% select(starts_with("Q6_a"), career = Q20, gender = Q21)   %>%
          theme_bw() +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          geom_text(aes(label = percent(per, accuracy = 1)), 
-                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 3) +
+                   position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 2) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("Reasons for using Open Source") + ylab("Percentage") +
-         scale_fill_brewer(palette = "Set2", name = "Gender") + facet_wrap(~career)
+         scale_fill_brewer(palette = "Set2", name = "Gender") + facet_wrap(~career) -> Fig42
+
+# Print the plot to screen
+print(Fig42)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure42.png", dpi = 360))
+
 ```
 
 Showing numbers instead of percentages.
