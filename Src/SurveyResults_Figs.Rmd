@@ -2392,9 +2392,9 @@ corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 
 ```
 
-### Contingency table
+### Fig 40: contingency table
 
-```{r q6a_contingency}
+```{r Figure40}
 
 # Create a data frame showing the choices per individual
 data %>% select(URN, num_range("Q6_a_", 1:8))                   %>%
@@ -2435,12 +2435,18 @@ vc %>% mutate(xx = tt)                  %>%
                     names_to = "yy",
                     values_to = "n")    %>% 
        ggplot(aes(x = factor(xx, levels=m), y = factor(yy, levels = rev(m)), fill = n)) +
-       theme_bw() + geom_tile() +
+       theme_bw() + geom_tile(colour = "black") +
        scale_fill_distiller(palette = "Blues", direction = 1) +
        theme(axis.text.x = element_text(angle = -60, hjust = 0),
             legend.position = "None") +
        geom_text(aes(label = n), size = 4) +
-       xlab("Use of OS") + ylab("Use of OS")
+       xlab("Use of OS") + ylab("Use of OS") -> Fig40
+
+# Print the plot to screen
+print(Fig40)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure40.png", dpi = 360))
 
 ```
 
@@ -2902,32 +2908,6 @@ data %>% select(starts_with("Q6_b"), career = Q20, gender = Q21) %>%
          facet_wrap(~ career)
 ```
 
-### Counting combined choices
-
-For each multiple choice replace spaces by "-"s and collapse all the
-non-empty choices and join them with an "\_". So, if an individual only
-chose A then that would only contribute an A, if an individual chose A,
-B and D then that would contribute an A_B\_D then we count all the
-combined choices.
-
-```{r reasons4NotOS_choices}
-
-data %>% select(id = URN, starts_with("Q6_b"))                         %>%
-         pivot_longer(cols = starts_with("Q6_b"),
-                      names_to = NULL,
-                      values_to = "ds")                                %>%
-         filter(ds != 0)                                               %>%  
-         group_by(id)                                                  %>% 
-         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         distinct(id, choices)                                         %>% 
-         ungroup()                                                     %>% 
-         select(-id)                                                   %>% 
-         group_by(choices)                                             %>% 
-         tally()                                                       %>% 
-         #filter(n > 1)                                                %>% 
-         arrange(desc(n))                                              %>% 
-         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
-```
 
 ### Contingency table
 
@@ -2975,7 +2955,7 @@ vc %>% mutate(xx = tt)                  %>%
                     names_to = "yy",
                     values_to = "n")    %>% 
        ggplot(aes(x = factor(xx, levels=m), y = factor(yy, levels = rev(m)), fill = n)) +
-       theme_bw() + geom_tile() +
+       theme_bw() + geom_tile(colour = "black") +
        scale_fill_distiller(palette = "Blues", direction = 1) +
        theme(axis.text.x = element_text(angle = -60, hjust = 0),
             legend.position = "None") +
