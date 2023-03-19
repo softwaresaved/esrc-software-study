@@ -2709,10 +2709,10 @@ data %>% select(starts_with("Q6_b"), career = Q20)        %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-### Responses by % career stage
+### Fig 45: responses by % career stage
 
 
-```{r reasons4NotOS_career_per}
+```{r Figure45}
 
 data %>% select(starts_with("Q6_b"), career = Q20)  %>%
          group_by(career)                           %>% 
@@ -2733,10 +2733,17 @@ data %>% select(starts_with("Q6_b"), career = Q20)  %>%
          theme_bw() +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          geom_text(aes(label = percent(per, accuracy = 1)), vjust = -0.5,
-                   position = position_dodge2(width = 0.9, preserve = "single"), size = 4) +
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("Reasons for not using Open Source") + ylab("Percent") +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
+         scale_fill_brewer(palette = "Set1", name = "Career stage") -> Fig45
+
+# Print the plot to screen
+print(Fig45)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure45.png", dpi = 360))
+
 ```
 
 ### Responses by gender
@@ -2789,9 +2796,9 @@ data %>% select(starts_with("Q6_b"), gender = Q21) %>%
          scale_fill_brewer(palette = "Set2", name = "Gender")
 ```
 
-### Responses by % gender and career
+### Fig 46: responses by % gender and career
 
-```{r reasons4NotOS_gender_career_per}
+```{r Figure46}
 
 data %>% select(starts_with("Q6_b"), career = Q20, gender = Q21) %>%
          filter(!(gender %in% lowstatsgender))                   %>% 
@@ -2812,11 +2819,17 @@ data %>% select(starts_with("Q6_b"), career = Q20, gender = Q21) %>%
          theme_bw() +
          scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.09)) +
          geom_text(aes(label = percent(per, accuracy = 0.1)), vjust = -0.5,
-                   position = position_dodge2(width = 0.9, preserve = "single"), size = 4) +
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 2) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          xlab("Reasons for not using Open Source") + ylab("Percent") +
          scale_fill_brewer(palette = "Set2", name = "Gender") +
-         facet_wrap(~ career)
+         facet_wrap(~ career) -> Fig46
+
+# Print the plot to screen
+print(Fig46)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure46.png", dpi = 360))
 ```
 
 
