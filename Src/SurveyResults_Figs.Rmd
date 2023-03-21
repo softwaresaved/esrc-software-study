@@ -4300,9 +4300,9 @@ listOther("Q11_b_i")
 Do you feel in your field that the development and maintenance of
 research software are sufficiently recognised or rewarded?
 
-### Recognition responses
+### Fig 55: recognition responses
 
-```{r q12_recognition}
+```{r Figure55}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, Q12)    %>% 
@@ -4324,7 +4324,14 @@ data %>%  select(URN, rew = Q12)                   %>%
           ylab("Numbers") + ylim(0, 76) +
           geom_text(aes(label = paste0(n," (", per,")")), vjust = -0.5, size = 4) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0, size = 10), 
-                legend.position = "None")
+                legend.position = "None") -> Fig55
+
+# Print the plot to screen
+print(Fig55)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure55.png", dpi = 360))
+
 
 ```
 
