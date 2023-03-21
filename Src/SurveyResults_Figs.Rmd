@@ -3550,61 +3550,14 @@ suppressMessages(ggsave("Figures/Figure52.png", dpi = 360))
 
 ```
 
-### Choice correlations
-
-My interpretation of this graph is that obtuse angles are negatively
-correlated, acute are positively correlated, circles are not correlated.
-The thinner the ellipse the stronger the correlation or anti
-correlation.
-
-```{r q10_correlations}
-
-data0 %>% select(num_range("Q10_", 1:6)) -> q  
-names(q) <- swuse
-
-q <- apply(q, 2, function(x) as.integer(x))
-
-my_colors <- brewer.pal(5, "Spectral")
-my_colors <- colorRampPalette(my_colors)(100)
-
-#plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
-corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
-
-```
 
 
 
-### Sharing software by % career stage
+### Fig 53: sharing software by % career stage
 
-```{r sharing_career_per}
+Look at the processed data which only takes the last value (most liberal sharing of software) option.
 
-data %>% select(URN, num_range("Q10_", 1:6), career = Q20)   %>%
-         filter(!(career %in% c("-", "Other")))              %>% 
-         group_by(career)                                    %>%
-         mutate(N = n())                                     %>%
-         pivot_longer(cols = num_range("Q10_", 1:6),
-                      names_to = NULL,
-                      values_to = "swuse")                   %>%
-         filter(swuse != 0)                                  %>%
-         group_by(swuse)                                     %>% 
-         mutate(M = n())                                     %>% 
-         group_by(swuse, career)                             %>%
-         mutate(per = n()/N)                                 %>% 
-         distinct(swuse, career, per, M)                     %>% 
-         ggplot(aes(x = reorder(swuse, -M), y = per, fill = career)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-         theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         xlab("Who do you share your software with?") + ylab("Percent") +
-         geom_text(aes(label = percent(per, accuracy=1)), vjust = -0.5,
-                   position = position_dodge2(width = 0.9, preserve = "single"),  size = 4) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
-
-Look at the procssed data which only takes the last value (most liberal sharing of software) option.
-
-```{r sharing_career_per1}
+```{r Figure53}
 
 data %>% select(sharesw, career = Q20)                       %>%
          filter(!(career %in% c("-", "Other")))              %>% 
@@ -3622,9 +3575,16 @@ data %>% select(sharesw, career = Q20)                       %>%
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          xlab("Who do you share your software with?") + ylab("Percent") +
          geom_text(aes(label = percent(n/N, accuracy=1)), vjust = -0.5,
-                   position = position_dodge2(width = 0.9, preserve = "single"),  size = 4) +
+                   position = position_dodge2(width = 0.9, preserve = "single"),  size = 3) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
+         scale_fill_brewer(palette = "Set1", name = "Career stage") -> Fig53
+
+# Print the plot to screen
+print(Fig53)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure53.png", dpi = 360))
+
 ```
 
 
