@@ -3151,41 +3151,8 @@ data %>% select(num_range("Q7_", 1:7), num_range("Q19_", 1:22))          %>%
          scale_fill_continuous(high = "#132B43", low = "#56B1F7")
 ```
 
-### Combined choices
 
-For each multiple choice replace spaces by "-"s and collapse all the
-non-empty choices and join them with an "\_". So, if an individual only
-chose A then that would only contribute an A, if an individual chose A,
-B and D then that would contribute an A_B\_D then we count all the
-combined choices. Only showing combinations that have a count greater
-than 1.
 
-```{r swMaintained_choices}
-
-data %>% select(id = URN, num_range("Q7_", 1:7))                       %>%
-         pivot_longer(cols = num_range("Q7_", 1:7),
-                      names_to = NULL,
-                      values_to = "ds")                                %>%
-         filter(ds != 0)                                               %>%  
-         group_by(id)                                                  %>% 
-         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         distinct(id, choices)                                         %>% 
-         ungroup()                                                     %>% 
-         select(-id)                                                   %>% 
-         group_by(choices)                                             %>% 
-         tally()                                                       %>% 
-         filter(n  > 1)                                                %>% 
-         arrange(desc(n))                                              %>% 
-         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
-```
-
-### Other maintenance mechanisms
-
-```{r other_maintenace, results = 'asis'}
-
-listOther("Q7_a")
-
-```
 
 ## Q8 Software workflows
 
@@ -3878,9 +3845,9 @@ data %>% select(URN, num_range("Q10_", 1:6))            %>%
 ```
 
 
-### Sharing software contingency table
+### Fig 51: sharing software contingency table
 
-```{r sharingsw_contingency}
+```{r Figure51}
 
 # Create a data frame showing the choices per individual
 data %>% select(URN, num_range("Q10_", 1:6))                   %>%
@@ -3921,12 +3888,18 @@ vc %>% mutate(xx = tt)                  %>%
                     names_to = "yy",
                     values_to = "n")    %>% 
        ggplot(aes(x = factor(xx, levels=m), y = factor(yy, levels = rev(m)), fill = n)) +
-       theme_bw() + geom_tile() +
+       theme_bw() + geom_tile(colour = "black") +
        scale_fill_distiller(palette = "Blues", direction = 1) +
        theme(axis.text.x = element_text(angle = -60, hjust = 0),
             legend.position = "None") +
        geom_text(aes(label = n), size = 4) +
-       xlab("Software sharing") + ylab("Software sharing")
+       xlab("Software sharing") + ylab("Software sharing") -> Fig51
+
+# Print the plot to screen
+print(Fig51)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure51.png", dpi = 360))
 
 ```
 
