@@ -4842,7 +4842,7 @@ data %>% select(URN, num_range("Q10_", 1:6), career = Q20)   %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage")
 ```
 
-Look at the procssed data which only takes the last value (most liberal sharing of software) option.
+Look at the processed data which only takes the last value (most liberal sharing of software) option.
 
 ```{r sharing_career_per1}
 
