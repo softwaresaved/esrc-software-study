@@ -3336,138 +3336,6 @@ suppressMessages(ggsave("Figures/Figure49.png", dpi = 360))
 
 ```
 
-### Develop software by discipline
-
-```{r swdev_dist_per_tile}
-
-data %>% select(URN, Q9, num_range("Q19_", 1:22))                        %>%
-         filter(!is.na(Q9))                                              %>% 
-         pivot_longer(cols = starts_with("Q19"),
-                      names_to = NULL,
-                      values_to ="discipline")                           %>%
-         filter(discipline != 0)                                         %>%
-         group_by(URN)                                                   %>%
-         mutate(nn = n())                                                %>% 
-         group_by(discipline)                                            %>% 
-         mutate(NN = sum(1/nn))                                          %>%                                
-         group_by(discipline, Q9)                                        %>%
-         mutate(n = sum(1/nn))                                           %>%
-         ggplot(aes(y = discipline, x = Q9)) +
-         theme_bw() +
-         geom_tile(aes(fill = n/NN)) +
-         theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust=0),
-               axis.text.y = element_text(size = 8), legend.position = "None") +
-         geom_text(aes(label = paste0(round(n, 2),"/",round(NN +0.05, 1)," (",percent(n/NN, accuracy = 0.1),")")), 
-                   size = 4, colour = "white") +
-         xlab("Do you develop software?") + ylab("Research discipline") +
-         scale_fill_continuous(high = "#132B43", low = "#56B1F7")
-
-```
-
-### Developing and most important software
-
-```{r developing_importantsw}
-
-# Calculate an x label with the folks that filled in this question.
-important_software  %>% select(URN, starts_with("Q5"))                   %>% 
-                       pivot_longer(cols =  starts_with("Q5"),
-                                    names_to = NULL,
-                                    values_to = "software")              %>%
-                       filter(!is.na(software))                          %>% 
-                       group_by(URN)                                     %>% 
-                       mutate( contrib = 1/n())                          %>% 
-                       left_join(data %>% select(URN, Q9), by = "URN")   %>% 
-                       group_by(software, Q9)                            %>% 
-                       summarise(N = round(sum(contrib), 1), 
-                                 .groups = "drop")                       %>% 
-                      filter(N > 3)                                      %>% 
-                      ggplot(aes(x = Q9, y = N, fill = software)) +
-                      geom_col(colour = "black", position = position_stack()) + 
-                      theme_bw() +
-                      theme(legend.position = "None") +
-                      geom_text(aes(label = paste0(software)), 
-                                position = position_stack(vjust = 0.5)) +
-                      xlab("Do you develop software?") + ylab("Number")
-```
-Restrict to programming languages.
-
-```{r developing_importantsw_prog}
-
-# Programming languages
-proglan <- c("R", ".NET", "Excel", "VBA","Python", "FORTRAN", "Oxmetrics",
-             "NetLogo","SPSS","Knime","Stata", "C++", "Jupyter","MATLAB")
-
-# Calculate an x label with the folks that filled in this question.
-important_software  %>% select(URN, starts_with("Q5"))                   %>% 
-                       pivot_longer(cols =  starts_with("Q5"),
-                                    names_to = NULL,
-                                    values_to = "software")              %>%
-                       filter(!is.na(software))                          %>% 
-                       filter(software %in% proglan)                     %>% 
-                       group_by(URN)                                     %>% 
-                       mutate( contrib = 1/n())                          %>% 
-                       left_join(data %>% select(URN, Q9), by = "URN")   %>% 
-                       group_by(software, Q9)                            %>% 
-                       summarise(N = round(sum(contrib), 1), 
-                                 .groups = "drop")                       %>% 
-                      filter(N > 3)                                      %>% 
-                      ggplot(aes(x = Q9, y = N, fill = software)) +
-                      geom_col(colour = "black", position = position_stack()) + 
-                      theme_bw() +
-                      theme(legend.position = "None") +
-                      geom_text(aes(label = paste0(software)), 
-                                position = position_stack(vjust = 0.5)) +
-                      xlab("Do you develop software?")
-```
-### Developing and most important software table
-
-```{r developing_importantsw_table_yes}
-
-# Calculate an x label with the folks that filled in this question.
-important_software  %>% select(URN, starts_with("Q5"))                   %>% 
-                       pivot_longer(cols =  starts_with("Q5"),
-                                    names_to = NULL,
-                                    values_to = "software")              %>%
-                       filter(!is.na(software))                          %>% 
-                       group_by(URN)                                     %>% 
-                       mutate(contrib = 1/n())                           %>% 
-                       left_join(data %>% select(URN, Q9), by = "URN")   %>% 
-                       filter(Q9 == "Yes")                               %>%
-                       ungroup()                                         %>% 
-                       mutate(N = sum(contrib))                          %>% 
-                       group_by(software)                                %>% 
-                       mutate(n = sum(contrib))                          %>% 
-                       mutate(per = n/N)                                 %>% 
-                       filter(per > 0.02)                                %>% 
-                       distinct(software, per)                           %>% 
-                       arrange(desc(per))                                %>% 
-                       mutate(per = percent(per, accuracy = 0.1))        %>% 
-                       kbl(format="pipe", align = c("l","r"), col.names = c("Software", "Percent"))
-```
-
-```{r developing_importantsw_table_no}
-
-# Calculate an x label with the folks that filled in this question.
-important_software  %>% select(URN, starts_with("Q5"))                   %>% 
-                       pivot_longer(cols =  starts_with("Q5"),
-                                    names_to = NULL,
-                                    values_to = "software")              %>%
-                       filter(!is.na(software))                          %>% 
-                       group_by(URN)                                     %>% 
-                       mutate(contrib = 1/n())                           %>% 
-                       left_join(data %>% select(URN, Q9), by = "URN")   %>% 
-                       filter(Q9 == "No")                                %>%
-                       ungroup()                                         %>% 
-                       mutate(N = sum(contrib))                          %>% 
-                       group_by(software)                                %>% 
-                       mutate(n = sum(contrib))                          %>% 
-                       mutate(per = n/N)                                 %>% 
-                       filter(per > 0.02)                                %>% 
-                       distinct(software, per)                           %>% 
-                       arrange(desc(per))                                %>% 
-                       mutate(per = percent(per, accuracy = 0.1))        %>% 
-                       kbl(format="pipe", align = c("l","r"), col.names = c("Software", "Percent"))
-```
 
 ## Q10 Sharing software
 
@@ -3589,93 +3457,11 @@ suppressMessages(ggsave("Figures/Figure53.png", dpi = 360))
 
 
 
-### Sharing software by % gender
+### Fig 54: sharing software by gender and career stage
 
-```{r sharing_gender_per}
+Using the modifed interpretation of the data to take the most liberal data sharing option
 
-data %>% select(num_range("Q10_", 1:6), gender = Q21)   %>%
-         filter(!(gender %in% lowstatsgender))          %>%
-         group_by(gender)                               %>%
-         mutate(N = n())                                %>% 
-         pivot_longer(cols = num_range("Q10_", 1:6),
-                      names_to = NULL,
-                      values_to = "swuse")              %>%
-         filter(swuse != 0)                             %>%
-         group_by(swuse)                                %>% 
-         mutate(M = n())                                %>% 
-         group_by(swuse, gender)                        %>%
-         mutate(per = n()/N)                            %>% 
-         distinct(swuse, gender, per, M)                %>% 
-         ggplot(aes(x = reorder(swuse, -M), y = per, fill = gender)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-         theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         xlab("Who do you share your software with?") + ylab("Percent") +
-         geom_text(aes(label = percent(per, accuracy=1)), vjust = -0.5,
-                   position = position_dodge2(width = 0.9, preserve = "single"),  size = 2) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         scale_fill_brewer(palette = "Set2", name = "Gender") 
-
-```
-
-Using the modified sharing data (accept the most liberal policy):
-
-```{r sharing_gender_per5}
-
-data %>% select(sharesw, gender = Q21)                  %>%
-         filter(!(gender %in% lowstatsgender))          %>%
-         group_by(gender)                               %>%
-         mutate(N = n())                                %>% 
-         filter(!is.na(sharesw))                        %>%
-         group_by(sharesw)                              %>% 
-         mutate(M = n())                                %>% 
-         group_by(sharesw, gender)                      %>%
-         mutate(n = n())                                %>% 
-         distinct(sharesw, gender, n, M, N)             %>% 
-         ggplot(aes(x = reorder(sharesw, -M), y = n/N, fill = gender)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-         theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         xlab("Who do you share your software with?") + ylab("Percent") +
-         geom_text(aes(label = percent(n/N, accuracy=1)), vjust = -0.5,
-                   position = position_dodge2(width = 0.9, preserve = "single"),  size = 2) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         scale_fill_brewer(palette = "Set2", name = "Gender") 
-
-```
-
-### Sharing software by gender and career stage
-
-```{r sharing_gender_per3}
-
-data %>% select(num_range("Q10_", 1:6), career = Q20, gender = Q21)   %>%
-         group_by(gender)                                             %>%
-         mutate(N = n())                                              %>% 
-         pivot_longer(cols = num_range("Q10_", 1:6),
-                      names_to = NULL,
-                      values_to = "swuse")                            %>%
-         filter(swuse != 0)                                           %>%
-         group_by(swuse)                                              %>% 
-         mutate(M = n())                                              %>% 
-         filter(!(career %in% c("-", "Other")))                       %>% 
-         filter(!(gender %in% lowstatsgender))                        %>%
-         group_by(swuse, gender, career)                              %>%
-         mutate(per = n()/N)                                          %>% 
-         distinct(swuse, gender, per, career, M)                      %>% 
-         ggplot(aes(x = reorder(swuse, -M), y = per, fill = gender)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-         theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         xlab("Who do you share your software with?") + ylab("Percent") +
-         geom_text(aes(label = percent(per, accuracy=1)), vjust = -0.5,
-                   position = position_dodge2(width = 0.9, preserve = "single"),  size = 2) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         scale_fill_brewer(palette = "Set2", name = "Gender") +
-         facet_wrap(~career)
-```
-Using the modifed interpritation of the data to take the most liberal data sharing option
-
-```{r sharing_gender_per2}
+```{r Figure54}
 
 data %>% select(sharesw, career = Q20, gender = Q21)                  %>%
          group_by(gender)                                             %>%
@@ -3691,13 +3477,20 @@ data %>% select(sharesw, career = Q20, gender = Q21)                  %>%
          ggplot(aes(x = reorder(sharesw, -M), y = n/N, fill = gender)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.16)) +
+         scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.17)) +
          xlab("Who do you share your software with?") + ylab("Percent") +
          geom_text(aes(label = percent(n/N, accuracy = 0.1)), vjust = -0.5,
-                   position = position_dodge2(width = 0.9, preserve = "single"),  size = 4) +
+                   position = position_dodge2(width = 0.9, preserve = "single"),  size = 2) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
          scale_fill_brewer(palette = "Set2", name = "Gender") +
-         facet_wrap(~career)
+         facet_wrap(~career) -> Fig54
+
+# Print the plot to screen
+print(Fig54)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure54.png", dpi = 360))
+
 ```
 
 
