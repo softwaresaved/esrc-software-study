@@ -4974,7 +4974,7 @@ data %>% select(num_range("Q10_", 1:6), career = Q20, gender = Q21)   %>%
          scale_fill_brewer(palette = "Set2", name = "Gender") +
          facet_wrap(~career)
 ```
-Using the modifed interpritation of the data to take the most liberal data sharing option
+Using the modifed interpretation of the data to take the most liberal data sharing option
 
 ```{r sharing_gender_per2}
 
