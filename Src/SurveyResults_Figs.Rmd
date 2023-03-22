@@ -5800,9 +5800,9 @@ listOther("Q15_a")
 What barriers have you experienced to the use of software in your
 research? (Check all that apply.)
 
-### Barriers
+### Fig 59: barriers
 
-```{r barriers}
+```{r Figure59}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, num_range("Q16_", 1:13))           %>% 
@@ -5826,9 +5826,15 @@ data %>%  select(URN, num_range("Q16_", 1:13))            %>%
           geom_col(colour = "black") +
           theme_bw() + ylim(0, 91) +
           xlab(my$lab) + ylab("Numbers") + scale_fill_distiller(palette = "Blues", direction = 1) +
-          geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")),  vjust = -0.5, size = 4) +
-          theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0, size = 10),
-                legend.position = "None")
+          geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")),  vjust = -0.5, size = 2) +
+          theme(axis.text.x = element_text(angle = -70, vjust = 0.5, hjust=0, size = 10),
+                legend.position = "None") -> Fig59
+
+# Print the plot to screen
+print(Fig59)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure59.png", dpi = 360))
 
 ```
 
