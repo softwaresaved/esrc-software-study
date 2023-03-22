@@ -5265,8 +5265,15 @@ data %>%  select(URN, num_range("Q14_", 1:9))         %>%
           ylim(0, 111) +
           xlab(my$lab) + ylab("Numbers") + 
           scale_fill_distiller(palette = "Blues", direction = 1) +
-          geom_text(aes(y = n, label = paste0(n," (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 4) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0, size = 10), legend.position = "None")
+          geom_text(aes(y = n, label = paste0(n," (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 3) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0, size = 10), 
+                legend.position = "None") -> Fig57
+
+# Print the plot to screen
+print(Fig57)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure57.png", dpi = 360))
 
 ```
 
