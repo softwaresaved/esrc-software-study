@@ -5239,9 +5239,9 @@ that apply. The UK Tier 1 provides a national supercomputing service,
 e.g. ARCHER2, and Tier 2 systems provide computational services
 somewhere between institutional and the national Tier 1 service.
 
-### Distribution of where software is run
+### Fig 57: distribution of where software is run
 
-```{r where_sw_run}
+```{r Figure57}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, num_range("Q14_", 1:9))  %>% 
@@ -5302,32 +5302,10 @@ corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
 
 ```
 
-### Where software is run by career stage
 
-```{r where_sw_run_career}
+### Fig 58: where software is run by % career stage
 
-data %>%  select(num_range("Q14_", 1:9), career = Q20)  %>%
-          pivot_longer(cols = num_range("Q14_", 1:9),
-                       names_to = NULL,
-                       values_to = "runon")             %>%
-          filter(runon != 0)                            %>%
-          group_by(runon)                               %>% 
-          mutate(n = n())                               %>% 
-          filter(!(career %in% c("-", "Other")))        %>% 
-          group_by(career, runon)                       %>% 
-          ggplot(aes(x = reorder(runon, -n), fill  = career)) +
-          geom_bar( colour = "black") +
-          theme_bw() +
-          xlab("Where software is run") + ylab("Numbers") +
-          geom_text(aes(label = after_stat(count)), stat = "count", position = position_stack(0.5), size = 2) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-          scale_fill_brewer(palette = "Set1", name = "Career stage")
-
-```
-
-### Where software is run by % career stage
-
-```{r where_sw_run_career_per2}
+```{r Figure58}
 
 data %>%  select(num_range("Q14_", 1:9), career = Q20)         %>%
           group_by(career)                                     %>% 
@@ -5349,9 +5327,15 @@ data %>%  select(num_range("Q14_", 1:9), career = Q20)         %>%
           scale_y_continuous(labels = percent_format(accuracy = 1)) +
           xlab("Where software is run") + ylab("Percent") +
           geom_text(aes(label = per), vjust = -0.5,
-                    position = position_dodge2(width = 0.9, preserve = "single"), size = 4) +
+                    position = position_dodge2(width = 0.9, preserve = "single"), size = 2) +
           theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-          scale_fill_brewer(palette = "Set1", name = "Career stage")
+          scale_fill_brewer(palette = "Set1", name = "Career stage") -> Fig58
+
+# Print the plot to screen
+print(Fig58)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure58.png", dpi = 360))
 
 ```
 
