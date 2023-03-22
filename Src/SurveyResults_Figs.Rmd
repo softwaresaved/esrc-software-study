@@ -5838,50 +5838,8 @@ suppressMessages(ggsave("Figures/Figure59.png", dpi = 360))
 
 ```
 
-### Choice correlations
 
-My interpretation of this graph is that obtuse angles are negatively
-correlated, acute are positively correlated, circles are not correlated.
-The thinner the ellipse the stronger the correlation or anti
-correlation.
 
-```{r q16_correlations}
-
-data0 %>% select(num_range("Q16_", 1:13)) -> q  
-names(q) <- barriers
-
-q <- apply(q, 2, function(x) as.integer(x))
-
-my_colors <- brewer.pal(5, "Spectral")
-my_colors <- colorRampPalette(my_colors)(100)
-
-#plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
-corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
-#corrplot(cor(q), method="number", type= "lower", diag = FALSE)
-
-```
-
-### Barriers by career stage
-
-```{r barriers_careeer}
-
-data %>%  select(num_range("Q16_", 1:13), career = Q20)         %>%
-          filter(!(career %in% c("Other", "-")))                %>% 
-          pivot_longer(cols = num_range("Q16_", 1:13),
-                       names_to = NULL,
-                       values_to = "barriers")                  %>%
-          filter(barriers != 0)                                 %>%
-          group_by(barriers)                                    %>%
-          mutate(n = n())                                       %>% 
-          ggplot(aes(x = reorder(barriers, -n), fill  = career)) +
-          geom_bar(colour = "black") +
-          theme_bw() +
-          xlab("Barriers to software use") + ylab("Numbers") +
-          geom_text(aes(label = after_stat(count)), stat = "count", position = position_stack(0.5), size = 2) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
-          scale_fill_brewer(palette = "Set1", name = "Career stage")
-
-```
 
 ### Barriers by data use
 
@@ -5904,11 +5862,10 @@ data %>%  select(num_range("Q16_", 1:13), datause)         %>%
 
 ```
 
-### Barriers as % of careers
+### Fig 61: barriers as % of careers
 
-Removing "Other" and "-"
 
-```{r barriers_careeer_per2}
+```{r Figure61}
 
 data %>%  select(num_range("Q16_", 1:13), career = Q20)         %>%
           filter(!(career %in% c("Other", "-")))                %>% 
@@ -5929,10 +5886,16 @@ data %>%  select(num_range("Q16_", 1:13), career = Q20)         %>%
           scale_y_continuous(labels = percent_format(accuracy = 1)) +
           xlab("Barriers to software use") + ylab("Percentage") +
           geom_text(aes(label = percent(per, accuracy = 1)), 
-                    position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 3) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12),
+                    position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.6, size = 2) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10),
                 legend.text = element_text(size = 8))  +
-          scale_fill_brewer(palette = "Set1", name = "Career stage")
+          scale_fill_brewer(palette = "Set1", name = "Career stage") -> Fig61
+
+# Print the plot to screen
+print(Fig61)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure61.png", dpi = 360))
 
 ```
 
@@ -6111,13 +6074,6 @@ print(Fig60)
 suppressMessages(ggsave("Figures/Figure60.png", dpi = 360))
 ```
 
-### Other barriers
-
-```{r other_barriers, results='asis'}
-
-listOther("Q16_a")
-
-```
 
 ## Q17 Institutions
 
