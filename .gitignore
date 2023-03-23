@@ -24,6 +24,7 @@ Data/wf*
 Data/table*
 *.xlsx
 Data/HESA/
+Data/survey-results.csv
 *.docx
 Src/TestGraphProblem.R
 *.zip
