@@ -5907,39 +5907,9 @@ suppressMessages(ggsave("Figures/Figure62.png", dpi = 360))
 
 ```
 
-### Barriers as % of gender and career
+### Fig 63: barriers and dissability
 
-
-```{r barriers_gender_per3}
-
-data %>%  select(num_range("Q16_", 1:13), gender = Q21) %>%
-          group_by(gender)                                      %>%
-          filter(!(gender %in% lowstatsgender))                 %>% 
-          mutate(N = n())                                       %>% 
-          pivot_longer(cols = num_range("Q16_", 1:13),
-                       names_to = NULL,
-                       values_to = "barriers")                  %>%
-          filter(barriers != 0)                                 %>%
-          group_by(barriers)                                    %>% 
-          mutate(M = n())                                       %>% 
-          group_by(gender, barriers)                            %>%
-          mutate(per = n()/N)                                   %>% 
-          distinct(gender, barriers, per, M)                    %>% 
-          ggplot(aes(x = reorder(barriers, -M), y = per, fill  = gender)) +
-          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-          theme_bw() +
-          scale_y_continuous(labels = percent_format(accuracy = 1)) +
-          xlab("Barriers to software use") + ylab("Percentage") +
-          geom_text(aes(label = percent(per, accuracy = 0.1)), 
-                    position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 4) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
-          scale_fill_brewer(palette = "Set2", name = "Gender")
-
-```
-
-### Barriers and dissability
-
-```{r barriers_dis_per}
+```{r Figure63}
 
 data %>%  select(num_range("Q16_", 1:13), dis = Q23)            %>%
           filter(dis != "-")                                    %>% 
@@ -5958,13 +5928,19 @@ data %>%  select(num_range("Q16_", 1:13), dis = Q23)            %>%
           ggplot(aes(x = reorder(barriers, -M), y = n/N, fill = dis)) +
           geom_col(position = position_dodge2(width = 0.9, preserve = "single"), 
                    colour = "black") +
-          theme_bw() + scale_y_continuous(labels = percent_format(accuarcy = 1)) +
+          theme_bw() + scale_y_continuous(labels = percent_format(accuarcy = 1), limits = c(0, 0.7)) +
           xlab("Barriers to software use") + ylab("Percent") +
           geom_text(aes(y = n/N, label = per), 
                     position = position_dodge2(width = 0.9, preserve = "single"),
-                    vjust = -0.5, size = 4) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0, size = 12))  +
-          scale_fill_brewer(palette = "Set3", name = "Dissability")
+                    vjust = -0.5, size = 3) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0, size = 10))  +
+          scale_fill_brewer(palette = "Set3", name = "Dissability") -> Fig63
+
+# Print the plot to screen
+print(Fig63)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure63.png", dpi = 360))
 
 ```
 
