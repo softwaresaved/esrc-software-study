@@ -4438,9 +4438,9 @@ level do you agree/disagree with the following statements?
 
 I am aware of how the software I use is funded, managed and licensed
 
-#### Responses
+#### Fig 64: responses
 
-```{r aware_sw}
+```{r Figure64}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, num_range("Q13_1_",1:5))           %>% 
@@ -4464,11 +4464,17 @@ data %>% select(URN, num_range("Q13_1_",1:5))            %>%
          ggplot(aes(x = understanding, y = n, fill = n)) + 
          geom_col(colour = "black") + 
          scale_fill_distiller(palette = "Blues", direction = 1) +
-         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 4) +
+         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 3) +
          theme_bw() + ylab("Numbers") +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10), 
                legend.position = "None") +
-         xlab(my$lab)
+         xlab(my$lab) -> Fig64
+
+# Print the plot to screen
+print(Fig64)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure64.png", dpi = 360))
 ```
 
 #### Responses by career stage
