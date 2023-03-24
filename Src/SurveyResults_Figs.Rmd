@@ -1292,28 +1292,6 @@ suppressMessages(ggsave("Figures/Figure16.png", dpi = 360))
 
 ```
 
-### Choice correlations
-
-My interpretation of this graph is that obtuse angles are negatively
-correlated, acute are positively correlated, circles are not correlated.
-The thinner the ellipse the stronger the correlation or anti
-correlation.
-
-```{r q2_correlations}
-
-data0 %>% select(num_range("Q2_b_",1:6)) -> q  
-names(q) <- ds
-
-q <- apply(q, 2, function(x) as.integer(x))
-
-my_colors <- brewer.pal(5, "Spectral")
-my_colors <- colorRampPalette(my_colors)(100)
-
-#plotcorr(cor(q), col=my_colors[cor(q)*50+50],cex.lab = 0.6*par("cex.lab"))
-corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
-
-
-```
 
 ### Fig17: Reusing existing data by % career stage
 
@@ -1804,36 +1782,6 @@ suppressMessages(ggsave("Figures/Figure25.png", dpi = 360))
 
 ```
 
-### Software used by data use
-
-
-```{r sw_used_career_per}
-
-data %>% select(num_range("Q4_",1:26), datause)                              %>%
-         group_by(datause)                                                    %>% 
-         mutate(N = n())                                                     %>% 
-         pivot_longer(cols = starts_with("Q4"), 
-                      names_to = NULL,
-                      values_to = "software")                                %>%
-         filter(software != 0)                                               %>%
-         group_by(software)                                                  %>% 
-         mutate(M = n())                                                     %>% 
-         filter(M > 25)                                                      %>% 
-         group_by(software, datause)                                          %>% 
-         mutate(per = n()/N)                                                 %>% 
-         distinct(software, datause, per, N, M)                               %>% 
-         ggplot(aes(x = reorder(software,-M), y = per, fill = datause)) +
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-         theme_bw() +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.15, hjust=0, size = 10),
-               legend.text=element_text(size = 8)) +
-         ylab("Percent") + xlab("Software used") +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         geom_text(aes(x = software, y = per, label = percent(per, accuracy = 1)), 
-                 position = position_dodge2(width = 0.9, preserve = "single"), vjust= -0.5,
-                 size = 4) +
-         scale_fill_brewer(palette = "PuRd", name = "Data use") 
-```
 
 ### Fig 26: software by gender
 
