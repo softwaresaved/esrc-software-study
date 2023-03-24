@@ -5869,11 +5869,10 @@ data %>%  select(num_range("Q16_", 1:13), gender = Q21)         %>%
 
 ```
 
-### Barriers as % of gender
+### Fig 62: barriers as % of gender and career
 
-Remove the low stat components
 
-```{r barriers_gender_per2}
+```{r Figure62}
 
 data %>%  select(num_range("Q16_", 1:13), career = Q20, gender = Q21) %>%
           filter(!(gender %in% lowstatsgender))                       %>% 
@@ -5892,13 +5891,19 @@ data %>%  select(num_range("Q16_", 1:13), career = Q20, gender = Q21) %>%
           ggplot(aes(x = reorder(barriers, -M), y = per, fill  = gender)) +
           geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
           theme_bw() +
-          scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.25)) +
+          scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.26)) +
           xlab("Barriers to software use") + ylab("Percentage") +
           geom_text(aes(label = percent(per, accuracy = 0.1)), 
-                    position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.5, size = 3) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0))  +
+                    position = position_dodge2(width = 0.9, preserve = "single"), vjust = -0.75, size = 1.5) +
+          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 0, size = 6))  +
           scale_fill_brewer(palette = "Set2", name = "Gender") +
-          facet_wrap(~ career)
+          facet_wrap(~ career) -> Fig62
+
+# Print the plot to screen
+print(Fig62)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure62.png", dpi = 360))
 
 ```
 
