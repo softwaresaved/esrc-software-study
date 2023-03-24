@@ -5225,30 +5225,6 @@ suppressMessages(ggsave("Figures/Figure57.png", dpi = 360))
 
 ```
 
-### Choice correlations
-
-My interpretation of this graph is that obtuse angles are negatively
-correlated, acute are positively correlated, circles are not correlated.
-The thinner the ellipse the stronger the correlation or anti
-correlation. Removed the use of tier 1 and tier 2 as these got no
-response.
-
-```{r q14_correlations}
-
-data0 %>% select(num_range("Q14_", 1:9)) -> q  
- q <- q[,c(-6, -7)]
-names(q) <- hw[c(-6, -7)]
-
-q <- apply(q, 2, function(x) as.integer(x))
-
-my_colors <- brewer.pal(5, "Spectral")
-my_colors <- colorRampPalette(my_colors)(100)
-
-#plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.75*par("cex.lab"))
-
-corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
-
-```
 
 
 ### Fig 58: where software is run by % career stage
@@ -5284,186 +5260,6 @@ print(Fig58)
 
 # Save the plot to file
 suppressMessages(ggsave("Figures/Figure58.png", dpi = 360))
-
-```
-
-### Where software is run by gender
-
-```{r where_sw_run_gender}
-
-data %>%  select(num_range("Q14_", 1:9), gender = Q21)  %>%
-          pivot_longer(cols = num_range("Q14_", 1:9),
-                       names_to = NULL,
-                       values_to = "runon")              %>%
-          filter(runon != 0)                             %>%
-          group_by(runon)                                %>% 
-          mutate(n = n())                                %>% 
-          filter(!(gender %in% lowstatsgender))          %>% 
-          group_by(gender, runon)                        %>% 
-          ggplot(aes(x = reorder(runon, -n), fill  = gender)) +
-          geom_bar( colour = "black") +
-          theme_bw() +
-          xlab("Where software is run") + ylab("Numbers") +
-          geom_text(aes(label = after_stat(count)), stat = "count", position = position_stack(0.5), size = 3) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-          scale_fill_brewer(palette = "Set2", name = "Gender")
-
-```
-
-### Where software is run by % gender
-
-```{r where_sw_run_gender_per}
-
-data %>%  select(num_range("Q14_", 1:9), gender = Q21)         %>%
-          group_by(gender)                                     %>% 
-          mutate(N = n())                                      %>% 
-          pivot_longer(cols = num_range("Q14_", 1:9),
-                       names_to = NULL,
-                       values_to = "runon")                    %>%
-          filter(runon != 0)                                   %>%
-          group_by(runon)                                      %>% 
-          mutate(M = n())                                      %>% 
-          filter(!(gender %in% lowstatsgender))                %>% 
-          group_by(gender, runon)                              %>% 
-          mutate(n = n())                                      %>% 
-          mutate(per = percent(n/N, accuracy = 1))             %>% 
-          distinct(M, N, n, per)                               %>% 
-          ggplot(aes(x = reorder(runon, -M), y = n/N, fill  = gender)) +
-          geom_col( position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-          theme_bw() + scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.76)) +
-          xlab("Where software is run") + ylab("Percent") +
-          geom_text(aes(label = per), vjust = -0.5,
-                    position = position_dodge2(width = 0.9, preserve = "single"), size = 4) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-          scale_fill_brewer(palette = "Set2", name = "Gender")
-
-```
-
-### Where software is run by % gender and career
-
-```{r where_sw_run_gender_career_per}
-
-data %>%  select(num_range("Q14_", 1:9), career = Q20, gender = Q21) %>%
-          group_by(gender)                                           %>% 
-          mutate(N = n())                                            %>% 
-          pivot_longer(cols = num_range("Q14_", 1:9),
-                       names_to = NULL,
-                       values_to = "runon")                          %>%
-          filter(runon != 0)                                         %>%
-          group_by(runon)                                            %>% 
-          mutate(M = n())                                            %>% 
-          filter(!(gender %in% lowstatsgender))                      %>% 
-          filter(!(career %in% c("-", "Other")))                     %>% 
-          group_by(gender, runon, career)                            %>% 
-          mutate(n = n())                                            %>% 
-          mutate(per = percent(n/N, accuracy = 0.1))                   %>% 
-          distinct(M, N, n, per, career)                             %>% 
-          ggplot(aes(x = reorder(runon, -M), y = n/N, fill  = gender)) +
-          geom_col( position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
-          theme_bw() + scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.41)) +
-          xlab("Where software is run") + ylab("Percent") +
-          geom_text(aes(label = per), vjust = -0.5,
-                    position = position_dodge2(width = 0.9, preserve = "single"), size = 3) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-          scale_fill_brewer(palette = "Set2", name = "Gender") +
-          facet_wrap(~ career)
-
-```
-
-### Count combined choices
-
-For each multiple choice replace spaces by "-"s and collapse all the
-non-empty choices and join them with an "\_". So, if an individual only
-chose A then that would only contribute an A, if an individual chose A,
-B and D then that would contribute an A_B\_D then we count all the
-combined choices. Only showing combinations that have a count greater
-than 1.
-
-```{r run_choices}
-
-data %>% select(URN, num_range("Q14_", 1:9))                           %>%
-         pivot_longer(cols = num_range("Q14_", 1:9),
-                      names_to = NULL,
-                      values_to = "ds")                                %>%
-         filter(ds != 0)                                               %>%  
-         group_by(URN)                                                 %>% 
-         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>%
-         distinct(URN, choices)                                        %>% 
-         ungroup()                                                     %>% 
-         select(-URN)                                                  %>% 
-         group_by(choices)                                             %>% 
-         tally()                                                       %>% 
-         arrange(desc(n))                                              %>% 
-         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
-```
-
-```{r run_choices2}
-
-data %>% select(URN, num_range("Q14_", 1:9))                           %>%
-         pivot_longer(cols = num_range("Q14_", 1:9),
-                      names_to = NULL,
-                      values_to = "ds")                                %>%
-         filter(ds != 0)                                               %>%  
-         group_by(URN)                                                 %>%
-         filter(ds == "Own" | ds == "InstitutionallyProvided")         %>%
-         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         distinct(URN, choices)                                        %>% 
-         ungroup()                                                     %>% 
-         select(-URN)                                                  %>% 
-         group_by(choices)                                             %>% 
-         tally()                                                       %>% 
-         arrange(desc(n))                                              %>% 
-         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
-```
-
-```{r run_choices_career}
-
-data %>% select(URN, num_range("Q14_", 1:9), career = Q20)             %>%
-         pivot_longer(cols = num_range("Q14_", 1:9),
-                      names_to = NULL,
-                      values_to = "ds")                                %>%
-         filter(ds != 0)                                               %>%
-         filter(ds == "Own" | ds == "InstitutionallyProvided")         %>% 
-         group_by(URN)                                                 %>% 
-         filter(!(career %in% c("-", "Other"))) %>% 
-         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         distinct(URN, choices, career)                                %>% 
-         ungroup()                                                     %>% 
-         select(-URN)                                                  %>% 
-         group_by(career, choices)                                     %>% 
-         tally()                                                       %>%
-         pivot_wider(names_from = "career", 
-                     values_from = "n",
-                     values_fill = 0)
-```
-
-```{r run_choices_gender}
-
-data %>% select(URN, num_range("Q14_", 1:9), gender = Q21)             %>%
-         pivot_longer(cols = num_range("Q14_", 1:9),
-                      names_to = NULL,
-                      values_to = "ds")                                %>%
-         filter(ds != 0)                                               %>%
-         filter(ds == "Own" | ds == "InstitutionallyProvided")         %>% 
-         group_by(URN)                                                 %>% 
-         filter(!(gender %in% lowstatsgender)) %>% 
-         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         distinct(URN, choices, gender)                                %>% 
-         ungroup()                                                     %>% 
-         select(-URN)                                                  %>% 
-         group_by(gender, choices)                                     %>% 
-         tally()                                                       %>%
-         pivot_wider(names_from = "gender", 
-                     values_from = "n",
-                     values_fill = 0)
-
-```
-
-### Other platforms used
-
-```{r other_run_on, results='asis'}
-
-listOther("Q14_a")
 
 ```
 
@@ -5786,30 +5582,6 @@ suppressMessages(ggsave("Figures/Figure59.png", dpi = 360))
 
 ```
 
-
-
-
-### Barriers by data use
-
-```{r barriers_datause}
-
-data %>%  select(num_range("Q16_", 1:13), datause)         %>%
-          pivot_longer(cols = num_range("Q16_", 1:13),
-                       names_to = NULL,
-                       values_to = "barriers")             %>%
-          filter(barriers != 0)                            %>%
-          group_by(barriers)                               %>%
-          mutate(n = n())                                  %>% 
-          ggplot(aes(x = reorder(barriers, -n), fill  = datause)) +
-          geom_bar(colour = "black") +
-          theme_bw() +
-          xlab("Barriers to software use") + ylab("Numbers") +
-          geom_text(aes(label = after_stat(count)), stat = "count", position = position_stack(0.5), size = 2) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
-          scale_fill_brewer(palette = "PuRd", name = "Data use")
-
-```
-
 ### Fig 61: barriers as % of careers
 
 
@@ -5844,28 +5616,6 @@ print(Fig61)
 
 # Save the plot to file
 suppressMessages(ggsave("Figures/Figure61.png", dpi = 360))
-
-```
-
-### Barriers frequencies with gender
-
-```{r barriers_gender}
-
-data %>%  select(num_range("Q16_", 1:13), gender = Q21)         %>%
-          filter(!(gender %in% lowstatsgender))                 %>% 
-          pivot_longer(cols = num_range("Q16_", 1:13),
-                       names_to = NULL,
-                       values_to = "barriers")                  %>%
-          filter(barriers != 0)                                 %>%
-          group_by(barriers)                                    %>%
-          mutate(n = n())                                       %>% 
-          ggplot(aes(x = reorder(barriers, -n), fill  = gender)) +
-          geom_bar(colour = "black") +
-          theme_bw() +
-          xlab("Barriers to software use") + ylab("Numbers") +
-          geom_text(aes(label = after_stat(count)), stat = "count", position = position_stack(0.5), size = 2) +
-          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))  +
-          scale_fill_brewer(palette = "Set2", name = "Gender")
 
 ```
 
