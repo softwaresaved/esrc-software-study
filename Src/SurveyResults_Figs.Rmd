@@ -3776,57 +3776,7 @@ suppressMessages(ggsave("Figures/Figure77.png", dpi = 360))
 
 ```
 
-### Skills acquisition by % data use
 
-```{r acquiring_skills_datause_per}
-
-data %>% select(num_range("Q11_", 1:12), datause)        %>%
-         group_by(datause)                                %>% 
-         mutate(N = n())                                 %>% 
-         pivot_longer(cols = num_range("Q11_", 1:12),
-                      names_to = NULL,
-                      values_to = "skills")              %>%
-         filter(skills != 0)                             %>%
-         group_by(skills)                                %>% 
-         mutate(M = n())                                 %>% 
-         group_by(datause, skills)                        %>% 
-         mutate(per = n()/N)                             %>% 
-         distinct(datause, skills, per, M)                %>% 
-         ggplot(aes(x = reorder(skills, -M), y = per, fill = datause)) + 
-         geom_col(position = position_dodge2(width = 0.9, preserve = "single"),
-                  colour = "black") +
-         theme_bw() +
-         scale_y_continuous(labels = percent_format(accuracy = 1)) +
-         xlab("Where skills are being acquired") + ylab("Percent") +
-         geom_text(aes(label = percent(per, accuracy = 1)), 
-                   position = position_dodge2(width = 0.9, preserve = "single"),
-                   vjust = -0.5, size = 3.5) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0),
-               legend.text=element_text(size = 8)) +
-         scale_fill_brewer(palette = "PuRd", name = "Data use")
-```
-
-### Skills acquisition by gender
-
-```{r acquiring_skills_gender}
-
-data %>% select(num_range("Q11_", 1:12), gender = Q21)   %>%
-         filter(!(gender %in% lowstatsgender))           %>% 
-         pivot_longer(cols = num_range("Q11_", 1:12),
-                      names_to = "questions",
-                      values_to = "skills")              %>%
-         filter(skills != 0)                             %>%
-         group_by(skills)                                %>% 
-         mutate(n = n())                                 %>% 
-         ggplot(aes(x = reorder(skills, -n), fill = gender)) + 
-         geom_bar(colour = "black") +
-         theme_bw() +
-         xlab("Where skills are acquired") + ylab("Numbers") +
-         geom_text(aes(label = after_stat(count)), position = position_stack(vjust = 0.5), 
-                   stat = "count", size = 3) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) +
-         scale_fill_brewer(palette = "Set2", name = "Gender")
-```
 
 ### Skills acquisition by % gender
 
@@ -3891,41 +3841,6 @@ data %>% select(num_range("Q11_", 1:12), career = Q20, gender = Q21)   %>%
          facet_wrap( ~ career)
 ```
 
-### Counting combined choices
-
-For each multiple choice replace spaces by "-"s and collapse all the
-non-empty choices and join them with an "\_". So, if an individual only
-chose A then that would only contribute an A, if an individual chose A,
-B and D then that would contribute an A_B\_D then we count all the
-combined choices. Only showing combinations that have a count greater
-than 1.
-
-```{r acquiringSkills_choices}
-
-data %>% select(id = URN, num_range("Q11_", 1:12))                     %>%
-         pivot_longer(cols = num_range("Q11_", 1:12),
-                      names_to = NULL,
-                      values_to = "ds")                                %>%
-         filter(ds != 0)                                               %>%  
-         group_by(id)                                                  %>% 
-         mutate(choices = paste0(gsub(" ","-", ds), collapse = "_"))   %>% 
-         distinct(id, choices)                                         %>% 
-         ungroup()                                                     %>% 
-         select(-id)                                                   %>% 
-         group_by(choices)                                             %>% 
-         tally()                                                       %>% 
-         filter(n  > 1)                                                %>% 
-         arrange(desc(n))                                              %>% 
-         kbl(format="pipe", align = c("l","r"), col.names = c("Combined choice", "Numbers"))
-```
-
-### Other ways of acquiring skills
-
-```{r other_mechanisms, results = 'asis'}
-
-listOther("Q11_a")
-
-```
 
 ## Q11b NCRM courses
 
@@ -3981,25 +3896,10 @@ provided by the NCRM. What we can say though is that out of the
 `r percent(nrow(b)/nrow(data), accuracy = 0.1)` respectively have taken
 NCRM courses.
 
-### List of NCRM courses taken
 
-```{r ncrm_courses, results = 'asis'}
+### Fig 79: NCRM courses by career stage
 
-data %>% select(num_range("Q11_b_", 1:22))             %>%
-         pivot_longer(cols = num_range("Q11_b_", 1:22),
-                      names_to = NULL,
-                      values_to = "ncrm")              %>%
-         filter(ncrm != 0)                             %>%
-         group_by(ncrm)                                %>%
-         tally()                                       %>%
-         arrange(desc(n))                              %>%
-         kbl(format="pipe", align = c("l","r"),
-                col.names = c("NCRM course", "Numbers"))
-```
-
-### NCRM courses by career stage
-
-```{r ncrm_courses_career}
+```{r Figure79}
 
 data %>% select(URN, starts_with("Q11_b_"), career = Q20)      %>%
          pivot_longer(cols = starts_with("Q11_b_"),
@@ -4015,7 +3915,14 @@ data %>% select(URN, starts_with("Q11_b_"), career = Q20)      %>%
          scale_fill_brewer(palette = "Set1", name = "Career stage") +
          theme(legend.position = "none")  + ylab("Number of NCRM courses taken") +
          xlab("Career stage") + 
-         geom_text(aes(x = career, label = paste0(n," (",nid,")")), vjust = -0.5, size = 4)
+         geom_text(aes(x = career, label = paste0(n," (",nid,")")), vjust = -0.5, size = 3)  -> Fig79
+
+# Print the plot to screen
+print(Fig79)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure79.png", dpi = 360))
+
 
 ```
 
