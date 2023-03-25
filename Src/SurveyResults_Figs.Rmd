@@ -5142,9 +5142,9 @@ should be made available to others.
 Which relevant software policies are you aware of (please check all you
 are aware of)?
 
-### Licensing policies awareness distributions
+### Fig 53: licensing policies awareness distributions
 
-```{r licensing}
+```{r Figure73}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, starts_with("Q15_"), -"Q15_a")                     %>% 
@@ -5168,10 +5168,17 @@ data %>% select(URN, starts_with("Q15_"), -"Q15_a")                     %>%
          geom_bar(colour = "black") +
          theme_bw() + ylim(0,76) + scale_fill_distiller(palette = "Blues", direction = 1) +
          geom_text(aes(y = n, label = paste0(n, " (", per, ")")),  
-                   vjust = -0.5, size = 4) +
+                   vjust = -0.5, size = 3) +
          ylab("Numbers") + xlab(my$lab)  +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12), 
-               legend.position = "None") 
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 10), 
+               legend.position = "None")  -> Fig73
+
+# Print the plot to screen
+print(Fig73)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure73.png", dpi = 360))
+
 ```
 
 ### Licensing policies awareness by career stage
