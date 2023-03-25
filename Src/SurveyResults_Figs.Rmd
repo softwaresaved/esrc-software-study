@@ -4806,25 +4806,6 @@ print(Fig69)
 suppressMessages(ggsave("Figures/Figure69.png", dpi = 360))
 ```
 
-#### Responses by gender
-
-```{r insufficient_attention_gender}
-
-data %>% select(num_range("Q13_3_",1:5), gender = Q21)     %>%
-        filter(!(gender %in% lowstatsgender))              %>% 
-         pivot_longer(cols = starts_with("Q13"),
-                      names_to = NULL,
-                      values_to = "understanding")         %>%
-         filter(understanding != 0)                        %>%
-         mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
-         ggplot(aes(x = understanding, fill = gender)) + 
-         geom_bar(colour = "black") +
-         geom_text(aes(label = after_stat(count)), stat = "count",position = position_stack(0.5), size = 3) +
-         theme_bw() + ylab("Numbers") +
-         xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community") +
-         scale_fill_brewer(palette = "Set2", name = "Gender")
-```
-
 #### Responses as % of gender pop
 
 
@@ -4886,9 +4867,9 @@ data %>% select(num_range("Q13_3_",1:5), career = Q20, gender = Q21)            
 There is insufficient incentive for me to learn how my software is
 funded, managed and licensed
 
-#### Responses
+#### Fig 70: responses
 
-```{r insufficient_incentives}
+```{r Figure70}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, num_range("Q13_4_",1:5))  %>% 
@@ -4912,17 +4893,24 @@ data %>% select(URN, num_range("Q13_4_",1:5))            %>%
          distinct(understanding, N, n)                   %>%
          ggplot(aes(x = understanding, y = n, fill = n)) + 
          geom_col(colour = "black") +
-         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 4) +
+         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 3) +
          scale_fill_distiller(palette = "Blues", direction = 1) +
          theme_bw() + ylab("Numbers") + theme(legend.position = "None") +
-         xlab(my$lab)
+         xlab(my$lab)  -> Fig70
+
+# Print the plot to screen
+print(Fig70)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure70.png", dpi = 360))
+
 ```
 
 
-#### Distribution of answers as % of career stage
+#### Fig 71: distribution of answers as % of career stage
 
 
-```{r insufficient_incentives_career_per2}
+```{r Figure71}
 
 data %>% select(num_range("Q13_4_",1:5), career = Q20)                                  %>%
          group_by(career)                                                               %>% 
@@ -4939,11 +4927,18 @@ data %>% select(num_range("Q13_4_",1:5), career = Q20)                          
          ggplot(aes(x = understanding, y = per, fill = career)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
-                       position = position_dodge2(width = 0.9, preserve = "single"), size = 4, vjust = -0.5) +
+                       position = position_dodge2(width = 0.9, preserve = "single"), size = 3, vjust = -0.5) +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          theme_bw() + ylab("Percent") +
          xlab("Insufficient incentive to learn how s/w is funded, managed and licensed") +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
+         scale_fill_brewer(palette = "Set1", name = "Career stage") -> Fig71
+
+# Print the plot to screen
+print(Fig71)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure71.png", dpi = 360))
+
 ```
 
 
