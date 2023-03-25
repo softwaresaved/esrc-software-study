@@ -3675,33 +3675,10 @@ suppressMessages(ggsave("Figures/Figure76.png", dpi = 360))
 
 ```
 
-### Choice correlations
 
-My interpretation of this graph is that obtuse angles are negatively
-correlated, acute are positively correlated, circles are not correlated.
-The thinner the ellipse the stronger the correlation or anti
-correlation.
+### Fig 78: contingency table
 
-```{r q11_correlations}
-
-data0 %>% select(num_range("Q11_", 1:12)) -> q  
-names(q) <- skills
-
-q <- apply(q, 2, function(x) as.integer(x))
-
-my_colors <- brewer.pal(5, "Spectral")
-my_colors <- colorRampPalette(my_colors)(100)
-
-#plotcorr(cor(q), col=my_colors[cor(q)*50+50], cex.lab = 0.5*par("cex.lab"))
-
-corrplot(cor(q), method="circle", type= "lower", diag = FALSE)
-#corrplot(cor(q), method="number", type= "lower", diag = FALSE)
-
-```
-
-### Contingency table
-
-```{r q11_contingency}
+```{r Figure78}
 
 # Create a data frame showing the choices per individual
 data %>% select(URN, num_range("Q11_", 1:12))                   %>%
@@ -3745,41 +3722,25 @@ vc %>% mutate(xx = tt)                  %>%
                     names_to = "yy",
                     values_to = "n")    %>% 
        ggplot(aes(x = factor(xx, levels=m), y = factor(yy, levels = rev(m)), fill = n)) +
-       theme_bw() + geom_tile() +
+       theme_bw() + geom_tile(colour = "black") +
        scale_fill_distiller(palette = "Blues", direction = 1) +
        theme(axis.text.x = element_text(angle = -60, hjust = 0),
             legend.position = "None") +
        geom_text(aes(label = n), size = 4) +
-       xlab(lab) + ylab(lab)
+       xlab(lab) + ylab(lab) -> Fig78
+
+# Print the plot to screen
+print(Fig78)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure78.png", dpi = 360))
+
 
 ```
 
-### Skills acquisition by career stage
+### Fig 77: skills acquisition by % career stage
 
-```{r acquiring_skills_career}
-
-data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
-         filter(!(career %in% c("-", "Other")))          %>% 
-         pivot_longer(cols = num_range("Q11_", 1:12),
-                      names_to = "questions",
-                      values_to = "skills")              %>%
-         filter(skills != 0)                             %>%
-         group_by(skills)                                %>% 
-         mutate(n = n())                                 %>% 
-         ggplot(aes(x = reorder(skills, -n), fill = career)) + 
-         geom_bar(colour = "black") +
-         theme_bw() +
-         xlab("Where skills are acquired") + ylab("Numbers") +
-         geom_text(aes(label = after_stat(count)), position = position_stack(vjust = 0.5), 
-                   stat = "count", size = 3) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0),
-               legend.text=element_text(size = 6)) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
-
-### Skills acquisition by % career stage
-
-```{r acquiring_skills_career_per}
+```{r Figure77}
 
 data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
          group_by(career)                                %>% 
@@ -3802,10 +3763,17 @@ data %>% select(num_range("Q11_", 1:12), career = Q20)   %>%
          xlab("Where skills are being acquired") + ylab("Percent") +
          geom_text(aes(label = percent(per, accuracy = 1)), 
                    position = position_dodge2(width = 0.9, preserve = "single"),
-                   vjust = -0.5, size = 3.5) +
+                   vjust = -0.5, size = 2) +
          theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0),
                legend.text=element_text(size = 8)) +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
+         scale_fill_brewer(palette = "Set1", name = "Career stage") -> Fig77
+
+# Print the plot to screen
+print(Fig77)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure77.png", dpi = 360))
+
 ```
 
 ### Skills acquisition by % data use
