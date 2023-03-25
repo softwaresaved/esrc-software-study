@@ -4585,7 +4585,7 @@ data %>% select(num_range("Q13_1_",1:5), career = Q20, gender = Q21)            
 My institution/funder's policies on how software is funded, managed and
 licensed are clear to me
 
-#### Fig66: responses
+#### Fig 66: responses
 
 ```{r Figure66}
 
@@ -4735,9 +4735,9 @@ data %>% select(num_range("Q13_2_",1:5), career = Q20, gender = Q21)            
 There is insufficient attention paid to software funding, management and
 licensing by the economic and social sciences research community
 
-#### Responses
+#### Fig 68: responses
 
-```{r insufficient_attention}
+```{r Figure68}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, num_range("Q13_3_",1:5))  %>% 
@@ -4761,9 +4761,16 @@ data %>% select(URN, num_range("Q13_3_",1:5))           %>%
          distinct(understanding, N, n)                  %>%
          ggplot(aes(x = understanding, y = n, fill = n)) + 
          geom_col(colour = "black") +
-         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 4) +
+         geom_text(aes(label = paste0(n, " (", percent(n/N, accuracy = 1),")")), vjust = -0.5, size = 3) +
          theme_bw() + ylab("Numbers") + scale_fill_distiller(palette = "Blues", direction = 1) +
-         xlab(my$lab) + theme(legend.position = "None")
+         xlab(my$lab) + theme(legend.position = "None") -> Fig68
+
+# Print the plot to screen
+print(Fig68)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure68.png", dpi = 360))
+
 ```
 
 #### Responses by career stage
