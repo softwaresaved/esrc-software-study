@@ -4773,29 +4773,10 @@ suppressMessages(ggsave("Figures/Figure68.png", dpi = 360))
 
 ```
 
-#### Responses by career stage
-
-```{r insufficient_attention_career}
-
-data %>% select(num_range("Q13_3_",1:5), career = Q20)     %>%
-         filter(!(career %in% c("Other", "-")))            %>% 
-         pivot_longer(cols = starts_with("Q13"),
-                      names_to = NULL,
-                      values_to = "understanding")         %>%
-         filter(understanding != 0)                        %>%
-         mutate(understanding = factor(understanding, levels = likert, ordered = TRUE)) %>%
-         ggplot(aes(x = understanding, fill = career)) + 
-         geom_bar(colour = "black") +
-         geom_text(aes(label = after_stat(count)), stat = "count",position = position_stack(0.5), size = 3) +
-         theme_bw() + ylab("Numbers") +
-         xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community") +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
-```
-
-#### Responses as % of career stage
+#### Fig 69: responses as % of career stage
 
 
-```{r insufficient_attention_career_per2}
+```{r Figure69}
 
 data %>% select(num_range("Q13_3_",1:5), career = Q20)                                  %>%
          group_by(career)                                                               %>% 
@@ -4812,11 +4793,17 @@ data %>% select(num_range("Q13_3_",1:5), career = Q20)                          
          ggplot(aes(x = understanding, y = per, fill = career)) + 
          geom_col(position = position_dodge2(width = 0.9, preserve = "single"), colour = "black") +
          geom_text(aes(y = per, label = percent(per, accuracy = 1)), 
-                       position = position_dodge2(width = 0.9, preserve = "single"), size = 4, vjust = -0.5) +
+                       position = position_dodge2(width = 0.9, preserve = "single"), size = 3, vjust = -0.5) +
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          theme_bw() + ylab("Percent") +
          xlab("Insufficient awareness on how s/w is funded, managed and licensed by the community") +
-         scale_fill_brewer(palette = "Set1", name = "Career stage")
+         scale_fill_brewer(palette = "Set1", name = "Career stage") -> Fig69
+
+# Print the plot to screen
+print(Fig69)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure69.png", dpi = 360))
 ```
 
 #### Responses by gender
