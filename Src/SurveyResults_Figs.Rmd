@@ -5181,32 +5181,10 @@ suppressMessages(ggsave("Figures/Figure73.png", dpi = 360))
 
 ```
 
-### Licensing policies awareness by career stage
 
-```{r licensing_career}
+### Fig 74: licensing policies awareness by % career stage
 
-data %>% select(starts_with("Q15_"), -"Q15_a", career = Q20)            %>%
-         filter(!(career %in% c("-", "Other")))                         %>% 
-         pivot_longer(cols = starts_with("Q15_"),
-                      names_to = NULL,
-                      values_to ="aware")                               %>%
-         filter(aware != 0)                                             %>%
-         mutate(aware = factor(aware, ordered = TRUE, levels = licawa)) %>% 
-         group_by(career, aware)                                        %>% 
-         mutate(n = n())                                                %>% 
-         ggplot(aes(x = aware, fill = career)) +
-         geom_bar(colour = "black") +
-         theme_bw() +
-         geom_text(aes(label = after_stat(count)), stat = "count", position = position_stack(0.5), size = 3) +
-         ylab("Numbers") + xlab("Aware of the policy for") +
-         scale_fill_brewer(palette = "Set1", name = "Career stage") +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
-
-```
-
-### Licensing policies awareness by % career stage
-
-```{r licensing_career_per}
+```{r Figure74}
 
 data %>% select(URN, starts_with("Q15_"), -"Q15_a", career = Q20)          %>%
          group_by(career)                                                  %>%
@@ -5229,10 +5207,17 @@ data %>% select(URN, starts_with("Q15_"), -"Q15_a", career = Q20)          %>%
          theme_bw() + 
          scale_y_continuous(labels = percent_format(accuracy = 1)) +
          geom_text(aes(label = per), vjust = -0.5,
-                   position = position_dodge2(width = 0.9, preserve = "single"), size = 4) +
+                   position = position_dodge2(width = 0.9, preserve = "single"), size = 2.5) +
          ylab("Percent") + xlab("Aware of the policy for") +
          scale_fill_brewer(palette = "Set1", name = "Career stage") +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0))
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0)) -> Fig74
+
+# Print the plot to screen
+print(Fig74)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure74.png", dpi = 360))
+
 
 ```
 
