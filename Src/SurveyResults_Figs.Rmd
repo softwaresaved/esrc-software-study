@@ -3638,36 +3638,9 @@ important_software  %>% select(URN, starts_with("Q5"))                        %>
 How did you acquire the skills necessary to utilise software in your
 research? (Please check all that apply.)
 
-### How skills are acquired
+### Fig 76: how skills are acquired
 
-```{r acquiring_skills}
-
-# Calculate an x label with the folks that filled in this question.
-data %>% select(URN, num_range("Q11_", 1:12))  %>% 
-         pivot_longer(cols = num_range("Q11_", 1:12),
-                      names_to = "questions",
-                      values_to = "skills")              %>%
-         filter(skills != 0)                             %>%
-         summarise(lab = paste0("Where skills are acquired (N=", n_distinct(URN),")")) -> my
-
-data %>% select(num_range("Q11_", 1:12))                 %>%
-         pivot_longer(cols = num_range("Q11_", 1:12),
-                      names_to = "questions",
-                      values_to = "skills")              %>%
-         filter(skills != 0)                             %>%
-         group_by(skills)                                %>% 
-         mutate(n = n())                                 %>% 
-         ggplot(aes(x = reorder(skills, -n), fill = n)) + 
-         geom_bar(colour = "black") +
-         theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
-         xlab(my$lab) + ylab("Numbers") +
-         geom_text(aes(label = after_stat(count)), stat = "count", vjust = -0.5, size = 4) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12), legend.position = "None")
-```
-
-Include percentages.
-
-```{r acquiring_skills_per}
+```{r Figure76}
 
 # Calculate an x label with the folks that filled in this question.
 data %>% select(URN, num_range("Q11_", 1:12))  %>% 
@@ -3691,7 +3664,15 @@ data %>% select(URN, num_range("Q11_", 1:12))            %>%
          theme_bw() + scale_fill_distiller(palette = "Blues", direction = 1) +
          xlab(my$lab) + ylab("Numbers") + ylim(0, 129) +
          geom_text(aes(y = n, label = paste0(n, " (", per,")")), vjust = -0.5, size = 3) +
-         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12), legend.position = "None")
+         theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust=0, size = 12), 
+               legend.position = "None")  -> Fig76
+
+# Print the plot to screen
+print(Fig76)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure76.png", dpi = 360))
+
 ```
 
 ### Choice correlations
