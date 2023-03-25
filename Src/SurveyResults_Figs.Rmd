@@ -3928,25 +3928,6 @@ suppressMessages(ggsave("Figures/Figure79.png", dpi = 360))
 
 ### NCRM courses by gender
 
-```{r ncrm_courses_gender}
-
-data %>% select(URN, starts_with("Q11_b_"), gender = Q21) %>%
-         pivot_longer(cols = starts_with("Q11_b_"),
-                      names_to = NULL,
-                      values_to = "ncrm")                 %>%
-         filter(ncrm != 0)                                %>%
-         group_by(gender)                                 %>% 
-         mutate(n = n(), nid = n_distinct(URN))           %>%
-         ungroup()                                        %>% 
-         distinct(gender, n, nid)                         %>% 
-         ggplot(aes(x = gender, y = n, fill = gender)) +
-         geom_col(colour = "black") + theme_bw() +
-         scale_fill_brewer(palette = "Set2", name = "Career stage") +
-         theme(legend.position = "none")  + ylab("Number of NCRM courses taken") +
-         xlab("Gender") + 
-         geom_text(aes(x = gender, label = paste0(n," (",nid,")") ), vjust = -0.5, size = 4)
-
-```
 
 ```{r ncrm_courses_gender2}
 
@@ -3970,12 +3951,12 @@ data %>% select(URN, starts_with("Q11_b_"), gender = Q21) %>%
 
 ```
 
-### Number of NCRM courses by individuals by career stage
+### Fig 80: number of NCRM courses by individuals by career stage
 
 Need to be slightly careful with this measure - it counts an entry in
 "Other" as a course even if a list is given there.
 
-```{r ncrm_courses_individual_career}
+```{r Figure80}
 
 data %>% select(URN, starts_with("Q11_b_"), career = Q20) %>%
          pivot_longer(cols = starts_with("Q11_b_"),
@@ -3995,7 +3976,13 @@ data %>% select(URN, starts_with("Q11_b_"), career = Q20) %>%
          ylab("Number of people") +
          #scale_x_discrete() +
          xlab("Number of courses taken") + 
-         geom_text(aes(x = N, label = n), position = position_stack(0.5),  size = 4)
+         geom_text(aes(x = N, label = n), position = position_stack(0.5),  size = 4)  -> Fig80
+
+# Print the plot to screen
+print(Fig80)
+
+# Save the plot to file
+suppressMessages(ggsave("Figures/Figure80.png", dpi = 360))
 
 ```
 
