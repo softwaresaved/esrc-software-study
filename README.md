@@ -1,5 +1,7 @@
 # Software for Social Sciences Data
 
+[![DOI](https://zenodo.org/badge/407500828.svg)](https://zenodo.org/badge/latestdoi/407500828)
+
 This is a repository for a UKRI Economic and Social Research Council (ESRC) funded project to understand the software used to analyse social sciences data. 
 
 This is done by:
