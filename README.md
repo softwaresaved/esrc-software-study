@@ -10,7 +10,9 @@ This is done by:
 * A survey sampling the views and software in the community. The JISC [Online surveys](https://www.onlinesurveys.ac.uk/) was used to this end. A pdf copy of the survey used is available here: [esrc-survey.pdf](Docs/esrc-survey.pdf).
 * A set of interviews with members from the community.
 
-Any software produced is made available under a BSD 2-Clause licence and any data and other non-software derivative is made available under a CC-BY 4.0 International Licence. Any software produced has been made available under a BSD 2-Clause licence and any data and other non-software derivative is made available under a CC-BY 4.0 International Licence. Note that the software that analysed the survey is provided for illustrative purposes - it will not work on the decoupled anonymised data set.
+Any software produced is made available under a BSD 2-Clause licence and any data and other non-software derivative is made available under a CC-BY 4.0 International Licence. Any software produced has been made available under a BSD 2-Clause licence and any data and other non-software derivative is made available under a CC-BY 4.0 International Licence. 
+
+**Note that the software that analysed the survey is provided for illustrative purposes - it will not work on the decoupled anonymised data set.**
 
 Exceptions to this are:
 
